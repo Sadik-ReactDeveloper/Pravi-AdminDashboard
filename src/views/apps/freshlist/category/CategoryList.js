@@ -42,31 +42,31 @@ class CategoryList extends React.Component {
         width: 100,
         filter: true,
       },
-      {
-        headerName: "Image",
-        field: "image",
-        filter: true,
-        width: 100,
-        cellRendererFramework: params => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <img
-                className="rounded-circle mr-50"
-                src={params.data?.image}
-                alt="user avatar"
-                height="40"
-                width="40"
-              />
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "Image",
+      //   field: "image",
+      //   filter: true,
+      //   width: 100,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <img
+      //           className="rounded-circle mr-50"
+      //           src={params.data?.image}
+      //           alt="user avatar"
+      //           height="40"
+      //           width="40"
+      //         />
+      //       </div>
+      //     );
+      //   },
+      // },
       {
         headerName: "Name",
         field: "category_name",
         filter: true,
-        width: 150,
-        cellRendererFramework: params => {
+        width: 200,
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <span>{params.data?.category_name}</span>
@@ -74,110 +74,110 @@ class CategoryList extends React.Component {
           );
         },
       },
-      {
-        headerName: "Type",
-        field: "type",
-        filter: true,
-        width: 150,
-        cellRendererFramework: params => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data?.type}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Featured",
-        field: "feature",
-        filter: true,
-        width: 150,
-        cellRendererFramework: params => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <span className="" style={{ textTransform: "uppercase" }}>
-                {params.data?.feature}
-              </span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Status",
-        field: "status",
-        filter: true,
-        width: 100,
-        cellRendererFramework: params => {
-          return params.value === "Active" ? (
-            <div className="badge badge-pill badge-success">
-              {params.data.status}
-            </div>
-          ) : params.value === "Deactive" ? (
-            <div className="badge badge-pill badge-warning">
-              {params.data.status}
-            </div>
-          ) : null;
-        },
-      },
-      {
-        headerName: "Actions",
-        field: "sortorder",
-        field: "transactions",
-        width: 150,
-        cellRendererFramework: params => {
-          return (
-            <div className="actions cursor-pointer">
-              <Route
-                render={({ history }) => (
-                  <>
-                    <Eye
-                      className="mr-50"
-                      size="25px"
-                      color="green"
-                      onClick={() =>
-                        history.push(
-                          `/app/freshlist/category/viewCategory/${params.data._id}`
-                        )
-                      }
-                    />
+      // {
+      //   headerName: "Type",
+      //   field: "type",
+      //   filter: true,
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <span>{params.data?.type}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Featured",
+      //   field: "feature",
+      //   filter: true,
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <span className="" style={{ textTransform: "uppercase" }}>
+      //           {params.data?.feature}
+      //         </span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Status",
+      //   field: "status",
+      //   filter: true,
+      //   width: 100,
+      //   cellRendererFramework: (params) => {
+      //     return params.value === "Active" ? (
+      //       <div className="badge badge-pill badge-success">
+      //         {params.data.status}
+      //       </div>
+      //     ) : params.value === "Deactive" ? (
+      //       <div className="badge badge-pill badge-warning">
+      //         {params.data.status}
+      //       </div>
+      //     ) : null;
+      //   },
+      // },
+      // {
+      //   headerName: "Actions",
+      //   field: "sortorder",
+      //   field: "transactions",
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="actions cursor-pointer">
+      //         <Route
+      //           render={({ history }) => (
+      //             <>
+      //               <Eye
+      //                 className="mr-50"
+      //                 size="25px"
+      //                 color="green"
+      //                 onClick={() =>
+      //                   history.push(
+      //                     `/app/freshlist/category/viewCategory/${params.data.id}`
+      //                   )
+      //                 }
+      //               />
 
-                    <Edit
-                      className="mr-50"
-                      size="25px"
-                      color="blue"
-                      onClick={() =>
-                        history.push(
-                          `/app/freshlist/category/editCategory/${params.data._id}`
-                        )
-                      }
-                    />
-                  </>
-                )}
-              />
-              <Route
-                render={({ history }) => (
-                  <Trash2
-                    className="mr-50"
-                    size="25px"
-                    color="red"
-                    onClick={() => {
-                      let selectedData = this.gridApi.getSelectedRows();
-                      this.runthisfunction(params.data._id);
-                      this.gridApi.updateRowData({ remove: selectedData });
-                    }}
-                  />
-                )}
-              />
-            </div>
-          );
-        },
-      },
+      //               <Edit
+      //                 className="mr-50"
+      //                 size="25px"
+      //                 color="blue"
+      //                 onClick={() =>
+      //                   history.push(
+      //                     `/app/freshlist/category/editCategory/${params.data.id}`
+      //                   )
+      //                 }
+      //               />
+      //             </>
+      //           )}
+      //         />
+      //         <Route
+      //           render={({ history }) => (
+      //             <Trash2
+      //               className="mr-50"
+      //               size="25px"
+      //               color="red"
+      //               onClick={() => {
+      //                 let selectedData = this.gridApi.getSelectedRows();
+      //                 this.runthisfunction(params.data.id);
+      //                 this.gridApi.updateRowData({ remove: selectedData });
+      //               }}
+      //             />
+      //           )}
+      //         />
+      //       </div>
+      //     );
+      //   },
+      // },
     ],
   };
 
   async componentDidMount() {
-    await axiosConfig.get("/admin/getallcategory").then(response => {
-      let rowData = response.data.data;
+    await axiosConfig.get("/getcategory").then((response) => {
+      let rowData = response.data.data?.category;
       console.log(rowData);
       this.setState({ rowData });
     });
@@ -186,15 +186,15 @@ class CategoryList extends React.Component {
   async runthisfunction(id) {
     console.log(id);
     await axiosConfig.delete(`/admin/del_one_category/${id}`).then(
-      response => {
+      (response) => {
         console.log(response);
       },
-      error => {
+      (error) => {
         console.log(error);
       }
     );
   }
-  onGridReady = params => {
+  onGridReady = (params) => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
     this.setState({
@@ -203,10 +203,10 @@ class CategoryList extends React.Component {
       totalPages: this.gridApi.paginationGetTotalPages(),
     });
   };
-  updateSearchQuery = val => {
+  updateSearchQuery = (val) => {
     this.gridApi.setQuickFilter(val);
   };
-  filterSize = val => {
+  filterSize = (val) => {
     if (this.gridApi) {
       this.gridApi.paginationSetPageSize(Number(val));
       this.setState({
@@ -311,7 +311,7 @@ class CategoryList extends React.Component {
                         <div className="table-input mr-1">
                           <Input
                             placeholder="search..."
-                            onChange={e =>
+                            onChange={(e) =>
                               this.updateSearchQuery(e.target.value)
                             }
                             value={this.state.value}
@@ -328,7 +328,7 @@ class CategoryList extends React.Component {
                       </div>
                     </div>
                     <ContextLayout.Consumer>
-                      {context => (
+                      {(context) => (
                         <AgGridReact
                           gridOptions={{}}
                           rowSelection="multiple"

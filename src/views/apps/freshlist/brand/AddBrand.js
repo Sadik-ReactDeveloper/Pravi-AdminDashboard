@@ -14,12 +14,13 @@ import {
 import { history } from "../../../../history";
 import axiosConfig from "../../../../axiosConfig";
 import { Route } from "react-router-dom";
+import swal from "sweetalert";
 
 export class AddBrand extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
+      brandname: "",
       desc: "",
       brand_img: "",
       status: "",
@@ -28,32 +29,40 @@ export class AddBrand extends Component {
     };
   }
 
-  onChangeHandler = event => {
+  onChangeHandler = (event) => {
     this.setState({ selectedFile: event.target.files[0] });
     this.setState({ selectedName: event.target.files[0].name });
     console.log(event.target.files[0]);
   };
-  handleChange = e => {
+  handleChange = (e) => {
     this.setState({ status: e.target.value });
   };
-  changeHandler = e => {
+  changeHandler = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
-  submitHandler = e => {
+  submitHandler = (e) => {
     e.preventDefault();
     const data = new FormData();
-    data.append("brand_name", this.state.name);
-    data.append("desc", this.state.desc);
+
+    data.append("brand_name", this.state.brandname);
+    data.append("description", this.state.desc);
     data.append("status", this.state.status);
-    data.append("image", this.state.selectedFile, this.state.selectedName);
+    // data.append("image", this.state.selectedFile);
 
     axiosConfig
-      .post(`/admin/addbrand`, data)
-      .then(response => {
-        console.log(response);
-        this.props.history.push("/app/freshlist/brand/brandList");
+      .post(`/addbrand`, data)
+      .then((response) => {
+        console.log(response?.data?.success);
+        if (response?.data?.success) {
+          swal("Sucess", "Brand Added Successfully");
+          this.setState({ brandname: "" });
+          this.setState({ desc: "" });
+          this.setState({ status: "" });
+          this.setState({ selectedFile: "" });
+          // this.props.history.push("/app/freshlist/brand/brandList");
+        }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -64,7 +73,7 @@ export class AddBrand extends Component {
           <Row className="m-2">
             <Col>
               <h1 col-sm-6 className="float-left">
-                Add Brand
+                Add Brand here
               </h1>
             </Col>
             <Col>
@@ -90,30 +99,30 @@ export class AddBrand extends Component {
                   <Input
                     type="text"
                     placeholder="Branch Name"
-                    name="name"
-                    value={this.state.name}
+                    name="brandname"
+                    value={this.state.brandname}
                     onChange={this.changeHandler}
                   />
                 </Col>
-                {/* <Col lg="6" md="6" className="mb-1">
+                <Col lg="6" md="6" className="mb-1">
                   <Label>Description</Label>
                   <Input
-                    type="text"
+                    type="textarea"
                     placeholder="Description"
                     name="desc"
                     value={this.state.desc}
                     onChange={this.changeHandler}
                   />
-                </Col> */}
+                </Col>
 
                 {/* <Col lg="6" md="6" className="mb-1">
-                  <Label>Brand Image</Label>
-                  <CustomInput
-                    type="file"
-                    onChange={this.onChangeHandler}
-                  ></CustomInput>
-                </Col> */}
-                {/* <Col lg="6" md="6" sm="6" className="mb-2 mt-1">
+                    <Label>Brand Image</Label>
+                    <CustomInput
+                      type="file"
+                      onChange={this.onChangeHandler}
+                    ></CustomInput>
+                  </Col> */}
+                <Col lg="6" md="6" sm="6" className="mb-2 mt-1">
                   <Label className="mb-1">Status</Label>
                   <div
                     className="form-label-group"
@@ -135,13 +144,13 @@ export class AddBrand extends Component {
                     />
                     <span style={{ marginRight: "3px" }}>Deactive</span>
                   </div>
-                </Col> */}
+                </Col>
               </Row>
               <Row>
                 <Button.Ripple
                   color="primary"
                   type="submit"
-                  className="mr-1 mb-1"
+                  className="mr-1 mb-1 mx-1"
                 >
                   Add
                 </Button.Ripple>

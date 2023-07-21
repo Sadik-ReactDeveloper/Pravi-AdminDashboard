@@ -15,7 +15,7 @@ import {
   TabPane,
 } from "reactstrap";
 // import classnames from "classnames";
-import logo from "../../../../assets/img/logo/logo.png";
+import logo from "../../../../assets/img/logo/logo.ico";
 //import loginImg from "../../../../assets/img/pages/login.png";
 import "../../../../assets/scss/pages/authentication.scss";
 import { history } from "../../../../history";
@@ -35,18 +35,21 @@ class Login extends React.Component {
       password: "",
     };
   }
-  handlechange = e => {
+  handlechange = (e) => {
     e.preventDefault();
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  loginHandler = e => {
+  loginHandler = (e) => {
     e.preventDefault();
-    console.log(this.state.email);
-    console.log(this.state.password);
+    const fromdata = new FormData();
+    fromdata.append("usrname", this.state.email);
+    fromdata.append("password", this.state.password);
+    // console.log(this.state.email);
+    // console.log(this.state.password);
     axios
-      .post("http://3.6.37.16:8000/admin/adminlogin", this.state)
-      .then(response => {
+      .post("http://3.6.37.16:8000/admin/adminlogin", fromdata)
+      .then((response) => {
         swal("Successful!", "You clicked the button!", "success");
         console.log(response.data.user);
         console.log(response.data);
@@ -55,7 +58,7 @@ class Login extends React.Component {
         this.props.history.push("/dashboard");
         // history.push("/dashboard");
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error.response);
         swal("Error!", "Invalid! Email or Password ", "error");
       });
@@ -77,7 +80,12 @@ class Login extends React.Component {
                 <Col lg="12" md="12" className="p-1">
                   <Card className="rounded-0 mb-0 px-2 login-tabs-container">
                     <div className="logo-box text-center p-1">
-                      <img src={logo} alt="loginImg" width="150" />
+                      <img
+                        src={logo}
+                        alt="loginImg"
+                        width="150px"
+                        height="150px"
+                      />
                     </div>
                     <CardHeader className="pb-1">
                       <CardTitle>
@@ -90,10 +98,10 @@ class Login extends React.Component {
                       Welcome back, please login to your account.
                     </p>
                     <Form onSubmit={this.loginHandler}>
-                      <Label>Email</Label>
+                      <Label>UserName</Label>
                       <FormGroup className="form-label-group position-relative has-icon-left">
                         <Input
-                          type="email"
+                          type="text"
                           name="email"
                           placeholder="Email"
                           value={this.state.email}
@@ -147,7 +155,7 @@ class Login extends React.Component {
     );
   }
 }
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     values: state.auth.login,
   };

@@ -96,7 +96,7 @@ class SideMenuContent extends React.Component {
     });
   };
 
-  initRender = parentArr => {
+  initRender = (parentArr) => {
     this.setState({
       activeGroups: parentArr.slice(0),
       currentActiveGroup: parentArr.slice(0),
@@ -129,18 +129,18 @@ class SideMenuContent extends React.Component {
       // "Orders",
       // "Confirmed",
       // "In Process",
-      // "ACCOUNTS",
+      // "Account",
       // "Client Accounts",
       // "Create Account",
     ];
 
     const menuItems = navigationConfig.map((item, i) => {
-      navigationConfig[i].children?.forEach(tab => {
+      navigationConfig[i].children?.forEach((tab) => {
         if (tabsToHide.includes(tab?.title)) {
           tab.hidden = true;
         }
       });
-      navigationConfig?.forEach(tab => {
+      navigationConfig?.forEach((tab) => {
         if (tabsToHide.includes(tab?.title)) {
           console.log(tab.title);
           tab.hidden = true;
@@ -184,7 +184,7 @@ class SideMenuContent extends React.Component {
             disabled: item.disabled,
           })}
           key={item.id}
-          onClick={e => {
+          onClick={(e) => {
             e.stopPropagation();
             if (item.type === "item") {
               this.props.handleActiveItem(item.navLink);
@@ -218,7 +218,7 @@ class SideMenuContent extends React.Component {
               this.props.handleSidebarMouseEnter(item.id);
             }}
             key={item.id}
-            onClick={e => {
+            onClick={(e) => {
               return item.type === "collapse" ? e.preventDefault() : "";
             }}
             target={item.newTab ? "_blank" : undefined}

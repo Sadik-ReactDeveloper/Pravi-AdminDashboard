@@ -34,7 +34,7 @@ export default function AddRoleNew() {
     // console.log(navigationConfig);
   }, []);
 
-  const handleSumit = e => {
+  const handleSumit = (e) => {
     e.preventDefault();
 
     let formdata = new FormData();
@@ -45,7 +45,7 @@ export default function AddRoleNew() {
 
     axiosConfig
       .post(`/addroles`, formdata)
-      .then(res => {
+      .then((res) => {
         console.log(res);
         swal("Success", "Role Created");
         setSelected("");
@@ -56,7 +56,7 @@ export default function AddRoleNew() {
           checkbox.checked = false;
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
@@ -66,7 +66,7 @@ export default function AddRoleNew() {
         <AddRoleUpdate />
       </section>
 
-      <Row className="">
+      {/* <Row className="">
         <Col xl={12}>
           <Card>
             <div className="container" />
@@ -204,7 +204,7 @@ export default function AddRoleNew() {
             </section>
           </Card>
         </Col>
-      </Row>
+      </Row> */}
     </>
   );
 }

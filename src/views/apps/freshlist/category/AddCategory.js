@@ -35,70 +35,72 @@ export class AddCategory extends Component {
     };
   }
 
-  onChangeHandler1 = event => {
+  onChangeHandler1 = (event) => {
     this.setState({ selectedFile1: event.target.files[0] });
     this.setState({ selectedName1: event.target.files[0].name });
     console.log(event.target.files[0]);
   };
-  onChangeHandler2 = event => {
+  onChangeHandler2 = (event) => {
     this.setState({ selectedFile2: event.target.files[0] });
     this.setState({ selectedName2: event.target.files[0].name });
     console.log(event.target.files[0]);
   };
-  onChangeHandler3 = event => {
+  onChangeHandler3 = (event) => {
     this.setState({ selectedFile3: event.target.files[0] });
     this.setState({ selectedName3: event.target.files[0].name });
     console.log(event.target.files[0]);
   };
-  onChangeHandler4 = event => {
+  onChangeHandler4 = (event) => {
     this.setState({ selectedFile4: event.target.files[0] });
     this.setState({ selectedName4: event.target.files[0].name });
     console.log(event.target.files[0]);
   };
 
-  changeHandler1 = e => {
+  changeHandler1 = (e) => {
     this.setState({ status: e.target.value });
   };
-  changeHandler = e => {
+  changeHandler = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
-  submitHandler = e => {
+  submitHandler = (e) => {
     e.preventDefault();
     const data = new FormData();
-    data.append("category_name", this.state.category_name);
-    data.append("type", this.state.type);
-    data.append("feature", this.state.feature);
-    data.append("status", this.state.status);
-    data.append("image", this.state.selectedFile1, this.state.selectedName1);
-    data.append(
-      "thumbnail_img",
-      this.state.selectedFile2,
-      this.state.selectedName2
-    );
-    data.append(
-      "web_banner",
-      this.state.selectedFile3,
-      this.state.selectedName3
-    );
-    data.append(
-      "app_banner",
-      this.state.selectedFile4,
-      this.state.selectedName4
-    );
 
-    for (var value of data.values()) {
-      console.log(value);
-    }
+    data.append("category_name", this.state.category_name);
+    // data.append("type", this.state.type);
+    // data.append("feature", this.state.feature);
+    // data.append("status", this.state.status);
+    // data.append("image", this.state.selectedFile1, this.state.selectedName1);
+    // data.append(
+    //   "thumbnail_img",
+    //   this.state.selectedFile2,
+    //   this.state.selectedName2
+    // );
+    // data.append(
+    //   "web_banner",
+    //   this.state.selectedFile3,
+    //   this.state.selectedName3
+    // );
+    // data.append(
+    //   "app_banner",
+    //   this.state.selectedFile4,
+    //   this.state.selectedName4
+    // );
+
+    // for (var value of data.values()) {
+    //   console.log(value);
+    // }
     axiosConfig
-      .post(`/admin/addcategory`, data)
-      .then(response => {
-        console.log(response);
-        if (response.data.msg === "success") {
-          swal("Success!", "You Data IS been Submitted", "success");
-          this.props.history.push("/app/freshlist/category/categoryList");
+      .post(`/addcategory`, data)
+      .then((response) => {
+        console.log(response?.data.success);
+        if (response?.data.success) {
+          swal("Success!", "You Data Submitted", "Success");
+          this.setState({ category_name: "" });
+          // this.props.history.push("/app/freshlist/category/categoryList");
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -186,18 +188,14 @@ export class AddCategory extends Component {
                 </Col> */}
 
                 {/* <Col lg="6" md="6" className="mb-2">
-                  <Label>Feature</Label>
-                  <CustomInput
-                    type="select"
-                    placeholder="Select Type"
+                  <Label>Description</Label>
+                  <input
+                    type="text"
+                    className="form-control"
                     name="feature"
                     value={this.state.feature}
                     onChange={this.changeHandler}
-                  >
-                    <option>Select Feature</option>
-                    <option value="yes">Yes</option>
-                    <option value="no">No</option>
-                  </CustomInput>
+                  />
                 </Col> */}
 
                 {/* <Col lg="6" md="6" sm="6" className="mb-2 mt-1">
@@ -226,13 +224,13 @@ export class AddCategory extends Component {
               </Row>
 
               <Row>
-                <Button.Ripple
-                  color="primary"
-                  type="submit"
-                  className="mr-1 mb-1"
-                >
-                  Add Category
-                </Button.Ripple>
+                <Col>
+                  <div className="d-flex justify-content-start">
+                    <Button.Ripple color="primary" type="submit" className="">
+                      Add Category
+                    </Button.Ripple>
+                  </div>
+                </Col>
               </Row>
             </Form>
           </CardBody>

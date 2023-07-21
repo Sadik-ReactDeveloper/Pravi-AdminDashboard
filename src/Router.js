@@ -345,6 +345,10 @@ const EditProductAttribute = lazy(() =>
 const AddRoleNew = lazy(() =>
   import("./views/apps/freshlist/accounts/AddRoleNew")
 );
+const CreateAccount = lazy(() =>
+  import("./views/apps/freshlist/accounts/CreateAccount")
+);
+const RoleList = lazy(() => import("./views/apps/freshlist/accounts/RoleList"));
 // INhouseProduct
 const HouseProductList = lazy(() =>
   import("./views/apps/freshlist/house/HouseProductList")
@@ -646,10 +650,10 @@ const accessControl = lazy(() =>
 const RouteConfig = ({ component: Component, fullLayout, ...rest }) => (
   <Route
     {...rest}
-    render={props => {
+    render={(props) => {
       return (
         <ContextLayout.Consumer>
-          {context => {
+          {(context) => {
             let LayoutTag =
               fullLayout === true
                 ? context.fullLayout
@@ -669,7 +673,7 @@ const RouteConfig = ({ component: Component, fullLayout, ...rest }) => (
     }}
   />
 );
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     user: state.auth.login.userRole,
   };
@@ -1123,6 +1127,12 @@ class AppRouter extends React.Component {
             path="/app/freshlist/account/addRoleNew"
             component={AddRoleNew}
           />
+          {/* create Account */}
+          <AppRoute
+            path="/app/Trupee/account/CreateAccount"
+            component={CreateAccount}
+          />
+          <AppRoute path="/app/Trupee/account/RoleList" component={RoleList} />
           {/* inhouse Product */}
           <AppRoute
             path="/app/freshlist/house/houseProductList"

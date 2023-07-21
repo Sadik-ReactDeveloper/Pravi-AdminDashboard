@@ -57,32 +57,32 @@ class RoleList extends React.Component {
         resizable: true,
         width: 160,
         cellRendererFramework: (params) => {
-          console.log(params);
+          // console.log(params);
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{params?.data}</span>
+                <span>{params?.data?.role_name}</span>
               </div>
             </div>
           );
         },
       },
-      {
-        headerName: "Created By",
-        field: "Description",
-        filter: true,
-        resizable: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>SuperAdmin</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "Created By",
+      //   field: "Description",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 200,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>SuperAdmin</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       //   {
       //     headerName: "Email",
       //     field: "email",
@@ -289,10 +289,9 @@ class RoleList extends React.Component {
   };
   async componentDidMount() {
     const User = this.context;
-    console.log("@@@@@@", User);
-
+    console.log("Contextapi data", User);
     await axiosConfig.get("/getrolelist").then((response) => {
-      let rowData = response.data.data;
+      let rowData = response.data.data?.roles;
       console.log(rowData);
       this.setState({ rowData });
     });

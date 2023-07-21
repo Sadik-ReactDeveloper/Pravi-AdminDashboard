@@ -175,20 +175,18 @@ class BrandList extends React.Component {
       });
     }
   };
-  
+
   render() {
     const { rowData, columnDefs, defaultColDef } = this.state;
     return (
-     <Row className="app-user-list">
-        <Col sm="12">
-         
-        </Col>
+      <Row className="app-user-list">
+        <Col sm="12"></Col>
         <Col sm="12">
           <Card>
             <Row className="m-2">
               <Col>
                 <h1 col-sm-6 className="float-left">
-                  Brand List
+                  Brand Lists
                 </h1>
               </Col>
               <Col>

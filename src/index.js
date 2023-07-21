@@ -11,6 +11,7 @@ import Spinner from "./components/@vuexy/spinner/Fallback-spinner";
 import "./index.scss";
 import "./@fake-db";
 import App from "./App";
+import State from "./context/State";
 
 //const LazyApp = lazy(() => import("./App"));
 
@@ -23,11 +24,13 @@ ReactDOM.render(
   >
     <Provider store={store}>
       <Suspense fallback={<Spinner />}>
-        <Layout>
-          <IntlProviderWrapper>
-            <App />
-          </IntlProviderWrapper>
-        </Layout>
+        <State>
+          <Layout>
+            <IntlProviderWrapper>
+              <App />
+            </IntlProviderWrapper>
+          </Layout>
+        </State>
       </Suspense>
     </Provider>
     ,

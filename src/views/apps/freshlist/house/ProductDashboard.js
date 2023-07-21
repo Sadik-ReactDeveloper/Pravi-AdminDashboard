@@ -46,7 +46,7 @@ class ProductDashboard extends React.Component {
         headerName: "UID",
         valueGetter: "node.rowIndex + 1",
         field: "node.rowIndex + 1",
-        checkboxSelection: true,
+        // checkboxSelection: true,
         width: 150,
         filter: true,
       },
@@ -56,11 +56,11 @@ class ProductDashboard extends React.Component {
         field: "product",
         filter: "agSetColumnFilter",
         width: 150,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{params.data.description}</span>
+                <span>{params.data?.description}</span>
               </div>
             </div>
           );
@@ -71,7 +71,7 @@ class ProductDashboard extends React.Component {
         field: "category",
         filter: "agSetColumnFilter",
         width: 150,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
@@ -87,7 +87,7 @@ class ProductDashboard extends React.Component {
         field: "brand",
         filter: "agSetColumnFilter",
         width: 120,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
@@ -102,7 +102,7 @@ class ProductDashboard extends React.Component {
         field: "price",
         filter: "agSetColumnFilter",
         width: 120,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
@@ -118,7 +118,7 @@ class ProductDashboard extends React.Component {
 
         filter: "agSetColumnFilter",
         width: 150,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
@@ -133,7 +133,7 @@ class ProductDashboard extends React.Component {
         field: "pisces",
         filter: "agSetColumnFilter",
         width: 120,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
@@ -148,7 +148,7 @@ class ProductDashboard extends React.Component {
         field: "pisces",
         filter: "agSetColumnFilter",
         width: 120,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
@@ -162,7 +162,7 @@ class ProductDashboard extends React.Component {
         headerName: "Actions",
         field: "transactions",
         width: 150,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
               <Trash2
@@ -170,7 +170,10 @@ class ProductDashboard extends React.Component {
                 size="25px"
                 color="Red"
                 onClick={() => {
+                  let selectedData = this.gridApi.getSelectedRows();
+
                   this.runthisfunction(params.data.id);
+                  this.gridApi.updateRowData({ remove: selectedData });
                 }}
               />
             </div>
@@ -181,15 +184,13 @@ class ProductDashboard extends React.Component {
   };
 
   async componentDidMount() {
-    axios
-      .get(
-        "https://invoice-o.com/Infinity/api/ApiCommonController/productlistapi"
-      )
-      .then(response => {
+    axiosConfig
+      .get("/productlistapi")
+      .then((response) => {
         this.setState({ rowData: response.data.data });
-        console.log(response.data.data);
+        // console.log(response.data.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
     // await axiosConfig.get("/gettermsconditions").then(response => {
@@ -202,24 +203,22 @@ class ProductDashboard extends React.Component {
     console.log(id);
     let data = new FormData();
     data.append("id", id);
-    await axios
-      .post(
-        "https://invoice-o.com/Infinity/api/ApiCommonController/deleteproduct",
-        {
-          body: JSON.stringify({
-            id: id.toString(),
-          }),
-        }
-      )
-      .then(resp => {
+    await axiosConfig
+      .post("/deleteproduct", data)
+      // .post("/deleteproduct", {
+      //   body: JSON.stringify({
+      //     id: id.toString(),
+      //   }),
+      // })
+      .then((resp) => {
         console.log(resp);
       })
-      .then(response => {
+      .then((response) => {
         console.log(response);
       });
   }
 
-  onGridReady = params => {
+  onGridReady = (params) => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
     this.setState({
@@ -229,11 +228,11 @@ class ProductDashboard extends React.Component {
     });
   };
 
-  updateSearchQuery = val => {
+  updateSearchQuery = (val) => {
     this.gridApi.setQuickFilter(val);
   };
 
-  filterSize = val => {
+  filterSize = (val) => {
     if (this.gridApi) {
       this.gridApi.paginationSetPageSize(Number(val));
       this.setState({
@@ -467,7 +466,7 @@ class ProductDashboard extends React.Component {
                         <div className="table-input mr-1">
                           <Input
                             placeholder="search..."
-                            onChange={e =>
+                            onChange={(e) =>
                               this.updateSearchQuery(e.target.value)
                             }
                             value={this.state.value}
@@ -484,7 +483,7 @@ class ProductDashboard extends React.Component {
                       </div>
                     </div>
                     <ContextLayout.Consumer>
-                      {context => (
+                      {(context) => (
                         <AgGridReact
                           gridOptions={{}}
                           rowSelection="multiple"

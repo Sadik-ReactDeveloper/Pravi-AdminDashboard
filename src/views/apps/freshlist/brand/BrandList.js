@@ -41,31 +41,31 @@ class BrandList extends React.Component {
         width: 100,
         filter: true,
       },
-      {
-        headerName: "Image",
-        field: "image",
-        filter: true,
-        width: 100,
-        cellRendererFramework: params => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <img
-                className="rounded-circle mr-50"
-                src={params.data?.image}
-                alt="user avatar"
-                height="40"
-                width="40"
-              />
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "Image",
+      //   field: "image",
+      //   filter: true,
+      //   width: 100,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <img
+      //           className="rounded-circle mr-50"
+      //           src={params?.data?.image}
+      //           alt="user avatar"
+      //           height="40"
+      //           width="40"
+      //         />
+      //       </div>
+      //     );
+      //   },
+      // },
       {
         headerName: "Brand Name",
         field: "brand_name",
         filter: true,
-        width: 100,
-        cellRendererFramework: params => {
+        width: 160,
+        cellRendererFramework: (params) => {
           return (
             <div>
               <span>{params.data?.brand_name}</span>
@@ -77,11 +77,11 @@ class BrandList extends React.Component {
         headerName: "Description",
         field: "desc",
         filter: true,
-        width: 100,
-        cellRendererFramework: params => {
+        width: 190,
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data?.desc}</span>
+              <span>{params?.data?.description}</span>
             </div>
           );
         },
@@ -91,12 +91,12 @@ class BrandList extends React.Component {
         field: "status",
         filter: true,
         width: 150,
-        cellRendererFramework: params => {
-          return params.value === "Active" ? (
+        cellRendererFramework: (params) => {
+          return params.data?.status === "Active" ? (
             <div className="badge badge-pill badge-success">
               {params.data.status}
             </div>
-          ) : params.value === "Deactive" ? (
+          ) : params.data?.status === "Deactive" ? (
             <div className="badge badge-pill badge-warning">
               {params.data.status}
             </div>
@@ -108,7 +108,7 @@ class BrandList extends React.Component {
         field: "sortorder",
         field: "transactions",
         width: 150,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
               <Route
@@ -120,7 +120,7 @@ class BrandList extends React.Component {
                       color="green"
                       onClick={() =>
                         history.push(
-                          `/app/freshlist/brand/viewBrand/${params.data._id}`
+                          `/app/freshlist/brand/viewBrand/${params.data.id}`
                         )
                       }
                     />
@@ -130,7 +130,7 @@ class BrandList extends React.Component {
                       color="blue"
                       onClick={() =>
                         history.push(
-                          `/app/freshlist/brand/editBrand/${params.data._id}`
+                          `/app/freshlist/brand/editBrand/${params.data.id}`
                         )
                       }
                     />
@@ -140,7 +140,7 @@ class BrandList extends React.Component {
                       color="red"
                       onClick={() => {
                         let selectedData = this.gridApi.getSelectedRows();
-                        this.runthisfunction(params.data._id);
+                        this.runthisfunction(params.data.id);
                         this.gridApi.updateRowData({ remove: selectedData });
                       }}
                     />
@@ -155,9 +155,10 @@ class BrandList extends React.Component {
   };
 
   async componentDidMount() {
-    await axiosConfig.get("/admin/brandlist").then(response => {
-      let rowData = response.data.data;
-      console.log(rowData);
+    //invoice-o.com/Infinity/api/ApiCommonController
+    await axiosConfig.get("/getbrand").then((response) => {
+      let rowData = response.data.data?.brands;
+      // console.log(rowData);
       this.setState({ rowData });
     });
   }
@@ -165,15 +166,15 @@ class BrandList extends React.Component {
   async runthisfunction(id) {
     console.log(id);
     await axiosConfig.delete(`/admin/del_brand/${id}`).then(
-      response => {
+      (response) => {
         console.log(response);
       },
-      error => {
+      (error) => {
         console.log(error);
       }
     );
   }
-  onGridReady = params => {
+  onGridReady = (params) => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
     this.setState({
@@ -182,10 +183,10 @@ class BrandList extends React.Component {
       totalPages: this.gridApi.paginationGetTotalPages(),
     });
   };
-  updateSearchQuery = val => {
+  updateSearchQuery = (val) => {
     this.gridApi.setQuickFilter(val);
   };
-  filterSize = val => {
+  filterSize = (val) => {
     if (this.gridApi) {
       this.gridApi.paginationSetPageSize(Number(val));
       this.setState({
@@ -206,7 +207,7 @@ class BrandList extends React.Component {
               <Row className="m-2">
                 <Col>
                   <h1 sm="6" className="float-left">
-                    Brand List
+                    Brand List here
                   </h1>
                 </Col>
                 <Col>
@@ -279,7 +280,7 @@ class BrandList extends React.Component {
                         <div className="table-input mr-1">
                           <Input
                             placeholder="search..."
-                            onChange={e =>
+                            onChange={(e) =>
                               this.updateSearchQuery(e.target.value)
                             }
                             value={this.state.value}
@@ -296,7 +297,7 @@ class BrandList extends React.Component {
                       </div>
                     </div>
                     <ContextLayout.Consumer>
-                      {context => (
+                      {(context) => (
                         <AgGridReact
                           gridOptions={{}}
                           rowSelection="multiple"

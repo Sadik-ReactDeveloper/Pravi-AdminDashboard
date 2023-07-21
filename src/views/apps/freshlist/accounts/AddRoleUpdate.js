@@ -3,6 +3,7 @@ import { Row, Col, Card, Button, Label, Input } from "reactstrap";
 import { Roles } from "./AddRole";
 import axios from "axios";
 import axiosConfig from "../../../../axiosConfig";
+import swal from "sweetalert";
 
 export default function AddRoleNew() {
   const [Desc, setDesc] = useState("");
@@ -75,6 +76,14 @@ export default function AddRoleNew() {
       .post(`/addroles`, formdata)
       .then((res) => {
         console.log(res);
+        swal("Success", "Role Created");
+        setSelected("");
+        setDesc("");
+        setRole("");
+        var checkboxes = document.getElementsByName("check");
+        for (var checkbox of checkboxes) {
+          checkbox.checked = false;
+        }
       })
       .catch((er) => {
         console.log(er);
@@ -85,11 +94,7 @@ export default function AddRoleNew() {
       <Row className="">
         <Col xl={12}>
           <Card>
-            <div
-              className="container"
-              // title={data?.cardTitle}
-              // dotsMenu={data?.dotsMenu}
-            />
+            <div className="container" />
             <div className="container py-2">
               <div className="d-flex justify-content-end">
                 <a
@@ -150,16 +155,6 @@ export default function AddRoleNew() {
                       >
                         <Col className="gy-2" lg="4" sm="4" md="4">
                           <div className="align-item-center">
-                            {/* <input
-                              onClick={(e) => {
-                                handleSelectTab(value?.title);
-                              }}
-                              style={{
-                                height: "19px",
-                                width: "26px",
-                              }}
-                              type="checkbox"
-                            /> */}
                             <span className="mx-3 gy-0"> {value?.title}</span>
                           </div>
                         </Col>
@@ -196,6 +191,7 @@ export default function AddRoleNew() {
                                   <Col key={ind} lg="2" md="2" sm="2">
                                     <div className="d-flex justify-content-center">
                                       <input
+                                        name="check"
                                         onClick={(e) => {
                                           handleSelectPage(
                                             e.target.value,
@@ -215,26 +211,6 @@ export default function AddRoleNew() {
                                   </Col>
                                 ))}
                               </Row>
-                              {/* <Col key={i} lg="12" md="12">
-                              <div className="container elementsofaddrole py-2">
-                                <div>
-                                  <Row className="gy-0">
-                                    <Col className="gy-0">
-                                      <h6 className=""> {ele}</h6>
-                                    </Col>
-                                    <Col className="gy-0" lg="3" sm="3">
-                                      <input
-                                        style={{
-                                          height: "19px",
-                                          width: "26px",
-                                        }}
-                                        type="checkbox"
-                                      />
-                                    </Col>
-                                  </Row>{" "}
-                                </div>
-                              </div>
-                            </Col> */}
                             </>
                           ))}
                         </div>

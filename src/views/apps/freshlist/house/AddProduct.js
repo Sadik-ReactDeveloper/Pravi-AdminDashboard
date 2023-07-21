@@ -21,8 +21,13 @@ export class AddProduct extends Component {
     super(props);
     this.state = {
       category_name: "",
-      type: "",
-      feature: "",
+      Price: "",
+      // type: "",
+      description: "",
+      variety: "",
+      shipmentfee: "",
+      Tags: "",
+      taxrate: "",
       status: "",
       selectedFile1: null,
       selectedName1: "",
@@ -35,67 +40,57 @@ export class AddProduct extends Component {
     };
   }
 
-  onChangeHandler1 = event => {
+  onChangeHandler1 = (event) => {
     this.setState({ selectedFile1: event.target.files[0] });
     this.setState({ selectedName1: event.target.files[0].name });
     console.log(event.target.files[0]);
   };
-  onChangeHandler2 = event => {
+  onChangeHandler2 = (event) => {
     this.setState({ selectedFile2: event.target.files[0] });
     this.setState({ selectedName2: event.target.files[0].name });
     console.log(event.target.files[0]);
   };
-  onChangeHandler3 = event => {
+  onChangeHandler3 = (event) => {
     this.setState({ selectedFile3: event.target.files[0] });
     this.setState({ selectedName3: event.target.files[0].name });
     console.log(event.target.files[0]);
   };
-  onChangeHandler4 = event => {
+  onChangeHandler4 = (event) => {
     this.setState({ selectedFile4: event.target.files[0] });
     this.setState({ selectedName4: event.target.files[0].name });
     console.log(event.target.files[0]);
   };
 
-  changeHandler1 = e => {
+  changeHandler1 = (e) => {
     this.setState({ status: e.target.value });
   };
-  changeHandler = e => {
+  changeHandler = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
-  submitHandler = e => {
+  submitHandler = (e) => {
     e.preventDefault();
     const data = new FormData();
-    data.append("category_name", this.state.category_name);
-    data.append("type", this.state.type);
-    data.append("feature", this.state.feature);
-    data.append("status", this.state.status);
-    data.append("image", this.state.selectedFile1, this.state.selectedName1);
-    data.append(
-      "thumbnail_img",
-      this.state.selectedFile2,
-      this.state.selectedName2
-    );
-    data.append(
-      "web_banner",
-      this.state.selectedFile3,
-      this.state.selectedName3
-    );
-    data.append(
-      "app_banner",
-      this.state.selectedFile4,
-      this.state.selectedName4
-    );
+
+    data.append("title", this.state.category_name);
+    data.append("veriety", this.state.variety);
+    data.append("price", this.state.Price);
+    data.append("description", this.state.description);
+    data.append("shipping_fee", this.state.shipmentfee);
+    data.append("tax_rate", this.state.taxrate);
+    data.append("tags", this.state.Tags);
+    // data.append("status", this.state.status);
+    data.append("image", this.state.selectedFile1);
 
     axiosConfig
-      .post(`/admin/addcategory`, data)
-      .then(response => {
+      .post(`/addproduct`, data)
+      .then((response) => {
         console.log(response);
-        if (response.data.msg === "success") {
-          swal("Success!", "You Data IS been Submitted", "success");
-          this.props.history.push("/app/freshlist/category/categoryList");
+        if (response.data.success) {
+          swal("Success!", "You Data iS been Submitted", "success");
+          // this.props.history.push("/app/freshlist/category/categoryList");
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -108,7 +103,7 @@ export class AddProduct extends Component {
             <Col>
               <h2>Basic Information</h2>
             </Col>
-            <Col>
+            {/* <Col>
               <Route
                 render={({ history }) => (
                   <Button
@@ -121,64 +116,64 @@ export class AddProduct extends Component {
                   </Button>
                 )}
               />
-            </Col>
+            </Col> */}
           </Row>
           <CardBody>
             <Form className="m-1" onSubmit={this.submitHandler}>
               <Row className="mb-2">
-                <Col lg="12" md="12">
+                <Col lg="6" md="6">
                   <FormGroup>
                     <Label>Title</Label>
                     <Input
                       type="text"
                       placeholder="Title"
-                      name="title"
+                      name="category_name"
                       bsSize="lg"
-                      //   value={this.state.category_name}
-                      //   onChange={this.changeHandler}
+                      value={this.state.category_name}
+                      onChange={this.changeHandler}
                     />
                   </FormGroup>
                 </Col>
-                <Col lg="12" md="12">
+                <Col lg="6" md="6">
                   <FormGroup>
                     <Label>Description</Label>
                     <Input
-                      type="textarea"
-                      placeholder="Description"
+                      type="text"
+                      placeholder="Description ..."
                       name="description"
                       bsSize="lg"
-                      //   value={this.state.category_name}
-                      //   onChange={this.changeHandler}
+                      value={this.state.description}
+                      onChange={this.changeHandler}
                     />
                   </FormGroup>
                 </Col>
-                <Col lg="12" md="12">
+                <Col lg="6" md="6">
                   <FormGroup>
-                    <Label>REGULAR PRICE (₹)</Label>
+                    <Label> PRICE (₹)</Label>
                     <Input
                       type="number"
                       placeholder="Amount In Number"
-                      name="title"
+                      name="Price"
                       bsSize="lg"
-                      //   value={this.state.category_name}
-                      //   onChange={this.changeHandler}
+                      value={this.state.Price}
+                      onChange={this.changeHandler}
                     />
                   </FormGroup>
                 </Col>
-                <Col lg="12" md="12">
+                <Col lg="6" md="6">
                   <FormGroup>
-                    <Label>DISCOUNT PRICE (₹)</Label>
+                    <Label>Variety</Label>
                     <Input
-                      type="number"
-                      placeholder="Amount In Number"
-                      name="DISCOUNT"
+                      type="text"
+                      placeholder="Variety..."
+                      name="variety"
                       bsSize="lg"
-                      //   value={this.state.category_name}
-                      //   onChange={this.changeHandler}
+                      value={this.state.variety}
+                      onChange={this.changeHandler}
                     />
                   </FormGroup>
                 </Col>
-                <Col lg="12" md="12">
+                {/* <Col lg="6" md="6">
                   <FormGroup>
                     <Label>STOCK</Label>
                     <Input
@@ -186,76 +181,89 @@ export class AddProduct extends Component {
                       placeholder="STOCK"
                       name="STOCK"
                       bsSize="lg"
-                      //   value={this.state.category_name}
-                      //   onChange={this.changeHandler}
+                        value={this.state.category_name}
+                        onChange={this.changeHandler}
                     />
                   </FormGroup>
-                </Col>
-                <Col lg="12" md="12">
+                </Col> */}
+                <Col lg="6" md="6">
                   <FormGroup>
                     <Label>SHIPING FEE(₹)</Label>
                     <Input
                       type="number"
-                      placeholder="Amount In Number"
-                      name="DISCOUNT"
+                      placeholder="Number..."
+                      name="shipmentfee"
                       bsSize="lg"
-                      //   value={this.state.category_name}
-                      //   onChange={this.changeHandler}
+                      value={this.state.shipmentfee}
+                      onChange={this.changeHandler}
                     />
                   </FormGroup>
                 </Col>
-                <Col lg="12" md="12">
+                <Col lg="6" md="6">
                   <FormGroup>
                     <Label>TAX RATE (%)</Label>
                     <Input
                       type="number"
                       placeholder="Tax in Percentage"
-                      name="TAX"
+                      name="taxrate"
                       bsSize="lg"
-                      //   value={this.state.category_name}
-                      //   onChange={this.changeHandler}
+                      value={this.state.taxrate}
+                      onChange={this.changeHandler}
                     />
                   </FormGroup>
                 </Col>
-                <Col lg="12" md="12">
+                <Col lg="6" md="6">
                   <FormGroup>
                     <Label>TAGS</Label>
                     <Input
-                      type="textarea"
+                      type="text"
                       placeholder="Type here..."
-                      name="TAGS"
+                      name="Tags"
                       bsSize="lg"
-                      //   value={this.state.category_name}
-                      //   onChange={this.changeHandler}
+                      value={this.state.Tags}
+                      onChange={this.changeHandler}
                     />
                   </FormGroup>
                 </Col>
               </Row>
               <Row>
-                <Col className="my-2" lg="12" md="6">
+                <Row className="my-2 mx-2">
                   <h2>Media & Published</h2>
-                </Col>
-
-                <Col lg="3" md="3">
-                  <FormGroup>
-                    <CustomInput type="file" onChange={this.onChangeHandler3} />
-                  </FormGroup>
-                </Col>
-                <Col lg="3" md="3">
-                  <FormGroup>
-                    <CustomInput type="file" onChange={this.onChangeHandler3} />
-                  </FormGroup>
-                </Col>
-                <Col lg="3" md="3">
-                  <FormGroup>
-                    <CustomInput type="file" onChange={this.onChangeHandler3} />
-                  </FormGroup>
-                </Col>
-                <Col lg="3" md="3">
-                  <FormGroup>
-                    <CustomInput type="file" onChange={this.onChangeHandler3} />
-                  </FormGroup>
-                </Col>
+                </Row>
+                <Row>
+                  <Col lg="3" md="3">
+                    <FormGroup>
+                      <CustomInput
+                        type="file"
+                        onChange={this.onChangeHandler3}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col lg="3" md="3">
+                    <FormGroup>
+                      <CustomInput
+                        type="file"
+                        onChange={this.onChangeHandler3}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col lg="3" md="3">
+                    <FormGroup>
+                      <CustomInput
+                        type="file"
+                        onChange={this.onChangeHandler3}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col lg="3" md="3">
+                    <FormGroup>
+                      <CustomInput
+                        type="file"
+                        onChange={this.onChangeHandler3}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
               </Row>
               <Row>
                 <Button.Ripple
