@@ -160,7 +160,7 @@ class SideMenuContent extends React.Component {
       //     tab.hidden = true;
       //   }
       // });
-      // debugger;
+      // debugger
       // const hasVisibleChildren = item.children.some((child) => !child.hidden);
 
       // if (!hasVisibleChildren) {
