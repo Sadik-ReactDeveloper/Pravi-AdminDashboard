@@ -32,6 +32,7 @@ export class CreateAccount extends Component {
       AssignRole: "",
       Selectuser: "",
       UserName: "",
+      productName: [],
     };
   }
   changeHandler = (e) => {
@@ -41,31 +42,19 @@ export class CreateAccount extends Component {
     this.setState({ status: e.target.value });
   };
 
-  //   async componentDidMount() {
-  //     axiosConfig
-  //       .get("/admin/product_list")
-  //       .then((response) => {
-  //         console.log(response.data.data);
-  //         this.setState({
-  //           productName: response.data.data,
-  //         });
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //       });
-
-  //     axiosConfig
-  //       .get("/admin/getall_units")
-  //       .then((response) => {
-  //         this.setState({
-  //           attribuName: response.data.data,
-  //         });
-  //       })
-  //       .catch((err) => {
-  //         swal("Oops", "Something went wrong!", "error");
-  //         console.log(err);
-  //       });
-  //   }
+  async componentDidMount() {
+    axiosConfig
+      .get("/getrolelist")
+      .then((response) => {
+        // console.log(response.data?.data?.roles);
+        this.setState({
+          productName: response.data?.data?.roles,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   submitHandler = (e) => {
     e.preventDefault();
@@ -308,9 +297,13 @@ export class CreateAccount extends Component {
                     onChange={this.changeHandler}
                   >
                     <option value="Admin">Admin</option>
-                    <option value="Seller">Seller</option>
-                    <option value="Seller">UPI</option>
-                    <option value="Seller">Other</option>
+
+                    {this.state.productName &&
+                      this.state.productName?.map((value, index) => (
+                        <option key={index} value={value?.role_name}>
+                          {value?.role_name}
+                        </option>
+                      ))}
                   </CustomInput>
                 </Col>
                 {/* <Col lg="6" md="6">

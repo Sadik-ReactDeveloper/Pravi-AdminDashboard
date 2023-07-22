@@ -23,16 +23,21 @@ import LoginAuth0 from "./LoginAuth0";
 import LoginFirebase from "./LoginFirebase";
 import LoginJWT from "./LoginJWT";
 import { connect } from "react-redux";
-import axios from "axios";
+// import UserContext from "../../../../context/Context";
+
 import swal from "sweetalert";
+import axiosConfig from "../../../../axiosConfig";
 
 class Login extends React.Component {
+  // static contextType = UserContext;
+
   constructor(props) {
     super(props);
 
     this.state = {
       email: "",
       password: "",
+      // rowData: {},
     };
   }
   handlechange = (e) => {
@@ -43,24 +48,28 @@ class Login extends React.Component {
   loginHandler = (e) => {
     e.preventDefault();
     const fromdata = new FormData();
-    fromdata.append("usrname", this.state.email);
+    fromdata.append("username", this.state.email);
     fromdata.append("password", this.state.password);
     // console.log(this.state.email);
     // console.log(this.state.password);
-    axios
-      .post("http://3.6.37.16:8000/admin/adminlogin", fromdata)
+    axiosConfig
+      .post("/usersign", fromdata)
       .then((response) => {
-        swal("Successful!", "You clicked the button!", "success");
-        console.log(response.data.user);
-        console.log(response.data);
-        localStorage.setItem("auth-admintoken", response.data.token);
-        localStorage.setItem("userData", JSON.stringify(response.data.user));
-        this.props.history.push("/dashboard");
-        // history.push("/dashboard");
+        let msg = response.data?.success;
+        if (msg) {
+          swal("Successful!", "You are LoggedIn!", "Success");
+          this.props.history.push("/dashboard");
+          localStorage.setItem("userData", JSON.stringify(response.data?.data));
+        }
       })
       .catch((error) => {
-        console.log(error.response);
-        swal("Error!", "Invalid! Email or Password ", "error");
+        // console.log(error.response?.data.success);
+        let msg = error.response?.data.success;
+
+        if (!msg) {
+          swal("Error", "Invalid Username or Password");
+        }
+        // swal("Error!", "Invalid! Email or Password ", "error");
       });
   };
 

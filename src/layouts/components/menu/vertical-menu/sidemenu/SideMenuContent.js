@@ -7,8 +7,11 @@ import { Badge } from "reactstrap";
 import { ChevronRight } from "react-feather";
 import { FormattedMessage } from "react-intl";
 import { history } from "../../../../../history";
+// import UserContext from "../../../../../context/Context";
 
 class SideMenuContent extends React.Component {
+  // static contextType = UserContext;
+
   constructor(props) {
     super(props);
 
@@ -24,6 +27,9 @@ class SideMenuContent extends React.Component {
     activeGroups: [],
     currentActiveGroup: [],
     tempArr: [],
+    userData: {},
+    showpages: [],
+    showpage: [],
   };
 
   handleGroupClick = (id, parent = null, type = "") => {
@@ -105,6 +111,15 @@ class SideMenuContent extends React.Component {
   };
 
   componentDidMount() {
+    // const User = this.context;
+    // console.log("Contextapi", User);
+    let { showpage, input } = this.state;
+    let userCredentials = JSON.parse(localStorage.getItem("userData"));
+
+    let TabparMission = userCredentials?.role?.map((value) => value?.pageName);
+
+    this.setState({ showpage: TabparMission });
+    this.setState({ userData: userCredentials });
     this.initRender(this.parentArr[0] ? this.parentArr[0] : []);
   }
 
@@ -122,36 +137,39 @@ class SideMenuContent extends React.Component {
 
   render() {
     // Loop over sidebar items
-
-    const tabsToHide = [
-      "Pending",
-      // "DASHBOARD",
-      // "Orders",
-      // "Confirmed",
-      // "In Process",
-      // "Account",
-      // "Client Accounts",
-      // "Create Account",
+    console.log(this.state.showpage);
+    const arr = [
+      "Dashboard",
+      "Account",
+      "Create Account",
+      "Client Account",
+      "Create Role",
     ];
-
     const menuItems = navigationConfig.map((item, i) => {
-      navigationConfig[i].children?.forEach((tab) => {
-        if (tabsToHide.includes(tab?.title)) {
+      navigationConfig[i].children?.forEach((tab, imd) => {
+        if (arr?.includes(tab?.title)) {
+          tab.hidden = false;
+        } else {
           tab.hidden = true;
         }
       });
-      navigationConfig?.forEach((tab) => {
-        if (tabsToHide.includes(tab?.title)) {
-          console.log(tab.title);
+      navigationConfig?.forEach((tab, i) => {
+        if (arr?.includes(tab?.title)) {
+          tab.hidden = false;
+        } else {
           tab.hidden = true;
         }
       });
-      // working side menu
-      // console.log("my tabs", item);
+      debugger;
+      // const hasVisibleChildren = item.children.some((child) => !child.hidden);
+
+      // if (!hasVisibleChildren) {
+      //   hasVisibleChildren = false;
+      // }
+
       if (item.hidden) {
         return null; // Skip rendering the hidden tab
       }
-
       const CustomAnchorTag = item.type === "external-link" ? `a` : Link;
       // checks if item has groupheader
       if (item.type === "groupHeader") {

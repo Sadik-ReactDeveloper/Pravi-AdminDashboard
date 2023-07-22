@@ -288,8 +288,8 @@ class RoleList extends React.Component {
     ],
   };
   async componentDidMount() {
-    const User = this.context;
-    console.log("Contextapi data", User);
+    // const User = this.context;
+    // console.log("Contextapi data", User);
     await axiosConfig.get("/getrolelist").then((response) => {
       let rowData = response.data.data?.roles;
       console.log(rowData);

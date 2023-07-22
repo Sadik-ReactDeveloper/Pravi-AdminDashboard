@@ -36,7 +36,7 @@ import { FiBarChart2 } from "react-icons/fi";
 const navigationConfig = [
   {
     id: "dashboard",
-    title: "DASHBOARD",
+    title: "Dashboard",
     type: "item",
     icon: <FaHome size={15} />,
     permissions: ["admin", "editor"],
@@ -170,7 +170,8 @@ const navigationConfig = [
   // },
   {
     type: "groupHeader",
-    groupTitle: "ACCOUNTS MANAGEMENT",
+    groupTitle: "Account",
+    title: "Account",
   },
   {
     id: "account",
@@ -189,7 +190,7 @@ const navigationConfig = [
 
       {
         id: "clientAccounts",
-        title: "Client Accounts",
+        title: "Client Account",
         type: "item",
         icon: <FaGopuram size={15} />,
         permissions: ["admin", "editor"],
@@ -197,7 +198,7 @@ const navigationConfig = [
       },
       {
         id: "accountantaccounts",
-        title: "Accountant Accounts",
+        title: "Accountant Account",
         type: "item",
         icon: <FaGopuram size={15} />,
         permissions: ["admin", "editor"],

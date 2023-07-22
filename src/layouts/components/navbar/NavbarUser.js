@@ -443,6 +443,7 @@ class NavbarUser extends React.PureComponent {
               {/* <span className="user-status">{this.state.userData.name}</span> */}
             </div>
             <span data-tour="user">
+              {/* userimage integrated here */}
               <img
                 src={userData?.image}
                 // src={userData.image === undefined ? userData.image : null}

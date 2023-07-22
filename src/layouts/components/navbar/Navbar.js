@@ -87,6 +87,7 @@ const ThemeNavbar = (props) => {
                   <h2 className="text-primary brand-text mb-0">Vuexy</h2>
                 </div>
               ) : null}
+              {/* working navbar */}
               <NavbarUser
                 handleAppOverlay={props.handleAppOverlay}
                 changeCurrentLang={props.changeCurrentLang}

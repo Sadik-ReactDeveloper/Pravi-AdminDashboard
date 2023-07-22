@@ -17,7 +17,7 @@ class SideMenuGroup extends React.Component {
     activeItem: this.props.activePath,
   };
 
-  handleActiveItem = url => {
+  handleActiveItem = (url) => {
     this.setState({
       activeItem: url,
     });
@@ -46,7 +46,7 @@ class SideMenuGroup extends React.Component {
     return (
       <ul className="menu-content">
         {item.children
-          ? item.children.map(child => {
+          ? item.children.map((child) => {
               if (child.hidden) {
                 return null; // Skip rendering the hidden tab
               }
@@ -88,7 +88,7 @@ class SideMenuGroup extends React.Component {
                           item.parentOf.includes(this.props.activeItemState)),
                       disabled: child.disabled,
                     })}
-                    onClick={e => {
+                    onClick={(e) => {
                       e.stopPropagation();
                       handleGroupClick(child.id, item.id, child.type);
                       if (child.navLink && child.navLink !== undefined) {
@@ -120,7 +120,7 @@ class SideMenuGroup extends React.Component {
                         this.props.handleSidebarMouseEnter(child.id);
                       }}
                       key={child.id}
-                      onClick={e => {
+                      onClick={(e) => {
                         return child.type === "collapse"
                           ? e.preventDefault()
                           : "";
