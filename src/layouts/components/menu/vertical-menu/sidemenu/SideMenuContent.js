@@ -146,21 +146,21 @@ class SideMenuContent extends React.Component {
       "Create Role",
     ];
     const menuItems = navigationConfig.map((item, i) => {
-      navigationConfig[i].children?.forEach((tab, imd) => {
-        if (arr?.includes(tab?.title)) {
-          tab.hidden = false;
-        } else {
-          tab.hidden = true;
-        }
-      });
-      navigationConfig?.forEach((tab, i) => {
-        if (arr?.includes(tab?.title)) {
-          tab.hidden = false;
-        } else {
-          tab.hidden = true;
-        }
-      });
-      debugger;
+      // navigationConfig[i].children?.forEach((tab, imd) => {
+      //   if (arr?.includes(tab?.title)) {
+      //     tab.hidden = false;
+      //   } else {
+      //     tab.hidden = true;
+      //   }
+      // });
+      // navigationConfig?.forEach((tab, i) => {
+      //   if (arr?.includes(tab?.title)) {
+      //     tab.hidden = false;
+      //   } else {
+      //     tab.hidden = true;
+      //   }
+      // });
+      // debugger;
       // const hasVisibleChildren = item.children.some((child) => !child.hidden);
 
       // if (!hasVisibleChildren) {
