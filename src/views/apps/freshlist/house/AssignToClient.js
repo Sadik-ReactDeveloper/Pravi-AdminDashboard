@@ -14,7 +14,7 @@ import {
   CardText,
   Label,
 } from "reactstrap";
-import axios from "axios";
+
 import axiosConfig from "../../../../axiosConfig";
 import ReactHtmlParser from "react-html-parser";
 import { ContextLayout } from "../../../../utility/context/Layout";
@@ -56,11 +56,11 @@ class AssignToClient extends React.Component {
         field: "product",
         filter: "agSetColumnFilter",
         width: 150,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{params.data.product}</span>
+                <span>{params.data?.title}</span>
               </div>
             </div>
           );
@@ -71,7 +71,7 @@ class AssignToClient extends React.Component {
         field: "category",
         filter: "agSetColumnFilter",
         width: 150,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
@@ -87,7 +87,7 @@ class AssignToClient extends React.Component {
         field: "brand",
         filter: "agSetColumnFilter",
         width: 120,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
@@ -102,7 +102,7 @@ class AssignToClient extends React.Component {
         field: "price",
         filter: "agSetColumnFilter",
         width: 120,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
@@ -118,7 +118,7 @@ class AssignToClient extends React.Component {
 
         filter: "agSetColumnFilter",
         width: 150,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
@@ -133,7 +133,7 @@ class AssignToClient extends React.Component {
         field: "pisces",
         filter: "agSetColumnFilter",
         width: 120,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
@@ -148,7 +148,7 @@ class AssignToClient extends React.Component {
         field: "pisces",
         filter: "agSetColumnFilter",
         width: 120,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
@@ -159,11 +159,26 @@ class AssignToClient extends React.Component {
         },
       },
       {
+        headerName: "description",
+        field: "description",
+        filter: "agSetColumnFilter",
+        width: 120,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{ReactHtmlParser(params.data?.description)}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
         headerName: "ASSIGN TO CLIENT",
         field: "assigntoclient",
         filter: "agSetColumnFilter",
         width: 120,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
@@ -177,7 +192,7 @@ class AssignToClient extends React.Component {
         headerName: "Actions",
         field: "transactions",
         width: 150,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
               <Route
@@ -212,27 +227,25 @@ class AssignToClient extends React.Component {
   };
 
   async componentDidMount() {
-    axios
-      .get(
-        "https://invoice-o.com/Infinity/api/ApiCommonController/productlistapi"
-      )
-      .then(response => {
+    axiosConfig
+      .get("/productlistapi")
+      .then((response) => {
         this.setState({ rowData: response.data.data });
-        console.log(response.data.data);
+        // console.log(response.data.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
 
   async runthisfunction(id) {
     console.log(id);
-    await axiosConfig.get(`/deltermcondition/${id}`).then(response => {
+    await axiosConfig.get(`/deltermcondition/${id}`).then((response) => {
       console.log(response);
     });
   }
 
-  onGridReady = params => {
+  onGridReady = (params) => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
     this.setState({
@@ -242,11 +255,11 @@ class AssignToClient extends React.Component {
     });
   };
 
-  updateSearchQuery = val => {
+  updateSearchQuery = (val) => {
     this.gridApi.setQuickFilter(val);
   };
 
-  filterSize = val => {
+  filterSize = (val) => {
     if (this.gridApi) {
       this.gridApi.paginationSetPageSize(Number(val));
       this.setState({
@@ -478,7 +491,7 @@ class AssignToClient extends React.Component {
                         <div className="table-input mr-1">
                           <Input
                             placeholder="search..."
-                            onChange={e =>
+                            onChange={(e) =>
                               this.updateSearchQuery(e.target.value)
                             }
                             value={this.state.value}
@@ -495,7 +508,7 @@ class AssignToClient extends React.Component {
                       </div>
                     </div>
                     <ContextLayout.Consumer>
-                      {context => (
+                      {(context) => (
                         <AgGridReact
                           gridOptions={{}}
                           rowSelection="multiple"

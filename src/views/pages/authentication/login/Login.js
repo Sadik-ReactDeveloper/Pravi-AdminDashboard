@@ -57,7 +57,26 @@ class Login extends React.Component {
       .then((response) => {
         let msg = response.data?.success;
         if (msg) {
-          swal("Successful!", "You are LoggedIn!", "Success");
+          swal(
+            "Sucessfully login",
+            "You are LoggedIn!",
+            "Success",
+
+            {
+              buttons: {
+                ok: { text: "Ok", value: "ok" },
+                // catch: { text: "Cancel ", value: "catch" },
+              },
+            }
+          ).then((value) => {
+            switch (value) {
+              case "ok":
+                window.location.reload();
+                break;
+              default:
+            }
+          });
+
           this.props.history.push("/dashboard");
           localStorage.setItem("userData", JSON.stringify(response.data?.data));
         }
@@ -104,7 +123,7 @@ class Login extends React.Component {
                       </CardTitle>
                     </CardHeader>
                     <p className="px-2 auth-title mb-2">
-                      Welcome back, please login to your account.
+                      Welcome back, Please login to your account.
                     </p>
                     <Form onSubmit={this.loginHandler}>
                       <Label>UserName</Label>

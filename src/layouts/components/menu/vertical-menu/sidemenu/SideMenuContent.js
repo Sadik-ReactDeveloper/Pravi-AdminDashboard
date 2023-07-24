@@ -109,19 +109,19 @@ class SideMenuContent extends React.Component {
       flag: false,
     });
   };
-
-  componentDidMount() {
-    // const User = this.context;
-    // console.log("Contextapi", User);
-    let { showpage, input } = this.state;
+  handleshow = () => {
     let userCredentials = JSON.parse(localStorage.getItem("userData"));
 
     let TabparMission = userCredentials?.role?.map((value) => value?.pageName);
 
     this.setState({ showpage: TabparMission });
     this.setState({ userData: userCredentials });
+  };
+  componentDidMount = async () => {
+    await this.handleshow();
+
     this.initRender(this.parentArr[0] ? this.parentArr[0] : []);
-  }
+  };
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.activePath !== this.props.activePath) {
@@ -137,37 +137,23 @@ class SideMenuContent extends React.Component {
 
   render() {
     // Loop over sidebar items
-    console.log(this.state.showpage);
-    const arr = [
-      "Dashboard",
-      "Accounts",
-      "Create Account",
-      "Create Role",
-      "Client Account",
-      "Accountant Account",
-    ];
+    // console.log(this.state.showpage);
+
     const menuItems = navigationConfig.map((item, i) => {
       // navigationConfig[i].children?.forEach((tab) => {
-      //   if (arr?.includes(tab?.title)) {
+      //   if (this.state.showpage?.includes(tab?.title)) {
       //     tab.hidden = false;
       //   } else {
       //     tab.hidden = true;
       //   }
       // });
       // navigationConfig?.forEach((tab) => {
-
-      //   if (arr?.includes(tab?.title)) {
+      //   if (this.state.showpage?.includes(tab?.title)) {
       //     tab.hidden = false;
       //   } else {
       //     tab.hidden = true;
       //   }
       // });
-
-      // const hasVisibleChildren = item.children.some((child) => !child.hidden);
-
-      // if (!hasVisibleChildren) {
-      //   hasVisibleChildren = false;
-      // }
 
       if (item.hidden) {
         return null; // Skip rendering the hidden tab
