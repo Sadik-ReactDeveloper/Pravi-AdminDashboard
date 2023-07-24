@@ -259,17 +259,22 @@ class RoleList extends React.Component {
                 className="mr-50"
                 size="25px"
                 color="green"
-                // onClick={() =>
-                //   history.push(
-                //     `/app/freshlist/order/viewAll/${params.data._id}`
-                //   )
-                // }
+                onClick={() =>
+                  history.push(
+                    `/app/freshlist/account/updateexistingrole/${params.data.id}`
+                  )
+                }
               />
               <Edit2
                 className="mr-50"
                 size="25px"
                 color="blue"
-                //   onClick={() => history.push("/app/freshlist/order/EditOrder")}
+                onClick={() =>
+                  history.push(
+                    `/app/freshlist/account/updateexistingrole`
+                    // `/app/freshlist/account/updateexistingrole/${params.data.id}`
+                  )
+                }
               />
               <BsTrash
                 className="mr-50"

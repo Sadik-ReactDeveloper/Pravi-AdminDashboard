@@ -345,6 +345,9 @@ const EditProductAttribute = lazy(() =>
 const AddRoleNew = lazy(() =>
   import("./views/apps/freshlist/accounts/AddRoleNew")
 );
+const UpdateExistingRole = lazy(() =>
+  import("./views/apps/freshlist/accounts/UpdateExistingRole")
+);
 const CreateAccount = lazy(() =>
   import("./views/apps/freshlist/accounts/CreateAccount")
 );
@@ -1129,6 +1132,10 @@ class AppRouter extends React.Component {
           <AppRoute
             path="/app/freshlist/account/addRoleNew"
             component={AddRoleNew}
+          />
+          <AppRoute
+            path="/app/freshlist/account/updateexistingrole"
+            component={UpdateExistingRole}
           />
           {/* create Account */}
           <AppRoute
