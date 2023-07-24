@@ -380,7 +380,9 @@ const ServiceMaster = lazy(() =>
 const ProductType = lazy(() =>
   import("./views/apps/freshlist/house/ProductType")
 );
-
+const EditProductType = lazy(() =>
+  import("./views/apps/freshlist/house/EditProductType")
+);
 const EditHouseProduct = lazy(() =>
   import("./views/apps/freshlist/house/EditHouseProduct")
 );
@@ -546,6 +548,7 @@ const Badge = lazy(() => import("./components/reactstrap/badge/Badge"));
 const BadgePill = lazy(() =>
   import("./components/reactstrap/badgePills/BadgePill")
 );
+
 const Progress = lazy(() =>
   import("./components/reactstrap/progress/Progress")
 );
@@ -1169,6 +1172,10 @@ class AppRouter extends React.Component {
           <AppRoute
             path="/app/freshlist/house/producttype"
             component={ProductType}
+          />
+          <AppRoute
+            path="/app/freshlist/house/editProductType/:id"
+            component={EditProductType}
           />
           <AppRoute
             path="/app/freshlist/house/EditHouseProduct/:id"

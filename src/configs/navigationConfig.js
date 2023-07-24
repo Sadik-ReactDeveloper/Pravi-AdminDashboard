@@ -73,14 +73,14 @@ const navigationConfig = [
         permissions: ["admin", "editor"],
         navLink: "/app/freshlist/house/producttype",
       },
-      {
-        id: "clientAccounts",
-        title: "Client Account",
-        type: "item",
-        icon: <FaCircle size={15} />,
-        permissions: ["admin", "editor"],
-        navLink: "/app/freshlist/house/producttype",
-      },
+      // {
+      //   id: "clientAccounts",
+      //   title: "Client Account",
+      //   type: "item",
+      //   icon: <FaCircle size={15} />,
+      //   permissions: ["admin", "editor"],
+      //   navLink: "/app/freshlist/house/producttype",
+      // },
       {
         id: "accountantaccounts",
         title: "Accountant Account",
