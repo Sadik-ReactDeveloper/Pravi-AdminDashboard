@@ -43,17 +43,15 @@ export class CreateAccount extends Component {
   };
 
   async componentDidMount() {
-    //invoice-o.com/Infinity/api/ApiCommonController
-    https: axiosConfig
+    axiosConfig
       .get("/getrolelistdropdown")
       .then((response) => {
-        console.log(response.data?.data?.roles);
         const propertyNames = Object.values(response.data?.data?.roles);
 
         console.log(propertyNames);
-        // this.setState({
-        //   productName: response.data?.data?.roles,
-        // });
+        this.setState({
+          productName: propertyNames,
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -304,8 +302,8 @@ export class CreateAccount extends Component {
 
                     {this.state.productName &&
                       this.state.productName?.map((value, index) => (
-                        <option key={index} value={value?.role_name}>
-                          {value?.role_name}
+                        <option key={index} value={value}>
+                          {value}
                         </option>
                       ))}
                   </CustomInput>

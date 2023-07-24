@@ -61,7 +61,7 @@ class RoleList extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{params?.data?.role_name}</span>
+                <span>{params?.data}</span>
               </div>
             </div>
           );
@@ -292,9 +292,24 @@ class RoleList extends React.Component {
     // console.log("Contextapi data", User);
     await axiosConfig.get("/getrolelist").then((response) => {
       let rowData = response.data.data?.roles;
-      console.log(rowData);
-      this.setState({ rowData });
+      // console.log(rowData);
+      // this.setState({ rowData });
     });
+    axiosConfig
+      .get("/getrolelistdropdown")
+      .then((response) => {
+        const propertyNames = Object.values(response.data?.data?.roles);
+
+        // console.log(propertyNames);
+        this.setState({ rowData: propertyNames });
+
+        // this.setState({
+        //   productName: propertyNames,
+        // });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   async runthisfunction(id) {
