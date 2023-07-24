@@ -104,16 +104,7 @@ export default function AddRoleNew() {
         <Col xl={12}>
           <Card>
             <div className="container" />
-            {/* <div className="container py-2">
-              <div className="d-flex justify-content-end">
-                <a
-                  onClick={() => navigate("/m/role")}
-                  style={{ color: "blue", cursor: "pointer" }}
-                >
-                  <Button color="primary">Back</Button>
-                </a>
-              </div>
-            </div> */}
+
             <Form onSubmit={handleSumit}>
               <div className="container mt-5">
                 <Row className="mb-3 container">

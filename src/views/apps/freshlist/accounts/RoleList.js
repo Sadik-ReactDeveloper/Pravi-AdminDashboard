@@ -300,12 +300,7 @@ class RoleList extends React.Component {
       .then((response) => {
         const propertyNames = Object.values(response.data?.data?.roles);
 
-        // console.log(propertyNames);
         this.setState({ rowData: propertyNames });
-
-        // this.setState({
-        //   productName: propertyNames,
-        // });
       })
       .catch((error) => {
         console.log(error);
