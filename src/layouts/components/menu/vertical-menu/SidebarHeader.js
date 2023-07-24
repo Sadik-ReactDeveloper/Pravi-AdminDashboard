@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { ArrowRight, X, Circle } from "react-feather";
 import classnames from "classnames";
-import logo from "../../../../assets/img/logo/logo.ico";
+import logo from "../../../../assets/img/logo/logomain.png";
+import { AiFillLeftCircle } from "react-icons/ai";
+
 class SidebarHeader extends Component {
   render() {
     let {
@@ -16,18 +18,19 @@ class SidebarHeader extends Component {
     return (
       <div className="navbar-header">
         <ul className="nav navbar-nav flex-row">
-          <li className="nav-item mr-auto">
+          <li className="nav-item">
             <NavLink to="/" className="navbar-brand">
-              <div className="brand-logo mb-6" />
+              <div className="brand-logo" />
               {/* <h2 className="brand-text mb-0">Deepak</h2> */}
-              <img src={logo} alt="logo" width="80px" height="80px" />
+              <img src={logo} alt="logo" width="160px" />
               {/* <h1 style={{ width: "100", color: "green" }}>FreshList</h1> */}
             </NavLink>
           </li>
           <li className="nav-item nav-toggle ">
             <div className="nav-link modern-nav-toggle">
               {collapsed === false ? (
-                <X
+                <AiFillLeftCircle
+                  style={{ cursor: "pointer" }}
                   onClick={() => {
                     toggleSidebarMenu(true);
                     toggle();
