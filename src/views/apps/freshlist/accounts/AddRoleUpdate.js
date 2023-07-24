@@ -4,11 +4,14 @@ import { Roles } from "./AddRole";
 import axios from "axios";
 import axiosConfig from "../../../../axiosConfig";
 import swal from "sweetalert";
+import { BsFillArrowDownCircleFill } from "react-icons/bs";
 
 export default function AddRoleNew() {
   const [Desc, setDesc] = useState("");
   const [Role, setRole] = useState("");
   const [Selected, setSelected] = useState([]);
+  const [SelectedIndex, setIndex] = useState("");
+  const [show, setShow] = useState(false);
 
   // const navigate = useNavigate();
 
@@ -89,13 +92,19 @@ export default function AddRoleNew() {
         console.log(er);
       });
   };
+  const handlesetparent = (value, index) => {
+    // console.log(value);
+    // console.log(index);
+    setShow(value);
+    setIndex(index);
+  };
   return (
     <>
       <Row className="">
         <Col xl={12}>
           <Card>
             <div className="container" />
-            <div className="container py-2">
+            {/* <div className="container py-2">
               <div className="d-flex justify-content-end">
                 <a
                   onClick={() => navigate("/m/role")}
@@ -104,7 +113,7 @@ export default function AddRoleNew() {
                   <Button color="primary">Back</Button>
                 </a>
               </div>
-            </div>
+            </div> */}
             <Form onSubmit={handleSumit}>
               <div className="container mt-5">
                 <Row className="mb-3 container">
@@ -141,7 +150,9 @@ export default function AddRoleNew() {
                         style={{
                           borderRadius: "12px",
                           // background: "#e5dfdf26",
-                          height: "340px",
+                          height: `${
+                            show && SelectedIndex === index ? "340px" : "40px"
+                          }`,
                         }}
                         className="customcol gy-0 mb-2 "
                         lg="12"
@@ -158,13 +169,15 @@ export default function AddRoleNew() {
                         >
                           <Col className="gy-2" lg="4" sm="4" md="4">
                             <div className="align-item-center">
-                              {/* <input
+                              <input
+                                className="mt-1"
                                 name="check"
                                 onClick={(e) => {
+                                  handlesetparent(e.target.checked, index);
                                   handleSelectPage(
                                     e.target.value,
                                     e.target.checked,
-                                    permit,
+                                    "parentPermit",
                                     value?.title,
                                     index
                                   );
@@ -174,8 +187,26 @@ export default function AddRoleNew() {
                                   width: "26px",
                                 }}
                                 type="checkbox"
-                              /> */}
-                              <span className="mx-3 gy-0"> {value?.title}</span>
+                              />
+
+                              <span className="mx-3 gy-0">
+                                {" "}
+                                {value?.title}
+                                {"    "}
+                                {/* {!show ? (
+                                  <>
+                                    <BsFillArrowDownCircleFill
+                                      title="show Subpages"
+                                      onClick={() =>
+                                        handlesetparent("true", index)
+                                      }
+                                      style={{ cursor: "pointer" }}
+                                      fill="blue"
+                                      size="25px"
+                                    />
+                                  </>
+                                ) : null} */}
+                              </span>
                             </div>
                           </Col>
                           <Col className="gy-2">
@@ -199,42 +230,47 @@ export default function AddRoleNew() {
                             </div>
                           </Col>
                         </Row>
-                        <div className="container">
-                          <div className="gy-2 mt-2">
-                            {value?.TabName?.map((ele, i) => (
-                              <>
-                                <Row key={i} className="">
-                                  <Col lg="4" sm="4" md="4">
-                                    <h6 className="mt-1"> {ele?.title}</h6>
-                                  </Col>
-                                  {ele?.permission?.map((permit, ind) => (
-                                    <Col key={ind} lg="2" md="2" sm="2">
-                                      <div className="d-flex justify-content-center">
-                                        <input
-                                          name="check"
-                                          onClick={(e) => {
-                                            handleSelectPage(
-                                              e.target.value,
-                                              e.target.checked,
-                                              permit,
-                                              ele.title,
-                                              ind
-                                            );
-                                          }}
-                                          style={{
-                                            height: "19px",
-                                            width: "26px",
-                                          }}
-                                          type="checkbox"
-                                        />
-                                      </div>
-                                    </Col>
-                                  ))}
-                                </Row>
-                              </>
-                            ))}
-                          </div>
-                        </div>
+
+                        {show && SelectedIndex === index ? (
+                          <>
+                            <div className="container">
+                              <div className="gy-2 mt-2">
+                                {value?.TabName?.map((ele, i) => (
+                                  <>
+                                    <Row key={i} className="">
+                                      <Col lg="4" sm="4" md="4">
+                                        <h6 className="mt-1"> {ele?.title}</h6>
+                                      </Col>
+                                      {ele?.permission?.map((permit, ind) => (
+                                        <Col key={ind} lg="2" md="2" sm="2">
+                                          <div className="d-flex justify-content-center">
+                                            <input
+                                              name="check"
+                                              onClick={(e) => {
+                                                handleSelectPage(
+                                                  e.target.value,
+                                                  e.target.checked,
+                                                  permit,
+                                                  ele.title,
+                                                  ind
+                                                );
+                                              }}
+                                              style={{
+                                                height: "19px",
+                                                width: "26px",
+                                              }}
+                                              type="checkbox"
+                                            />
+                                          </div>
+                                        </Col>
+                                      ))}
+                                    </Row>
+                                  </>
+                                ))}
+                              </div>
+                            </div>
+                          </>
+                        ) : null}
                       </Col>
                     ))}
                 </Row>

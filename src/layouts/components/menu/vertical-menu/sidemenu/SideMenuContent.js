@@ -140,27 +140,28 @@ class SideMenuContent extends React.Component {
     console.log(this.state.showpage);
     const arr = [
       "Dashboard",
-      "Account",
+      "Accounts",
       "Create Account",
-      "Client Account",
       "Create Role",
+      "Client Account",
+      "Accountant Account",
     ];
     const menuItems = navigationConfig.map((item, i) => {
-      // navigationConfig[i].children?.forEach((tab, imd) => {
+      // navigationConfig[i].children?.forEach((tab) => {
       //   if (arr?.includes(tab?.title)) {
       //     tab.hidden = false;
       //   } else {
       //     tab.hidden = true;
       //   }
       // });
-      // navigationConfig?.forEach((tab, i) => {
+      // navigationConfig?.forEach((tab) => {
       //   if (arr?.includes(tab?.title)) {
       //     tab.hidden = false;
       //   } else {
       //     tab.hidden = true;
       //   }
       // });
-      // debugger
+
       // const hasVisibleChildren = item.children.some((child) => !child.hidden);
 
       // if (!hasVisibleChildren) {

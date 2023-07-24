@@ -43,13 +43,17 @@ export class CreateAccount extends Component {
   };
 
   async componentDidMount() {
-    axiosConfig
-      .get("/getrolelist")
+    //invoice-o.com/Infinity/api/ApiCommonController
+    https: axiosConfig
+      .get("/getrolelistdropdown")
       .then((response) => {
-        // console.log(response.data?.data?.roles);
-        this.setState({
-          productName: response.data?.data?.roles,
-        });
+        console.log(response.data?.data?.roles);
+        const propertyNames = Object.values(response.data?.data?.roles);
+
+        console.log(propertyNames);
+        // this.setState({
+        //   productName: response.data?.data?.roles,
+        // });
       })
       .catch((error) => {
         console.log(error);

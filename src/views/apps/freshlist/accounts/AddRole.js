@@ -9,6 +9,27 @@ export const Roles = [
     ],
   },
   {
+    title: "Transaction",
+    TabName: [
+      {
+        title: "Place Order",
+        permission: ["View", "Create", "Edit", "Delete"],
+      },
+      {
+        title: "Order Raise List",
+        permission: ["View", "Create", "Edit", "Delete"],
+      },
+      {
+        title: "Order Received List",
+        permission: ["View", "Create", "Edit", "Delete"],
+      },
+      {
+        title: "Completed Order List",
+        permission: ["View", "Create", "Edit", "Delete"],
+      },
+    ],
+  },
+  {
     title: "Accounts",
     TabName: [
       {
@@ -21,6 +42,10 @@ export const Roles = [
       },
       {
         title: "Accountant Account",
+        permission: ["View", "Create", "Edit", "Delete"],
+      },
+      {
+        title: "Create Role",
         permission: ["View", "Create", "Edit", "Delete"],
       },
     ],
@@ -54,13 +79,21 @@ export const Roles = [
         permission: ["View", "Create", "Edit", "Delete"],
       },
       {
-        title: "Product list",
+        title: "Add Product",
         permission: ["View", "Create", "Edit", "Delete"],
       },
       {
-        title: "Product type",
+        title: "User List",
         permission: ["View", "Create", "Edit", "Delete"],
       },
+      {
+        title: "Assign To Client",
+        permission: ["View", "Create", "Edit", "Delete"],
+      },
+      // {
+      //   title: "Product type",
+      //   permission: ["View", "Create", "Edit", "Delete"],
+      // },
       {
         title: "Add Product ",
         permission: ["View", "Create", "Edit", "Delete"],
@@ -78,7 +111,7 @@ export const Roles = [
         permission: ["View", "Create", "Edit", "Delete"],
       },
       {
-        title: "service master",
+        title: "Service Master",
         permission: ["View", "Create", "Edit", "Delete"],
       },
     ],

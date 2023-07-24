@@ -32,7 +32,7 @@ class SideMenuGroup extends React.Component {
         this.props.activePath === this.childObj.navLink &&
         !this.props.parentArr.includes(this.parentArray[0])
       ) {
-        console.log("@@@@", this.props.activePath);
+        // console.log("@@@@", this.props.activePath);
         this.props.parentArr.splice(0, this.props.parentArr.length);
         this.props.parentArr.push(this.parentArray);
       } else if (this.props.parentArr.includes(this.parentArray)) {
