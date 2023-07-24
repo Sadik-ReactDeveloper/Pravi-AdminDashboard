@@ -155,6 +155,7 @@ class SideMenuContent extends React.Component {
       //   }
       // });
       // navigationConfig?.forEach((tab) => {
+
       //   if (arr?.includes(tab?.title)) {
       //     tab.hidden = false;
       //   } else {

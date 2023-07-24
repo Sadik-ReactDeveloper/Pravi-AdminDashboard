@@ -68,7 +68,7 @@ export default function AddRoleNew() {
 
   const handleSumit = (e) => {
     e.preventDefault();
-    debugger;
+
     let formdata = new FormData();
     formdata.set("user_id", 1);
     formdata.set("role_name", Role);
