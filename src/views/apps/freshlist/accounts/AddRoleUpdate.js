@@ -270,6 +270,7 @@ export default function AddRoleNew() {
                     <div className="d-flex justify-content-center mb-2">
                       <Button
                         type="submit"
+                        style={{ cursor: "pointer" }}
                         // onClick={(e) => handleSumit(e)}
                         color="primary"
                       >
