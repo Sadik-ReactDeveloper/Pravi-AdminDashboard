@@ -116,35 +116,35 @@ export const Roles = [
       },
     ],
   },
-  {
-    title: "Tranaction",
-    TabName: [
-      {
-        title: "Transaction Dashboard",
-        permission: ["View", "Create", "Edit", "Delete"],
-      },
-      {
-        title: "Place Order",
-        permission: ["View", "Create", "Edit", "Delete"],
-      },
-      {
-        title: "Edit Order",
-        permission: ["View", "Create", "Edit", "Delete"],
-      },
-      {
-        title: "Order Raise List ",
-        permission: ["View", "Create", "Edit", "Delete"],
-      },
-      {
-        title: "Order Received List",
-        permission: ["View", "Create", "Edit", "Delete"],
-      },
-      {
-        title: "Completed Order List ",
-        permission: ["View", "Create", "Edit", "Delete"],
-      },
-    ],
-  },
+  // {
+  //   title: "Tranaction",
+  //   TabName: [
+  //     {
+  //       title: "Transaction Dashboard",
+  //       permission: ["View", "Create", "Edit", "Delete"],
+  //     },
+  //     {
+  //       title: "Place Order",
+  //       permission: ["View", "Create", "Edit", "Delete"],
+  //     },
+  //     {
+  //       title: "Edit Order",
+  //       permission: ["View", "Create", "Edit", "Delete"],
+  //     },
+  //     {
+  //       title: "Order Raise List ",
+  //       permission: ["View", "Create", "Edit", "Delete"],
+  //     },
+  //     {
+  //       title: "Order Received List",
+  //       permission: ["View", "Create", "Edit", "Delete"],
+  //     },
+  //     {
+  //       title: "Completed Order List ",
+  //       permission: ["View", "Create", "Edit", "Delete"],
+  //     },
+  //   ],
+  // },
   {
     title: "Billing Dashboard",
     TabName: [
