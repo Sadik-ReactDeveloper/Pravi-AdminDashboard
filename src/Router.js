@@ -345,7 +345,13 @@ const EditProductAttribute = lazy(() =>
 const AddRoleNew = lazy(() =>
   import("./views/apps/freshlist/accounts/AddRoleNew")
 );
+<<<<<<< HEAD
 const EditRole = lazy(() => import("./views/apps/freshlist/accounts/EditRole"));
+=======
+const UpdateExistingRole = lazy(() =>
+  import("./views/apps/freshlist/accounts/UpdateExistingRole")
+);
+>>>>>>> 23df7562ee331f070063eb0087b57ba48a0f07f8
 const CreateAccount = lazy(() =>
   import("./views/apps/freshlist/accounts/CreateAccount")
 );
@@ -1132,8 +1138,13 @@ class AppRouter extends React.Component {
             component={AddRoleNew}
           />
           <AppRoute
+<<<<<<< HEAD
             path="/app/freshlist/account/editRole/:id"
             component={EditRole}
+=======
+            path="/app/freshlist/account/updateexistingrole"
+            component={UpdateExistingRole}
+>>>>>>> 23df7562ee331f070063eb0087b57ba48a0f07f8
           />
           {/* create Account */}
           <AppRoute
