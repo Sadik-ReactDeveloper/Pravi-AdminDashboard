@@ -84,7 +84,6 @@ class RoleList extends React.Component {
                   )
                 }
               />
-<<<<<<< HEAD
               <Route
                 render={({ history }) => (
                   <Edit
@@ -99,18 +98,6 @@ class RoleList extends React.Component {
                     }
                   />
                 )}
-=======
-              <Edit2
-                className="mr-50"
-                size="25px"
-                color="blue"
-                onClick={() =>
-                  history.push(
-                    `/app/freshlist/account/updateexistingrole`
-                    // `/app/freshlist/account/updateexistingrole/${params.data.id}`
-                  )
-                }
->>>>>>> 23df7562ee331f070063eb0087b57ba48a0f07f8
               />
               <BsTrash
                 className="mr-50"
