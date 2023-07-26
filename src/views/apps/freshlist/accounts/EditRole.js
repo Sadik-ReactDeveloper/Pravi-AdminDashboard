@@ -1,19 +1,30 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Row, Col, Card, Button, Label, Input, Form } from "reactstrap";
 import { Roles } from "./AddRole";
+import { useParams } from "react-router-dom";
 import axios from "axios";
+// import AddRoleUpdate from "./AddRoleUpdate";
+import { permission } from "./DummyPermissiom";
 import axiosConfig from "../../../../axiosConfig";
+// import navigationConfig from "../../../../configs/navigationConfig";
 import swal from "sweetalert";
-import { BsFillArrowDownCircleFill } from "react-icons/bs";
+import { CiGlass } from "react-icons/ci";
+import { CloudLightning } from "react-feather";
 
-export default function AddRoleNew() {
+export default function EditRole(props) {
   const [Desc, setDesc] = useState("");
   const [Role, setRole] = useState("");
+  const [myRole, setMyRole] = useState("");
   const [Selected, setSelected] = useState([]);
   const [SelectedIndex, setIndex] = useState("");
-  const [show, setShow] = useState(false);
-
-  // const navigate = useNavigate();
+  const [show, setShow] = useState(true);
+  const [getpermission, setgetpermission] = useState([]);
+  const [permissionList, setPermissionList] = useState([]);
+  const [isChecked, setIsChecked] = useState(true);
+  const [view, setView] = useState(true);
+  const [create, setCreate] = useState(true);
+  const [edit, setEdit] = useState(true);
+  const [deletebtn, setDeleteBtn] = useState(true);
 
   const handleSelectPage = (value, checked, permit, title, ele) => {
     if (checked) {
@@ -63,39 +74,95 @@ export default function AddRoleNew() {
     }
   };
   useEffect(() => {
-    console.log(Selected);
+    // console.log(Selected);
+    console.log(Selected[0]?.permission[0]);
+    // if (Selected[0]?.permission[0] || Selected[0]?.permission[1]) {
+    //   setView();
+    // }
+
+    Selected[0]?.permission[0] === "View"
+      ? setView(true)
+      : Selected[0]?.permission[1] === "Create"
+      ? setCreate(true)
+      : Selected[0]?.permission[2] === "Edit"
+      ? setEdit(true)
+      : Selected[0]?.permission[3] === "Delete"
+      ? setDeleteBtn(true)
+      : null;
   }, [Selected]);
+
+  useEffect(() => {
+    const rollName = props.history.location?.data?.data?.role_name;
+    // console.log(permission);
+    let formdata = new FormData();
+    formdata.set("role_name", rollName);
+    axiosConfig
+      .post(`/editroleview`, formdata)
+      .then(Response => {
+        console.log(Response?.data.data.permissioninfo);
+        setMyRole(Response?.data.data?.roleinfo?.role_name);
+        setDesc(Response?.data?.data?.roleinfo?.description);
+        setPermissionList(Response?.data?.data?.permissioninfo);
+      })
+      .catch(error => {
+        console.log("1Error", error);
+      });
+    const newarr = permission.map(value => value?.pagename);
+    setgetpermission(newarr);
+    // console.log(Selected);
+    {
+      permissionList &&
+        permissionList?.map(getpermi => {
+          console.log(getpermi.permission);
+          if (getpermi?.pagename === value?.title) {
+            setIsChecked(true);
+          } else {
+            setIsChecked(false);
+          }
+          console.log(getpermi.permission);
+          getpermi.permission === "View"
+            ? setView(true)
+            : getpermi.permission === "Create"
+            ? setCreate(true)
+            : getpermi.permission === "Edit"
+            ? setEdit(true)
+            : getpermi.permission === "Delete"
+            ? setDeleteBtn(true)
+            : null;
+        });
+    }
+  }, []);
 
   const handleSumit = e => {
     e.preventDefault();
+    // let formdata = new FormData();
+    // formdata.set("user_id", 1);
+    // formdata.set("role_name", "sadik");
+    // formdata.set("description", Desc);
+    // formdata.set("selectedarray", JSON.stringify(Selected));
 
-    let formdata = new FormData();
-    formdata.set("user_id", 1);
-    formdata.set("role_name", Role);
-    formdata.set("description", Desc);
-    formdata.set("selectedarray", JSON.stringify(Selected));
-
-    axiosConfig
-      .post(`/addroles`, formdata)
-      .then(res => {
-        console.log(res);
-        swal("Success", "Role Created");
-        setSelected("");
-        setDesc("");
-        setRole("");
-        var checkboxes = document.getElementsByName("check");
-        for (var checkbox of checkboxes) {
-          checkbox.checked = false;
-        }
-      })
-      .catch(er => {
-        console.log(er);
-      });
+    // axiosConfig
+    //   .post(`/addroles`, formdata)
+    //   .then(res => {
+    //     console.log(res);
+    //     swal("Success", "Role Created");
+    //     setSelected("");
+    //     setDesc("");
+    //     setRole("");
+    //     var checkboxes = document.getElementsByName("check");
+    //     for (var checkbox of checkboxes) {
+    //       checkbox.checked = false;
+    //     }
+    //   })
+    //   .catch(er => {
+    //     console.log(er);
+    //   });
   };
   const handlesetparent = (value, index) => {
-    // console.log(value);
-    // console.log(index);
-    setShow(value);
+    console.log("checkValue", value);
+    console.log("index", index);
+    setShow(!value);
+    setIsChecked(!isChecked);
     setIndex(index);
   };
   return (
@@ -104,15 +171,19 @@ export default function AddRoleNew() {
         <Col xl={12}>
           <Card>
             <div className="container" />
-            <Form onSubmit={handleSumit}>
+            <Form
+              onSubmit={e => {
+                handleSumit(e);
+              }}
+            >
               <div className="container mt-5">
                 <Row className="mb-3 container">
                   <Col>
                     <Label>Enter Role *</Label>
                     <Input
                       required
-                      value={Role}
-                      onChange={e => setRole(e.target.value)}
+                      value={myRole}
+                      onChange={e => setMyRole(e.target.value)}
                       type="text"
                       placeholder="Enter Role"
                       className="form-control"
@@ -161,6 +232,7 @@ export default function AddRoleNew() {
                             <div className="align-item-center">
                               <input
                                 className="mt-1"
+                                checked={isChecked}
                                 name="check"
                                 onClick={e => {
                                   handlesetparent(e.target.checked, index);
@@ -178,23 +250,7 @@ export default function AddRoleNew() {
                                 }}
                                 type="checkbox"
                               />
-
-                              <span className="mx-3 gy-0">
-                                {value?.title}
-                                {/* {!show ? (
-                                  <>
-                                    <BsFillArrowDownCircleFill
-                                      title="show Subpages"
-                                      onClick={() =>
-                                        handlesetparent("true", index)
-                                      }
-                                      style={{ cursor: "pointer" }}
-                                      fill="blue"
-                                      size="25px"
-                                    />
-                                  </>
-                                ) : null} */}
-                              </span>
+                              <span className="mx-3 gy-0">{value?.title}</span>
                             </div>
                           </Col>
                           <Col className="gy-2">
@@ -234,6 +290,7 @@ export default function AddRoleNew() {
                                           <div className="d-flex justify-content-center">
                                             <input
                                               name="check"
+                                              checked={view}
                                               onClick={e => {
                                                 handleSelectPage(
                                                   e.target.value,
@@ -268,7 +325,6 @@ export default function AddRoleNew() {
                       <Button
                         type="submit"
                         style={{ cursor: "pointer" }}
-                        // onClick={(e) => handleSumit(e)}
                         color="primary"
                       >
                         Submit

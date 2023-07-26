@@ -345,6 +345,7 @@ const EditProductAttribute = lazy(() =>
 const AddRoleNew = lazy(() =>
   import("./views/apps/freshlist/accounts/AddRoleNew")
 );
+const EditRole = lazy(() => import("./views/apps/freshlist/accounts/EditRole"));
 const CreateAccount = lazy(() =>
   import("./views/apps/freshlist/accounts/CreateAccount")
 );
@@ -653,10 +654,10 @@ const accessControl = lazy(() =>
 const RouteConfig = ({ component: Component, fullLayout, ...rest }) => (
   <Route
     {...rest}
-    render={(props) => {
+    render={props => {
       return (
         <ContextLayout.Consumer>
-          {(context) => {
+          {context => {
             let LayoutTag =
               fullLayout === true
                 ? context.fullLayout
@@ -676,7 +677,7 @@ const RouteConfig = ({ component: Component, fullLayout, ...rest }) => (
     }}
   />
 );
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     user: state.auth.login.userRole,
   };
@@ -1129,6 +1130,10 @@ class AppRouter extends React.Component {
           <AppRoute
             path="/app/freshlist/account/addRoleNew"
             component={AddRoleNew}
+          />
+          <AppRoute
+            path="/app/freshlist/account/editRole/:id"
+            component={EditRole}
           />
           {/* create Account */}
           <AppRoute

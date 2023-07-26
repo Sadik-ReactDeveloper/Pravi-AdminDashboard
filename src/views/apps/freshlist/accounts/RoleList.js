@@ -27,7 +27,6 @@ import "../../../../assets/scss/pages/users.scss";
 import swal from "sweetalert";
 import { Route } from "react-router-dom";
 import { BsEye, BsTrash } from "react-icons/bs";
-
 class RoleList extends React.Component {
   static contextType = UserContext;
 
@@ -56,203 +55,23 @@ class RoleList extends React.Component {
         filter: true,
         resizable: true,
         width: 160,
-        cellRendererFramework: (params) => {
-          // console.log(params);
+        cellRendererFramework: params => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{params?.data}</span>
+                <span>{params?.data?.role_name}</span>
               </div>
             </div>
           );
         },
       },
-      // {
-      //   headerName: "Created By",
-      //   field: "Description",
-      //   filter: true,
-      //   resizable: true,
-      //   width: 200,
-      //   cellRendererFramework: (params) => {
-      //     return (
-      //       <div className="d-flex align-items-center cursor-pointer">
-      //         <div className="">
-      //           <span>SuperAdmin</span>
-      //         </div>
-      //       </div>
-      //     );
-      //   },
-      // },
-      //   {
-      //     headerName: "Email",
-      //     field: "email",
-      //     filter: true,
-      //     resizable: true,
-      //     width: 200,
-      //     cellRendererFramework: (params) => {
-      //       return (
-      //         <div className="d-flex align-items-center cursor-pointer">
-      //           <div className="ml-2">
-      //             <span>{params.data.notifyby_email}</span>
-      //           </div>
-      //         </div>
-      //       );
-      //     },
-      //   },
-      //   {
-      //     headerName: "ID ",
-      //     field: "Id",
-      //     filter: true,
-      //     resizable: true,
-      //     width: 200,
-      //     cellRendererFramework: (params) => {
-      //       return (
-      //         <div className="d-flex align-items-center cursor-pointer">
-      //           <div className="ml-2">
-      //             <span>{params?.data?.id}</span>
-      //           </div>
-      //         </div>
-      //       );
-      //     },
-      //   },
-
-      //   {
-      //     headerName: "Unit Price",
-      //     field: "unitprice",
-      //     filter: true,
-      //     resizable: true,
-      //     width: 150,
-      //     cellRendererFramework: (params) => {
-      //       return (
-      //         <div className="d-flex align-items-center cursor-pointer">
-      //           <div className="ml-2">
-      //             <span>{params.data?.price}</span>
-      //           </div>
-      //         </div>
-      //       );
-      //     },
-      //   },
-      //   {
-      //     headerName: "Shipping fee",
-      //     field: "timeslot",
-      //     filter: true,
-      //     resizable: true,
-      //     width: 150,
-      //     cellRendererFramework: (params) => {
-      //       return (
-      //         <div className="d-flex align-items-center cursor-pointer">
-      //           <div className="ml-2">
-      //             <span>{params.data?.shipping_fee}</span>
-      //           </div>
-      //         </div>
-      //       );
-      //     },
-      //   },
-      //   {
-      //     headerName: "Tag",
-      //     field: "Tag",
-      //     filter: true,
-      //     resizable: true,
-      //     width: 200,
-      //     cellRendererFramework: (params) => {
-      //       return (
-      //         <div className="d-flex align-items-center cursor-pointer">
-      //           <div className="ml-2">
-      //             <span>{params.data?.tags}</span>
-      //           </div>
-      //         </div>
-      //       );
-      //     },
-      //   },
-      //   {
-      //     headerName: "Tax Rate",
-      //     field: "Tax Rate",
-      //     filter: true,
-      //     resizable: true,
-      //     width: 200,
-      //     cellRendererFramework: (params) => {
-      //       return (
-      //         <div className="d-flex align-items-center cursor-pointer">
-      //           <div className="ml-2">
-      //             <span>{params.data?.tax_rate}</span>
-      //           </div>
-      //         </div>
-      //       );
-      //     },
-      //   },
-      //   {
-      //     headerName: "Variety",
-      //     field: "total_price",
-      //     filter: true,
-      //     resizable: true,
-      //     width: 150,
-      //     cellRendererFramework: (params) => {
-      //       return (
-      //         <div className="d-flex align-items-center cursor-pointer">
-      //           <div className="ml-2">
-      //             <span>{params.data?.veriety}</span>
-      //           </div>
-      //         </div>
-      //       );
-      //     },
-      //   },
-      //   {
-      //     headerName: "Payment",
-      //     field: "payment",
-      //     filter: true,
-      //     resizable: true,
-      //     width: 150,
-      //     cellRendererFramework: (params) => {
-      //       return (
-      //         <div className="d-flex align-items-center cursor-pointer">
-      //           <div className="ml-2">
-      //             <span>{params.data.payment}</span>
-      //           </div>
-      //         </div>
-      //       );
-      //     },
-      //   },
-      //   {
-      //     headerName: "Payment Status",
-      //     field: "paymentstatus",
-      //     filter: true,
-      //     resizable: true,
-      //     width: 200,
-      //     cellRendererFramework: (params) => {
-      //       return (
-      //         <div className="d-flex align-items-center cursor-pointer">
-      //           <div className="ml-2">
-      //             <span>{params.data.paymentstatus}</span>
-      //           </div>
-      //         </div>
-      //       );
-      //     },
-      //   },
-
-      //   {
-      //     headerName: "Product Status",
-      //     field: "status",
-      //     filter: true,
-      //     width: 200,
-      //     cellRendererFramework: (params) => {
-      //       return params.value === "Order Placed" ? (
-      //         <div className="badge badge-pill badge-success">
-      //           {params.data.status}
-      //         </div>
-      //       ) : params.value === "painding" ? (
-      //         <div className="badge badge-pill badge-warning">
-      //           {params.data.status}
-      //         </div>
-      //       ) : null;
-      //     },
-      //   },
 
       {
         headerName: "Actions",
         field: "sortorder",
         field: "transactions",
         width: 160,
-        cellRendererFramework: (params) => {
+        cellRendererFramework: params => {
           return (
             <div className="actions cursor-pointer">
               <BsEye
@@ -265,11 +84,20 @@ class RoleList extends React.Component {
                 //   )
                 // }
               />
-              <Edit2
-                className="mr-50"
-                size="25px"
-                color="blue"
-                //   onClick={() => history.push("/app/freshlist/order/EditOrder")}
+              <Route
+                render={({ history }) => (
+                  <Edit
+                    className="mr-50"
+                    size="25px"
+                    color="blue"
+                    onClick={() =>
+                      history.push({
+                        pathname: `/app/freshlist/account/editRole/${params.data.id}`,
+                        data: params,
+                      })
+                    }
+                  />
+                )}
               />
               <BsTrash
                 className="mr-50"
@@ -288,32 +116,26 @@ class RoleList extends React.Component {
     ],
   };
   async componentDidMount() {
-    // const User = this.context;
-    // console.log("Contextapi data", User);
-    await axiosConfig.get("/getrolelist").then((response) => {
-      let rowData = response.data.data?.roles;
-      // console.log(rowData);
-      // this.setState({ rowData });
-    });
     axiosConfig
-      .get("/getrolelistdropdown")
-      .then((response) => {
-        const propertyNames = Object.values(response.data?.data?.roles);
+      .get("/getrolelist")
+      .then(response => {
+        // console.log(response.data?.data?.roles);
+        // const propertyNames = Object.values(response.data?.data?.roles);
 
-        this.setState({ rowData: propertyNames });
+        this.setState({ rowData: response.data?.data });
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   }
 
   async runthisfunction(id) {
     console.log(id);
-    await axiosConfig.get(`/delcontactus/${id}`).then((response) => {
+    await axiosConfig.get(`/delcontactus/${id}`).then(response => {
       console.log(response);
     });
   }
-  onGridReady = (params) => {
+  onGridReady = params => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
     this.setState({
@@ -322,11 +144,11 @@ class RoleList extends React.Component {
       totalPages: this.gridApi.paginationGetTotalPages(),
     });
   };
-  updateSearchQuery = (val) => {
+  updateSearchQuery = val => {
     this.gridApi.setQuickFilter(val);
   };
 
-  filterSize = (val) => {
+  filterSize = val => {
     if (this.gridApi) {
       this.gridApi.paginationSetPageSize(Number(val));
       this.setState({
@@ -362,12 +184,7 @@ class RoleList extends React.Component {
   //         data.append("banner_img", file, file.name);
   //       }
   //     }
-  //     for (var value of data.values()) {
-  //       console.log(value);
-  //     }
-  //     for (var key of data.keys()) {
-  //       console.log(key);
-  //     }
+
   //     axiosConfig
   //       .post("/addbanner", data)
   //       .then((response) => {
@@ -504,7 +321,7 @@ class RoleList extends React.Component {
                     </div> */}
                   </div>
                   <ContextLayout.Consumer>
-                    {(context) => (
+                    {context => (
                       <AgGridReact
                         gridOptions={{}}
                         rowSelection="multiple"
