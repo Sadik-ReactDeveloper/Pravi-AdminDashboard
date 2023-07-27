@@ -66,9 +66,10 @@ export default function AddRoleNew() {
     console.log(Selected);
   }, [Selected]);
 
-  const handleSumit = e => {
+  const handleSumit = (e) => {
     e.preventDefault();
-
+    // let data = JSON.parse(localStorage.getItem("userData"));
+    //     console.log(data?.Userinfo?.id);
     let formdata = new FormData();
     formdata.set("user_id", 1);
     formdata.set("role_name", Role);
@@ -77,7 +78,7 @@ export default function AddRoleNew() {
 
     axiosConfig
       .post(`/addroles`, formdata)
-      .then(res => {
+      .then((res) => {
         console.log(res);
         swal("Success", "Role Created");
         setSelected("");
@@ -88,7 +89,7 @@ export default function AddRoleNew() {
           checkbox.checked = false;
         }
       })
-      .catch(er => {
+      .catch((er) => {
         console.log(er);
       });
   };
@@ -112,7 +113,7 @@ export default function AddRoleNew() {
                     <Input
                       required
                       value={Role}
-                      onChange={e => setRole(e.target.value)}
+                      onChange={(e) => setRole(e.target.value)}
                       type="text"
                       placeholder="Enter Role"
                       className="form-control"
@@ -123,7 +124,7 @@ export default function AddRoleNew() {
                     <Input
                       required
                       value={Desc}
-                      onChange={e => setDesc(e.target.value)}
+                      onChange={(e) => setDesc(e.target.value)}
                       type="text"
                       placeholder="Enter Role Desc.."
                       // className="form-control"
@@ -162,7 +163,8 @@ export default function AddRoleNew() {
                               <input
                                 className="mt-1"
                                 name="check"
-                                onClick={e => {
+                                id={`head_${value?.title}`}
+                                onClick={(e) => {
                                   handlesetparent(e.target.checked, index);
                                   handleSelectPage(
                                     e.target.value,
@@ -234,7 +236,8 @@ export default function AddRoleNew() {
                                           <div className="d-flex justify-content-center">
                                             <input
                                               name="check"
-                                              onClick={e => {
+                                              id={`item_${permit}`}
+                                              onClick={(e) => {
                                                 handleSelectPage(
                                                   e.target.value,
                                                   e.target.checked,

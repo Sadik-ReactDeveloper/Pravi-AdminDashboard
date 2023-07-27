@@ -345,13 +345,11 @@ const EditProductAttribute = lazy(() =>
 const AddRoleNew = lazy(() =>
   import("./views/apps/freshlist/accounts/AddRoleNew")
 );
-<<<<<<< HEAD
 const EditRole = lazy(() => import("./views/apps/freshlist/accounts/EditRole"));
-=======
+
 const UpdateExistingRole = lazy(() =>
   import("./views/apps/freshlist/accounts/UpdateExistingRole")
 );
->>>>>>> 23df7562ee331f070063eb0087b57ba48a0f07f8
 const CreateAccount = lazy(() =>
   import("./views/apps/freshlist/accounts/CreateAccount")
 );
@@ -379,6 +377,9 @@ const ProductDashboard = lazy(() =>
 );
 const RateMaster = lazy(() =>
   import("./views/apps/freshlist/house/RateMaster")
+);
+const AddRateMaster = lazy(() =>
+  import("./views/apps/freshlist/house/AddRateMaster")
 );
 const Inventory = lazy(() => import("./views/apps/freshlist/house/Inventory"));
 const ServiceMaster = lazy(() =>
@@ -660,10 +661,10 @@ const accessControl = lazy(() =>
 const RouteConfig = ({ component: Component, fullLayout, ...rest }) => (
   <Route
     {...rest}
-    render={props => {
+    render={(props) => {
       return (
         <ContextLayout.Consumer>
-          {context => {
+          {(context) => {
             let LayoutTag =
               fullLayout === true
                 ? context.fullLayout
@@ -683,7 +684,7 @@ const RouteConfig = ({ component: Component, fullLayout, ...rest }) => (
     }}
   />
 );
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     user: state.auth.login.userRole,
   };
@@ -1138,13 +1139,12 @@ class AppRouter extends React.Component {
             component={AddRoleNew}
           />
           <AppRoute
-<<<<<<< HEAD
             path="/app/freshlist/account/editRole/:id"
             component={EditRole}
-=======
-            path="/app/freshlist/account/updateexistingrole"
+          />
+          <AppRoute
+            path="/app/freshlist/account/UpdateExistingRole/:id"
             component={UpdateExistingRole}
->>>>>>> 23df7562ee331f070063eb0087b57ba48a0f07f8
           />
           {/* create Account */}
           <AppRoute
@@ -1176,6 +1176,10 @@ class AppRouter extends React.Component {
           <AppRoute
             path="/app/freshlist/house/ratemaster"
             component={RateMaster}
+          />
+          <AppRoute
+            path="/app/freshlist/house/AddRateMaster"
+            component={AddRateMaster}
           />
           <AppRoute
             path="/app/freshlist/house/inventory"

@@ -51,83 +51,135 @@ class Invetory extends React.Component {
         headerName: "UID",
         valueGetter: "node.rowIndex + 1",
         field: "node.rowIndex + 1",
-        checkboxSelection: true,
+        // checkboxSelection: true,
         width: 150,
         filter: true,
       },
 
       {
-        headerName: "ITEM NAME",
+        headerName: "Category NAME",
         field: "itemname",
         filter: "agSetColumnFilter",
         width: 150,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>vcvvv</span>
+                <span>{params.data?.category_name}</span>
               </div>
             </div>
           );
         },
       },
       {
-        headerName: "ITEM CATEGORY",
+        headerName: "Title",
+        field: "itemname",
+        filter: "agSetColumnFilter",
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params.data?.title}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "PRODUCT Image",
+        field: "product",
+        filter: "agSetColumnFilter",
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                {/* <span>{params.data?.title}</span> */}
+                <img
+                  style={{ borderRadius: "12px" }}
+                  width="60px"
+                  height="40px"
+                  src={params.data?.product_images[0]}
+                  alt="image"
+                />
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Description",
         field: "category",
         filter: "agSetColumnFilter",
         width: 150,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
                 {/* <span>{ReactHtmlParser(params.data.volume)}</span> */}
-                <span>vdfgvdfv</span>
+                <span>{params?.data?.description}</span>
               </div>
             </div>
           );
         },
       },
       {
-        headerName: "CURRENT STOCK",
+        headerName: " Price",
         field: "currentstock",
         filter: "agSetColumnFilter",
-        width: 120,
-        cellRendererFramework: params => {
+        width: 160,
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{ReactHtmlParser(params.data.pisces)}</span>
+                <span>{ReactHtmlParser(params.data?.price)}</span>
               </div>
             </div>
           );
         },
       },
       {
-        headerName: "UNIT",
+        headerName: "Discount Price",
+        field: "currentstock",
+        filter: "agSetColumnFilter",
+        width: 190,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{ReactHtmlParser(params.data?.discountprice)}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "shipping fee",
         field: "UNIT",
 
         filter: "agSetColumnFilter",
         width: 150,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{ReactHtmlParser(params.data.pisces)}</span>
+                <span>{ReactHtmlParser(params?.data?.shipping_fee)}</span>
               </div>
             </div>
           );
         },
       },
       {
-        headerName: "PRICE",
+        headerName: "Stock",
         field: "price",
         filter: "agSetColumnFilter",
         width: 120,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{ReactHtmlParser(params.data.pisces)}</span>
+                <span>{ReactHtmlParser(params.data?.stock)}</span>
               </div>
             </div>
           );
@@ -135,31 +187,31 @@ class Invetory extends React.Component {
       },
 
       {
-        headerName: "TYPE",
+        headerName: "Tag",
         field: "pisces",
 
         filter: "agSetColumnFilter",
         width: 120,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{ReactHtmlParser(params.data.pisces)}</span>
+                <span>{ReactHtmlParser(params.data?.tags)}</span>
               </div>
             </div>
           );
         },
       },
       {
-        headerName: "TAX",
+        headerName: "TAX Rate",
         field: "tax",
         filter: "agSetColumnFilter",
         width: 120,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{ReactHtmlParser(params.data.pisces)}</span>
+                <span>{ReactHtmlParser(params.data?.tax_rate)}</span>
               </div>
             </div>
           );
@@ -172,11 +224,11 @@ class Invetory extends React.Component {
 
         filter: "agSetColumnFilter",
         width: 120,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{ReactHtmlParser(params.data.pisces)}</span>
+                <span>{ReactHtmlParser(params?.data?.pisces)}</span>
               </div>
             </div>
           );
@@ -188,11 +240,11 @@ class Invetory extends React.Component {
 
         filter: "agSetColumnFilter",
         width: 120,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{ReactHtmlParser(params.data.pisces)}</span>
+                <span>{ReactHtmlParser(params.data?.pisces)}</span>
               </div>
             </div>
           );
@@ -204,11 +256,11 @@ class Invetory extends React.Component {
 
         filter: "agSetColumnFilter",
         width: 120,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{ReactHtmlParser(params.data.pisces)}</span>
+                <span>{ReactHtmlParser(params.data?.pisces)}</span>
               </div>
             </div>
           );
@@ -218,7 +270,7 @@ class Invetory extends React.Component {
         headerName: "Actions",
         field: "transactions",
         width: 150,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
               <Trash2
@@ -239,25 +291,26 @@ class Invetory extends React.Component {
   };
   toggle = () => {
     // this.setState({ modal: !modal });
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       modal: !prevState.modal,
     }));
   };
   async componentDidMount() {
-    await axiosConfig.get("/gettermsconditions").then(response => {
+    await axiosConfig.get("/getproductinventory").then((response) => {
       let rowData = response.data.data;
+      console.log(response.data.data);
       this.setState({ rowData });
     });
   }
 
   async runthisfunction(id) {
     console.log(id);
-    await axiosConfig.get(`/deltermcondition/${id}`).then(response => {
+    await axiosConfig.get(`/deltermcondition/${id}`).then((response) => {
       console.log(response);
     });
   }
 
-  onGridReady = params => {
+  onGridReady = (params) => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
     this.setState({
@@ -267,11 +320,11 @@ class Invetory extends React.Component {
     });
   };
 
-  updateSearchQuery = val => {
+  updateSearchQuery = (val) => {
     this.gridApi.setQuickFilter(val);
   };
 
-  filterSize = val => {
+  filterSize = (val) => {
     if (this.gridApi) {
       this.gridApi.paginationSetPageSize(Number(val));
       this.setState({
@@ -424,7 +477,7 @@ class Invetory extends React.Component {
                         <div className="table-input mr-1">
                           <Input
                             placeholder="search..."
-                            onChange={e =>
+                            onChange={(e) =>
                               this.updateSearchQuery(e.target.value)
                             }
                             value={this.state.value}
@@ -441,7 +494,7 @@ class Invetory extends React.Component {
                       </div>
                     </div>
                     <ContextLayout.Consumer>
-                      {context => (
+                      {(context) => (
                         <AgGridReact
                           gridOptions={{}}
                           rowSelection="multiple"

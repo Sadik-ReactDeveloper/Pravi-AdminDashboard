@@ -55,7 +55,7 @@ class RoleList extends React.Component {
         filter: true,
         resizable: true,
         width: 160,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
@@ -71,7 +71,7 @@ class RoleList extends React.Component {
         field: "sortorder",
         field: "transactions",
         width: 160,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
               <BsEye
@@ -118,24 +118,24 @@ class RoleList extends React.Component {
   async componentDidMount() {
     axiosConfig
       .get("/getrolelist")
-      .then(response => {
+      .then((response) => {
         // console.log(response.data?.data?.roles);
         // const propertyNames = Object.values(response.data?.data?.roles);
 
         this.setState({ rowData: response.data?.data });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
 
   async runthisfunction(id) {
     console.log(id);
-    await axiosConfig.get(`/delcontactus/${id}`).then(response => {
+    await axiosConfig.get(`/delcontactus/${id}`).then((response) => {
       console.log(response);
     });
   }
-  onGridReady = params => {
+  onGridReady = (params) => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
     this.setState({
@@ -144,11 +144,11 @@ class RoleList extends React.Component {
       totalPages: this.gridApi.paginationGetTotalPages(),
     });
   };
-  updateSearchQuery = val => {
+  updateSearchQuery = (val) => {
     this.gridApi.setQuickFilter(val);
   };
 
-  filterSize = val => {
+  filterSize = (val) => {
     if (this.gridApi) {
       this.gridApi.paginationSetPageSize(Number(val));
       this.setState({
@@ -321,7 +321,7 @@ class RoleList extends React.Component {
                     </div> */}
                   </div>
                   <ContextLayout.Consumer>
-                    {context => (
+                    {(context) => (
                       <AgGridReact
                         gridOptions={{}}
                         rowSelection="multiple"

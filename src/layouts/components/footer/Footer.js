@@ -23,7 +23,7 @@ const Footer = (props) => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            FreshList,
+            Paravi,
           </a>
           All rights reserved
         </span>

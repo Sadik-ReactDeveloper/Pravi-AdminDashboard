@@ -31,6 +31,7 @@ import { Route } from "react-router-dom";
 class RateMaster extends React.Component {
   state = {
     rowData: [],
+    Ratemaster: [],
     paginationPageSize: 20,
     currenPageSize: "",
     getPageSize: "",
@@ -45,37 +46,38 @@ class RateMaster extends React.Component {
         headerName: "UID",
         valueGetter: "node.rowIndex + 1",
         field: "node.rowIndex + 1",
-        checkboxSelection: true,
+        // checkboxSelection: true,
         width: 150,
         filter: true,
       },
 
-      {
-        headerName: "PRODUCT",
-        field: "product",
-        filter: "agSetColumnFilter",
-        width: 150,
-        cellRendererFramework: params => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>vcvvv</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "PRODUCT",
+      //   field: "product",
+      //   filter: "agSetColumnFilter",
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     console.log(params?.data);
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>vcvvv</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       {
         headerName: "CATEGORY",
         field: "category",
         filter: "agSetColumnFilter",
         width: 150,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
                 {/* <span>{ReactHtmlParser(params.data.volume)}</span> */}
-                <span>vdfgvdfv</span>
+                <span>{params?.data?.category_name}</span>
               </div>
             </div>
           );
@@ -86,11 +88,11 @@ class RateMaster extends React.Component {
         field: "brand",
         filter: "agSetColumnFilter",
         width: 120,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{ReactHtmlParser(params.data.pisces)}</span>
+                <span>{ReactHtmlParser(params?.data?.brand_name)}</span>
               </div>
             </div>
           );
@@ -101,69 +103,101 @@ class RateMaster extends React.Component {
         field: "price",
         filter: "agSetColumnFilter",
         width: 120,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{ReactHtmlParser(params.data.pisces)}</span>
+                <span>{ReactHtmlParser(params.data.price)}</span>
               </div>
             </div>
           );
         },
       },
+      // {
+      //   headerName: "STOCK",
+      //   field: "pisces",
+
+      //   filter: "agSetColumnFilter",
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{ReactHtmlParser(params.data.pisces)}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       {
-        headerName: "STOCK",
+        headerName: "status",
         field: "pisces",
 
         filter: "agSetColumnFilter",
         width: 150,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{ReactHtmlParser(params.data.pisces)}</span>
+                <span>{ReactHtmlParser(params.data.status)}</span>
               </div>
             </div>
           );
         },
       },
       {
-        headerName: "ORDER",
+        headerName: "Date Created",
         field: "pisces",
 
         filter: "agSetColumnFilter",
-        width: 120,
-        cellRendererFramework: params => {
+        width: 150,
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{ReactHtmlParser(params.data.pisces)}</span>
+                <span>{params.data?.created_date?.split(" ")[0]}</span>
               </div>
             </div>
           );
         },
       },
-      {
-        headerName: "SALES",
-        field: "pisces",
+      // {
+      //   headerName: "ORDER",
+      //   field: "pisces",
 
-        filter: "agSetColumnFilter",
-        width: 120,
-        cellRendererFramework: params => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{ReactHtmlParser(params.data.pisces)}</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      //   filter: "agSetColumnFilter",
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{ReactHtmlParser(params.data.pisces)}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "SALES",
+      //   field: "pisces",
+
+      //   filter: "agSetColumnFilter",
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{ReactHtmlParser(params.data.pisces)}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       {
         headerName: "Actions",
         field: "transactions",
         width: 150,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
               <Trash2
@@ -185,28 +219,25 @@ class RateMaster extends React.Component {
   // componentDidMount() {}
 
   async componentDidMount() {
-    // axiosConfig
-    //   .get("/admin/product_list")
-    //   .then(response => {
-    //     this.setState({ product: response.data.data.length });
-    //   })
-    //   .catch(error => {
-    //     console.log(error);
-    //   });
-    await axiosConfig.get("/gettermsconditions").then(response => {
-      let rowData = response.data.data;
-      this.setState({ rowData });
-    });
+    await axiosConfig
+      .get("/getratemaster")
+      .then((response) => {
+        // console.log(response.data.data);
+        this.setState({ rowData: response.data.data });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   async runthisfunction(id) {
     console.log(id);
-    await axiosConfig.get(`/deltermcondition/${id}`).then(response => {
+    await axiosConfig.get(`/deltermcondition/${id}`).then((response) => {
       console.log(response);
     });
   }
 
-  onGridReady = params => {
+  onGridReady = (params) => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
     this.setState({
@@ -216,11 +247,11 @@ class RateMaster extends React.Component {
     });
   };
 
-  updateSearchQuery = val => {
+  updateSearchQuery = (val) => {
     this.gridApi.setQuickFilter(val);
   };
 
-  filterSize = val => {
+  filterSize = (val) => {
     if (this.gridApi) {
       this.gridApi.paginationSetPageSize(Number(val));
       this.setState({
@@ -303,7 +334,21 @@ class RateMaster extends React.Component {
             </Row>
             <Row className="m-2">
               <Col>
-                <h1>Rate Master</h1>
+                <h1>Rate Master List</h1>
+              </Col>
+              <Col>
+                <Route
+                  render={({ history }) => (
+                    <Button
+                      className=" btn btn-success float-right"
+                      onClick={() =>
+                        history.push("/app/freshlist/house/AddRateMaster")
+                      }
+                    >
+                      Add
+                    </Button>
+                  )}
+                />
               </Col>
             </Row>
             <CardBody>
@@ -358,7 +403,9 @@ class RateMaster extends React.Component {
                       <div className="table-input mr-1">
                         <Input
                           placeholder="search..."
-                          onChange={e => this.updateSearchQuery(e.target.value)}
+                          onChange={(e) =>
+                            this.updateSearchQuery(e.target.value)
+                          }
                           value={this.state.value}
                         />
                       </div>
@@ -373,7 +420,7 @@ class RateMaster extends React.Component {
                     </div>
                   </div>
                   <ContextLayout.Consumer>
-                    {context => (
+                    {(context) => (
                       <AgGridReact
                         gridOptions={{}}
                         rowSelection="multiple"

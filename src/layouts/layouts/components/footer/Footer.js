@@ -1,16 +1,18 @@
-import React from "react"
-import ScrollToTop from "react-scroll-up"
-import { Button } from "reactstrap"
-import { Heart, ArrowUp } from "react-feather"
-import classnames from "classnames"
+import React from "react";
+import ScrollToTop from "react-scroll-up";
+import { Button } from "reactstrap";
+import { Heart, ArrowUp } from "react-feather";
+import classnames from "classnames";
 
-const Footer = props => {
-  let footerTypeArr = ["sticky", "static", "hidden"]
+const Footer = (props) => {
+  let footerTypeArr = ["sticky", "static", "hidden"];
   return (
     <footer
       className={classnames("footer footer-light", {
-        "footer-static": props.footerType === "static" || !footerTypeArr.includes(props.footerType),
-        "d-none": props.footerType === "hidden"
+        "footer-static":
+          props.footerType === "static" ||
+          !footerTypeArr.includes(props.footerType),
+        "d-none": props.footerType === "hidden",
       })}
     >
       <p className="mb-0 clearfix">
@@ -38,7 +40,7 @@ const Footer = props => {
         </ScrollToTop>
       ) : null}
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

@@ -20,6 +20,13 @@ export class AddProduct extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      productid: "",
+      userid: "",
+      User: "",
+      quantity: "",
+      productName: [],
+      AssignRole: "",
+      rowData: [],
       category_name: "",
       type: "",
       feature: "",
@@ -35,27 +42,6 @@ export class AddProduct extends Component {
     };
   }
 
-  onChangeHandler1 = (event) => {
-    this.setState({ selectedFile1: event.target.files[0] });
-    this.setState({ selectedName1: event.target.files[0].name });
-    console.log(event.target.files[0]);
-  };
-  onChangeHandler2 = (event) => {
-    this.setState({ selectedFile2: event.target.files[0] });
-    this.setState({ selectedName2: event.target.files[0].name });
-    console.log(event.target.files[0]);
-  };
-  onChangeHandler3 = (event) => {
-    this.setState({ selectedFile3: event.target.files[0] });
-    this.setState({ selectedName3: event.target.files[0].name });
-    console.log(event.target.files[0]);
-  };
-  onChangeHandler4 = (event) => {
-    this.setState({ selectedFile4: event.target.files[0] });
-    this.setState({ selectedName4: event.target.files[0].name });
-    console.log(event.target.files[0]);
-  };
-
   changeHandler1 = (e) => {
     this.setState({ status: e.target.value });
   };
@@ -65,40 +51,36 @@ export class AddProduct extends Component {
   submitHandler = (e) => {
     e.preventDefault();
     const data = new FormData();
-    data.append("category_name", this.state.category_name);
-    data.append("type", this.state.type);
-    data.append("feature", this.state.feature);
-    data.append("status", this.state.status);
-    data.append("image", this.state.selectedFile1, this.state.selectedName1);
-    data.append(
-      "thumbnail_img",
-      this.state.selectedFile2,
-      this.state.selectedName2
-    );
-    data.append(
-      "web_banner",
-      this.state.selectedFile3,
-      this.state.selectedName3
-    );
-    data.append(
-      "app_banner",
-      this.state.selectedFile4,
-      this.state.selectedName4
-    );
+
+    data.append("user_id", this.state.User);
+    data.append("product_id", this.state.productid);
+    data.append("qty", this.state.quantity);
 
     axiosConfig
-      .post(`/admin/addcategory`, data)
+      .post(`/assign_to_client`, data)
       .then((response) => {
         console.log(response);
-        if (response.data.msg === "success") {
-          swal("Success!", "You Data IS been Submitted", "success");
-          this.props.history.push("/app/freshlist/category/categoryList");
-        }
+        this.setState({ User: "" });
+        this.setState({ productid: "" });
+        this.setState({ quantity: "" });
+        // if (response.data.msg === "success") {
+        //   swal("Success!", "You Data IS been Submitted", "success");
+        //   this.props.history.push("/app/freshlist/category/categoryList");
+        // }
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.response);
       });
   };
+  componentDidMount() {
+    let { id } = this.props.match.params;
+    this.setState({ productid: id });
+    axiosConfig.get("/getuserlist").then((response) => {
+      console.log(response?.data?.data?.users);
+      let rowData = response?.data?.data?.users;
+      this.setState({ rowData });
+    });
+  }
   render() {
     return (
       <div>
@@ -125,35 +107,55 @@ export class AddProduct extends Component {
           <CardBody>
             <Form className="m-1" onSubmit={this.submitHandler}>
               <Row className="mb-2">
-                <Col lg="6" md="6" className="mb-1 ">
-                  <Label>Roll</Label>
-                  <Input
-                    required
-                    type="select"
-                    name="weight"
-                    placeholder="Enter Iden Type"
-                    // value={this.state.weight}
-                    // onChange={this.changeHandler}
-                  >
-                    <option value="12ROW">1</option>
-                    <option value="12ROW">2</option>
-                    <option value="12ROW">3</option>
-                  </Input>
-                </Col>
+                {/* <Col lg="6" md="6" className="mb-1 ">
+                    <Label>Role</Label>
+                    
+                    <CustomInput
+                      type="select"
+                      placeholder=""
+                      name="AssignRole"
+                      value={this.state.AssignRole}
+                      onChange={this.changeHandler}
+                    >
+                      <option value="Admin">Admin</option>
+
+                      {this.state.productName &&
+                        this.state.productName?.map((value, index) => (
+                          <option key={index} value={value}>
+                            {value}
+                          </option>
+                        ))}
+                    </CustomInput>
+                  </Col> */}
                 <Col lg="6" md="6" className="mb-1 ">
                   <Label>User List</Label>
                   <Input
                     required
                     type="select"
-                    name="weight"
+                    name="User"
                     placeholder="Enter Iden Type"
-                    // value={this.state.weight}
-                    // onChange={this.changeHandler}
+                    value={this.state.User}
+                    onChange={this.changeHandler}
                   >
-                    <option value="12ROW">Abc</option>
-                    <option value="12ROW">bcd</option>
-                    <option value="12ROW">xyz</option>
+                    <option value="12ROW">--Selecte--</option>
+                    {this.state.rowData &&
+                      this.state.rowData?.map((value, i) => (
+                        <option key={i} value={value?.id}>
+                          {value?.full_name}
+                        </option>
+                      ))}
                   </Input>
+                </Col>
+                <Col lg="6" md="6" className="mb-1 ">
+                  <Label>Quantity</Label>
+                  <Input
+                    required
+                    type="number"
+                    name="quantity"
+                    placeholder="Enter Quantity..."
+                    value={this.state.quantity}
+                    onChange={this.changeHandler}
+                  />
                 </Col>
               </Row>
 
@@ -161,7 +163,7 @@ export class AddProduct extends Component {
                 <Button.Ripple
                   color="primary"
                   type="submit"
-                  className="mr-1 mb-1"
+                  className="mr-1 mx-1 mb-1"
                 >
                   Assign To Client
                 </Button.Ripple>

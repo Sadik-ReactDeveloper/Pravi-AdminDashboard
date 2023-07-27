@@ -46,11 +46,33 @@ class AssignToClient extends React.Component {
         headerName: "UID",
         valueGetter: "node.rowIndex + 1",
         field: "node.rowIndex + 1",
-        checkboxSelection: true,
+        // checkboxSelection: true,
         width: 150,
         filter: true,
       },
 
+      {
+        headerName: "PRODUCT Image",
+        field: "product",
+        filter: "agSetColumnFilter",
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                {/* <span>{params.data?.title}</span> */}
+                <img
+                  style={{ borderRadius: "12px" }}
+                  width="60px"
+                  height="40px"
+                  src={params?.data?.product_images[0]}
+                  alt="image"
+                />
+              </div>
+            </div>
+          );
+        },
+      },
       {
         headerName: "PRODUCT",
         field: "product",
@@ -75,7 +97,7 @@ class AssignToClient extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{params.data.volume}</span>
+                <span>{params.data?.category_name}</span>
                 {/* <span>vdfgvdfv</span> */}
               </div>
             </div>
@@ -83,7 +105,7 @@ class AssignToClient extends React.Component {
         },
       },
       {
-        headerName: "BRAND",
+        headerName: "Description",
         field: "brand",
         filter: "agSetColumnFilter",
         width: 120,
@@ -91,7 +113,7 @@ class AssignToClient extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{ReactHtmlParser(params.data.pisces)}</span>
+                <span>{ReactHtmlParser(params.data?.description)}</span>
               </div>
             </div>
           );
@@ -106,7 +128,67 @@ class AssignToClient extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{params.data.price}</span>
+                <span>{params.data?.price}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "DiscountPrice",
+        field: "price",
+        filter: "agSetColumnFilter",
+        width: 120,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params.data?.discountprice}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Shipping Fee",
+        field: "price",
+        filter: "agSetColumnFilter",
+        width: 120,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params.data?.shipping_fee}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Tax Rate",
+        field: "price",
+        filter: "agSetColumnFilter",
+        width: 120,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params.data?.tax_rate}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Tags",
+        field: "price",
+        filter: "agSetColumnFilter",
+        width: 120,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params.data?.tags}</span>
               </div>
             </div>
           );
@@ -122,14 +204,14 @@ class AssignToClient extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{ReactHtmlParser(params.data.pisces)}</span>
+                <span>{ReactHtmlParser(params.data?.stock)}</span>
               </div>
             </div>
           );
         },
       },
       {
-        headerName: "ORDER",
+        headerName: "Created ",
         field: "pisces",
         filter: "agSetColumnFilter",
         width: 120,
@@ -137,37 +219,9 @@ class AssignToClient extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{ReactHtmlParser(params.data.pisces)}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "SALES",
-        field: "pisces",
-        filter: "agSetColumnFilter",
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{ReactHtmlParser(params.data.pisces)}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "description",
-        field: "description",
-        filter: "agSetColumnFilter",
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{ReactHtmlParser(params.data?.description)}</span>
+                <span>
+                  {ReactHtmlParser(params.data?.created_date?.split(" ")[0])}
+                </span>
               </div>
             </div>
           );
@@ -231,7 +285,7 @@ class AssignToClient extends React.Component {
       .get("/productlistapi")
       .then((response) => {
         this.setState({ rowData: response.data.data });
-        // console.log(response.data.data);
+        console.log(response.data.data);
       })
       .catch((error) => {
         console.log(error);
