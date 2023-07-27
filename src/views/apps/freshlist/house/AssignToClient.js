@@ -37,18 +37,19 @@ class AssignToClient extends React.Component {
     getPageSize: "",
     defaultColDef: {
       sortable: true,
-      editable: true,
-      resizable: true,
+      // editable: true,
+      // resizable: true,
       suppressMenu: true,
     },
     columnDefs: [
       {
         headerName: "UID",
+        filter: true,
+
         valueGetter: "node.rowIndex + 1",
         field: "node.rowIndex + 1",
         // checkboxSelection: true,
         width: 150,
-        filter: true,
       },
 
       {
@@ -75,9 +76,10 @@ class AssignToClient extends React.Component {
       },
       {
         headerName: "PRODUCT",
-        field: "product",
-        filter: "agSetColumnFilter",
+        field: "title",
+        filter: true,
         width: 150,
+
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
@@ -90,7 +92,7 @@ class AssignToClient extends React.Component {
       },
       {
         headerName: "CATEGORY",
-        field: "category",
+        field: "category_name",
         filter: "agSetColumnFilter",
         width: 150,
         cellRendererFramework: (params) => {
@@ -106,7 +108,7 @@ class AssignToClient extends React.Component {
       },
       {
         headerName: "Description",
-        field: "brand",
+        field: "description",
         filter: "agSetColumnFilter",
         width: 120,
         cellRendererFramework: (params) => {
@@ -136,7 +138,7 @@ class AssignToClient extends React.Component {
       },
       {
         headerName: "DiscountPrice",
-        field: "price",
+        field: "discountprice",
         filter: "agSetColumnFilter",
         width: 120,
         cellRendererFramework: (params) => {
@@ -151,7 +153,7 @@ class AssignToClient extends React.Component {
       },
       {
         headerName: "Shipping Fee",
-        field: "price",
+        field: "shipping_fee",
         filter: "agSetColumnFilter",
         width: 120,
         cellRendererFramework: (params) => {
@@ -166,7 +168,7 @@ class AssignToClient extends React.Component {
       },
       {
         headerName: "Tax Rate",
-        field: "price",
+        field: "tax_rate",
         filter: "agSetColumnFilter",
         width: 120,
         cellRendererFramework: (params) => {
@@ -181,7 +183,7 @@ class AssignToClient extends React.Component {
       },
       {
         headerName: "Tags",
-        field: "price",
+        field: "tags",
         filter: "agSetColumnFilter",
         width: 120,
         cellRendererFramework: (params) => {
@@ -196,7 +198,7 @@ class AssignToClient extends React.Component {
       },
       {
         headerName: "STOCK",
-        field: "pisces",
+        field: "stock",
 
         filter: "agSetColumnFilter",
         width: 150,
@@ -212,7 +214,7 @@ class AssignToClient extends React.Component {
       },
       {
         headerName: "Created ",
-        field: "pisces",
+        field: "created_date",
         filter: "agSetColumnFilter",
         width: 120,
         cellRendererFramework: (params) => {
