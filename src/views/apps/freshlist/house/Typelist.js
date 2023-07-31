@@ -21,7 +21,7 @@ import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
 import { Route, Link } from "react-router-dom";
 
-class BrandList extends React.Component {
+class Typelist extends React.Component {
   state = {
     rowData: [],
     Viewpermisson: null,
@@ -65,14 +65,14 @@ class BrandList extends React.Component {
       //   },
       // },
       {
-        headerName: "Brand Name",
-        field: "brand_name",
+        headerName: "product_type",
+        field: "product_type",
         filter: true,
         width: 160,
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data?.brand_name}</span>
+              <span>{params.data?.product_type}</span>
             </div>
           );
         },
@@ -125,7 +125,7 @@ class BrandList extends React.Component {
                         color="green"
                         onClick={() =>
                           history.push(
-                            `/app/freshlist/brand/viewBrand/${params.data.id}`
+                            `/app/freshlist/house/EditType/${params.data.id}`
                           )
                         }
                       />
@@ -138,7 +138,7 @@ class BrandList extends React.Component {
                         color="blue"
                         onClick={() =>
                           history.push(
-                            `/app/freshlist/brand/editBrand/${params.data.id}`
+                            `/app/freshlist/house/EditType/${params.data.id}`
                           )
                         }
                       />
@@ -170,7 +170,7 @@ class BrandList extends React.Component {
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
 
     let newparmisson = pageparmission?.role?.find(
-      (value) => value?.pageName === "Brand List"
+      (value) => value?.pageName === "Type"
     );
 
     this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
@@ -183,9 +183,8 @@ class BrandList extends React.Component {
     this.setState({
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
-
-    await axiosConfig.get("/getbrand").then((response) => {
-      let rowData = response.data.data?.brands;
+    await axiosConfig.get("/producttypelistview").then((response) => {
+      let rowData = response.data.data;
       // console.log(rowData);
       this.setState({ rowData });
     });
@@ -235,7 +234,7 @@ class BrandList extends React.Component {
               <Row className="m-2">
                 <Col>
                   <h1 sm="6" className="float-left">
-                    Brand List here
+                    Type List here
                   </h1>
                 </Col>
                 <Col>
@@ -246,7 +245,7 @@ class BrandList extends React.Component {
                           className="btn float-right"
                           color="primary"
                           onClick={() =>
-                            history.push("/app/freshlist/brand/addBrand")
+                            history.push("/app/freshlist/house/AddType")
                           }
                         >
                           Add New
@@ -355,4 +354,4 @@ class BrandList extends React.Component {
     );
   }
 }
-export default BrandList;
+export default Typelist;

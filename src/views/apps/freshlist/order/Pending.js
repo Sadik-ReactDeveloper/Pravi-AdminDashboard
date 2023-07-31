@@ -28,6 +28,10 @@ import swal from "sweetalert";
 class Pending extends React.Component {
   state = {
     rowData: [],
+    Viewpermisson: null,
+    Editpermisson: null,
+    Createpermisson: null,
+    Deletepermisson: null,
     paginationPageSize: 20,
     currenPageSize: "",
     getPageSize: "",
@@ -46,101 +50,290 @@ class Pending extends React.Component {
         filter: true,
       },
       {
+        headerName: "Status",
+        field: "order_status",
+        filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          // order_status= 'Inprogress, 'Completed'
+
+          return params.data?.order_status === "Completed" ? (
+            <div className="badge badge-pill badge-success">Completed</div>
+          ) : params.data?.order_status === "Pending" ? (
+            <div className="badge badge-pill badge-warning">
+              {params.data.order_status}
+            </div>
+          ) : params.data?.order_status === "Inprogress" ? (
+            <div className="badge badge-pill bg-primary">Inprogress</div>
+          ) : params.data?.order_status === "canceled" ? (
+            <div className="badge badge-pill bg-danger">
+              {params.data.order_status}
+            </div>
+          ) : params.data?.order_status === "Order Placed" ? (
+            <div className="badge badge-pill bg-success">Order Placed</div>
+          ) : null;
+        },
+      },
+
+      {
         headerName: "Order ID ",
-        field: "orderId",
+        field: "order_id",
         filter: true,
         resizable: true,
+        width: 180,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.order_id}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Name ",
+        field: "title",
+        filter: true,
+        resizable: true,
+        width: 180,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.title}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "category_name",
+        field: "category_name",
+        filter: true,
+        resizable: true,
+        width: 160,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.category_name}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "description",
+        field: "description",
+        filter: true,
+        resizable: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.description}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Order Date",
+        field: "order_date",
+        filter: "true",
         width: 120,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{params.data.orderId}</span>
+                <span>{params.data?.order_date}</span>
               </div>
             </div>
           );
         },
       },
       {
-        headerName: "Email",
-        field: "email",
-        filter: true,
-        resizable: true,
-        width: 200,
+        headerName: "order_id",
+        field: "order_id",
+        filter: "true",
+        width: 160,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{params.data.email}</span>
+                <span>{params.data?.order_id}</span>
               </div>
             </div>
           );
         },
       },
       {
-        headerName: "Phone",
-        field: "phone",
+        headerName: "price",
+        field: "price",
         filter: true,
         resizable: true,
-        width: 100,
+        width: 160,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{params.data.phone_no}</span>
+              <div>
+                <span>{params.data?.price}</span>
               </div>
             </div>
           );
         },
       },
-
       {
-        headerName: "Zone",
-        field: "zone",
+        headerName: "discountprice",
+        field: "discountprice",
         filter: true,
         resizable: true,
-        width: 150,
+        width: 170,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{params.data.order_zone}</span>
+              <div>
+                <span>{params.data?.discountprice}</span>
               </div>
             </div>
           );
         },
       },
       {
-        headerName: "Delivery Address",
-        field: "delivery_address",
+        headerName: "product_images",
+        field: "product_images",
         filter: true,
         resizable: true,
-        width: 200,
+        width: 180,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{params.data.delivery_add}</span>
+              <div>
+                <img
+                  style={{ borderRadius: "12px" }}
+                  src={params?.data?.product_images[0]}
+                  alt="image"
+                  width="60px"
+                />
               </div>
             </div>
           );
         },
       },
-
       {
-        headerName: "Status",
-        field: "status",
+        headerName: "Quantity",
+        field: "qty",
         filter: true,
-        width: 150,
+        resizable: true,
+        width: 190,
         cellRendererFramework: (params) => {
-          return params.value === "Pending" ? (
-            <div className="badge badge-pill badge-success">
-              {params.data.status}
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.qty}</span>
+              </div>
             </div>
-          ) : null;
+          );
         },
       },
-
+      {
+        headerName: "shipping_fee",
+        field: "shipping_fee",
+        filter: true,
+        resizable: true,
+        width: 190,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.shipping_fee}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "stock",
+        field: "stock",
+        filter: true,
+        resizable: true,
+        width: 190,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.stock}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "tags",
+        field: "tags",
+        filter: true,
+        resizable: true,
+        width: 190,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.tags}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "tax_rate",
+        field: "tax_rate",
+        filter: true,
+        resizable: true,
+        width: 180,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.tax_rate}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "subtotal",
+        field: "subtotal",
+        filter: true,
+        resizable: true,
+        width: 180,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.subtotal}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "total",
+        field: "total",
+        filter: true,
+        resizable: true,
+        width: 180,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.total}</span>
+              </div>
+            </div>
+          );
+        },
+      },
       {
         headerName: "Actions",
         field: "sortorder",
@@ -149,32 +342,38 @@ class Pending extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
-              <Eye
-                className="mr-50"
-                size="25px"
-                color="green"
-                onClick={() =>
-                  history.push(
-                    `/app/freshlist/order/viewAll/${params.data._id}`
-                  )
-                }
-              />
-              <Edit
-                className="mr-50"
-                size="25px"
-                color="blue"
-                onClick={() => history.push("/app/freshlist/order/EditOrder")}
-              />
-              <Trash2
-                className="mr-50"
-                size="25px"
-                color="red"
-                onClick={() => {
-                  let selectedData = this.gridApi.getSelectedRows();
-                  this.runthisfunction(params.data._id);
-                  this.gridApi.updateRowData({ remove: selectedData });
-                }}
-              />
+              {this.state.Viewpermisson && (
+                <Eye
+                  className="mr-50"
+                  size="25px"
+                  color="green"
+                  onClick={() =>
+                    history.push(
+                      `/app/freshlist/order/viewAll/${params.data.id}`
+                    )
+                  }
+                />
+              )}
+              {this.state.Editpermisson && (
+                <Edit
+                  className="mr-50"
+                  size="25px"
+                  color="blue"
+                  onClick={() => history.push("/app/freshlist/order/EditOrder")}
+                />
+              )}
+              {this.state.Deletepermisson && (
+                <Trash2
+                  className="mr-50"
+                  size="25px"
+                  color="red"
+                  onClick={() => {
+                    let selectedData = this.gridApi.getSelectedRows();
+                    this.runthisfunction(params.data.id);
+                    this.gridApi.updateRowData({ remove: selectedData });
+                  }}
+                />
+              )}
             </div>
           );
         },
@@ -182,10 +381,35 @@ class Pending extends React.Component {
     ],
   };
   async componentDidMount() {
-    await axiosConfig.get("/admin/pending_order").then((response) => {
-      let rowData = response.data.data;
-      console.log(rowData);
-      this.setState({ rowData });
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    const formdata = new FormData();
+    formdata.append("user_id", pageparmission?.Userinfo?.id);
+    formdata.append("order_status", "Inprogress");
+
+    await axiosConfig
+      .post(`/order_detail`, formdata)
+      .then((res) => {
+        // console.log(res.data.data);
+        let rowData = res.data.data;
+        this.setState({ rowData });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    let newparmisson = pageparmission?.role?.find(
+      (value) => value?.pageName === "Order Raise List"
+    );
+
+    this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
+    this.setState({
+      Createpermisson: newparmisson?.permission.includes("Create"),
+    });
+    this.setState({
+      Editpermisson: newparmisson?.permission.includes("Edit"),
+    });
+    this.setState({
+      Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
   }
 
@@ -267,66 +491,11 @@ class Pending extends React.Component {
     return (
       <Row className="app-user-list">
         <Col sm="12">
-          <h2> Select Date Range</h2>
-          <Card>
-            <CardBody>
-              <Form className="m-1" onSubmit={this.submitHandler}>
-                <Row>
-                  <Col lg="3" className="mb-2">
-                    <Label>All</Label>
-                    <Input
-                      required
-                      type="select"
-                      name="bannertype"
-                      placeholder=""
-                      value={this.state.bannertype}
-                      onChange={this.changeHandler}
-                    >
-                      <option value="select">--Select--</option>
-                      <option value="All">All</option>
-                      <option value="In-house">In-house</option>
-                      <option value="Seller">Seller</option>
-                    </Input>
-                  </Col>
-                  <Col lg="3" className="mb-2">
-                    <Label>Start Date</Label>
-                    <Input
-                      required
-                      type="date"
-                      name="bannertype"
-                      placeholder=""
-                      value={this.state.bannertype}
-                      onChange={this.changeHandler}
-                    ></Input>
-                  </Col>
-                  <Col lg="3" className="mb-2">
-                    <Label>End Date</Label>
-                    <Input
-                      required
-                      type="date"
-                      name="bannertype"
-                      placeholder=""
-                      value={this.state.bannertype}
-                      onChange={this.changeHandler}
-                    ></Input>
-                  </Col>
-
-                  <Col lg="3" className="mb-2">
-                    <Button.Ripple className="bt" color="primary" type="submit">
-                      Show Data
-                    </Button.Ripple>
-                  </Col>
-                </Row>
-              </Form>
-            </CardBody>
-          </Card>
-        </Col>
-        <Col sm="12">
           <Card>
             <Row className="m-2">
               <Col>
                 <h1 col-sm-6 className="float-left">
-                  Pending Order List
+                  Order Raise List
                 </h1>
               </Col>
             </Row>
@@ -381,40 +550,14 @@ class Pending extends React.Component {
                     <div className="d-flex flex-wrap justify-content-between mb-1">
                       <div className="table-input mr-1">
                         <Input
-                          placeholder="Hub Name"
+                          placeholder="Search..."
                           onChange={(e) =>
                             this.updateSearchQuery(e.target.value)
                           }
                           value={this.state.value}
                         />
                       </div>
-                      <div className="table-input mr-1">
-                        <Input
-                          placeholder="Order Id"
-                          onChange={(e) =>
-                            this.updateSearchQuery(e.target.value)
-                          }
-                          value={this.state.value}
-                        />
-                      </div>
-                      <div className="table-input mr-1">
-                        <Input
-                          placeholder="Phone Number"
-                          onChange={(e) =>
-                            this.updateSearchQuery(e.target.value)
-                          }
-                          value={this.state.value}
-                        />
-                      </div>
-                      <div className="table-input mr-1">
-                        <Input
-                          placeholder="Enter Email"
-                          onChange={(e) =>
-                            this.updateSearchQuery(e.target.value)
-                          }
-                          value={this.state.value}
-                        />
-                      </div>
+
                       <div className="export-btn">
                         <Button.Ripple
                           color="primary"

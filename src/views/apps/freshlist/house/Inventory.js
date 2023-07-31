@@ -36,6 +36,10 @@ import { Route } from "react-router-dom";
 class Invetory extends React.Component {
   state = {
     rowData: [],
+    Viewpermisson: null,
+    Editpermisson: null,
+    Createpermisson: null,
+    Deletepermisson: null,
     modal: false,
     paginationPageSize: 20,
     currenPageSize: "",
@@ -73,7 +77,7 @@ class Invetory extends React.Component {
       },
       {
         headerName: "Title",
-        field: "itemname",
+        field: "title",
         filter: "agSetColumnFilter",
         width: 150,
         cellRendererFramework: (params) => {
@@ -96,13 +100,19 @@ class Invetory extends React.Component {
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
                 {/* <span>{params.data?.title}</span> */}
-                <img
-                  style={{ borderRadius: "12px" }}
-                  width="60px"
-                  height="40px"
-                  src={params.data?.product_images[0]}
-                  alt="image"
-                />
+                {params.data?.product_images ? (
+                  <>
+                    <img
+                      style={{ borderRadius: "12px" }}
+                      width="60px"
+                      height="40px"
+                      src={params.data?.product_images[0]}
+                      alt="image"
+                    />
+                  </>
+                ) : (
+                  "No image"
+                )}
               </div>
             </div>
           );
@@ -110,7 +120,7 @@ class Invetory extends React.Component {
       },
       {
         headerName: "Description",
-        field: "category",
+        field: "description",
         filter: "agSetColumnFilter",
         width: 150,
         cellRendererFramework: (params) => {
@@ -126,7 +136,7 @@ class Invetory extends React.Component {
       },
       {
         headerName: " Price",
-        field: "currentstock",
+        field: "price",
         filter: "agSetColumnFilter",
         width: 160,
         cellRendererFramework: (params) => {
@@ -141,7 +151,7 @@ class Invetory extends React.Component {
       },
       {
         headerName: "Discount Price",
-        field: "currentstock",
+        field: "discountprice",
         filter: "agSetColumnFilter",
         width: 190,
         cellRendererFramework: (params) => {
@@ -156,7 +166,7 @@ class Invetory extends React.Component {
       },
       {
         headerName: "shipping fee",
-        field: "UNIT",
+        field: "shipping_fee",
 
         filter: "agSetColumnFilter",
         width: 150,
@@ -172,7 +182,7 @@ class Invetory extends React.Component {
       },
       {
         headerName: "Stock",
-        field: "price",
+        field: "stock",
         filter: "agSetColumnFilter",
         width: 120,
         cellRendererFramework: (params) => {
@@ -188,7 +198,7 @@ class Invetory extends React.Component {
 
       {
         headerName: "Tag",
-        field: "pisces",
+        field: "tags",
 
         filter: "agSetColumnFilter",
         width: 120,
@@ -204,7 +214,7 @@ class Invetory extends React.Component {
       },
       {
         headerName: "TAX Rate",
-        field: "tax",
+        field: "tax_rate",
         filter: "agSetColumnFilter",
         width: 120,
         cellRendererFramework: (params) => {
@@ -273,16 +283,18 @@ class Invetory extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
-              <Trash2
-                className="mr-50"
-                size="25px"
-                color="Red"
-                onClick={() => {
-                  let selectedData = this.gridApi.getSelectedRows();
-                  this.runthisfunction(params.data._id);
-                  this.gridApi.updateRowData({ remove: selectedData });
-                }}
-              />
+              {this.state.Deletepermisson && (
+                <Trash2
+                  className="mr-50"
+                  size="25px"
+                  color="Red"
+                  onClick={() => {
+                    let selectedData = this.gridApi.getSelectedRows();
+                    this.runthisfunction(params.data._id);
+                    this.gridApi.updateRowData({ remove: selectedData });
+                  }}
+                />
+              )}
             </div>
           );
         },
@@ -296,6 +308,23 @@ class Invetory extends React.Component {
     }));
   };
   async componentDidMount() {
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+
+    let newparmisson = pageparmission?.role?.find(
+      (value) => value?.pageName === "Inventory"
+    );
+
+    this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
+    this.setState({
+      Createpermisson: newparmisson?.permission.includes("Create"),
+    });
+    this.setState({
+      Editpermisson: newparmisson?.permission.includes("Edit"),
+    });
+    this.setState({
+      Deletepermisson: newparmisson?.permission.includes("Delete"),
+    });
+
     await axiosConfig.get("/getproductinventory").then((response) => {
       let rowData = response.data.data;
       console.log(response.data.data);

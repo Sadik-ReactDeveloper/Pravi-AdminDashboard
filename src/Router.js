@@ -191,6 +191,12 @@ const AddGallery = lazy(() =>
 
 //order
 const All = lazy(() => import("./views/apps/freshlist/order/All"));
+const Placeorder = lazy(() =>
+  import("./views/apps/freshlist/order/Placeorder")
+);
+const PurchasedOrder = lazy(() =>
+  import("./views/apps/freshlist/order/PurchasedOrder")
+);
 const AddOrder = lazy(() => import("./views/apps/freshlist/order/AddOrder"));
 const EditOrder = lazy(() => import("./views/apps/freshlist/order/EditOrder"));
 const ViewAll = lazy(() => import("./views/apps/freshlist/order/ViewAll"));
@@ -362,6 +368,9 @@ const HouseProductList = lazy(() =>
 const AddProduct = lazy(() =>
   import("./views/apps/freshlist/house/AddProduct")
 );
+const EditMyProduct = lazy(() =>
+  import("./views/apps/freshlist/house/EditProduct")
+);
 const AssignToClient = lazy(() =>
   import("./views/apps/freshlist/house/AssignToClient")
 );
@@ -381,6 +390,9 @@ const RateMaster = lazy(() =>
 const AddRateMaster = lazy(() =>
   import("./views/apps/freshlist/house/AddRateMaster")
 );
+const AddType = lazy(() => import("./views/apps/freshlist/house/AddType"));
+const EditType = lazy(() => import("./views/apps/freshlist/house/EditType"));
+const Typelist = lazy(() => import("./views/apps/freshlist/house/Typelist"));
 const Inventory = lazy(() => import("./views/apps/freshlist/house/Inventory"));
 const ServiceMaster = lazy(() =>
   import("./views/apps/freshlist/house/ServiceMaster")
@@ -918,6 +930,14 @@ class AppRouter extends React.Component {
           />
           {/* order */}
           <AppRoute path="/app/freshlist/order/all" component={All} />
+          <AppRoute
+            path="/app/freshlist/order/Placeorder"
+            component={Placeorder}
+          />
+          <AppRoute
+            path="/app/freshlist/order/purchasedorder"
+            component={PurchasedOrder}
+          />
           <AppRoute path="/app/freshlist/order/AddOrder" component={AddOrder} />
           <AppRoute
             path="/app/freshlist/order/editOrder/:id"
@@ -1162,6 +1182,10 @@ class AppRouter extends React.Component {
             component={AddProduct}
           />
           <AppRoute
+            path="/app/freshlist/house/editmyproduct/:id"
+            component={EditMyProduct}
+          />
+          <AppRoute
             path="/app/freshlist/house/assignedPage/:id"
             component={AssignedPage}
           />
@@ -1181,6 +1205,12 @@ class AppRouter extends React.Component {
             path="/app/freshlist/house/AddRateMaster"
             component={AddRateMaster}
           />
+          <AppRoute path="/app/freshlist/house/AddType" component={AddType} />
+          <AppRoute
+            path="/app/freshlist/house/EditType/:id"
+            component={EditType}
+          />
+          <AppRoute path="/app/freshlist/house/Typelist" component={Typelist} />
           <AppRoute
             path="/app/freshlist/house/inventory"
             component={Inventory}

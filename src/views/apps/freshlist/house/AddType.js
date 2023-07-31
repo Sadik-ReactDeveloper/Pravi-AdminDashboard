@@ -16,14 +16,14 @@ import axiosConfig from "../../../../axiosConfig";
 import { Route } from "react-router-dom";
 import swal from "sweetalert";
 
-export class AddRateMaster extends Component {
+export class AddType extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      category_name: "",
+      TypeName: "",
       Brand: "",
       Brandlist: "",
-      P_Title: "",
+      Description: "",
       Price: "",
       stock: "",
       Regularprice: "",
@@ -48,11 +48,11 @@ export class AddRateMaster extends Component {
       //   console.log(rowData);
       this.setState({ rowData });
     });
-    await axiosConfig.get("/getbrand").then((response) => {
-      let Brandlist = response.data.data?.brands;
-      //   console.log(Brandlist);
-      this.setState({ Brandlist });
-    });
+    // await axiosConfig.get("/getbrand").then((response) => {
+    //   let Brandlist = response.data.data?.brands;
+    //   //   console.log(Brandlist);
+    //   this.setState({ Brandlist });
+    // });
   }
 
   handleChange(i, e) {
@@ -107,19 +107,23 @@ export class AddRateMaster extends Component {
   };
   submitHandler = (e) => {
     e.preventDefault();
-
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    console.log(pageparmission?.Userinfo?.id);
     const data = new FormData();
 
-    data.append("brand_id", this.state.Brand);
-    data.append("category_id", this.state.category_name);
-    data.append("price", this.state.Price);
+    data.append("user_id", pageparmission?.Userinfo?.id);
+    // data.append("brand_id", this.state.Brand);
+    data.append("product_type", this.state.TypeName);
+    data.append("description", this.state.Description);
     data.append("status", "Active");
 
     axiosConfig
-      .post(`/addratemaster`, data)
+      .post(`/addproducttype`, data)
       .then((response) => {
         if (response?.data?.success) {
-          swal("Success!", "You Data iS been Submitted", "success");
+          this.setState({ TypeName: "" });
+          this.setState({ Description: "" });
+          swal("Success!", "You Data has been Submitted", "success");
         }
       })
       .catch((error) => {
@@ -130,7 +134,7 @@ export class AddRateMaster extends Component {
     return (
       <div>
         <Card>
-          <h1 className="p-2 ">Add Rate Master here</h1>
+          <h1 className="p-2 ">Add Type here</h1>
           <Row className="m-2">
             <Col>
               <h2>Enter Information</h2>
@@ -141,7 +145,7 @@ export class AddRateMaster extends Component {
                   <Button
                     className=" btn btn-danger float-right"
                     onClick={() =>
-                      history.push("/app/freshlist/house/ratemaster")
+                      history.push("/app/freshlist/house/Typelist")
                     }
                   >
                     Back
@@ -155,9 +159,9 @@ export class AddRateMaster extends Component {
               <Row className="mb-2">
                 <Col lg="6" md="6">
                   <FormGroup>
-                    <Label> Choose Category *</Label>
+                    <Label> Add Type</Label>
 
-                    <select
+                    {/* <select
                       required
                       onChange={(e) =>
                         this.setState({ category_name: e.target.value })
@@ -173,18 +177,18 @@ export class AddRateMaster extends Component {
                             {val?.category_name}
                           </option>
                         ))}
-                    </select>
-                    {/* <Input
+                    </select> */}
+                    <Input
                       type="text"
                       placeholder="Title"
-                      name="category_name"
+                      name="TypeName"
                       bsSize="lg"
-                      value={this.state.category_name}
+                      value={this.state.TypeName}
                       onChange={this.changeHandler}
-                    /> */}
+                    />
                   </FormGroup>
                 </Col>
-                <Col lg="6" md="6">
+                {/* <Col lg="6" md="6">
                   <FormGroup>
                     <Label> Choose Brand *</Label>
 
@@ -204,20 +208,20 @@ export class AddRateMaster extends Component {
                         ))}
                     </select>
                   </FormGroup>
-                </Col>
-                {/* <Col lg="6" md="6">
+                </Col> */}
+                <Col lg="6" md="6">
                   <FormGroup>
-                    <Label>Title</Label>
+                    <Label>Description</Label>
                     <Input
                       type="text"
                       placeholder="Title"
-                      name="P_Title"
+                      name="Description"
                       bsSize="lg"
-                      value={this.state.P_Title}
+                      value={this.state.Description}
                       onChange={this.changeHandler}
                     />
                   </FormGroup>
-                </Col> */}
+                </Col>
                 {/* <Col lg="12" md="12">
                   <FormGroup>
                     <Label>Description</Label>
@@ -233,7 +237,7 @@ export class AddRateMaster extends Component {
                     />
                   </FormGroup>
                 </Col> */}
-                <Col lg="6" md="6">
+                {/* <Col lg="6" md="6">
                   <FormGroup>
                     <Label> PRICE (₹)</Label>
                     <Input
@@ -246,7 +250,7 @@ export class AddRateMaster extends Component {
                       onChange={this.changeHandler}
                     />
                   </FormGroup>
-                </Col>
+                </Col> */}
               </Row>
 
               <Row>
@@ -256,7 +260,7 @@ export class AddRateMaster extends Component {
                     type="submit"
                     className="mx-3 mb-1"
                   >
-                    Add Rate Master
+                    Add Type
                   </Button.Ripple>
                 </Col>
               </Row>
@@ -267,4 +271,4 @@ export class AddRateMaster extends Component {
     );
   }
 }
-export default AddRateMaster;
+export default AddType;

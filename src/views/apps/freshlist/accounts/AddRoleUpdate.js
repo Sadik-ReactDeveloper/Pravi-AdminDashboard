@@ -68,10 +68,11 @@ export default function AddRoleNew() {
 
   const handleSumit = (e) => {
     e.preventDefault();
-    // let data = JSON.parse(localStorage.getItem("userData"));
-    //     console.log(data?.Userinfo?.id);
+    let userdata = JSON.parse(localStorage.getItem("userData"));
+
     let formdata = new FormData();
-    formdata.set("user_id", 1);
+
+    formdata.append("user_id", userdata?.Userinfo?.id);
     formdata.set("role_name", Role);
     formdata.set("description", Desc);
     formdata.set("selectedarray", JSON.stringify(Selected));

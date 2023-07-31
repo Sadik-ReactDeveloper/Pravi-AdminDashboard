@@ -20,7 +20,8 @@ import ReactHtmlParser from "react-html-parser";
 import { ContextLayout } from "../../../../utility/context/Layout";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
-import { Trash2, ChevronDown } from "react-feather";
+import { Eye, Trash2, ChevronDown, Edit } from "react-feather";
+
 import { history } from "../../../../history";
 import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
@@ -32,6 +33,10 @@ class ProductDashboard extends React.Component {
   state = {
     product: [],
     rowData: [],
+    Viewpermisson: null,
+    Editpermisson: null,
+    Createpermisson: null,
+    Deletepermisson: null,
     paginationPageSize: 20,
     currenPageSize: "",
     getPageSize: "",
@@ -61,13 +66,17 @@ class ProductDashboard extends React.Component {
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
                 {/* <span>{params.data?.title}</span> */}
-                <img
-                  style={{ borderRadius: "12px" }}
-                  width="60px"
-                  height="40px"
-                  src={params?.data?.product_images[0]}
-                  alt="image"
-                />
+                {params?.data?.product_images ? (
+                  <img
+                    style={{ borderRadius: "12px" }}
+                    width="60px"
+                    height="40px"
+                    src={params?.data?.product_images[0]}
+                    alt="image"
+                  />
+                ) : (
+                  "No Image "
+                )}
               </div>
             </div>
           );
@@ -75,7 +84,7 @@ class ProductDashboard extends React.Component {
       },
       {
         headerName: "PRODUCT",
-        field: "product",
+        field: "title",
         filter: "agSetColumnFilter",
         width: 150,
         cellRendererFramework: (params) => {
@@ -90,7 +99,7 @@ class ProductDashboard extends React.Component {
       },
       {
         headerName: "CATEGORY",
-        field: "category",
+        field: "category_name",
         filter: "agSetColumnFilter",
         width: 150,
         cellRendererFramework: (params) => {
@@ -106,7 +115,7 @@ class ProductDashboard extends React.Component {
       },
       {
         headerName: "Description",
-        field: "brand",
+        field: "description",
         filter: "agSetColumnFilter",
         width: 120,
         cellRendererFramework: (params) => {
@@ -136,7 +145,7 @@ class ProductDashboard extends React.Component {
       },
       {
         headerName: "DiscountPrice",
-        field: "price",
+        field: "discountprice",
         filter: "agSetColumnFilter",
         width: 120,
         cellRendererFramework: (params) => {
@@ -151,7 +160,7 @@ class ProductDashboard extends React.Component {
       },
       {
         headerName: "Shipping Fee",
-        field: "price",
+        field: "shipping_fee",
         filter: "agSetColumnFilter",
         width: 120,
         cellRendererFramework: (params) => {
@@ -166,7 +175,7 @@ class ProductDashboard extends React.Component {
       },
       {
         headerName: "Tax Rate",
-        field: "price",
+        field: "tax_rate",
         filter: "agSetColumnFilter",
         width: 120,
         cellRendererFramework: (params) => {
@@ -181,7 +190,7 @@ class ProductDashboard extends React.Component {
       },
       {
         headerName: "Tags",
-        field: "price",
+        field: "tags",
         filter: "agSetColumnFilter",
         width: 120,
         cellRendererFramework: (params) => {
@@ -196,7 +205,7 @@ class ProductDashboard extends React.Component {
       },
       {
         headerName: "STOCK",
-        field: "pisces",
+        field: "stock",
 
         filter: "agSetColumnFilter",
         width: 150,
@@ -212,7 +221,7 @@ class ProductDashboard extends React.Component {
       },
       {
         headerName: "Created ",
-        field: "pisces",
+        field: "created_date",
         filter: "agSetColumnFilter",
         width: 120,
         cellRendererFramework: (params) => {
@@ -249,17 +258,44 @@ class ProductDashboard extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
-              <Trash2
-                className="mr-50"
-                size="25px"
-                color="Red"
-                onClick={() => {
-                  let selectedData = this.gridApi.getSelectedRows();
+              {/* {this.state.Viewpermisson && (
+                <Eye
+                  className="mr-50"
+                  size="25px"
+                  color="green"
+                  onClick={() =>
+                    history.push(
+                      `/app/freshlist/order/viewAll/${params.data.id}`
+                    )
+                  }
+                />
+              )} */}
+              {this.state.Editpermisson && (
+                <Edit
+                  className="mr-50"
+                  size="25px"
+                  color="blue"
+                  onClick={() =>
+                    this.props.history.push({
+                      pathname: `/app/freshlist/house/editmyproduct/${params.data?.id}`,
+                      state: params.data,
+                    })
+                  }
+                />
+              )}
+              {this.state.Deletepermisson && (
+                <Trash2
+                  className="mr-50"
+                  size="25px"
+                  color="Red"
+                  onClick={() => {
+                    let selectedData = this.gridApi.getSelectedRows();
 
-                  this.runthisfunction(params.data?.id);
-                  this.gridApi.updateRowData({ remove: selectedData });
-                }}
-              />
+                    this.runthisfunction(params.data?.id);
+                    this.gridApi.updateRowData({ remove: selectedData });
+                  }}
+                />
+              )}
             </div>
           );
         },
@@ -268,6 +304,23 @@ class ProductDashboard extends React.Component {
   };
 
   async componentDidMount() {
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+
+    let newparmisson = pageparmission?.role?.find(
+      (value) => value?.pageName === "Product List"
+    );
+
+    this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
+    this.setState({
+      Createpermisson: newparmisson?.permission.includes("Create"),
+    });
+    this.setState({
+      Editpermisson: newparmisson?.permission.includes("Edit"),
+    });
+    this.setState({
+      Deletepermisson: newparmisson?.permission.includes("Delete"),
+    });
+
     await axiosConfig
       .get("/productlistapi")
       .then((response) => {
@@ -402,78 +455,13 @@ class ProductDashboard extends React.Component {
           <Col sm="12"></Col>
           <Col sm="12">
             <Card>
-              <Row className="pt-1 mx-1">
-                <Col lg="3" md="3" className="mb-1 ">
-                  <Label>SHOW BY</Label>
-                  <Input
-                    required
-                    type="select"
-                    name="weight"
-                    placeholder="Enter Iden Type"
-                    // value={this.state.weight}
-                    // onChange={this.changeHandler}
-                  >
-                    <option value="12ROW">12 ROW</option>
-                    <option value="24ROW">24 ROW</option>
-                    <option value="36ROW">36 ROW</option>
-                  </Input>
-                </Col>
-                <Col lg="3" md="3" className="mb-1">
-                  <Label>RATING BY</Label>
-                  <Input
-                    required
-                    type="select"
-                    name="weight"
-                    placeholder="Enter Iden Type"
-                    // value={this.state.weight}
-                    // onChange={this.changeHandler}
-                  >
-                    <option value="1Star">1 Star</option>
-                    <option value="2Star">2 Star</option>
-                    <option value="3Star">3 Star</option>
-                    <option value="4Star">4 Star</option>
-                    <option value="5Star">5 Star</option>
-                  </Input>
-                </Col>
-                <Col lg="3" md="3" className="mb-1">
-                  <Label>CATEGORY BY</Label>
-                  <Input
-                    required
-                    type="select"
-                    name="weight"
-                    placeholder="Enter Iden Type"
-                    // value={this.state.weight}
-                    // onChange={this.changeHandler}
-                  >
-                    <option value="Mans">Mans</option>
-                    <option value="Womans">Womans</option>
-                    <option value="Kids">Kids</option>
-                    <option value="Accessory">Accessory</option>
-                  </Input>
-                </Col>
-                <Col lg="3" md="3" className="mb-1">
-                  <Label>BRAND BY</Label>
-                  <Input
-                    required
-                    type="select"
-                    name="weight"
-                    placeholder="Enter Iden Type"
-                    // value={this.state.weight}
-                    // onChange={this.changeHandler}
-                  >
-                    <option value="Ecstasy">Ecstasy</option>
-                    <option value="Freeland">Freeland</option>
-                    <option value="Rongdhonu">Rongdhonu</option>
-                  </Input>
-                </Col>
-              </Row>
               <Row className="m-2">
                 <Col>
                   <h1 col-sm-6 className="float-left">
                     Product Dashboard
                   </h1>
                 </Col>
-                <Col>
+                {/* <Col>
                   <Route
                     render={({ history }) => (
                       <Button
@@ -489,7 +477,7 @@ class ProductDashboard extends React.Component {
                       </Button>
                     )}
                   />
-                </Col>
+                </Col> */}
               </Row>
               <CardBody>
                 {this.state.rowData === null ? null : (

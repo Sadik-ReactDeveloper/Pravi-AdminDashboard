@@ -24,10 +24,10 @@ export const Roles = [
         permission: ["View", "Create", "Edit", "Delete"],
       },
 
-      {
-        title: "Accountant Account",
-        permission: ["View", "Create", "Edit", "Delete"],
-      },
+      // {
+      //   title: "Accountant Account",
+      //   permission: ["View", "Create", "Edit", "Delete"],
+      // },
       {
         title: "Create Role",
         permission: ["View", "Create", "Edit", "Delete"],
@@ -89,6 +89,10 @@ export const Roles = [
     TabName: [
       {
         title: "Brand List",
+        permission: ["View", "Create", "Edit", "Delete"],
+      },
+      {
+        title: "Category List",
         permission: ["View", "Create", "Edit", "Delete"],
       },
     ],

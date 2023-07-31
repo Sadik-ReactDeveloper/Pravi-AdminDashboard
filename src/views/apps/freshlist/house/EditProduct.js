@@ -17,14 +17,13 @@ import { Route } from "react-router-dom";
 import swal from "sweetalert";
 import { CloudLightning } from "react-feather";
 
-export class AddProduct extends Component {
+export class EditProduct extends Component {
   constructor(props) {
     super(props);
     this.state = {
       category_name: "",
-      Brand: "",
+      ViewoneProduct: {},
       P_Title: "",
-      Type: "",
       Price: "",
       stock: "",
       Regularprice: "",
@@ -50,15 +49,28 @@ export class AddProduct extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   async componentDidMount() {
+    console.log(this.props?.location?.state);
+
+    this.setState({
+      category_name: this.props?.location?.state?.category_name,
+    });
+    this.setState({ P_Title: this.props?.location?.state?.title });
+    this.setState({ Price: this.props?.location?.state?.price });
+    this.setState({ stock: this.props?.location?.state?.stock });
+
+    this.setState({
+      DiscountPrice: this.props?.location?.state?.discountprice,
+    });
+    this.setState({ description: this.props?.location?.state?.description });
+    // this.setState({ variety: this.props?.location?.state?.category_name })
+    this.setState({ shipmentfee: this.props?.location?.state?.shipping_fee });
+    this.setState({ Tags: this.props?.location?.state?.tags });
+    this.setState({ taxrate: this.props?.location?.state?.tax_rate });
+    this.setState({ status: this.props?.location?.state?.status });
     await axiosConfig.get("/getcategory").then((response) => {
       let rowData = response.data.data?.category;
       console.log(rowData);
       this.setState({ rowData });
-    });
-    await axiosConfig.get("/getbrand").then((response) => {
-      let Brandlist = response.data.data?.brands;
-      //   console.log(Brandlist);
-      this.setState({ Brandlist });
     });
   }
 
@@ -85,30 +97,11 @@ export class AddProduct extends Component {
     console.log(this.state.formValues);
   }
 
-  // onChangeHandler1 = (event) => {
-  //   this.setState({ selectedFile1: event.target.files[0] });
-  //   this.setState({ selectedName1: event.target.files[0].name });
-  //   console.log(event.target.files[0]);
-  // };
-  // onChangeHandler2 = (event) => {
-  //   this.setState({ selectedFile2: event.target.files[0] });
-  //   this.setState({ selectedName2: event.target.files[0].name });
-  //   console.log(event.target.files[0]);
-  // };
   onChangeHandler3 = (event) => {
     let selectedName = Array.from(event.target.files);
     console.log(selectedName);
     this.setState({ selectedFile3: selectedName });
-
-    // this.setState({ selectedFile3: event.target.files });
-    // this.setState({ selectedName3: event.target.files[0].name });
-    // console.log(event.target.files);
   };
-  // onChangeHandler4 = (event) => {
-  //   this.setState({ selectedFile4: event.target.files[0] });
-  //   this.setState({ selectedName4: event.target.files[0].name });
-  //   console.log(event.target.files[0]);
-  // };
 
   changeHandler1 = (e) => {
     this.setState({ status: e.target.value });
@@ -119,8 +112,8 @@ export class AddProduct extends Component {
   submitHandler = (e) => {
     e.preventDefault();
     const data = new FormData();
-    console.log(this.state.formValues);
-    data.append("brand_id", this.state.Brand);
+
+    data.append("id", this.props?.location?.state?.id);
     data.append("title", this.state.P_Title);
     data.append("veriety", JSON.stringify(this.state.formValues));
     data.append("category_id", this.state.category_name);
@@ -144,9 +137,9 @@ export class AddProduct extends Component {
     //     data.append("image_name", file);
     //   }
     // }
-
     axiosConfig
-      .post(`/addproduct`, data, {
+      .post(`/editproduct`, data, {
+        //   .post(`/addproduct`, data, {
         headers: {
           "Content-Type": "multipart/form-data; ",
         },
@@ -166,10 +159,10 @@ export class AddProduct extends Component {
     return (
       <div>
         <Card>
-          <h1 className="p-2 ">Product Upload</h1>
+          <h1 className="p-2 ">Product Update</h1>
           <Row className="m-2">
             <Col>
-              <h2>Basic Information</h2>
+              <h2>Existing Information</h2>
             </Col>
             {/* <Col>
               <Route
@@ -191,7 +184,7 @@ export class AddProduct extends Component {
               <Row className="mb-2">
                 <Col lg="6" md="6">
                   <FormGroup>
-                    <Label> Choose Category *</Label>
+                    <Label> Choose Category</Label>
 
                     <select
                       onChange={(e) =>
@@ -201,6 +194,10 @@ export class AddProduct extends Component {
                       name="Select"
                       id="Select"
                     >
+                      {" "}
+                      <option value={this.props?.location?.state?.id}>
+                        {this.props?.location?.state?.category_name}
+                      </option>
                       <option value="volvo">--Select Category--</option>
                       {this.state.rowData &&
                         this.state.rowData?.map((val, i) => (
@@ -217,55 +214,6 @@ export class AddProduct extends Component {
                       value={this.state.category_name}
                       onChange={this.changeHandler}
                     /> */}
-                  </FormGroup>
-                </Col>
-                <Col lg="6" md="6">
-                  <FormGroup>
-                    <Label> Choose Type *</Label>
-
-                    <select
-                      onChange={(e) => this.setState({ Type: e.target.value })}
-                      className="form-control"
-                      name="Select"
-                      id="Select"
-                    >
-                      <option value="volvo">--Select Type--</option>
-                      {this.state.rowData &&
-                        this.state.rowData?.map((val, i) => (
-                          <option key={i} value={val?.id}>
-                            {val?.category_name}
-                          </option>
-                        ))}
-                    </select>
-                    {/* <Input
-                      type="text"
-                      placeholder="Title"
-                      name="category_name"
-                      bsSize="lg"
-                      value={this.state.category_name}
-                      onChange={this.changeHandler}
-                    /> */}
-                  </FormGroup>
-                </Col>
-                <Col lg="6" md="6">
-                  <FormGroup>
-                    <Label> Choose Brand *</Label>
-
-                    <select
-                      required
-                      onChange={(e) => this.setState({ Brand: e.target.value })}
-                      className="form-control"
-                      name="Select"
-                      id="Select"
-                    >
-                      <option value="volvo">--Select Brand--</option>
-                      {this.state.Brandlist &&
-                        this.state.Brandlist?.map((val, i) => (
-                          <option key={i} value={val?.id}>
-                            {val?.brand_name}
-                          </option>
-                        ))}
-                    </select>
                   </FormGroup>
                 </Col>
                 <Col lg="6" md="6">
@@ -401,10 +349,10 @@ export class AddProduct extends Component {
               <Row>
                 <Col lg="6" md="6">
                   <FormGroup>
-                    <Label> Quantity </Label>
+                    <Label> Stock </Label>
                     <Input
                       type="number"
-                      placeholder="in Number"
+                      placeholder="Amount In Number"
                       name="stock"
                       bsSize="lg"
                       value={this.state.stock}
@@ -466,7 +414,7 @@ export class AddProduct extends Component {
                 </Col>
               </Row>
               <Row>
-                <Col lg="6" sm="6">
+                <Col lg="4" sm="4">
                   <FormGroup>
                     <Label>Media & Published (Select multiple files)</Label>
                     <CustomInput
@@ -479,6 +427,29 @@ export class AddProduct extends Component {
                     />
                   </FormGroup>
                 </Col>
+
+                {this.props?.location?.state?.product_images && (
+                  <Col lg="8" sm="8">
+                    <Label>Existing Images</Label>
+                    <FormGroup>
+                      {this.props?.location?.state?.product_images?.map(
+                        (value) => {
+                          return (
+                            <span className="mx-1">
+                              <img
+                                style={{ borderRadius: "12px" }}
+                                src={value}
+                                width="150px"
+                                height="150px"
+                                alt="images"
+                              />
+                            </span>
+                          );
+                        }
+                      )}
+                    </FormGroup>
+                  </Col>
+                )}
               </Row>
               <Row>
                 <Button.Ripple
@@ -486,7 +457,7 @@ export class AddProduct extends Component {
                   type="submit"
                   className="mr-1 mb-1"
                 >
-                  Add Product
+                  Update Product
                 </Button.Ripple>
               </Row>
             </Form>
@@ -496,4 +467,4 @@ export class AddProduct extends Component {
     );
   }
 }
-export default AddProduct;
+export default EditProduct;

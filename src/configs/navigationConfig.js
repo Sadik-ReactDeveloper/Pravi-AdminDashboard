@@ -81,14 +81,14 @@ const navigationConfig = [
       //   permissions: ["admin", "editor"],
       //   navLink: "/app/freshlist/house/producttype",
       // },
-      {
-        id: "accountantaccounts",
-        title: "Accountant Account",
-        type: "item",
-        icon: <FaCircle size={15} />,
-        permissions: ["admin", "editor"],
-        navLink: "/app/freshlist/house/AddProduct",
-      },
+      // {
+      //   id: "accountantaccounts",
+      //   title: "Accountant Account",
+      //   type: "item",
+      //   icon: <FaCircle size={15} />,
+      //   permissions: ["admin", "editor"],
+      //   navLink: "/app/freshlist/house/AddProduct",
+      // },
       {
         id: "createrole",
         title: "Create Role",
@@ -142,7 +142,8 @@ const navigationConfig = [
         type: "item",
         icon: <FaCircle size={8} />,
         permissions: ["admin", "editor"],
-        navLink: "/app/freshlist/house/ratemaster",
+        navLink: "/app/freshlist/house/Typelist",
+        // navLink: "/app/freshlist/house/AddRateMaster",
       },
       {
         id: "assigntoclient",
@@ -320,7 +321,7 @@ const navigationConfig = [
     type: "item",
     icon: <FaList size={8} />,
     permissions: ["admin", "editor"],
-    navLink: "/app/freshlist/category/categoryList",
+    navLink: "/app/freshlist/order/purchasedorder",
   },
   {
     id: "Bills",

@@ -31,6 +31,10 @@ import { Route } from "react-router-dom";
 class RateMaster extends React.Component {
   state = {
     rowData: [],
+    Viewpermisson: null,
+    Editpermisson: null,
+    Createpermisson: null,
+    Deletepermisson: null,
     Ratemaster: [],
     paginationPageSize: 20,
     currenPageSize: "",
@@ -200,16 +204,18 @@ class RateMaster extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
-              <Trash2
-                className="mr-50"
-                size="25px"
-                color="Red"
-                onClick={() => {
-                  let selectedData = this.gridApi.getSelectedRows();
-                  this.runthisfunction(params.data._id);
-                  this.gridApi.updateRowData({ remove: selectedData });
-                }}
-              />
+              {this.state.Deletepermisson && (
+                <Trash2
+                  className="mr-50"
+                  size="25px"
+                  color="Red"
+                  onClick={() => {
+                    let selectedData = this.gridApi.getSelectedRows();
+                    this.runthisfunction(params.data._id);
+                    this.gridApi.updateRowData({ remove: selectedData });
+                  }}
+                />
+              )}
             </div>
           );
         },
@@ -219,6 +225,23 @@ class RateMaster extends React.Component {
   // componentDidMount() {}
 
   async componentDidMount() {
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+
+    let newparmisson = pageparmission?.role?.find(
+      (value) => value?.pageName === "Rate Master"
+    );
+
+    this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
+    this.setState({
+      Createpermisson: newparmisson?.permission.includes("Create"),
+    });
+    this.setState({
+      Editpermisson: newparmisson?.permission.includes("Edit"),
+    });
+    this.setState({
+      Deletepermisson: newparmisson?.permission.includes("Delete"),
+    });
+
     await axiosConfig
       .get("/getratemaster")
       .then((response) => {

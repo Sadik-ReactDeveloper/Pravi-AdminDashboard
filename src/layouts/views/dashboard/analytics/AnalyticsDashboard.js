@@ -127,7 +127,7 @@ class AnalyticsDashboard extends React.Component {
               style={{ borderColor: "white" }}
             >
               <CardTitle className="mb-1" tag="h4" style={{ color: "white" }}>
-                Total Products
+                Total Productss
               </CardTitle>
 
               <CardText tag="h3" style={{ color: "white" }}>

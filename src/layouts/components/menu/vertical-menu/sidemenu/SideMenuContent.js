@@ -140,20 +140,20 @@ class SideMenuContent extends React.Component {
     // console.log(this.state.showpage);
 
     const menuItems = navigationConfig.map((item, i) => {
-      navigationConfig[i].children?.forEach((tab) => {
-        if (this.state.showpage?.includes(tab?.title)) {
-          tab.hidden = false;
-        } else {
-          tab.hidden = true;
-        }
-      });
-      navigationConfig?.forEach((tab) => {
-        if (this.state.showpage?.includes(tab?.title)) {
-          tab.hidden = false;
-        } else {
-          tab.hidden = true;
-        }
-      });
+      // navigationConfig[i].children?.forEach((tab) => {
+      //   if (this.state.showpage?.includes(tab?.title)) {
+      //     tab.hidden = false;
+      //   } else {
+      //     tab.hidden = true;
+      //   }
+      // });
+      // navigationConfig?.forEach((tab) => {
+      //   if (this.state.showpage?.includes(tab?.title)) {
+      //     tab.hidden = false;
+      //   } else {
+      //     tab.hidden = true;
+      //   }
+      // });
 
       if (item.hidden) {
         return null; // Skip rendering the hidden tab

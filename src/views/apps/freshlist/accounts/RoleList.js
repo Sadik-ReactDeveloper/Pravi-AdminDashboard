@@ -32,6 +32,10 @@ class RoleList extends React.Component {
 
   state = {
     rowData: [],
+    Viewpermisson: null,
+    Editpermisson: null,
+    Createpermisson: null,
+    Deletepermisson: null,
     paginationPageSize: 20,
     currenPageSize: "",
     getPageSize: "",
@@ -59,7 +63,7 @@ class RoleList extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{params?.data?.role_name}</span>
+                <span>{params?.data}</span>
               </div>
             </div>
           );
@@ -74,41 +78,49 @@ class RoleList extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
-              <BsEye
-                className="mr-50"
-                size="25px"
-                color="green"
-                onClick={() =>
-                  history.push(
-                    `/app/freshlist/account/updateexistingrole/${params.data.id}`
-                  )
-                }
-              />
-              <Route
-                render={({ history }) => (
-                  <Edit
-                    className="mr-50"
-                    size="25px"
-                    color="blue"
-                    onClick={() =>
-                      history.push({
-                        pathname: `/app/freshlist/account/editRole/${params.data.id}`,
-                        data: params,
-                      })
-                    }
-                  />
-                )}
-              />
-              <BsTrash
-                className="mr-50"
-                size="25px"
-                color="red"
-                onClick={() => {
-                  let selectedData = this.gridApi.getSelectedRows();
-                  // this.runthisfunction(params.data._id);
-                  this.gridApi.updateRowData({ remove: selectedData });
-                }}
-              />
+              {/* {this.state.Viewpermisson && (
+                <BsEye
+                  className="mr-50"
+                  size="25px"
+                  color="green"
+                  onClick={() =>
+                    history.push(
+                      `/app/freshlist/account/updateexistingrole/${params.data.id}`
+                    )
+                  }
+                />
+              )} */}
+
+              {this.state.Editpermisson && (
+                <Route
+                  render={({ history }) => (
+                    <Edit
+                      className="mr-50"
+                      size="25px"
+                      color="blue"
+                      onClick={() =>
+                        history.push({
+                          pathname: `/app/freshlist/account/editRole/${params?.data}`,
+                          // pathname: `/app/freshlist/account/editRole/${params.data.id}`,
+                          data: params,
+                        })
+                      }
+                    />
+                  )}
+                />
+              )}
+              {this.state.Deletepermisson && (
+                <BsTrash
+                  className="mr-50"
+                  size="25px"
+                  color="red"
+                  onClick={() => {
+                    let selectedData = this.gridApi.getSelectedRows();
+                    // this.runthisfunction(params.data._id);
+                    this.gridApi.updateRowData({ remove: selectedData });
+                  }}
+                />
+              )}
             </div>
           );
         },
@@ -116,13 +128,34 @@ class RoleList extends React.Component {
     ],
   };
   async componentDidMount() {
-    axiosConfig
-      .get("/getrolelist")
-      .then((response) => {
-        // console.log(response.data?.data?.roles);
-        // const propertyNames = Object.values(response.data?.data?.roles);
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
 
-        this.setState({ rowData: response.data?.data });
+    let newparmisson = pageparmission?.role?.find(
+      (value) => value?.pageName === "Role List"
+    );
+
+    this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
+    this.setState({
+      Createpermisson: newparmisson?.permission.includes("Create"),
+    });
+    this.setState({
+      Editpermisson: newparmisson?.permission.includes("Edit"),
+    });
+    this.setState({
+      Deletepermisson: newparmisson?.permission.includes("Delete"),
+    });
+
+    let userdata = JSON.parse(localStorage.getItem("userData"));
+    // console.log(userdata?.Userinfo?.id);
+    const formdata = new FormData();
+    formdata.append("user_id", userdata?.Userinfo?.id);
+    axiosConfig
+      .post("/getrolelist", formdata)
+      .then((response) => {
+        console.log(response.data?.data);
+        const propertyNames = Object.values(response.data?.data);
+        console.log(propertyNames);
+        this.setState({ rowData: propertyNames });
       })
       .catch((error) => {
         console.log(error);
@@ -131,9 +164,9 @@ class RoleList extends React.Component {
 
   async runthisfunction(id) {
     console.log(id);
-    await axiosConfig.get(`/delcontactus/${id}`).then((response) => {
-      console.log(response);
-    });
+    // await axiosConfig.get(`/delcontactus/${id}`).then((response) => {
+    //   console.log(response);
+    // });
   }
   onGridReady = (params) => {
     this.gridApi = params.api;

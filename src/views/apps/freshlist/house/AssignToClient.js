@@ -27,11 +27,16 @@ import "../../../../assets/scss/pages/users.scss";
 import { FaWallet, Facart, FaCartArrowDown, FaBoxOpen } from "react-icons/fa";
 import "moment-timezone";
 import { Route } from "react-router-dom";
+import AssignClientCompoent from "./AssignClientCompoent";
 
 class AssignToClient extends React.Component {
   state = {
     product: [],
     rowData: [],
+    Viewpermisson: null,
+    Editpermisson: null,
+    Createpermisson: null,
+    Deletepermisson: null,
     paginationPageSize: 20,
     currenPageSize: "",
     getPageSize: "",
@@ -62,13 +67,20 @@ class AssignToClient extends React.Component {
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
                 {/* <span>{params.data?.title}</span> */}
-                <img
-                  style={{ borderRadius: "12px" }}
-                  width="60px"
-                  height="40px"
-                  src={params?.data?.product_images[0]}
-                  alt="image"
-                />
+
+                {params?.data?.product_images ? (
+                  <>
+                    <img
+                      style={{ borderRadius: "12px" }}
+                      width="60px"
+                      height="40px"
+                      src={params?.data?.product_images[0]}
+                      alt="image"
+                    />
+                  </>
+                ) : (
+                  "NO Image"
+                )}
               </div>
             </div>
           );
@@ -229,21 +241,22 @@ class AssignToClient extends React.Component {
           );
         },
       },
-      {
-        headerName: "ASSIGN TO CLIENT",
-        field: "assigntoclient",
-        filter: "agSetColumnFilter",
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>Demo</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "ASSIGN TO CLIENT",
+      //   field: "assigntoclient",
+      //   filter: "agSetColumnFilter",
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     // console.log(params.data)
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>Demo</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       {
         headerName: "Actions",
         field: "transactions",
@@ -251,30 +264,35 @@ class AssignToClient extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
-              <Route
-                render={({ history }) => (
-                  <UserPlus
-                    className="mr-50"
-                    color="green"
-                    size={20}
-                    onClick={() =>
-                      history.push(
-                        `/app/freshlist/house/assignedPage/${params.data.id}`
-                      )
-                    }
-                  />
-                )}
-              />
-              <Trash2
-                className="mr-50"
-                size="25px"
-                color="Red"
-                onClick={() => {
-                  let selectedData = this.gridApi.getSelectedRows();
-                  this.runthisfunction(params.data._id);
-                  this.gridApi.updateRowData({ remove: selectedData });
-                }}
-              />
+              {this.state.Editpermisson && (
+                <Route
+                  render={({ history }) => (
+                    <UserPlus
+                      className="mr-50"
+                      color="green"
+                      size={20}
+                      onClick={() =>
+                        this.props.history.push({
+                          pathname: `/app/freshlist/house/assignedPage/${params.data.id}`,
+                          state: params.data,
+                        })
+                      }
+                    />
+                  )}
+                />
+              )}
+              {this.state.Deletepermisson && (
+                <Trash2
+                  className="mr-50"
+                  size="25px"
+                  color="Red"
+                  onClick={() => {
+                    let selectedData = this.gridApi.getSelectedRows();
+                    this.runthisfunction(params.data._id);
+                    this.gridApi.updateRowData({ remove: selectedData });
+                  }}
+                />
+              )}
             </div>
           );
         },
@@ -283,6 +301,21 @@ class AssignToClient extends React.Component {
   };
 
   async componentDidMount() {
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    let newparmisson = pageparmission?.role?.find(
+      (value) => value?.pageName === "Assign To Client"
+    );
+    this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
+    this.setState({
+      Createpermisson: newparmisson?.permission.includes("Create"),
+    });
+    this.setState({
+      Editpermisson: newparmisson?.permission.includes("Edit"),
+    });
+    this.setState({
+      Deletepermisson: newparmisson?.permission.includes("Delete"),
+    });
+
     axiosConfig
       .get("/productlistapi")
       .then((response) => {
@@ -406,78 +439,14 @@ class AssignToClient extends React.Component {
           <Col sm="12"></Col>
           <Col sm="12">
             <Card>
-              <Row className="pt-1 mx-1">
-                <Col lg="3" md="3" className="mb-1 ">
-                  <Label>SHOW BY</Label>
-                  <Input
-                    required
-                    type="select"
-                    name="weight"
-                    placeholder="Enter Iden Type"
-                    // value={this.state.weight}
-                    // onChange={this.changeHandler}
-                  >
-                    <option value="12ROW">12 ROW</option>
-                    <option value="24ROW">24 ROW</option>
-                    <option value="36ROW">36 ROW</option>
-                  </Input>
-                </Col>
-                <Col lg="3" md="3" className="mb-1">
-                  <Label>RATING BY</Label>
-                  <Input
-                    required
-                    type="select"
-                    name="weight"
-                    placeholder="Enter Iden Type"
-                    // value={this.state.weight}
-                    // onChange={this.changeHandler}
-                  >
-                    <option value="1Star">1 Star</option>
-                    <option value="2Star">2 Star</option>
-                    <option value="3Star">3 Star</option>
-                    <option value="4Star">4 Star</option>
-                    <option value="5Star">5 Star</option>
-                  </Input>
-                </Col>
-                <Col lg="3" md="3" className="mb-1">
-                  <Label>CATEGORY BY</Label>
-                  <Input
-                    required
-                    type="select"
-                    name="weight"
-                    placeholder="Enter Iden Type"
-                    // value={this.state.weight}
-                    // onChange={this.changeHandler}
-                  >
-                    <option value="Mans">Mans</option>
-                    <option value="Womans">Womans</option>
-                    <option value="Kids">Kids</option>
-                    <option value="Accessory">Accessory</option>
-                  </Input>
-                </Col>
-                <Col lg="3" md="3" className="mb-1">
-                  <Label>BRAND BY</Label>
-                  <Input
-                    required
-                    type="select"
-                    name="weight"
-                    placeholder="Enter Iden Type"
-                    // value={this.state.weight}
-                    // onChange={this.changeHandler}
-                  >
-                    <option value="Ecstasy">Ecstasy</option>
-                    <option value="Freeland">Freeland</option>
-                    <option value="Rongdhonu">Rongdhonu</option>
-                  </Input>
-                </Col>
-              </Row>
+              {/* <Row className="pt-1 mx-1"></Row> */}
               <Row className="m-2">
                 <Col>
                   <h1 col-sm-6 className="float-left">
                     Assign To Client
                   </h1>
                 </Col>
-                <Col>
+                {/* <Col>
                   <Route
                     render={({ history }) => (
                       <Button
@@ -491,6 +460,11 @@ class AssignToClient extends React.Component {
                       </Button>
                     )}
                   />
+                </Col> */}
+              </Row>
+              <Row>
+                <Col>
+                  <AssignClientCompoent />
                 </Col>
               </Row>
               <CardBody>

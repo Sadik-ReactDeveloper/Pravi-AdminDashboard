@@ -40,114 +40,17 @@ class MainDash extends React.Component {
   componentDidMount() {
     axiosConfig
       .get("/admin/product_list")
-      .then(response => {
+      .then((response) => {
         this.setState({ product: response.data.data.length });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
   render() {
     return (
       <React.Fragment>
-        <Row>
-          <Col lg="3" md="12">
-            <Card
-              className="bg-secondary  py-3 "
-              body
-              inverse
-              style={{ borderColor: "white" }}
-            >
-              <CardTitle
-                className="fntweight"
-                tag="h3"
-                style={{ color: "black", fontSize: "16px" }}
-              >
-                <FaBoxOpen style={{ color: "orange" }} />
-                &nbsp;&nbsp; Total Products
-              </CardTitle>
-              <CardText
-                className="wt-text"
-                tag="span"
-                style={{ color: "black", marginLeft: "4px" }}
-              >
-                {this.state.product}
-              </CardText>
-            </Card>
-          </Col>
-          <Col lg="3" md="12">
-            <Card
-              className="bg-secondary  py-3"
-              body
-              inverse
-              style={{ borderColor: "white" }}
-            >
-              <CardTitle
-                className="fntweight"
-                tag="h3"
-                style={{ color: "black", fontSize: "16px" }}
-              >
-                <FaBoxOpen style={{ color: "orange" }} />
-                &nbsp;&nbsp; Total Hub
-              </CardTitle>
-              <CardText
-                className="wt-text"
-                tag="span"
-                style={{ color: "black", marginLeft: "4px" }}
-              >
-                {this.state.product}
-              </CardText>
-            </Card>
-          </Col>
-          <Col lg="3" md="12">
-            <Card
-              className="bg-secondary  py-3"
-              body
-              inverse
-              style={{ borderColor: "white" }}
-            >
-              <CardTitle
-                className="fntweight"
-                tag="h3"
-                style={{ color: "black", fontSize: "16px" }}
-              >
-                <FaBoxOpen style={{ color: "orange" }} />
-                &nbsp;&nbsp; Total Sales
-              </CardTitle>
-              <CardText
-                className="wt-text"
-                tag="span"
-                style={{ color: "black", marginLeft: "4px" }}
-              >
-                {this.state.product}
-              </CardText>
-            </Card>
-          </Col>
-          <Col lg="3" md="12">
-            <Card
-              className="bg-secondary py-3"
-              body
-              inverse
-              style={{ borderColor: "white" }}
-            >
-              <CardTitle
-                className="fntweight"
-                tag="h3"
-                style={{ color: "black", fontSize: "14px" }}
-              >
-                <FaBoxOpen style={{ color: "orange" }} />
-                &nbsp;&nbsp; Total Customers
-              </CardTitle>
-              <CardText
-                className="wt-text"
-                tag="span"
-                style={{ color: "black", marginLeft: "4px" }}
-              >
-                {this.state.product}
-              </CardText>
-            </Card>
-          </Col>
-        </Row>
+        <Row></Row>
         <AnalyticsDashboard />
       </React.Fragment>
     );

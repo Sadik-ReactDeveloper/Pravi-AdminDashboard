@@ -25,6 +25,11 @@ class AnalyticsDashboard extends React.Component {
     super(props);
     this.state = {
       product: "",
+
+      Viewpermisson: null,
+      Editpermisson: null,
+      Createpermisson: null,
+      Deletepermisson: null,
       customer: {},
       store: {},
       seller: {},
@@ -37,6 +42,26 @@ class AnalyticsDashboard extends React.Component {
   }
 
   componentDidMount() {
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    console.log(pageparmission.role);
+    let newparmisson = pageparmission?.role?.find(
+      (value) => value?.pageName === "Dashboard"
+    );
+    console.log(newparmisson);
+    this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
+    this.setState({
+      Createpermisson: newparmisson?.permission.includes("Create"),
+    });
+    this.setState({
+      Editpermisson: newparmisson?.permission.includes("Edit"),
+    });
+    this.setState({
+      Deletepermisson: newparmisson?.permission.includes("Delete"),
+    });
+    console.log(newparmisson?.permission.includes("View"));
+    console.log(newparmisson?.permission.includes("Create"));
+    console.log(newparmisson?.permission.includes("Edit"));
+    console.log(newparmisson?.permission.includes("Delete"));
     // axiosConfig
     //   .get("/admin/product_list")
     //   .then((response) => {
@@ -132,8 +157,10 @@ class AnalyticsDashboard extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <Row className="">
-          {/* <Col lg="3" md="12">
+        {this.state.Viewpermisson ? (
+          <>
+            <Row className="">
+              {/* <Col lg="3" md="12">
             <Card
               className="bg-secondary"
               body
@@ -156,7 +183,7 @@ class AnalyticsDashboard extends React.Component {
               </CardTitle>
             </Card>
           </Col> */}
-          {/* <Col lg="3" md="12">
+              {/* <Col lg="3" md="12">
             <Card className="bg-secondary" body inverse>
               <CardTitle className="mb-1" tag="h4" style={{ color: "black" }}>
                 <FcBusinessman />&nbsp;&nbsp;
@@ -166,21 +193,21 @@ class AnalyticsDashboard extends React.Component {
               {/* <CardText tag="h3" style={{ color: "white" }}>
                 {this.state.customer.data}
               </CardText> */}
-          {/* </Card>
+              {/* </Card>
           </Col> */}
-          {/* <Col lg="3" md="12">
+              {/* <Col lg="3" md="12">
             <Card className="bg-secondary" body inverse>
               <CardTitle className="mb-1" tag="h4" style={{ color: "black" }}>
                 <FcShop />&nbsp;&nbsp;
                 Total Store
               </CardTitle> */}
 
-          {/* <CardText tag="h3" style={{ color: "white" }}>
+              {/* <CardText tag="h3" style={{ color: "white" }}>
                 {this.state.store.data}
               </CardText> */}
-          {/* </Card>
+              {/* </Card>
           </Col> */}
-          {/* <Col lg="3" md="12">
+              {/* <Col lg="3" md="12">
             <Card className="bg-secondary" body inverse>
               <CardTitle className="mb-1" tag="h4" style={{ color: "black" }}>
                 <FcSalesPerformance />&nbsp;&nbsp;
@@ -190,107 +217,242 @@ class AnalyticsDashboard extends React.Component {
               {/* <CardText tag="h3" style={{ color: "white" }}>
                 {this.state.sale.data}
               </CardText> */}
-          {/* </Card>
+              {/* </Card>
           </Col> */}
+              <Col lg="3" md="12">
+                <Card
+                  className="bg-secondary  py-3 "
+                  body
+                  inverse
+                  style={{ borderColor: "white" }}
+                >
+                  <CardTitle
+                    className="fntweight"
+                    tag="h3"
+                    style={{ color: "black", fontSize: "16px" }}
+                  >
+                    <FaBoxOpen style={{ color: "orange" }} />
+                    &nbsp;&nbsp; Total Products
+                  </CardTitle>
+                  <CardText
+                    className="wt-text"
+                    tag="span"
+                    style={{ color: "black", marginLeft: "4px" }}
+                  >
+                    {this.state.product}
+                  </CardText>
+                </Card>
+              </Col>
+              <Col lg="3" md="12">
+                <Card
+                  className="bg-secondary  py-3"
+                  body
+                  inverse
+                  style={{ borderColor: "white" }}
+                >
+                  <CardTitle
+                    className="fntweight"
+                    tag="h3"
+                    style={{ color: "black", fontSize: "16px" }}
+                  >
+                    <FaBoxOpen style={{ color: "orange" }} />
+                    &nbsp;&nbsp; Total Hub
+                  </CardTitle>
+                  <CardText
+                    className="wt-text"
+                    tag="span"
+                    style={{ color: "black", marginLeft: "4px" }}
+                  >
+                    {this.state.product}
+                  </CardText>
+                </Card>
+              </Col>
+              <Col lg="3" md="12">
+                <Card
+                  className="bg-secondary  py-3"
+                  body
+                  inverse
+                  style={{ borderColor: "white" }}
+                >
+                  <CardTitle
+                    className="fntweight"
+                    tag="h3"
+                    style={{ color: "black", fontSize: "16px" }}
+                  >
+                    <FaBoxOpen style={{ color: "orange" }} />
+                    &nbsp;&nbsp; Total Sales
+                  </CardTitle>
+                  <CardText
+                    className="wt-text"
+                    tag="span"
+                    style={{ color: "black", marginLeft: "4px" }}
+                  >
+                    {this.state.product}
+                  </CardText>
+                </Card>
+              </Col>
+              <Col lg="3" md="12">
+                <Card
+                  className="bg-secondary py-3"
+                  body
+                  inverse
+                  style={{ borderColor: "white" }}
+                >
+                  <CardTitle
+                    className="fntweight"
+                    tag="h3"
+                    style={{ color: "black", fontSize: "14px" }}
+                  >
+                    <FaBoxOpen style={{ color: "orange" }} />
+                    &nbsp;&nbsp; Total Customers
+                  </CardTitle>
+                  <CardText
+                    className="wt-text"
+                    tag="span"
+                    style={{ color: "black", marginLeft: "4px" }}
+                  >
+                    {this.state.product}
+                  </CardText>
+                </Card>
+              </Col>
+              <Col lg="3" md="12">
+                <Card className="bg-secondary" body inverse>
+                  <CardTitle
+                    className="mb-1"
+                    tag="h4"
+                    style={{ color: "black" }}
+                  >
+                    <FcNews />
+                    &nbsp;&nbsp; Pending(05)
+                  </CardTitle>
 
-          <Col lg="3" md="12">
-            <Card className="bg-secondary" body inverse>
-              <CardTitle className="mb-1" tag="h4" style={{ color: "black" }}>
-                <FcNews />
-                &nbsp;&nbsp; Pending(05)
-              </CardTitle>
-
-              {/* <CardText tag="h3" style={{ color: "white" }}>
+                  {/* <CardText tag="h3" style={{ color: "white" }}>
                 {this.state.brand.data}
               </CardText> */}
-            </Card>
-          </Col>
-          <Col lg="3" md="12">
-            <Card className="bg-secondary" body inverse>
-              <CardTitle className="mb-1" tag="h4" style={{ color: "black" }}>
-                <FcOk />
-                &nbsp;&nbsp;Confirmed(10)
-              </CardTitle>
-              {/* <CardText tag="h3" style={{ color: "white" }}>
+                </Card>
+              </Col>
+              <Col lg="3" md="12">
+                <Card className="bg-secondary" body inverse>
+                  <CardTitle
+                    className="mb-1"
+                    tag="h4"
+                    style={{ color: "black" }}
+                  >
+                    <FcOk />
+                    &nbsp;&nbsp;Confirmed(10)
+                  </CardTitle>
+                  {/* <CardText tag="h3" style={{ color: "white" }}>
                 {this.state.banner.data}
               </CardText> */}
-            </Card>
-          </Col>
-          <Col lg="3" md="12">
-            <Card className="bg-secondary" body inverse>
-              <CardTitle className="mb-1" tag="h4" style={{ color: "black" }}>
-                <BsBoxSeam style={{ color: "cornflowerblue" }} />
-                &nbsp;&nbsp;Packaging(35)
-              </CardTitle>
-              {/* <CardText tag="h3" style={{ color: "white" }}>
+                </Card>
+              </Col>
+              <Col lg="3" md="12">
+                <Card className="bg-secondary" body inverse>
+                  <CardTitle
+                    className="mb-1"
+                    tag="h4"
+                    style={{ color: "black" }}
+                  >
+                    <BsBoxSeam style={{ color: "cornflowerblue" }} />
+                    &nbsp;&nbsp;Packaging(35)
+                  </CardTitle>
+                  {/* <CardText tag="h3" style={{ color: "white" }}>
                 {this.state.total_sub.data}
               </CardText> */}
-            </Card>
-          </Col>
-          <Col lg="3" md="12">
-            <Card className="bg-secondary" body inverse>
-              <CardTitle
-                className="mb-1"
-                tag="h4"
-                style={{ color: "black", fontSize: "15px" }}
-              >
-                <FcShipped />
-                &nbsp;&nbsp;Out for delivery(39)
-              </CardTitle>
-              {/* <CardText tag="h3" style={{ color: "white" }}>
+                </Card>
+              </Col>
+              <Col lg="3" md="12">
+                <Card className="bg-secondary" body inverse>
+                  <CardTitle
+                    className="mb-1"
+                    tag="h4"
+                    style={{ color: "black", fontSize: "15px" }}
+                  >
+                    <FcShipped />
+                    &nbsp;&nbsp;Out for delivery(39)
+                  </CardTitle>
+                  {/* <CardText tag="h3" style={{ color: "white" }}>
                 {this.state.Coupon.data}
               </CardText> */}
-            </Card>
-          </Col>
-          <Col lg="3" md="12">
-            <Card className="bg-secondary" body inverse>
-              <CardTitle className="mb-1" tag="h4" style={{ color: "black" }}>
-                <TbTruckDelivery />
-                &nbsp;&nbsp;Delivered(29)
-              </CardTitle>
-              {/* <CardText tag="h3" style={{ color: "white" }}>
+                </Card>
+              </Col>
+              <Col lg="3" md="12">
+                <Card className="bg-secondary" body inverse>
+                  <CardTitle
+                    className="mb-1"
+                    tag="h4"
+                    style={{ color: "black" }}
+                  >
+                    <TbTruckDelivery />
+                    &nbsp;&nbsp;Delivered(29)
+                  </CardTitle>
+                  {/* <CardText tag="h3" style={{ color: "white" }}>
                 {this.state.Coupon.data}
               </CardText> */}
-            </Card>
-          </Col>
-          <Col lg="3" md="12">
-            <Card className="bg-secondary" body inverse>
-              <CardTitle className="mb-1" tag="h4" style={{ color: "black" }}>
-                <FcCancel />
-                &nbsp;&nbsp;Cancelled(00)
-              </CardTitle>
-              {/* <CardText tag="h3" style={{ color: "white" }}>
+                </Card>
+              </Col>
+              <Col lg="3" md="12">
+                <Card className="bg-secondary" body inverse>
+                  <CardTitle
+                    className="mb-1"
+                    tag="h4"
+                    style={{ color: "black" }}
+                  >
+                    <FcCancel />
+                    &nbsp;&nbsp;Cancelled(00)
+                  </CardTitle>
+                  {/* <CardText tag="h3" style={{ color: "white" }}>
                 {this.state.Coupon.data}
               </CardText> */}
-            </Card>
-          </Col>
-          <Col lg="3" md="12">
-            <Card className="bg-secondary" body inverse>
-              <CardTitle className="mb-1" tag="h4" style={{ color: "black" }}>
-                <FcRules />
-                &nbsp;&nbsp; Returned (00)
-              </CardTitle>
-              {/* <CardText tag="h3" style={{ color: "white" }}>
+                </Card>
+              </Col>
+              <Col lg="3" md="12">
+                <Card className="bg-secondary" body inverse>
+                  <CardTitle
+                    className="mb-1"
+                    tag="h4"
+                    style={{ color: "black" }}
+                  >
+                    <FcRules />
+                    &nbsp;&nbsp; Returned (00)
+                  </CardTitle>
+                  {/* <CardText tag="h3" style={{ color: "white" }}>
                 {this.state.Coupon.data}
               </CardText> */}
-            </Card>
-          </Col>
-          <Col lg="3" md="12">
-            <Card className="bg-secondary" body inverse>
-              <CardTitle
-                className="mb-1"
-                tag="h4"
-                style={{ color: "black", fontSize: "15px" }}
-              >
-                <AiOutlineCloseCircle />
-                &nbsp;&nbsp; Failed delivery(2)
-              </CardTitle>
-              {/* <CardText tag="h3" style={{ color: "white" }}>
+                </Card>
+              </Col>
+              <Col lg="3" md="12">
+                <Card className="bg-secondary" body inverse>
+                  <CardTitle
+                    className="mb-1"
+                    tag="h4"
+                    style={{ color: "black", fontSize: "15px" }}
+                  >
+                    <AiOutlineCloseCircle />
+                    &nbsp;&nbsp; Failed delivery(2)
+                  </CardTitle>
+                  {/* <CardText tag="h3" style={{ color: "white" }}>
                 {this.state.Coupon.data}
               </CardText> */}
-            </Card>
-          </Col>
-        </Row>
+                </Card>
+              </Col>
+            </Row>
+          </>
+        ) : (
+          <>
+            <Row>
+              <Col>
+                <div className="d-flex justify-content-center align itme center">
+                  <h2 style={{ color: "red" }}>
+                    {" "}
+                    You are Not Authorized To View this Page
+                  </h2>
+                </div>
+              </Col>
+            </Row>
+          </>
+        )}
+
         {/* <div style={{ backgroundColor: 'white' }}>
           <h4 className="mb-1"> <FaWallet
             style={{ color: 'brown' }} />&nbsp;&nbsp;Admin Wallet</h4>

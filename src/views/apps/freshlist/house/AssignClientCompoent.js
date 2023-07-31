@@ -17,13 +17,13 @@ import { Route } from "react-router-dom";
 import swal from "sweetalert";
 import { CloudLightning } from "react-feather";
 
-export class AddProduct extends Component {
+export class AssignClientCompoent extends Component {
   constructor(props) {
     super(props);
     this.state = {
       category_name: "",
       Brand: "",
-      P_Title: "",
+      quantity: "",
       Type: "",
       Price: "",
       stock: "",
@@ -165,31 +165,11 @@ export class AddProduct extends Component {
   render() {
     return (
       <div>
-        <Card>
-          <h1 className="p-2 ">Product Upload</h1>
-          <Row className="m-2">
-            <Col>
-              <h2>Basic Information</h2>
-            </Col>
-            {/* <Col>
-              <Route
-                render={({ history }) => (
-                  <Button
-                    className=" btn btn-danger float-right"
-                    onClick={() =>
-                      history.push("/app/freshlist/category/categoryList")
-                    }
-                  >
-                    Back
-                  </Button>
-                )}
-              />
-            </Col> */}
-          </Row>
+        <Card className="mb-0">
           <CardBody>
             <Form className="m-1" onSubmit={this.submitHandler}>
               <Row className="mb-2">
-                <Col lg="6" md="6">
+                <Col lg="3" md="3">
                   <FormGroup>
                     <Label> Choose Category *</Label>
 
@@ -219,7 +199,7 @@ export class AddProduct extends Component {
                     /> */}
                   </FormGroup>
                 </Col>
-                <Col lg="6" md="6">
+                <Col lg="3" md="3">
                   <FormGroup>
                     <Label> Choose Type *</Label>
 
@@ -247,7 +227,7 @@ export class AddProduct extends Component {
                     /> */}
                   </FormGroup>
                 </Col>
-                <Col lg="6" md="6">
+                <Col lg="3" md="3">
                   <FormGroup>
                     <Label> Choose Brand *</Label>
 
@@ -268,20 +248,25 @@ export class AddProduct extends Component {
                     </select>
                   </FormGroup>
                 </Col>
-                <Col lg="6" md="6">
+                <Col lg="3" md="3">
+                  <Button.Ripple color="primary" type="submit" className="mt-2">
+                    Search
+                  </Button.Ripple>
+                </Col>
+                {/* <Col lg="3" md="3">
                   <FormGroup>
-                    <Label>Title</Label>
+                    <Label>Quantity</Label>
                     <Input
-                      type="text"
-                      placeholder="Title"
-                      name="P_Title"
+                      type="number"
+                      placeholder="Quantity..."
+                      name="quantity"
                       bsSize="lg"
-                      value={this.state.P_Title}
+                      value={this.state.quantity}
                       onChange={this.changeHandler}
                     />
                   </FormGroup>
-                </Col>
-                <Col lg="12" md="12">
+                </Col> */}
+                {/* <Col lg="12" md="12">
                   <FormGroup>
                     <Label>Description</Label>
                     <textarea
@@ -295,8 +280,8 @@ export class AddProduct extends Component {
                       onChange={this.changeHandler}
                     />
                   </FormGroup>
-                </Col>
-                <Col lg="6" md="6">
+                </Col> */}
+                {/* <Col lg="6" md="6">
                   <FormGroup>
                     <Label> PRICE (₹)</Label>
                     <Input
@@ -308,8 +293,8 @@ export class AddProduct extends Component {
                       onChange={this.changeHandler}
                     />
                   </FormGroup>
-                </Col>
-                <Col lg="6" md="6">
+                </Col> */}
+                {/* <Col lg="6" md="6">
                   <Row>
                     <Col lg="2" sm="2" md="2">
                       <div>
@@ -323,27 +308,18 @@ export class AddProduct extends Component {
                           color="primary"
                           className="button add mt-2"
                           type="button"
-                          // onClick={() => this.addFormFields()}
                           onClick={() => this.setState({ Addmore: true })}
                         >
                           Add
                         </Button>
 
-                        {/* <Label>Variety</Label>
-                        <Input
-                          type="text"
-                          placeholder="Variety..."
-                          name="variety"
-                          bsSize="lg"
-                          value={this.state.variety}
-                          onChange={this.changeHandler}
-                        /> */}
+                        
                       </FormGroup>
                     </Col>
                   </Row>
-                </Col>{" "}
+                </Col> */}
               </Row>
-              {this.state.Addmore ? (
+              {/* {this.state.Addmore ? (
                 <>
                   <Row>
                     <Col lg="12">
@@ -396,9 +372,9 @@ export class AddProduct extends Component {
                     </Col>
                   </Row>
                 </>
-              ) : null}
+              ) : null} */}
 
-              <Row>
+              {/* <Row>
                 <Col lg="6" md="6">
                   <FormGroup>
                     <Label> Quantity </Label>
@@ -464,8 +440,8 @@ export class AddProduct extends Component {
                     />
                   </FormGroup>
                 </Col>
-              </Row>
-              <Row>
+              </Row> */}
+              {/* <Row>
                 <Col lg="6" sm="6">
                   <FormGroup>
                     <Label>Media & Published (Select multiple files)</Label>
@@ -479,16 +455,8 @@ export class AddProduct extends Component {
                     />
                   </FormGroup>
                 </Col>
-              </Row>
-              <Row>
-                <Button.Ripple
-                  color="primary"
-                  type="submit"
-                  className="mr-1 mb-1"
-                >
-                  Add Product
-                </Button.Ripple>
-              </Row>
+              </Row> */}
+              <Row></Row>
             </Form>
           </CardBody>
         </Card>
@@ -496,4 +464,4 @@ export class AddProduct extends Component {
     );
   }
 }
-export default AddProduct;
+export default AssignClientCompoent;

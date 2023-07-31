@@ -37,6 +37,10 @@ import { Route } from "react-router-dom";
 class ProductType extends React.Component {
   state = {
     rowData: [],
+    Viewpermisson: null,
+    Editpermisson: null,
+    Createpermisson: null,
+    Deletepermisson: null,
     paginationPageSize: 20,
     currenPageSize: "",
     getPageSize: "",
@@ -58,7 +62,7 @@ class ProductType extends React.Component {
 
       {
         headerName: "Username",
-        field: "product",
+        field: "username",
         filter: "agSetColumnFilter",
         width: 150,
         cellRendererFramework: (params) => {
@@ -73,7 +77,7 @@ class ProductType extends React.Component {
       },
       {
         headerName: "FullName",
-        field: "product",
+        field: "full_name",
         filter: "agSetColumnFilter",
         width: 150,
         cellRendererFramework: (params) => {
@@ -88,7 +92,7 @@ class ProductType extends React.Component {
       },
       {
         headerName: "Email",
-        field: "Email",
+        field: "email",
         filter: "agSetColumnFilter",
         width: 230,
         cellRendererFramework: (params) => {
@@ -133,7 +137,7 @@ class ProductType extends React.Component {
       },
       {
         headerName: "Role",
-        field: "price",
+        field: "role",
         filter: "agSetColumnFilter",
         width: 120,
         cellRendererFramework: (params) => {
@@ -148,7 +152,7 @@ class ProductType extends React.Component {
       },
       {
         headerName: "Status",
-        field: "pisces",
+        field: "status",
         filter: "agSetColumnFilter",
         width: 150,
         cellRendererFramework: (params) => {
@@ -200,42 +204,50 @@ class ProductType extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
-              <Trash2
-                className="mr-50"
-                size="25px"
-                color="Red"
-                onClick={() => {
-                  this.runthisfunction(params.data.id);
-                }}
-              />
-              <Route
-                render={({ history }) => (
-                  <Edit
-                    className="mr-50"
-                    size="25px"
-                    color="green"
-                    onClick={() =>
-                      history.push(
-                        `/app/freshlist/house/editProductType/${params.data.id}`
-                      )
-                    }
-                  />
-                )}
-              />
-              <Route
-                render={({ history }) => (
-                  <FaLock
-                    className="mr-50"
-                    size="25px"
-                    color="blue"
-                    onClick={() =>
-                      history.push(
-                        `/app/freshlist/account/UpdateExistingRole/${params?.data?.role}`
-                      )
-                    }
-                  />
-                )}
-              />
+              {this.state.Deletepermisson && (
+                <Trash2
+                  className="mr-50"
+                  size="25px"
+                  color="Red"
+                  onClick={() => {
+                    this.runthisfunction(params.data.id);
+                  }}
+                />
+              )}
+
+              {this.state.Editpermisson && (
+                <Route
+                  render={({ history }) => (
+                    <Edit
+                      className="mr-50"
+                      size="25px"
+                      color="green"
+                      onClick={() =>
+                        history.push(
+                          `/app/freshlist/house/editProductType/${params.data.id}`
+                        )
+                      }
+                    />
+                  )}
+                />
+              )}
+
+              {this.state.Createpermisson && (
+                <Route
+                  render={({ history }) => (
+                    <FaLock
+                      className="mr-50"
+                      size="25px"
+                      color="blue"
+                      onClick={() =>
+                        history.push(
+                          `/app/freshlist/account/UpdateExistingRole/${params?.data?.role}`
+                        )
+                      }
+                    />
+                  )}
+                />
+              )}
             </div>
           );
         },
@@ -244,6 +256,21 @@ class ProductType extends React.Component {
   };
 
   async componentDidMount() {
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    let newparmisson = pageparmission?.role?.find(
+      (value) => value?.pageName === "User List"
+    );
+    this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
+    this.setState({
+      Createpermisson: newparmisson?.permission.includes("Create"),
+    });
+    this.setState({
+      Editpermisson: newparmisson?.permission.includes("Edit"),
+    });
+    this.setState({
+      Deletepermisson: newparmisson?.permission.includes("Delete"),
+    });
+
     await this.getUserList();
   }
   getUserList = async () => {

@@ -50,15 +50,19 @@ export class AddProduct extends Component {
   };
   submitHandler = (e) => {
     e.preventDefault();
+    let userData = JSON.parse(localStorage.getItem("userData"));
     const data = new FormData();
 
-    data.append("user_id", this.state.User);
+    data.append("user_id", userData?.Userinfo.id);
     data.append("product_id", this.state.productid);
     data.append("qty", this.state.quantity);
+    data.append("category_id", this.props.location.state?.category_id);
+    data.append("client_id", this.state.User);
 
     axiosConfig
       .post(`/assign_to_client`, data)
       .then((response) => {
+        swal("Success", "Sucessfully Assigned to client");
         console.log(response);
         this.setState({ User: "" });
         this.setState({ productid: "" });
@@ -128,7 +132,7 @@ export class AddProduct extends Component {
                     </CustomInput>
                   </Col> */}
                 <Col lg="6" md="6" className="mb-1 ">
-                  <Label>User List</Label>
+                  <Label>Client List</Label>
                   <Input
                     required
                     type="select"
