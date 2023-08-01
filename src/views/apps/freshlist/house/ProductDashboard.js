@@ -83,6 +83,36 @@ class ProductDashboard extends React.Component {
         },
       },
       {
+        headerName: "brand_name",
+        field: "brand_name",
+        filter: "agSetColumnFilter",
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params.data?.brand_name}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "product_type",
+        field: "product_type",
+        filter: "agSetColumnFilter",
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params.data?.product_type}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
         headerName: "PRODUCT",
         field: "title",
         filter: "agSetColumnFilter",
@@ -107,7 +137,6 @@ class ProductDashboard extends React.Component {
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
                 <span>{params.data?.category_name}</span>
-                {/* <span>vdfgvdfv</span> */}
               </div>
             </div>
           );
@@ -321,8 +350,12 @@ class ProductDashboard extends React.Component {
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
 
+    const formdata = new FormData();
+    formdata.append("user_id", pageparmission?.Userinfo?.id);
+    formdata.append("role", pageparmission?.Userinfo?.role);
+
     await axiosConfig
-      .get("/productlistapi")
+      .post("/productlistapi", formdata)
       .then((response) => {
         this.setState({ rowData: response.data.data });
         console.log(response.data.data);

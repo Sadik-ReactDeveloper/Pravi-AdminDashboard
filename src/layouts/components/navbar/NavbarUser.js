@@ -18,6 +18,7 @@ import ReactCountryFlag from "react-country-flag";
 import Autocomplete from "../../../components/@vuexy/autoComplete/AutoCompleteComponent";
 //import { useAuth0 } from "../../../authServices/auth0/auth0Service"
 import { history } from "../../../history";
+import images from "../../assets/img/logo/g.png";
 import { IntlContext } from "../../../utility/context/Internationalization";
 import { Route } from "react-router-dom";
 
@@ -191,6 +192,8 @@ class NavbarUser extends React.PureComponent {
   handleLangDropdown = () =>
     this.setState({ langDropdown: !this.state.langDropdown });
   render() {
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    // console.log(pageparmission?.Userinfo.full_name);
     //  console.log('console.log(this.state.userData) ',this.state.userData.image)
     const { userData } = this.state;
     const renderCartItems = this.state.shoppingCart.map((item) => {
@@ -437,7 +440,7 @@ class NavbarUser extends React.PureComponent {
           <DropdownToggle tag="a" className="nav-link dropdown-user-link">
             <div className="user-nav d-sm-flex d-none">
               <span className="user-name text-bold-600">
-                {userData?.name}
+                {pageparmission?.Userinfo.full_name}
                 {/* {userData.name === undefined ? userData.name : null} */}
               </span>
               {/* <span className="user-status">{this.state.userData.name}</span> */}
@@ -445,7 +448,8 @@ class NavbarUser extends React.PureComponent {
             <span data-tour="user">
               {/* userimage integrated here */}
               <img
-                src={userData?.image}
+                // src={userData?.image}
+                src={images}
                 // src={userData.image === undefined ? userData.image : null}
                 className="round"
                 height="40"

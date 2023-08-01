@@ -53,10 +53,12 @@ export class EditProductType extends Component {
       .catch((error) => {
         console.log(error);
       });
-
-    // getrolelistdropdown//
-    axiosConfig
-      .get("/getrolelistdropdown")
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    const formdata = new FormData();
+    formdata.append("user_id", pageparmission?.Userinfo?.id);
+    formdata.append("role", pageparmission?.Userinfo?.role);
+    await axiosConfig
+      .post("/getrolelistdropdown", formdata)
       .then((response) => {
         const propertyNames = Object.values(response.data?.data?.roles);
         this.setState({

@@ -111,26 +111,6 @@ export class AddProduct extends Component {
           <CardBody>
             <Form className="m-1" onSubmit={this.submitHandler}>
               <Row className="mb-2">
-                {/* <Col lg="6" md="6" className="mb-1 ">
-                    <Label>Role</Label>
-                    
-                    <CustomInput
-                      type="select"
-                      placeholder=""
-                      name="AssignRole"
-                      value={this.state.AssignRole}
-                      onChange={this.changeHandler}
-                    >
-                      <option value="Admin">Admin</option>
-
-                      {this.state.productName &&
-                        this.state.productName?.map((value, index) => (
-                          <option key={index} value={value}>
-                            {value}
-                          </option>
-                        ))}
-                    </CustomInput>
-                  </Col> */}
                 <Col lg="6" md="6" className="mb-1 ">
                   <Label>Client List</Label>
                   <Input

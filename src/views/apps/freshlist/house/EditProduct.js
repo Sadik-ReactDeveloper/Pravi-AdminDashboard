@@ -49,7 +49,20 @@ export class EditProduct extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   async componentDidMount() {
+    let { id } = this.props?.match.params;
+    console.log(id);
     console.log(this.props?.location?.state);
+    console.log(this.props?.location?.state?.veriety);
+    let formdata = new FormData();
+    // formdata.append("")
+    // axiosConfig
+    //   .post(``)
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
 
     this.setState({
       category_name: this.props?.location?.state?.category_name,

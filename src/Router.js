@@ -384,6 +384,12 @@ const AddHouseProduct = lazy(() =>
 const ProductDashboard = lazy(() =>
   import("./views/apps/freshlist/house/ProductDashboard")
 );
+const Assignedtoclient = lazy(() =>
+  import("./views/apps/freshlist/house/AssignedList")
+);
+const ViewoneAssigned = lazy(() =>
+  import("./views/apps/freshlist/house/ViewoneAssigned")
+);
 const RateMaster = lazy(() =>
   import("./views/apps/freshlist/house/RateMaster")
 );
@@ -1196,6 +1202,14 @@ class AppRouter extends React.Component {
           <AppRoute
             path="/app/freshlist/house/ProductDashboard"
             component={ProductDashboard}
+          />
+          <AppRoute
+            path="/app/freshlist/house/Assignedtoclient"
+            component={Assignedtoclient}
+          />
+          <AppRoute
+            path="/app/freshlist/house/viewoneassigned/:id"
+            component={ViewoneAssigned}
           />
           <AppRoute
             path="/app/freshlist/house/ratemaster"

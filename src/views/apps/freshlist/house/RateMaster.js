@@ -291,7 +291,7 @@ class RateMaster extends React.Component {
         <Col sm="12">
           <Card>
             <Row className="pt-1 mx-1">
-              <Col lg="3" md="3" className="mb-1 ">
+              {/* <Col lg="3" md="3" className="mb-1 ">
                 <Label>SHOW BY</Label>
                 <Input
                   required
@@ -353,7 +353,7 @@ class RateMaster extends React.Component {
                   <option value="Freeland">Freeland</option>
                   <option value="Rongdhonu">Rongdhonu</option>
                 </Input>
-              </Col>
+              </Col> */}
             </Row>
             <Row className="m-2">
               <Col>

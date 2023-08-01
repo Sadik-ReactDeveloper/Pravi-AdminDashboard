@@ -42,8 +42,9 @@ export class AddBrand extends Component {
   };
   submitHandler = (e) => {
     e.preventDefault();
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
     const data = new FormData();
-
+    data.append("user_id", pageparmission?.Userinfo?.id);
     data.append("brand_name", this.state.brandname);
     data.append("description", this.state.desc);
     data.append("status", this.state.status);

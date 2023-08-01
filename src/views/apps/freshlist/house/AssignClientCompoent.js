@@ -189,14 +189,6 @@ export class AssignClientCompoent extends Component {
                           </option>
                         ))}
                     </select>
-                    {/* <Input
-                      type="text"
-                      placeholder="Title"
-                      name="category_name"
-                      bsSize="lg"
-                      value={this.state.category_name}
-                      onChange={this.changeHandler}
-                    /> */}
                   </FormGroup>
                 </Col>
                 <Col lg="3" md="3">

@@ -57,6 +57,8 @@ class Login extends React.Component {
       .then((response) => {
         let msg = response.data?.success;
         if (msg) {
+          this.props.history.push("/dashboard");
+          localStorage.setItem("userData", JSON.stringify(response.data?.data));
           swal(
             "Sucessfully login",
             "You are LoggedIn!",
@@ -76,9 +78,6 @@ class Login extends React.Component {
               default:
             }
           });
-
-          this.props.history.push("/dashboard");
-          localStorage.setItem("userData", JSON.stringify(response.data?.data));
         }
       })
       .catch((error) => {
@@ -131,7 +130,7 @@ class Login extends React.Component {
                         <Input
                           type="text"
                           name="email"
-                          placeholder="Email"
+                          placeholder="Username"
                           value={this.state.email}
                           onChange={this.handlechange}
                           // required

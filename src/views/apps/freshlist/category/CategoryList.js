@@ -73,7 +73,7 @@ class CategoryList extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data?.category_name}</span>
+              <span>{params?.data?.category_name}</span>
             </div>
           );
         },
@@ -123,59 +123,64 @@ class CategoryList extends React.Component {
       //     ) : null;
       //   },
       // },
-      // {
-      //   headerName: "Actions",
-      //   field: "sortorder",
-      //   field: "transactions",
-      //   width: 150,
-      //   cellRendererFramework: (params) => {
-      //     return (
-      //       <div className="actions cursor-pointer">
-      //         <Route
-      //           render={({ history }) => (
-      //             <>
-      //               <Eye
-      //                 className="mr-50"
-      //                 size="25px"
-      //                 color="green"
-      //                 onClick={() =>
-      //                   history.push(
-      //                     `/app/freshlist/category/viewCategory/${params.data.id}`
-      //                   )
-      //                 }
-      //               />
-
-      //               <Edit
-      //                 className="mr-50"
-      //                 size="25px"
-      //                 color="blue"
-      //                 onClick={() =>
-      //                   history.push(
-      //                     `/app/freshlist/category/editCategory/${params.data.id}`
-      //                   )
-      //                 }
-      //               />
-      //             </>
-      //           )}
-      //         />
-      //         <Route
-      //           render={({ history }) => (
-      //             <Trash2
-      //               className="mr-50"
-      //               size="25px"
-      //               color="red"
-      //               onClick={() => {
-      //                 let selectedData = this.gridApi.getSelectedRows();
-      //                 this.runthisfunction(params.data.id);
-      //                 this.gridApi.updateRowData({ remove: selectedData });
-      //               }}
-      //             />
-      //           )}
-      //         />
-      //       </div>
-      //     );
-      //   },
-      // },
+      {
+        headerName: "Actions",
+        field: "sortorder",
+        field: "transactions",
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="actions cursor-pointer">
+              {this.state.Viewpermisson && (
+                <Route
+                  render={({ history }) => (
+                    <>
+                      <Eye
+                        className="mr-50"
+                        size="25px"
+                        color="green"
+                        onClick={() =>
+                          history.push(
+                            `/app/freshlist/category/viewCategory/${params?.data?.id}`
+                          )
+                        }
+                      />
+                    </>
+                  )}
+                />
+              )}
+              {this.state.Editpermisson && (
+                <Edit
+                  className="mr-50"
+                  size="25px"
+                  color="blue"
+                  onClick={() =>
+                    history.push(
+                      `/app/freshlist/category/editCategory/${params?.data?.id}`
+                    )
+                  }
+                />
+              )}
+              {this.state.Deletepermisson && (
+                <Route
+                  render={({ history }) => (
+                    <Trash2
+                      className="mr-50"
+                      size="25px"
+                      color="red"
+                      onClick={() => {
+                        let selectedData = this.gridApi.getSelectedRows();
+                        this.runthisfunction(params?.data?.id);
+                        this.gridApi.updateRowData({ remove: selectedData });
+                      }}
+                    />
+                  )}
+                />
+              )}
+            </div>
+          );
+        },
+      },
     ],
   };
 
@@ -197,10 +202,17 @@ class CategoryList extends React.Component {
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
 
-    await axiosConfig.get("/getcategory").then((response) => {
+    const data = new FormData();
+
+    data.append("user_id", pageparmission?.Userinfo?.id);
+    data.append("role", pageparmission?.Userinfo?.role);
+
+    await axiosConfig.post("/getcategory", data).then((response) => {
       let rowData = response.data.data?.category;
       console.log(rowData);
-      this.setState({ rowData });
+      if (rowData) {
+        this.setState({ rowData });
+      }
     });
   }
 

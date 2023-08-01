@@ -19,3 +19,8 @@
 .bt{
     margin-top: 18px;
 }
+/* [dir] input[type="radio"], [dir] input[type="checkbox"] {
+    height: 21px;
+    width: 41px;
+    padding: 0;
+} */

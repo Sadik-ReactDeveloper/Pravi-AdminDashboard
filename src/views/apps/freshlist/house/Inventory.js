@@ -366,7 +366,7 @@ class Invetory extends React.Component {
     const { rowData, columnDefs, defaultColDef } = this.state;
     return (
       <>
-        <Row className="m-2">
+        {/* <Row className="m-2">
           <Col>
             <h1 col-sm-6 className="float-left">
               Inventory Products
@@ -385,12 +385,12 @@ class Invetory extends React.Component {
               )}
             />
           </Col>
-        </Row>
+        </Row> */}
         <Row className="app-user-list pt-1">
           <Col sm="12"></Col>
           <Col sm="12">
             <Card>
-              <Row className="pt-1 mx-1">
+              {/* <Row className="pt-1 mx-1">
                 <Col lg="3" md="3" className="mb-1 ">
                   <Label>SHOW BY</Label>
                   <Input
@@ -446,7 +446,7 @@ class Invetory extends React.Component {
                     // onChange={this.changeHandler}
                   ></Input>
                 </Col>
-              </Row>
+              </Row> */}
               <Row className="m-2">
                 <Col>
                   <h1>Inventory List</h1>

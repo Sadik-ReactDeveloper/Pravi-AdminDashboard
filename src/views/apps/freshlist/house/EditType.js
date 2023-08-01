@@ -44,21 +44,17 @@ export class EditType extends Component {
   }
   async componentDidMount() {
     let { id } = this.props.match.params;
-
     const formdata = new FormData();
-    formdata.append("type_id", id);
-    await axiosConfig.post("/editproducttypelistview").then((response) => {
-      let rowData = response;
-      console.log(rowData);
-      //   this.setState({TypeName:})
-      //   this.setState({Description:})
-      //   this.setState({ rowData });
-    });
-    // await axiosConfig.get("/getbrand").then((response) => {
-    //   let Brandlist = response.data.data?.brands;
-    //   //   console.log(Brandlist);
-    //   this.setState({ Brandlist });
-    // });
+    formdata.append("product_type_id", id);
+    await axiosConfig
+      .post("/editproducttypelistview", formdata)
+      .then((response) => {
+        let rowData = response?.data?.data[0];
+        console.log(rowData);
+        this.setState({ TypeName: rowData?.product_type });
+        this.setState({ Description: rowData?.description });
+        this.setState({ status: rowData?.status });
+      });
   }
 
   handleChange(i, e) {
@@ -117,8 +113,9 @@ export class EditType extends Component {
     console.log(pageparmission?.Userinfo?.id);
     const data = new FormData();
     let { id } = this.props.match.params;
-    // data.append("user_id", pageparmission?.Userinfo?.id);
-    data.append("type_id", id);
+
+    data.append("user_id", pageparmission?.Userinfo?.id);
+    data.append("product_type_id", id);
     data.append("product_type", this.state.TypeName);
     data.append("description", this.state.Description);
     data.append("status", this.state.status);
@@ -126,6 +123,7 @@ export class EditType extends Component {
     axiosConfig
       .post(`/editproducttypesubmit`, data)
       .then((response) => {
+        console.log(response);
         if (response?.data?.success) {
           this.setState({ TypeName: "" });
           this.setState({ Description: "" });

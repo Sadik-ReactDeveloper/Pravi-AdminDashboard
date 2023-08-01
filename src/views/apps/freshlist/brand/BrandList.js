@@ -183,11 +183,16 @@ class BrandList extends React.Component {
     this.setState({
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
+    const data = new FormData();
 
-    await axiosConfig.get("/getbrand").then((response) => {
+    data.append("user_id", pageparmission?.Userinfo?.id);
+    data.append("role", pageparmission?.Userinfo?.role);
+    await axiosConfig.post("/getbrand", data).then((response) => {
       let rowData = response.data.data?.brands;
       // console.log(rowData);
-      this.setState({ rowData });
+      if (rowData) {
+        this.setState({ rowData });
+      }
     });
   }
 

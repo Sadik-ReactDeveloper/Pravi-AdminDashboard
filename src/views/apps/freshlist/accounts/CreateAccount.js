@@ -26,6 +26,7 @@ export class CreateAccount extends Component {
       fullname: "",
       City: "",
       phone_no: "",
+      setuserList: false,
       password: "",
       email: "",
       status: "",
@@ -43,9 +44,14 @@ export class CreateAccount extends Component {
   };
 
   async componentDidMount() {
-    axiosConfig
-      .get("/getrolelistdropdown")
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    const formdata = new FormData();
+    formdata.append("user_id", pageparmission?.Userinfo?.id);
+    formdata.append("role", pageparmission?.Userinfo?.role);
+    await axiosConfig
+      .post("/getrolelistdropdown", formdata)
       .then((response) => {
+        console.log(response);
         const propertyNames = Object.values(response.data?.data?.roles);
 
         console.log(propertyNames);
@@ -60,8 +66,9 @@ export class CreateAccount extends Component {
 
   submitHandler = (e) => {
     e.preventDefault();
-
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
     const formdata = new FormData();
+    formdata.append("created_by", pageparmission?.Userinfo?.id);
     formdata.append("password", this.state.password);
     formdata.append("full_name", this.state.fullname);
     formdata.append("username", this.state.UserName);
@@ -102,7 +109,7 @@ export class CreateAccount extends Component {
           <Row className="m-2">
             <Col>
               <h1 col-sm-6 className="float-left">
-                Add User here
+                Add here
               </h1>
             </Col>
             {/* <Col>
@@ -287,28 +294,74 @@ export class CreateAccount extends Component {
                 </Col>
               </Row>
               <hr />
-              <Row className="mt-2">
-                <Col lg="6" md="6">
-                  <Label className="mt-2  mb-2"> Select Role</Label>
+              <h4 className="py-2">Select User Type :-</h4>
 
-                  <CustomInput
-                    type="select"
-                    placeholder=""
-                    name="AssignRole"
-                    value={this.state.AssignRole}
-                    onChange={this.changeHandler}
-                  >
-                    <option value="Admin">Admin</option>
-
-                    {this.state.productName &&
-                      this.state.productName?.map((value, index) => (
-                        <option key={index} value={value}>
-                          {value}
-                        </option>
-                      ))}
-                  </CustomInput>
+              <Row>
+                <Col lg="2" md="2">
+                  <FormGroup>
+                    <h3>
+                      Client{" "}
+                      <span>
+                        <Input
+                          required
+                          className="mx-2"
+                          type="radio"
+                          name="City"
+                          value="Client"
+                          onChange={(e) => {
+                            this.setState({ setuserList: false });
+                            this.setState({ AssignRole: "Client" });
+                          }}
+                        />
+                      </span>
+                    </h3>
+                  </FormGroup>
                 </Col>
-                {/* <Col lg="6" md="6">
+                <Col lg="2" md="2">
+                  <FormGroup>
+                    <h3>
+                      User{" "}
+                      <span>
+                        <Input
+                          required
+                          height="21px"
+                          width="41px"
+                          className="mx-2"
+                          type="radio"
+                          name="City"
+                          value="User"
+                          onChange={(e) => {
+                            this.setState({ setuserList: true });
+                          }}
+                        />
+                      </span>
+                    </h3>
+                  </FormGroup>
+                </Col>
+              </Row>
+              {this.state.setuserList && (
+                <Row className="mt-2">
+                  <Col lg="6" md="6">
+                    <Label className="mt-2  mb-2"> Select Role</Label>
+
+                    <CustomInput
+                      type="select"
+                      placeholder=""
+                      name="AssignRole"
+                      value={this.state.AssignRole}
+                      onChange={this.changeHandler}
+                    >
+                      <option value="Admin">--Select Role--</option>
+
+                      {this.state.productName &&
+                        this.state.productName?.map((value, index) => (
+                          <option key={index} value={value}>
+                            {value}
+                          </option>
+                        ))}
+                    </CustomInput>
+                  </Col>
+                  {/* <Col lg="6" md="6">
                   <Label className="mt-2  mb-2"> Select User</Label>
 
                   <CustomInput
@@ -324,7 +377,8 @@ export class CreateAccount extends Component {
                     <option value="user2">Other</option>
                   </CustomInput>
                 </Col> */}
-              </Row>
+                </Row>
+              )}
               <Row>
                 <Col lg="6" md="6" sm="6" className="mb-2">
                   <Label className="mb-1 py-2">

@@ -145,10 +145,9 @@ class RoleList extends React.Component {
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
 
-    let userdata = JSON.parse(localStorage.getItem("userData"));
-    // console.log(userdata?.Userinfo?.id);
     const formdata = new FormData();
-    formdata.append("user_id", userdata?.Userinfo?.id);
+    formdata.append("user_id", pageparmission?.Userinfo?.id);
+    formdata.append("role", pageparmission?.Userinfo?.role);
     axiosConfig
       .post("/getrolelist", formdata)
       .then((response) => {

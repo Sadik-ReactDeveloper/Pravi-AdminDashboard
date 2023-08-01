@@ -14,28 +14,24 @@ import {
   CardText,
   Label,
 } from "reactstrap";
+import axios from "axios";
 import axiosConfig from "../../../../axiosConfig";
 import ReactHtmlParser from "react-html-parser";
 import { ContextLayout } from "../../../../utility/context/Layout";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
-import { Trash2, ChevronDown, Edit } from "react-feather";
+import { Eye, Trash2, ChevronDown, Edit } from "react-feather";
+
 import { history } from "../../../../history";
 import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
-import Moment from "react-moment";
-import {
-  FaWallet,
-  Facart,
-  FaCartArrowDown,
-  FaBoxOpen,
-  FaLock,
-} from "react-icons/fa";
+import { FaWallet, Facart, FaCartArrowDown, FaBoxOpen } from "react-icons/fa";
 import "moment-timezone";
 import { Route } from "react-router-dom";
 
-class ProductType extends React.Component {
+class AssignedList extends React.Component {
   state = {
+    product: [],
     rowData: [],
     Viewpermisson: null,
     Editpermisson: null,
@@ -56,12 +52,38 @@ class ProductType extends React.Component {
         valueGetter: "node.rowIndex + 1",
         field: "node.rowIndex + 1",
         // checkboxSelection: true,
-        width: 100,
+        width: 150,
         filter: true,
       },
 
+      //   {
+      //     headerName: "PRODUCT Image",
+      //     field: "product",
+      //     filter: "agSetColumnFilter",
+      //     width: 150,
+      //     cellRendererFramework: (params) => {
+      //       return (
+      //         <div className="d-flex align-items-center cursor-pointer">
+      //           <div className="">
+      //             {/* <span>{params.data?.title}</span> */}
+      //             {params?.data?.product_images ? (
+      //               <img
+      //                 style={{ borderRadius: "12px" }}
+      //                 width="60px"
+      //                 height="40px"
+      //                 src={params?.data?.product_images[0]}
+      //                 alt="image"
+      //               />
+      //             ) : (
+      //               "No Image "
+      //             )}
+      //           </div>
+      //         </div>
+      //       );
+      //     },
+      //   },
       {
-        headerName: "Username",
+        headerName: "Client Name",
         field: "username",
         filter: "agSetColumnFilter",
         width: 150,
@@ -69,14 +91,14 @@ class ProductType extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{params?.data?.username}</span>
+                <span>{params.data?.username}</span>
               </div>
             </div>
           );
         },
       },
       {
-        headerName: "FullName",
+        headerName: "full_name",
         field: "full_name",
         filter: "agSetColumnFilter",
         width: 150,
@@ -84,44 +106,29 @@ class ProductType extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{params?.data?.full_name}</span>
+                <span>{params.data?.full_name}</span>
               </div>
             </div>
           );
         },
       },
       {
-        headerName: "Email",
+        headerName: "email",
         field: "email",
-        filter: "agSetColumnFilter",
-        width: 230,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{params?.data?.email}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Mobile No.",
-        field: "mobile",
         filter: "agSetColumnFilter",
         width: 150,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{params?.data?.mobile}</span>
+                <span>{params.data?.email}</span>
               </div>
             </div>
           );
         },
       },
       {
-        headerName: "City",
+        headerName: "city",
         field: "city",
         filter: "agSetColumnFilter",
         width: 150,
@@ -129,69 +136,145 @@ class ProductType extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{params?.data?.city}</span>
+                <span>{params.data?.city}</span>
               </div>
             </div>
           );
         },
       },
       {
-        headerName: "Role",
-        field: "role",
+        headerName: "mobile",
+        field: "mobile",
         filter: "agSetColumnFilter",
         width: 120,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{params?.data?.role}</span>
+                <span>{ReactHtmlParser(params.data?.mobile)}</span>
               </div>
             </div>
           );
         },
       },
       {
-        headerName: "Status",
-        field: "status",
+        headerName: "create_date",
+        field: "create_date",
         filter: "agSetColumnFilter",
-        width: 150,
+        width: 120,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{params?.data?.status}</span>
+                <span>{params.data?.create_date}</span>
               </div>
             </div>
           );
         },
       },
-      // {
-      //   headerName: "ORDER",
-      //   field: "pisces",
-
-      //   filter: "agSetColumnFilter",
-      //   width: 120,
-      //   cellRendererFramework: (params) => {
-      //     return (
-      //       <div className="d-flex align-items-center cursor-pointer">
-      //         <div className="">
-      //           <span>vfdsvsd</span>
+      {
+        headerName: "status",
+        field: "status",
+        filter: "agSetColumnFilter",
+        width: 120,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params.data?.status}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      //   {
+      //     headerName: "Shipping Fee",
+      //     field: "shipping_fee",
+      //     filter: "agSetColumnFilter",
+      //     width: 120,
+      //     cellRendererFramework: (params) => {
+      //       return (
+      //         <div className="d-flex align-items-center cursor-pointer">
+      //           <div className="">
+      //             <span>{params.data?.shipping_fee}</span>
+      //           </div>
       //         </div>
-      //       </div>
-      //     );
+      //       );
+      //     },
       //   },
-      // },
+      //   {
+      //     headerName: "Tax Rate",
+      //     field: "tax_rate",
+      //     filter: "agSetColumnFilter",
+      //     width: 120,
+      //     cellRendererFramework: (params) => {
+      //       return (
+      //         <div className="d-flex align-items-center cursor-pointer">
+      //           <div className="">
+      //             <span>{params.data?.tax_rate}</span>
+      //           </div>
+      //         </div>
+      //       );
+      //     },
+      //   },
+      //   {
+      //     headerName: "Tags",
+      //     field: "tags",
+      //     filter: "agSetColumnFilter",
+      //     width: 120,
+      //     cellRendererFramework: (params) => {
+      //       return (
+      //         <div className="d-flex align-items-center cursor-pointer">
+      //           <div className="">
+      //             <span>{params.data?.tags}</span>
+      //           </div>
+      //         </div>
+      //       );
+      //     },
+      //   },
+      //   {
+      //     headerName: "STOCK",
+      //     field: "stock",
+
+      //     filter: "agSetColumnFilter",
+      //     width: 150,
+      //     cellRendererFramework: (params) => {
+      //       return (
+      //         <div className="d-flex align-items-center cursor-pointer">
+      //           <div className="">
+      //             <span>{ReactHtmlParser(params.data?.stock)}</span>
+      //           </div>
+      //         </div>
+      //       );
+      //     },
+      //   },
+      //   {
+      //     headerName: "Created ",
+      //     field: "created_date",
+      //     filter: "agSetColumnFilter",
+      //     width: 120,
+      //     cellRendererFramework: (params) => {
+      //       return (
+      //         <div className="d-flex align-items-center cursor-pointer">
+      //           <div className="">
+      //             <span>
+      //               {ReactHtmlParser(params.data?.created_date?.split(" ")[0])}
+      //             </span>
+      //           </div>
+      //         </div>
+      //       );
+      //     },
+      //   },
       // {
       //   headerName: "SALES",
       //   field: "pisces",
-
       //   filter: "agSetColumnFilter",
       //   width: 120,
       //   cellRendererFramework: (params) => {
       //     return (
       //       <div className="d-flex align-items-center cursor-pointer">
       //         <div className="">
-      //           <span>vfdsvds</span>
+      //           <span>{ReactHtmlParser(params.data.pisces)}</span>
       //         </div>
       //       </div>
       //     );
@@ -204,50 +287,44 @@ class ProductType extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
-              {this.state.Deletepermisson && (
-                <Trash2
-                  className="mr-50"
-                  size="25px"
-                  color="Red"
-                  onClick={() => {
-                    this.runthisfunction(params.data?.id);
-                  }}
-                />
-              )}
+              {/* {this.state.Viewpermisson && ( */}
+              <Eye
+                className="mr-50"
+                size="25px"
+                color="green"
+                onClick={() =>
+                  history.push(
+                    `/app/freshlist/house/viewoneassigned/${params.data.id}`
+                  )
+                }
+              />
+              {/* )} */}
+              {/* {this.state.Editpermisson && ( */}
+              <Edit
+                className="mr-50"
+                size="25px"
+                color="blue"
+                onClick={() =>
+                  this.props.history.push({
+                    pathname: `/app/freshlist/house/viewoneassigned/${params.data?.id}`,
+                    state: params.data,
+                  })
+                }
+              />
+              {/* )} */}
+              {/* {this.state.Deletepermisson && ( */}
+              <Trash2
+                className="mr-50"
+                size="25px"
+                color="Red"
+                onClick={() => {
+                  let selectedData = this.gridApi.getSelectedRows();
 
-              {this.state.Editpermisson && (
-                <Route
-                  render={({ history }) => (
-                    <Edit
-                      className="mr-50"
-                      size="25px"
-                      color="green"
-                      onClick={() =>
-                        history.push(
-                          `/app/freshlist/house/editProductType/${params.data?.id}`
-                        )
-                      }
-                    />
-                  )}
-                />
-              )}
-
-              {this.state.Createpermisson && (
-                <Route
-                  render={({ history }) => (
-                    <FaLock
-                      className="mr-50"
-                      size="25px"
-                      color="blue"
-                      onClick={() =>
-                        history.push(
-                          `/app/freshlist/account/UpdateExistingRole/${params?.data?.role}`
-                        )
-                      }
-                    />
-                  )}
-                />
-              )}
+                  this.runthisfunction(params.data?.id);
+                  this.gridApi.updateRowData({ remove: selectedData });
+                }}
+              />
+              {/* )} */}
             </div>
           );
         },
@@ -257,9 +334,11 @@ class ProductType extends React.Component {
 
   async componentDidMount() {
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
+
     let newparmisson = pageparmission?.role?.find(
-      (value) => value?.pageName === "User List"
+      (value) => value?.pageName === "Assigned List"
     );
+
     this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
     this.setState({
       Createpermisson: newparmisson?.permission.includes("Create"),
@@ -270,32 +349,36 @@ class ProductType extends React.Component {
     this.setState({
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
-
     const formdata = new FormData();
     formdata.append("user_id", pageparmission?.Userinfo?.id);
     formdata.append("role", pageparmission?.Userinfo?.role);
-    await axiosConfig.post("/getuserlist", formdata).then((response) => {
-      // console.log(response);
-      let rowData = response?.data?.data?.users;
-      this.setState({ rowData });
-    });
+    await axiosConfig
+      .post("/getclientlist", formdata)
+      .then((response) => {
+        this.setState({ rowData: response.data.data });
+        console.log(response.data.data);
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+    // await axiosConfig.get("/gettermsconditions").then(response => {
+    //   let rowData = response.data.data;
+    //   this.setState({ rowData });
+    // });
   }
-  getUserList = async () => {
-    const formdata = new FormData();
-    formdata.append("user_id", pageparmission?.Userinfo?.id);
-    formdata.append("role", pageparmission?.Userinfo?.role);
-    await axiosConfig.post("/getuserlist", formdata).then((response) => {
-      console.log(response);
-      let rowData = response?.data?.data?.users;
-      this.setState({ rowData });
-    });
-  };
+
   async runthisfunction(id) {
-    const formData = new FormData();
-    formData.append("user_id", id);
-    await axiosConfig.post(`/userdelete`, formData).then((response) => {
-      this.getUserList();
-    });
+    console.log(id);
+    let data = new FormData();
+    data.append("id", id);
+    await axiosConfig
+      .post("/deleteproduct", data)
+      .then((resp) => {
+        console.log(resp);
+      })
+      .then((response) => {
+        console.log(response);
+      });
   }
 
   onGridReady = (params) => {
@@ -403,75 +486,10 @@ class ProductType extends React.Component {
           <Col sm="12"></Col>
           <Col sm="12">
             <Card>
-              {/* <Row className="pt-1 mx-1">
-                <Col lg="3" md="3" className="mb-1 ">
-                  <Label>SHOW BY</Label>
-                  <Input
-                    required
-                    type="select"
-                    name="weight"
-                    placeholder="Enter Iden Type"
-                    // value={this.state.weight}
-                    // onChange={this.changeHandler}
-                  >
-                    <option value="12ROW">12 ROW</option>
-                    <option value="24ROW">24 ROW</option>
-                    <option value="36ROW">36 ROW</option>
-                  </Input>
-                </Col>
-                <Col lg="3" md="3" className="mb-1">
-                  <Label>RATING BY</Label>
-                  <Input
-                    required
-                    type="select"
-                    name="weight"
-                    placeholder="Enter Iden Type"
-                    // value={this.state.weight}
-                    // onChange={this.changeHandler}
-                  >
-                    <option value="1Star">1 Star</option>
-                    <option value="2Star">2 Star</option>
-                    <option value="3Star">3 Star</option>
-                    <option value="4Star">4 Star</option>
-                    <option value="5Star">5 Star</option>
-                  </Input>
-                </Col>
-                <Col lg="3" md="3" className="mb-1">
-                  <Label>CATEGORY BY</Label>
-                  <Input
-                    required
-                    type="select"
-                    name="weight"
-                    placeholder="Enter Iden Type"
-                    // value={this.state.weight}
-                    // onChange={this.changeHandler}
-                  >
-                    <option value="Mans">Mans</option>
-                    <option value="Womans">Womans</option>
-                    <option value="Kids">Kids</option>
-                    <option value="Accessory">Accessory</option>
-                  </Input>
-                </Col>
-                <Col lg="3" md="3" className="mb-1">
-                  <Label>BRAND BY</Label>
-                  <Input
-                    required
-                    type="select"
-                    name="weight"
-                    placeholder="Enter Iden Type"
-                    // value={this.state.weight}
-                    // onChange={this.changeHandler}
-                  >
-                    <option value="Ecstasy">Ecstasy</option>
-                    <option value="Freeland">Freeland</option>
-                    <option value="Rongdhonu">Rongdhonu</option>
-                  </Input>
-                </Col>
-              </Row> */}
               <Row className="m-2">
                 <Col>
                   <h1 col-sm-6 className="float-left">
-                    User List with Role
+                    Assigned Client List
                   </h1>
                 </Col>
                 {/* <Col>
@@ -481,7 +499,9 @@ class ProductType extends React.Component {
                         className="float-right"
                         color="primary"
                         onClick={() =>
-                          history.push("/app/freshlist/options/ProductType")
+                          history.push(
+                            "/app/freshlist/options/ProductDashboard"
+                          )
                         }
                       >
                         Add Type
@@ -589,4 +609,4 @@ class ProductType extends React.Component {
     );
   }
 }
-export default ProductType;
+export default AssignedList;

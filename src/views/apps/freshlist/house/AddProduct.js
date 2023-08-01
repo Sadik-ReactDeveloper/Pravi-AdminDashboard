@@ -16,6 +16,7 @@ import axiosConfig from "../../../../axiosConfig";
 import { Route } from "react-router-dom";
 import swal from "sweetalert";
 import { CloudLightning } from "react-feather";
+import { ResponsiveContainer } from "recharts";
 
 export class AddProduct extends Component {
   constructor(props) {
@@ -32,6 +33,7 @@ export class AddProduct extends Component {
       DiscountPrice: "",
       Addmore: false,
       rowData: [],
+      TypeList: [],
       description: "",
       variety: "",
       shipmentfee: "",
@@ -50,15 +52,39 @@ export class AddProduct extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   async componentDidMount() {
-    await axiosConfig.get("/getcategory").then((response) => {
+    const data = new FormData();
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    data.append("user_id", pageparmission?.Userinfo?.id);
+    data.append("role", pageparmission?.Userinfo?.role);
+    await axiosConfig.post("/getcategory", data).then((response) => {
       let rowData = response.data.data?.category;
       console.log(rowData);
-      this.setState({ rowData });
+      if (rowData) {
+        this.setState({ rowData });
+      }
     });
-    await axiosConfig.get("/getbrand").then((response) => {
+    const type = new FormData();
+    // let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    type.append("user_id", pageparmission?.Userinfo?.id);
+    type.append("role", pageparmission?.Userinfo?.role);
+
+    const brand = new FormData();
+    // let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    brand.append("user_id", pageparmission?.Userinfo?.id);
+    brand.append("role", pageparmission?.Userinfo?.role);
+    await axiosConfig.post("/getbrand", brand).then((response) => {
       let Brandlist = response.data.data?.brands;
-      //   console.log(Brandlist);
-      this.setState({ Brandlist });
+      console.log(response);
+      if (Brandlist) {
+        this.setState({ Brandlist });
+      }
+    });
+    await axiosConfig.post("/producttypelistview", type).then((response) => {
+      let TypeList = response.data.data;
+      console.log(TypeList);
+      if (TypeList) {
+        this.setState({ TypeList });
+      }
     });
   }
 
@@ -119,8 +145,11 @@ export class AddProduct extends Component {
   submitHandler = (e) => {
     e.preventDefault();
     const data = new FormData();
-    console.log(this.state.formValues);
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    // console.log(pageparmission?.Userinfo?.id);
+    data.append("user_id", pageparmission?.Userinfo?.id);
     data.append("brand_id", this.state.Brand);
+    data.append("product_type_id", this.state.Type);
     data.append("title", this.state.P_Title);
     data.append("veriety", JSON.stringify(this.state.formValues));
     data.append("category_id", this.state.category_name);
@@ -154,7 +183,7 @@ export class AddProduct extends Component {
       .then((response) => {
         console.log(response);
         if (response.data.success) {
-          swal("Success!", "You Data iS been Submitted", "success");
+          swal("Success!", "You Data is been Submitted", "success");
           // this.props.history.push("/app/freshlist/category/categoryList");
         }
       })
@@ -230,10 +259,10 @@ export class AddProduct extends Component {
                       id="Select"
                     >
                       <option value="volvo">--Select Type--</option>
-                      {this.state.rowData &&
-                        this.state.rowData?.map((val, i) => (
+                      {this.state.TypeList &&
+                        this.state.TypeList?.map((val, i) => (
                           <option key={i} value={val?.id}>
-                            {val?.category_name}
+                            {val?.product_type}
                           </option>
                         ))}
                     </select>

@@ -13,6 +13,8 @@ import {
   CardTitle,
   CardText,
   Label,
+  Form,
+  FormGroup,
 } from "reactstrap";
 
 import axiosConfig from "../../../../axiosConfig";
@@ -28,11 +30,25 @@ import { FaWallet, Facart, FaCartArrowDown, FaBoxOpen } from "react-icons/fa";
 import "moment-timezone";
 import { Route } from "react-router-dom";
 import AssignClientCompoent from "./AssignClientCompoent";
+import swal from "sweetalert";
 
 class AssignToClient extends React.Component {
   state = {
     product: [],
     rowData: [],
+    GetCategory: [],
+    Clientlist: [],
+    Brandlist: [],
+    Typelist: [],
+    ProductListData: [],
+    category_name: "",
+    Clientname: "",
+    Product: "",
+    showProduct: false,
+    Type: "",
+    assign_to_client: "",
+    Brand: "",
+    category: "",
     Viewpermisson: null,
     Editpermisson: null,
     Createpermisson: null,
@@ -273,8 +289,8 @@ class AssignToClient extends React.Component {
                       size={20}
                       onClick={() =>
                         this.props.history.push({
-                          pathname: `/app/freshlist/house/assignedPage/${params.data.id}`,
-                          state: params.data,
+                          pathname: `/app/freshlist/house/assignedPage/${params.data?.id}`,
+                          state: params?.data,
                         })
                       }
                     />
@@ -315,16 +331,55 @@ class AssignToClient extends React.Component {
     this.setState({
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
+    const formdata = new FormData();
+    formdata.append("user_id", pageparmission?.Userinfo?.id);
+    formdata.append("role", pageparmission?.Userinfo?.role);
 
-    axiosConfig
-      .get("/productlistapi")
+    await axiosConfig.post("/getbrand", formdata).then((response) => {
+      let Brandlist = response.data.data?.brands;
+
+      this.setState({ Brandlist });
+    });
+    await axiosConfig.post("/getclientlist", formdata).then((response) => {
+      let Clientlist = response.data.data;
+      console.log(Clientlist);
+      this.setState({ Clientlist });
+    });
+
+    await axiosConfig.post("/getcategory", formdata).then((response) => {
+      let GetCategory = response.data.data?.category;
+      // console.log(GetCategory);
+      this.setState({ GetCategory });
+    });
+
+    await axiosConfig
+      .post("/productlistapi", formdata)
+      // .post("/productlistapi")
       .then((response) => {
         this.setState({ rowData: response.data.data });
-        console.log(response.data.data);
+        // console.log(response.data.data);
       })
       .catch((error) => {
         console.log(error);
       });
+
+    await axiosConfig
+      .post("/producttypelistview", formdata)
+      .then((response) => {
+        let Typelist = response.data.data;
+        // console.log(Typelist);
+        this.setState({ Typelist });
+      });
+
+    // await axiosConfig
+    //   .post("/productlistapi", formdata)
+    //   .then((response) => {
+    //     this.setState({ ProductListData: response.data.data });
+    //     console.log(response.data.data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error.response);
+    //   });
   }
 
   async runthisfunction(id) {
@@ -333,6 +388,59 @@ class AssignToClient extends React.Component {
       console.log(response);
     });
   }
+  submitHandlerAssign = (e) => {
+    e.preventDefault();
+
+    let formdata = new FormData();
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    formdata.append("user_id", pageparmission?.Userinfo?.id);
+    formdata.append("category_id", this.state.category);
+    formdata.append("brand_id", this.state.Brand);
+    formdata.append("product_type_id", this.state.Type);
+    formdata.append("product_id", this.state.Product);
+    formdata.append("client_id", this.state.Clientname);
+    formdata.append("qty", this.state.quantity);
+
+    axiosConfig
+      .post(`/assign_to_client`, formdata)
+      .then((res) => {
+        console.log(res.data?.message);
+        if (res.data?.message) {
+          swal("Product Assigned Successfully");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  submitHandler = (e) => {
+    e.preventDefault();
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    const formdata = new FormData();
+    formdata.append("user_id", pageparmission?.Userinfo?.id);
+    formdata.append("role", pageparmission?.Userinfo?.role);
+    formdata.append("category_id", this.state.category);
+    formdata.append("brand_id", this.state.Brand);
+    formdata.append("product_type_id", this.state.Type);
+    if (this.state.category && this.state.Brand && this.state.Type) {
+      axiosConfig
+        .post(`/getproducts`, formdata)
+        .then((res) => {
+          console.log(res.data.data);
+          this.setState({ showProduct: true });
+
+          this.setState({ ProductListData: res.data.data });
+        })
+        .catch((err) => {
+          console.log(err.response.data);
+          if (err.response.data.message) {
+            swal("No Product Found");
+          }
+        });
+    } else {
+      swal("Error", "Select Mandatory Fields");
+    }
+  };
 
   onGridReady = (params) => {
     this.gridApi = params.api;
@@ -464,10 +572,163 @@ class AssignToClient extends React.Component {
               </Row>
               <Row>
                 <Col>
-                  <AssignClientCompoent />
+                  <Form className="m-1 container" onSubmit={this.submitHandler}>
+                    <Row className="mb-2">
+                      <Col lg="3" md="3">
+                        <FormGroup>
+                          <Label> Choose Category *</Label>
+
+                          <select
+                            onChange={(e) =>
+                              this.setState({ category: e.target.value })
+                            }
+                            className="form-control"
+                            name="Select"
+                            id="Select"
+                          >
+                            <option value="volvo">--Select Category--</option>
+                            {this.state.GetCategory &&
+                              this.state.GetCategory?.map((val, i) => (
+                                <option key={i} value={val?.id}>
+                                  {val?.category_name}
+                                </option>
+                              ))}
+                          </select>
+                        </FormGroup>
+                      </Col>
+                      <Col lg="3" md="3">
+                        <FormGroup>
+                          <Label> Choose Type *</Label>
+
+                          <select
+                            onChange={(e) =>
+                              this.setState({ Type: e.target.value })
+                            }
+                            className="form-control"
+                            name="Select"
+                            id="Select"
+                          >
+                            <option value="volvo">--Select Type--</option>
+                            {this.state.Typelist &&
+                              this.state.Typelist?.map((val, i) => (
+                                <option key={i} value={val?.id}>
+                                  {val?.product_type}
+                                </option>
+                              ))}
+                          </select>
+                        </FormGroup>
+                      </Col>
+                      <Col lg="3" md="3">
+                        <FormGroup>
+                          <Label> Choose Brand *</Label>
+
+                          <select
+                            required
+                            onChange={(e) =>
+                              this.setState({ Brand: e.target.value })
+                            }
+                            className="form-control"
+                            name="Select"
+                            id="Select"
+                          >
+                            <option value="volvo">--Select Brand--</option>
+                            {this.state.Brandlist &&
+                              this.state.Brandlist?.map((val, i) => (
+                                <option key={i} value={val?.id}>
+                                  {val?.brand_name}
+                                </option>
+                              ))}
+                          </select>
+                        </FormGroup>
+                      </Col>
+                      <Col lg="3" md="3">
+                        <Button.Ripple
+                          color="primary"
+                          type="submit"
+                          className="mt-2"
+                        >
+                          Search
+                        </Button.Ripple>
+                      </Col>
+                    </Row>
+                  </Form>
+                  {/* <AssignClientCompoent /> */}
                 </Col>
               </Row>
-              <CardBody>
+              {this.state.showProduct && (
+                <div className="container">
+                  <Form className="m-1" onSubmit={this.submitHandlerAssign}>
+                    <Row className="mb-2">
+                      <Col lg="4" md="4" className="mb-1 ">
+                        <Label>Product List</Label>
+                        <Input
+                          required
+                          type="select"
+                          name="Product"
+                          placeholder="Enter Iden Type"
+                          value={this.state.Product}
+                          onChange={(e) =>
+                            this.setState({ Product: e.target.value })
+                          }
+                        >
+                          <option value="12ROW">--Selecte--</option>
+                          {this.state.ProductListData &&
+                            this.state.ProductListData?.map((val, i) => (
+                              <option key={i} value={val?.id}>
+                                {val?.title}
+                              </option>
+                            ))}
+                        </Input>
+                      </Col>
+                      <Col lg="4" md="4" className="mb-1 ">
+                        <Label>Client List</Label>
+                        <Input
+                          required
+                          type="select"
+                          name="Clientname"
+                          placeholder="Enter Iden Type"
+                          value={this.state.Clientname}
+                          onChange={(e) =>
+                            this.setState({ Clientname: e.target.value })
+                          }
+                        >
+                          <option value="12ROW">--Selecte--</option>
+                          {this.state.Clientlist &&
+                            this.state.Clientlist?.map((val, i) => (
+                              <option key={i} value={val?.id}>
+                                {val?.full_name}
+                              </option>
+                            ))}
+                        </Input>
+                      </Col>
+                      <Col lg="4" md="4" className="mb-1 ">
+                        <Label>Quantity</Label>
+                        <Input
+                          required
+                          type="number"
+                          name="quantity"
+                          placeholder="Enter Quantity..."
+                          value={this.state.quantity}
+                          onChange={(e) =>
+                            this.setState({ quantity: e.target.value })
+                          }
+                        />
+                      </Col>
+                      <Col lg="4" md="4" className="mb-1 ">
+                        <Button.Ripple
+                          color="primary"
+                          type="submit"
+                          className="mr-1 mt-2 mb-1"
+                        >
+                          Assign To Client
+                        </Button.Ripple>
+                      </Col>
+                    </Row>
+                  </Form>
+                </div>
+              )}
+
+              {/* <CardBody>
                 {this.state.rowData === null ? null : (
                   <div className="ag-theme-material w-100 my-2 ag-grid-table">
                     <div className="d-flex flex-wrap justify-content-between align-items-center">
@@ -558,7 +819,7 @@ class AssignToClient extends React.Component {
                     </ContextLayout.Consumer>
                   </div>
                 )}
-              </CardBody>
+              </CardBody> */}
             </Card>
           </Col>
         </Row>

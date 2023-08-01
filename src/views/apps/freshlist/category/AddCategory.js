@@ -64,32 +64,11 @@ export class AddCategory extends Component {
   };
   submitHandler = (e) => {
     e.preventDefault();
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
     const data = new FormData();
-
+    data.append("user_id", pageparmission?.Userinfo?.id);
     data.append("category_name", this.state.category_name);
-    // data.append("type", this.state.type);
-    // data.append("feature", this.state.feature);
-    // data.append("status", this.state.status);
-    // data.append("image", this.state.selectedFile1, this.state.selectedName1);
-    // data.append(
-    //   "thumbnail_img",
-    //   this.state.selectedFile2,
-    //   this.state.selectedName2
-    // );
-    // data.append(
-    //   "web_banner",
-    //   this.state.selectedFile3,
-    //   this.state.selectedName3
-    // );
-    // data.append(
-    //   "app_banner",
-    //   this.state.selectedFile4,
-    //   this.state.selectedName4
-    // );
 
-    // for (var value of data.values()) {
-    //   console.log(value);
-    // }
     axiosConfig
       .post(`/addcategory`, data)
       .then((response) => {

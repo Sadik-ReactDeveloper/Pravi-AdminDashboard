@@ -1,524 +1,845 @@
-import React, { Component } from "react";
+import React from "react";
 import {
   Card,
   CardBody,
-  Col,
-  Form,
-  Row,
   Input,
-  Label,
+  Row,
+  Col,
+  UncontrolledDropdown,
+  DropdownMenu,
+  DropdownItem,
+  DropdownToggle,
   Button,
+  CardTitle,
+  CardText,
+  Label,
+  Form,
   FormGroup,
-  CustomInput,
 } from "reactstrap";
-import { history } from "../../../../history";
-import axiosConfig from "../../../../axiosConfig";
-import { Route } from "react-router-dom";
-import swal from "sweetalert";
-import { CloudLightning } from "react-feather";
 
-export class Placeorder extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      category_name: "",
-      Brand: "",
-      quantity: "",
-      Type: "",
-      Date: "",
-      Price: "",
-      stock: "",
-      Regularprice: "",
-      formValues: [{ PName: "", price: "" }],
-      DiscountPrice: "",
-      Addmore: false,
-      rowData: [],
-      description: "",
-      variety: "",
-      shipmentfee: "",
-      Tags: "",
-      taxrate: "",
-      status: "",
-      // selectedFile1: null,
-      // selectedName1: "",
-      // selectedFile2: null,
-      // selectedName2: "",
-      selectedFile3: [],
-      selectedName3: "",
-      // selectedFile4: null,
-      // selectedName4: "",
-    };
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+import axiosConfig from "../../../../axiosConfig";
+import ReactHtmlParser from "react-html-parser";
+import { ContextLayout } from "../../../../utility/context/Layout";
+import { AgGridReact } from "ag-grid-react";
+import "ag-grid-community/dist/styles/ag-grid.css";
+import { Trash2, ChevronDown, AtSign, Eye, UserPlus } from "react-feather";
+import { history } from "../../../../history";
+import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
+import "../../../../assets/scss/pages/users.scss";
+import { FaWallet, Facart, FaCartArrowDown, FaBoxOpen } from "react-icons/fa";
+import "moment-timezone";
+import { Route } from "react-router-dom";
+// import AssignClientCompoent from "./AssignClientCompoent";
+import swal from "sweetalert";
+
+class Placeorder extends React.Component {
+  state = {
+    product: [],
+    rowData: [],
+    GetCategory: [],
+    Clientlist: [],
+    Brandlist: [],
+    Typelist: [],
+    ProductListData: [],
+    userdata: {},
+    category_name: "",
+    Clientname: "",
+    DeliveryData: "",
+    Product: "",
+    showProduct: false,
+    Type: "",
+    assign_to_client: "",
+    Brand: "",
+    category: "",
+    Viewpermisson: null,
+    Editpermisson: null,
+    Createpermisson: null,
+    Deletepermisson: null,
+    paginationPageSize: 20,
+    currenPageSize: "",
+    getPageSize: "",
+    defaultColDef: {
+      sortable: true,
+      // editable: true,
+      // resizable: true,
+      suppressMenu: true,
+    },
+    columnDefs: [
+      {
+        headerName: "UID",
+        filter: true,
+
+        valueGetter: "node.rowIndex + 1",
+        field: "node.rowIndex + 1",
+        // checkboxSelection: true,
+        width: 150,
+      },
+
+      {
+        headerName: "PRODUCT Image",
+        field: "product",
+        filter: "agSetColumnFilter",
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                {/* <span>{params.data?.title}</span> */}
+
+                {params?.data?.product_images ? (
+                  <>
+                    <img
+                      style={{ borderRadius: "12px" }}
+                      width="60px"
+                      height="40px"
+                      src={params?.data?.product_images[0]}
+                      alt="image"
+                    />
+                  </>
+                ) : (
+                  "NO Image"
+                )}
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "PRODUCT",
+        field: "title",
+        filter: true,
+        width: 150,
+
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params.data?.title}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "CATEGORY",
+        field: "category_name",
+        filter: "agSetColumnFilter",
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params.data?.category_name}</span>
+                {/* <span>vdfgvdfv</span> */}
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Description",
+        field: "description",
+        filter: "agSetColumnFilter",
+        width: 120,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{ReactHtmlParser(params.data?.description)}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "PRICE",
+        field: "price",
+        filter: "agSetColumnFilter",
+        width: 120,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params.data?.price}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "DiscountPrice",
+        field: "discountprice",
+        filter: "agSetColumnFilter",
+        width: 120,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params.data?.discountprice}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Shipping Fee",
+        field: "shipping_fee",
+        filter: "agSetColumnFilter",
+        width: 120,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params.data?.shipping_fee}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Tax Rate",
+        field: "tax_rate",
+        filter: "agSetColumnFilter",
+        width: 120,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params.data?.tax_rate}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Tags",
+        field: "tags",
+        filter: "agSetColumnFilter",
+        width: 120,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params.data?.tags}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "STOCK",
+        field: "stock",
+
+        filter: "agSetColumnFilter",
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{ReactHtmlParser(params.data?.stock)}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Created ",
+        field: "created_date",
+        filter: "agSetColumnFilter",
+        width: 120,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>
+                  {ReactHtmlParser(params.data?.created_date?.split(" ")[0])}
+                </span>
+              </div>
+            </div>
+          );
+        },
+      },
+      // {
+      //   headerName: "ASSIGN TO CLIENT",
+      //   field: "assigntoclient",
+      //   filter: "agSetColumnFilter",
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     // console.log(params.data)
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>Demo</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      {
+        headerName: "Actions",
+        field: "transactions",
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="actions cursor-pointer">
+              {this.state.Editpermisson && (
+                <Route
+                  render={({ history }) => (
+                    <UserPlus
+                      className="mr-50"
+                      color="green"
+                      size={20}
+                      onClick={() =>
+                        this.props.history.push({
+                          pathname: `/app/freshlist/house/assignedPage/${params.data?.id}`,
+                          state: params?.data,
+                        })
+                      }
+                    />
+                  )}
+                />
+              )}
+              {this.state.Deletepermisson && (
+                <Trash2
+                  className="mr-50"
+                  size="25px"
+                  color="Red"
+                  onClick={() => {
+                    let selectedData = this.gridApi.getSelectedRows();
+                    this.runthisfunction(params.data._id);
+                    this.gridApi.updateRowData({ remove: selectedData });
+                  }}
+                />
+              )}
+            </div>
+          );
+        },
+      },
+    ],
+  };
+
   async componentDidMount() {
-    await axiosConfig.get("/getcategory").then((response) => {
-      let rowData = response.data.data?.category;
-      console.log(rowData);
-      this.setState({ rowData });
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    this.setState({ userdata: pageparmission });
+    let newparmisson = pageparmission?.role?.find(
+      (value) => value?.pageName === "Place Order"
+    );
+    this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
+    this.setState({
+      Createpermisson: newparmisson?.permission.includes("Create"),
     });
-    await axiosConfig.get("/getbrand").then((response) => {
+    this.setState({
+      Editpermisson: newparmisson?.permission.includes("Edit"),
+    });
+    this.setState({
+      Deletepermisson: newparmisson?.permission.includes("Delete"),
+    });
+    const formdata = new FormData();
+    formdata.append("user_id", pageparmission?.Userinfo?.id);
+    formdata.append("role", pageparmission?.Userinfo?.role);
+
+    await axiosConfig.post("/getbrand", formdata).then((response) => {
       let Brandlist = response.data.data?.brands;
-      //   console.log(Brandlist);
+
       this.setState({ Brandlist });
     });
-  }
-
-  handleChange(i, e) {
-    let formValues = this.state.formValues;
-    formValues[i][e.target.name] = e.target.value;
-    this.setState({ formValues });
-  }
-
-  addFormFields() {
-    this.setState({
-      formValues: [...this.state.formValues, { PName: "", price: "" }],
+    await axiosConfig.post("/getuserlist", formdata).then((response) => {
+      let Clientlist = response.data.data?.users;
+      console.log(Clientlist);
+      this.setState({ Clientlist });
     });
-    this.handleSubmit();
-  }
 
-  removeFormFields(i) {
-    let formValues = this.state.formValues;
-    formValues.splice(i, 1);
-    this.setState({ formValues });
-  }
+    await axiosConfig.post("/getcategory", formdata).then((response) => {
+      let GetCategory = response.data.data?.category;
+      // console.log(GetCategory);
+      this.setState({ GetCategory });
+    });
 
-  handleSubmit() {
-    console.log(this.state.formValues);
-  }
-
-  // onChangeHandler1 = (event) => {
-  //   this.setState({ selectedFile1: event.target.files[0] });
-  //   this.setState({ selectedName1: event.target.files[0].name });
-  //   console.log(event.target.files[0]);
-  // };
-  // onChangeHandler2 = (event) => {
-  //   this.setState({ selectedFile2: event.target.files[0] });
-  //   this.setState({ selectedName2: event.target.files[0].name });
-  //   console.log(event.target.files[0]);
-  // };
-  onChangeHandler3 = (event) => {
-    let selectedName = Array.from(event.target.files);
-    console.log(selectedName);
-    this.setState({ selectedFile3: selectedName });
-
-    // this.setState({ selectedFile3: event.target.files });
-    // this.setState({ selectedName3: event.target.files[0].name });
-    // console.log(event.target.files);
-  };
-  // onChangeHandler4 = (event) => {
-  //   this.setState({ selectedFile4: event.target.files[0] });
-  //   this.setState({ selectedName4: event.target.files[0].name });
-  //   console.log(event.target.files[0]);
-  // };
-
-  changeHandler1 = (e) => {
-    this.setState({ status: e.target.value });
-  };
-  changeHandler = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
-  submitHandler = (e) => {
-    e.preventDefault();
-    const data = new FormData();
-    console.log(this.state.formValues);
-    data.append("brand_id", this.state.Brand);
-    data.append("title", this.state.P_Title);
-    data.append("veriety", JSON.stringify(this.state.formValues));
-    data.append("category_id", this.state.category_name);
-    data.append("stock", this.state.stock);
-    data.append("price", this.state.Price);
-    data.append("discountprice", this.state.DiscountPrice);
-    data.append("description", this.state.description);
-    data.append("shipping_fee", this.state.shipmentfee);
-    data.append("tax_rate", this.state.taxrate);
-    data.append("tags", this.state.Tags);
-    data.append("status", "Active");
-    // this.state.selectedFile3.forEach((image, index) => {
-    //   data.append(`image`, image);
-    // });
-    // debugger;
-    for (let i = 0; i < this.state.selectedFile3?.length; i++) {
-      data.append("images[]", this.state.selectedFile3[i]);
-    }
-    // for (const file of this.state.selectedFile3) {
-    //   if (this.state.selectedFile3 !== null) {
-    //     data.append("image_name", file);
-    //   }
-    // }
-
-    axiosConfig
-      .post(`/addproduct`, data, {
-        headers: {
-          "Content-Type": "multipart/form-data; ",
-        },
-      })
+    await axiosConfig
+      .post("/productlistapi", formdata)
+      // .post("/productlistapi")
       .then((response) => {
-        console.log(response);
-        if (response.data.success) {
-          swal("Success!", "You Data iS been Submitted", "success");
-          // this.props.history.push("/app/freshlist/category/categoryList");
-        }
+        this.setState({ rowData: response.data.data });
+        // console.log(response.data.data);
       })
       .catch((error) => {
         console.log(error);
       });
+
+    await axiosConfig
+      .post("/producttypelistview", formdata)
+      .then((response) => {
+        let Typelist = response.data.data;
+        // console.log(Typelist);
+        this.setState({ Typelist });
+      });
+
+    // await axiosConfig
+    //   .post("/productlistapi", formdata)
+    //   .then((response) => {
+    //     this.setState({ ProductListData: response.data.data });
+    //     console.log(response.data.data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error.response);
+    //   });
+  }
+
+  async runthisfunction(id) {
+    console.log(id);
+    await axiosConfig.get(`/deltermcondition/${id}`).then((response) => {
+      console.log(response);
+    });
+  }
+  submitHandlerAssign = (e) => {
+    e.preventDefault();
+
+    let formdata = new FormData();
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    formdata.append("user_id", pageparmission?.Userinfo?.id);
+    formdata.append("category_id", this.state.category);
+    formdata.append("brand_id", this.state.Brand);
+    formdata.append("product_type_id", this.state.Type);
+    formdata.append("product_id", this.state.Product);
+    formdata.append("client_id", this.state.Clientname);
+    formdata.append("qty", this.state.quantity);
+
+    axiosConfig
+      .post(`/assign_to_client`, formdata)
+      .then((res) => {
+        console.log(res.data?.message);
+        if (res.data?.message) {
+          swal("Product Assigned Successfully");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  submitHandler = (e) => {
+    e.preventDefault();
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    const formdata = new FormData();
+    formdata.append("user_id", pageparmission?.Userinfo?.id);
+    formdata.append("role", pageparmission?.Userinfo?.role);
+    formdata.append("category_id", this.state.category);
+    formdata.append("brand_id", this.state.Brand);
+    formdata.append("product_type_id", this.state.Type);
+    if (this.state.category && this.state.Brand && this.state.Type) {
+      axiosConfig
+        .post(`/getproducts`, formdata)
+        .then((res) => {
+          console.log(res.data.data);
+          this.setState({ showProduct: true });
+
+          this.setState({ ProductListData: res.data.data });
+        })
+        .catch((err) => {
+          console.log(err.response.data);
+          if (err.response.data.message) {
+            swal("No Product Found");
+          }
+        });
+    } else {
+      swal("Error", "Select Mandatory Fields");
+    }
+  };
+
+  onGridReady = (params) => {
+    this.gridApi = params.api;
+    this.gridColumnApi = params.columnApi;
+    this.setState({
+      currenPageSize: this.gridApi.paginationGetCurrentPage() + 1,
+      getPageSize: this.gridApi.paginationGetPageSize(),
+      totalPages: this.gridApi.paginationGetTotalPages(),
+    });
+  };
+
+  updateSearchQuery = (val) => {
+    this.gridApi.setQuickFilter(val);
+  };
+
+  filterSize = (val) => {
+    if (this.gridApi) {
+      this.gridApi.paginationSetPageSize(Number(val));
+      this.setState({
+        currenPageSize: val,
+        getPageSize: val,
+      });
+    }
   };
   render() {
+    const { rowData, columnDefs, defaultColDef } = this.state;
     return (
-      <div>
-        <Card>
-          <h1 className="p-2 ">Place Order</h1>
-          <Row className="m-2">
-            <Col>
-              <h2>Enter Information</h2>
-            </Col>
-            {/* <Col>
-              <Route
-                render={({ history }) => (
-                  <Button
-                    className=" btn btn-danger float-right"
-                    onClick={() =>
-                      history.push("/app/freshlist/category/categoryList")
-                    }
-                  >
-                    Back
-                  </Button>
-                )}
-              />
-            </Col> */}
-          </Row>
-          <CardBody>
-            <Form className="m-1" onSubmit={this.submitHandler}>
-              <Row className="mb-2">
-                <Col lg="6" md="6">
-                  <FormGroup>
-                    <Label> Choose Category *</Label>
-
-                    <select
-                      onChange={(e) =>
-                        this.setState({ category_name: e.target.value })
-                      }
-                      className="form-control"
-                      name="Select"
-                      id="Select"
-                    >
-                      <option value="volvo">--Select Category--</option>
-                      {this.state.rowData &&
-                        this.state.rowData?.map((val, i) => (
-                          <option key={i} value={val?.id}>
-                            {val?.category_name}
-                          </option>
-                        ))}
-                    </select>
-                    {/* <Input
-                      type="text"
-                      placeholder="Title"
-                      name="category_name"
-                      bsSize="lg"
-                      value={this.state.category_name}
-                      onChange={this.changeHandler}
-                    /> */}
-                  </FormGroup>
+      <>
+        <Row>
+          {/* <Col lg="4" md="12">
+            <Card
+              className="bg-secondary  py-3 "
+              body
+              inverse
+              style={{ borderColor: "white" }}
+            >
+              <CardTitle
+                className="fntweight"
+                tag="h3"
+                style={{ color: "black", fontSize: "16px" }}
+              >
+                <FaBoxOpen style={{ color: "orange" }} />
+                &nbsp;&nbsp; Total Products
+              </CardTitle>
+              <CardText
+                className="wt-text"
+                tag="span"
+                style={{ color: "black", marginLeft: "4px" }}
+              >
+                {this.state.product}
+              </CardText>
+            </Card>
+          </Col> */}
+          {/* <Col lg="4" md="12">
+            <Card
+              className="bg-secondary  py-3"
+              body
+              inverse
+              style={{ borderColor: "white" }}
+            >
+              <CardTitle
+                className="fntweight"
+                tag="h3"
+                style={{ color: "black", fontSize: "16px" }}
+              >
+                <FaBoxOpen style={{ color: "orange" }} />
+                &nbsp;&nbsp; Total Categories
+              </CardTitle>
+              <CardText
+                className="wt-text"
+                tag="span"
+                style={{ color: "black", marginLeft: "4px" }}
+              >
+                {this.state.product}
+              </CardText>
+            </Card>
+          </Col> */}
+          {/* <Col lg="4" md="12">
+            <Card
+              className="bg-secondary  py-3"
+              body
+              inverse
+              style={{ borderColor: "white" }}
+            >
+              <CardTitle
+                className="fntweight"
+                tag="h3"
+                style={{ color: "black", fontSize: "16px" }}
+              >
+                <FaBoxOpen style={{ color: "orange" }} />
+                &nbsp;&nbsp; Total Barnds
+              </CardTitle>
+              <CardText
+                className="wt-text"
+                tag="span"
+                style={{ color: "black", marginLeft: "4px" }}
+              >
+                {this.state.product}
+              </CardText>
+            </Card>
+          </Col> */}
+        </Row>
+        <Row className="app-user-list">
+          <Col sm="12"></Col>
+          <Col sm="12">
+            <Card>
+              {/* <Row className="pt-1 mx-1"></Row> */}
+              <Row className="m-2">
+                <Col>
+                  <h1 col-sm-6 className="float-left">
+                    Create Order
+                  </h1>
                 </Col>
-                <Col lg="6" md="6">
-                  <FormGroup>
-                    <Label> Choose Type *</Label>
-
-                    <select
-                      onChange={(e) => this.setState({ Type: e.target.value })}
-                      className="form-control"
-                      name="Select"
-                      id="Select"
-                    >
-                      <option value="volvo">--Select Type--</option>
-                      {this.state.rowData &&
-                        this.state.rowData?.map((val, i) => (
-                          <option key={i} value={val?.id}>
-                            {val?.category_name}
-                          </option>
-                        ))}
-                    </select>
-                    {/* <Input
-                      type="text"
-                      placeholder="Title"
-                      name="category_name"
-                      bsSize="lg"
-                      value={this.state.category_name}
-                      onChange={this.changeHandler}
-                    /> */}
-                  </FormGroup>
+                <Col>
+                  <Route
+                    render={({ history }) => (
+                      <Button
+                        className="float-right"
+                        color="primary"
+                        onClick={() => history.push("/app/freshlist/order/all")}
+                      >
+                        Back
+                      </Button>
+                    )}
+                  />
                 </Col>
-                <Col lg="6" md="6">
-                  <FormGroup>
-                    <Label> Choose Brand *</Label>
-
-                    <select
-                      required
-                      onChange={(e) => this.setState({ Brand: e.target.value })}
-                      className="form-control"
-                      name="Select"
-                      id="Select"
-                    >
-                      <option value="volvo">--Select Brand--</option>
-                      {this.state.Brandlist &&
-                        this.state.Brandlist?.map((val, i) => (
-                          <option key={i} value={val?.id}>
-                            {val?.brand_name}
-                          </option>
-                        ))}
-                    </select>
-                  </FormGroup>
-                </Col>
-                <Col lg="6" md="6">
-                  <FormGroup>
-                    <Label> Choose user *</Label>
-
-                    <select
-                      required
-                      onChange={(e) => this.setState({ Brand: e.target.value })}
-                      className="form-control"
-                      name="Select"
-                      id="Select"
-                    >
-                      <option value="volvo">--Select Brand--</option>
-                      {this.state.Brandlist &&
-                        this.state.Brandlist?.map((val, i) => (
-                          <option key={i} value={val?.id}>
-                            {val?.brand_name}
-                          </option>
-                        ))}
-                    </select>
-                  </FormGroup>
-                </Col>
-                <Col lg="6" md="6">
-                  <FormGroup>
-                    <Label>Quantity</Label>
-                    <Input
-                      type="number"
-                      placeholder="Quantity..."
-                      name="quantity"
-                      bsSize="lg"
-                      value={this.state.quantity}
-                      onChange={this.changeHandler}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col lg="6" md="6">
-                  <FormGroup>
-                    <Label>Delivery Data</Label>
-                    <Input
-                      type="date"
-                      placeholder="Date..."
-                      name="Date"
-                      bsSize="lg"
-                      value={this.state.Date}
-                      onChange={this.changeHandler}
-                    />
-                  </FormGroup>
-                </Col>
-                {/* <Col lg="12" md="12">
-                  <FormGroup>
-                    <Label>Description</Label>
-                    <textarea
-                      type="text"
-                      rows={5}
-                      className="form-control"
-                      placeholder="Description ..."
-                      name="description"
-                      bsSize="lg"
-                      value={this.state.description}
-                      onChange={this.changeHandler}
-                    />
-                  </FormGroup>
-                </Col> */}
-                {/* <Col lg="6" md="6">
-                  <FormGroup>
-                    <Label> PRICE (₹)</Label>
-                    <Input
-                      type="number"
-                      placeholder="Amount In Number"
-                      name="Price"
-                      bsSize="lg"
-                      value={this.state.Price}
-                      onChange={this.changeHandler}
-                    />
-                  </FormGroup>
-                </Col> */}
-                {/* <Col lg="6" md="6">
-                  <Row>
-                    <Col lg="2" sm="2" md="2">
-                      <div>
-                        <h5 className="mt-2"> OR</h5>
-                      </div>
-                    </Col>
-                    <Col>
-                      <FormGroup>
-                        <Button
-                          style={{ width: "100%" }}
-                          color="primary"
-                          className="button add mt-2"
-                          type="button"
-                          onClick={() => this.setState({ Addmore: true })}
-                        >
-                          Add
-                        </Button>
-
-                        
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                </Col> */}
               </Row>
-              {this.state.Addmore ? (
-                <>
-                  <Row>
-                    <Col lg="12">
-                      {this.state.formValues.map((element, index) => (
-                        <div className="" key={index}>
-                          <Row className="py-1">
-                            <Col lg="4" sm="4">
-                              <label>Product Name</label>
-                              <input
-                                className="form-control"
-                                type="text"
-                                name="PName"
-                                value={element.PName || ""}
-                                onChange={(e) => this.handleChange(index, e)}
-                              />
-                            </Col>
-                            <Col lg="4" sm="4">
-                              <label>Price</label>
-                              <input
-                                className="form-control"
-                                type="number"
-                                name="price"
-                                value={element.price || ""}
-                                onChange={(e) => this.handleChange(index, e)}
-                              />
-                            </Col>
-                            <Col>
-                              {index ? (
-                                <Button
-                                  color="primary"
-                                  type="button"
-                                  className="button remove mt-2"
-                                  onClick={() => this.removeFormFields(index)}
-                                >
-                                  Remove
-                                </Button>
-                              ) : null}
-                              <Button
-                                color="primary"
-                                className="button add mt-2  mx-3"
-                                type="button"
-                                onClick={() => this.addFormFields()}
-                              >
-                                Add
-                              </Button>
-                            </Col>
-                          </Row>
-                        </div>
-                      ))}
-                    </Col>
-                  </Row>
-                </>
-              ) : null}
-
-              {/* <Row>
-                <Col lg="6" md="6">
-                  <FormGroup>
-                    <Label> Quantity </Label>
-                    <Input
-                      type="number"
-                      placeholder="in Number"
-                      name="stock"
-                      bsSize="lg"
-                      value={this.state.stock}
-                      onChange={this.changeHandler}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col lg="6" md="6">
-                  <FormGroup>
-                    <Label>Discount Price</Label>
-                    <Input
-                      type="number"
-                      placeholder="Discount Price"
-                      name="DiscountPrice"
-                      bsSize="lg"
-                      value={this.state.DiscountPrice}
-                      onChange={this.changeHandler}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col lg="6" md="6">
-                  <FormGroup>
-                    <Label>SHIPING FEE(₹)</Label>
-                    <Input
-                      type="number"
-                      placeholder="Number..."
-                      name="shipmentfee"
-                      bsSize="lg"
-                      value={this.state.shipmentfee}
-                      onChange={this.changeHandler}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col lg="6" md="6">
-                  <FormGroup>
-                    <Label>TAX RATE (%)</Label>
-                    <Input
-                      type="number"
-                      placeholder="Tax in Percentage"
-                      name="taxrate"
-                      bsSize="lg"
-                      value={this.state.taxrate}
-                      onChange={this.changeHandler}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col lg="6" md="6">
-                  <FormGroup>
-                    <Label>TAGS</Label>
-                    <Input
-                      type="text"
-                      placeholder="Type here..."
-                      name="Tags"
-                      bsSize="lg"
-                      value={this.state.Tags}
-                      onChange={this.changeHandler}
-                    />
-                  </FormGroup>
-                </Col>
-              </Row> */}
-              {/* <Row>
-                <Col lg="6" sm="6">
-                  <FormGroup>
-                    <Label>Media & Published (Select multiple files)</Label>
-                    <CustomInput
-                      multiple
-                      style={{ cursor: "pointer" }}
-                      accept="image/png,image/jpeg,image/jpg"
-                      name="image[]"
-                      type="file"
-                      onChange={this.onChangeHandler3}
-                    />
-                  </FormGroup>
-                </Col>
-              </Row> */}
               <Row>
-                <Button.Ripple
-                  color="primary"
-                  type="submit"
-                  className="mr-1 mb-1"
-                >
-                  Add Order
-                </Button.Ripple>
+                <Col>
+                  <Form className="m-1 container" onSubmit={this.submitHandler}>
+                    <Row className="mb-2">
+                      <Col lg="3" md="3">
+                        <FormGroup>
+                          <Label> Choose Category *</Label>
+
+                          <select
+                            onChange={(e) =>
+                              this.setState({ category: e.target.value })
+                            }
+                            className="form-control"
+                            name="Select"
+                            id="Select"
+                          >
+                            <option value="volvo">--Select Category--</option>
+                            {this.state.GetCategory &&
+                              this.state.GetCategory?.map((val, i) => (
+                                <option key={i} value={val?.id}>
+                                  {val?.category_name}
+                                </option>
+                              ))}
+                          </select>
+                        </FormGroup>
+                      </Col>
+                      <Col lg="3" md="3">
+                        <FormGroup>
+                          <Label> Choose Type *</Label>
+
+                          <select
+                            onChange={(e) =>
+                              this.setState({ Type: e.target.value })
+                            }
+                            className="form-control"
+                            name="Select"
+                            id="Select"
+                          >
+                            <option value="volvo">--Select Type--</option>
+                            {this.state.Typelist &&
+                              this.state.Typelist?.map((val, i) => (
+                                <option key={i} value={val?.id}>
+                                  {val?.product_type}
+                                </option>
+                              ))}
+                          </select>
+                        </FormGroup>
+                      </Col>
+                      <Col lg="3" md="3">
+                        <FormGroup>
+                          <Label> Choose Brand *</Label>
+
+                          <select
+                            required
+                            onChange={(e) =>
+                              this.setState({ Brand: e.target.value })
+                            }
+                            className="form-control"
+                            name="Select"
+                            id="Select"
+                          >
+                            <option value="volvo">--Select Brand--</option>
+                            {this.state.Brandlist &&
+                              this.state.Brandlist?.map((val, i) => (
+                                <option key={i} value={val?.id}>
+                                  {val?.brand_name}
+                                </option>
+                              ))}
+                          </select>
+                        </FormGroup>
+                      </Col>
+                      <Col lg="3" md="3">
+                        <Button.Ripple
+                          color="primary"
+                          type="submit"
+                          className="mt-2"
+                        >
+                          Search
+                        </Button.Ripple>
+                      </Col>
+                    </Row>
+                  </Form>
+                  {/* <AssignClientCompoent /> */}
+                </Col>
               </Row>
-            </Form>
-          </CardBody>
-        </Card>
-      </div>
+              {this.state.showProduct && (
+                <div className="container">
+                  <Form className="m-1" onSubmit={this.submitHandlerAssign}>
+                    <Row className="mb-2">
+                      <Col lg="4" md="4" className="mb-1 ">
+                        <Label>Product List</Label>
+                        <Input
+                          required
+                          type="select"
+                          name="Product"
+                          placeholder="Enter Iden Type"
+                          value={this.state.Product}
+                          onChange={(e) =>
+                            this.setState({ Product: e.target.value })
+                          }
+                        >
+                          <option value="12ROW">--Selecte--</option>
+                          {this.state.ProductListData &&
+                            this.state.ProductListData?.map((val, i) => (
+                              <option key={i} value={val?.id}>
+                                {val?.title}
+                              </option>
+                            ))}
+                        </Input>
+                      </Col>
+                      {/* {userdata && userdata?.Userinfo?.role === "Trupee" && (
+                        <Col lg="4" md="4" className="mb-1 ">
+                          <Label>User List</Label>
+                          <Input
+                            required
+                            type="select"
+                            name="Clientname"
+                            placeholder="Enter Iden Type"
+                            value={this.state.Clientname}
+                            onChange={(e) =>
+                              this.setState({ Clientname: e.target.value })
+                            }
+                          >
+                            <option value="12ROW">--Selecte--</option>
+                            {this.state.Clientlist &&
+                              this.state.Clientlist?.map((val, i) => (
+                                <option key={i} value={val?.id}>
+                                  {val?.full_name}
+                                </option>
+                              ))}
+                          </Input>
+                        </Col>
+                      )} */}
+                      <Col lg="4" md="4" className="mb-1 ">
+                        <Label>Quantity</Label>
+                        <Input
+                          required
+                          type="number"
+                          name="quantity"
+                          placeholder="Enter Quantity..."
+                          value={this.state.quantity}
+                          onChange={(e) =>
+                            this.setState({ quantity: e.target.value })
+                          }
+                        />
+                      </Col>
+                      <Col lg="4" md="4" className="mb-1 ">
+                        <Label>Delivery Date</Label>
+                        <Input
+                          required
+                          type="date"
+                          name="DeliveryData"
+                          // placeholder="Enter Quantity..."
+                          value={this.state.DeliveryData}
+                          onChange={(e) =>
+                            this.setState({ DeliveryData: e.target.value })
+                          }
+                        />
+                      </Col>
+                      <Col lg="4" md="4" className="mb-1 ">
+                        <Button.Ripple
+                          color="primary"
+                          type="submit"
+                          className="mr-1 mt-2 mb-1"
+                        >
+                          Create Order
+                        </Button.Ripple>
+                      </Col>
+                    </Row>
+                  </Form>
+                </div>
+              )}
+
+              {/* <CardBody>
+                {this.state.rowData === null ? null : (
+                  <div className="ag-theme-material w-100 my-2 ag-grid-table">
+                    <div className="d-flex flex-wrap justify-content-between align-items-center">
+                      <div className="mb-1">
+                        <UncontrolledDropdown className="p-1 ag-dropdown">
+                          <DropdownToggle tag="div">
+                            {this.gridApi
+                              ? this.state.currenPageSize
+                              : "" * this.state.getPageSize -
+                                (this.state.getPageSize - 1)}{" "}
+                            -{" "}
+                            {this.state.rowData.length -
+                              this.state.currenPageSize *
+                                this.state.getPageSize >
+                            0
+                              ? this.state.currenPageSize *
+                                this.state.getPageSize
+                              : this.state.rowData.length}{" "}
+                            of {this.state.rowData.length}
+                            <ChevronDown className="ml-50" size={15} />
+                          </DropdownToggle>
+                          <DropdownMenu right>
+                            <DropdownItem
+                              tag="div"
+                              onClick={() => this.filterSize(20)}
+                            >
+                              20
+                            </DropdownItem>
+                            <DropdownItem
+                              tag="div"
+                              onClick={() => this.filterSize(50)}
+                            >
+                              50
+                            </DropdownItem>
+                            <DropdownItem
+                              tag="div"
+                              onClick={() => this.filterSize(100)}
+                            >
+                              100
+                            </DropdownItem>
+                            <DropdownItem
+                              tag="div"
+                              onClick={() => this.filterSize(134)}
+                            >
+                              134
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </UncontrolledDropdown>
+                      </div>
+                      <div className="d-flex flex-wrap justify-content-between mb-1">
+                        <div className="table-input mr-1">
+                          <Input
+                            placeholder="search..."
+                            onChange={(e) =>
+                              this.updateSearchQuery(e.target.value)
+                            }
+                            value={this.state.value}
+                          />
+                        </div>
+                        <div className="export-btn">
+                          <Button.Ripple
+                            color="primary"
+                            onClick={() => this.gridApi.exportDataAsCsv()}
+                          >
+                            Export as CSV
+                          </Button.Ripple>
+                        </div>
+                      </div>
+                    </div>
+                    <ContextLayout.Consumer>
+                      {(context) => (
+                        <AgGridReact
+                          gridOptions={{}}
+                          rowSelection="multiple"
+                          defaultColDef={defaultColDef}
+                          columnDefs={columnDefs}
+                          rowData={rowData}
+                          onGridReady={this.onGridReady}
+                          colResizeDefault={"shift"}
+                          animateRows={true}
+                          floatingFilter={false}
+                          pagination={true}
+                          paginationPageSize={this.state.paginationPageSize}
+                          pivotPanelShow="always"
+                          enableRtl={context.state.direction === "rtl"}
+                        />
+                      )}
+                    </ContextLayout.Consumer>
+                  </div>
+                )}
+              </CardBody> */}
+            </Card>
+          </Col>
+        </Row>
+      </>
     );
   }
 }

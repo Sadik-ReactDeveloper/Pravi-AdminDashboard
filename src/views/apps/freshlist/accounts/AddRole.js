@@ -19,10 +19,10 @@ export const Roles = [
         title: "User List",
         permission: ["View", "Create", "Edit", "Delete"],
       },
-      {
-        title: "Client Account",
-        permission: ["View", "Create", "Edit", "Delete"],
-      },
+      // {
+      //   title: "Client Account",
+      //   permission: ["View", "Create", "Edit", "Delete"],
+      // },
 
       // {
       //   title: "Accountant Account",
@@ -59,6 +59,10 @@ export const Roles = [
       // },
       {
         title: "Assign To Client",
+        permission: ["View", "Create", "Edit", "Delete"],
+      },
+      {
+        title: "Assigned List",
         permission: ["View", "Create", "Edit", "Delete"],
       },
 
