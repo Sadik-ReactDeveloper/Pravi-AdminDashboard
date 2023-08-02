@@ -119,17 +119,20 @@ export class AddRateMaster extends Component {
     data.append("category_id", this.state.category_name);
     data.append("price", this.state.Price);
     data.append("status", "Active");
-
-    axiosConfig
-      .post(`/addratemaster`, data)
-      .then((response) => {
-        if (response?.data?.success) {
-          swal("Success!", "You Data iS been Submitted", "success");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (this.state.Brand && this.state.category_name && this.state.Price) {
+      axiosConfig
+        .post(`/addratemaster`, data)
+        .then((response) => {
+          if (response?.data?.success) {
+            swal("Success!", "You Data has been Submitted", "success");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      swal("Enter All Fields");
+    }
   };
   render() {
     return (
