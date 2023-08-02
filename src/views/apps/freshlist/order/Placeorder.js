@@ -409,23 +409,30 @@ class Placeorder extends React.Component {
 
     formdata.append("qty", this.state.quantity);
     formdata.append("delivery_date", this.state.DeliveryDate);
-
-    axiosConfig
-      .post(`/create_order`, formdata)
-      .then((res) => {
-        console.log(res.data);
-        if (res.data?.message) {
-          this.setState({ qty: "" });
-          this.setState({ delivery_date: "" });
-          swal("Success", "Order Created Successfully");
-        }
-      })
-      .catch((err) => {
-        console.log(err.response?.data.message);
-        if (err.response?.data.message) {
-          swal("Error", `${err.response?.data.message}`);
-        }
-      });
+    if (
+      this.state.Clientlist &&
+      this.state.DeliveryDate &&
+      this.state.quantity
+    ) {
+      axiosConfig
+        .post(`/create_order`, formdata)
+        .then((res) => {
+          console.log(res.data);
+          if (res.data?.message) {
+            this.setState({ qty: "" });
+            this.setState({ delivery_date: "" });
+            swal("Success", "Order Created Successfully");
+          }
+        })
+        .catch((err) => {
+          console.log(err.response?.data.message);
+          if (err.response?.data.message) {
+            swal("Error", `${err.response?.data.message}`);
+          }
+        });
+    } else {
+      swal("Select and Enter Details");
+    }
   };
   submitHandler = (e) => {
     e.preventDefault();
