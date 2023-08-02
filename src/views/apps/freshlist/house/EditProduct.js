@@ -52,8 +52,11 @@ export class EditProduct extends Component {
     let { id } = this.props?.match.params;
     console.log(id);
     console.log(this.props?.location?.state);
-    console.log(this.props?.location?.state?.veriety);
-    let formdata = new FormData();
+    console.log(JSON.parse(this.props?.location?.state?.veriety));
+    let variety = JSON.parse(this.props?.location?.state?.veriety);
+    if (variety.length > 0) {
+      this.setState({ Addmore: true });
+    }
     // formdata.append("")
     // axiosConfig
     //   .post(``)
@@ -68,6 +71,7 @@ export class EditProduct extends Component {
       category_name: this.props?.location?.state?.category_name,
     });
     this.setState({ P_Title: this.props?.location?.state?.title });
+
     this.setState({ Price: this.props?.location?.state?.price });
     this.setState({ stock: this.props?.location?.state?.stock });
 
@@ -75,7 +79,9 @@ export class EditProduct extends Component {
       DiscountPrice: this.props?.location?.state?.discountprice,
     });
     this.setState({ description: this.props?.location?.state?.description });
-    // this.setState({ variety: this.props?.location?.state?.category_name })
+    this.setState({
+      formValues: JSON.parse(this.props?.location?.state?.veriety),
+    });
     this.setState({ shipmentfee: this.props?.location?.state?.shipping_fee });
     this.setState({ Tags: this.props?.location?.state?.tags });
     this.setState({ taxrate: this.props?.location?.state?.tax_rate });

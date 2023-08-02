@@ -337,7 +337,7 @@ const navigationConfig = [
     type: "item",
     icon: <FaCircle size={8} />,
     permissions: ["admin", "editor"],
-    navLink: "/app/freshlist/subcategory/subCategoryList",
+    navLink: "/app/freshlist/subcategory/Bills",
   },
   {
     id: "invoice Generator",
@@ -345,7 +345,7 @@ const navigationConfig = [
     type: "item",
     icon: <FaCircle size={8} />,
     permissions: ["admin", "editor"],
-    navLink: "/app/freshlist/subcategory/subCategoryList",
+    navLink: "/app/freshlist/subcategory/InvoiceGenerator",
   },
   {
     id: "invoice Re-Generator",
@@ -353,7 +353,7 @@ const navigationConfig = [
     type: "item",
     icon: <FaCircle size={8} />,
     permissions: ["admin", "editor"],
-    navLink: "/app/freshlist/subcategory/subCategoryList",
+    navLink: "/app/freshlist/subcategory/inVoiceRegenerator",
   },
   {
     id: "invoices",
@@ -361,7 +361,7 @@ const navigationConfig = [
     type: "item",
     icon: <FaCircle size={8} />,
     permissions: ["admin", "editor"],
-    navLink: "/app/freshlist/subcategory/subCategoryList",
+    navLink: "/app/freshlist/subcategory/inVoices",
   },
   {
     id: "Payment Status",
@@ -369,7 +369,7 @@ const navigationConfig = [
     type: "item",
     icon: <FaCircle size={8} />,
     permissions: ["admin", "editor"],
-    navLink: "/app/freshlist/subcategory/subCategoryList",
+    navLink: "/app/freshlist/subcategory/PaymentStatus",
   },
   {
     id: "Payment completed",
@@ -377,7 +377,7 @@ const navigationConfig = [
     type: "item",
     icon: <FaCircle size={8} />,
     permissions: ["admin", "editor"],
-    navLink: "/app/freshlist/subcategory/subCategoryList",
+    navLink: "/app/freshlist/subcategory/paymentcompleted",
   },
   {
     type: "groupHeader",
@@ -390,7 +390,7 @@ const navigationConfig = [
     type: "item",
     icon: <FaList size={15} />,
     permissions: ["admin", "editor"],
-    navLink: "/app/freshlist/cart/suggestedProducts",
+    navLink: "/app/freshlist/cart/budgetlist",
   },
   {
     id: "Budget Assignment",

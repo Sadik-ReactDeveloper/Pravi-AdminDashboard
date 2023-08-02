@@ -319,6 +319,25 @@ const ViewCategory = lazy(() =>
 const SubCategoryList = lazy(() =>
   import("./views/apps/freshlist/subcategory/SubCategoryList")
 );
+const Bills = lazy(() => import("./views/apps/freshlist/subcategory/Bills"));
+const InvoiceGenerator = lazy(() =>
+  import("./views/apps/freshlist/subcategory/InvoiceGenerator")
+);
+
+const inVoiceRegenerator = lazy(() =>
+  import("./views/apps/freshlist/subcategory/inVoiceRegenerator")
+);
+
+const inVoices = lazy(() =>
+  import("./views/apps/freshlist/subcategory/inVoices")
+);
+
+const PaymentStatus = lazy(() =>
+  import("./views/apps/freshlist/subcategory/PaymentStatus")
+);
+const paymentcompleted = lazy(() =>
+  import("./views/apps/freshlist/subcategory/paymentcompleted")
+);
 const AddSubCategory = lazy(() =>
   import("./views/apps/freshlist/subcategory/AddSubCategory")
 );
@@ -1110,6 +1129,27 @@ class AppRouter extends React.Component {
             path="/app/freshlist/subcategory/subCategoryList"
             component={SubCategoryList}
           />
+          <AppRoute path="/app/freshlist/subcategory/Bills" component={Bills} />
+          <AppRoute
+            path="/app/freshlist/subcategory/InvoiceGenerator"
+            component={InvoiceGenerator}
+          />
+          <AppRoute
+            path="/app/freshlist/subcategory/inVoices"
+            component={inVoices}
+          />
+          <AppRoute
+            path="/app/freshlist/subcategory/inVoiceRegenerator"
+            component={inVoiceRegenerator}
+          />
+          <AppRoute
+            path="/app/freshlist/subcategory/PaymentStatus"
+            component={PaymentStatus}
+          />
+          <AppRoute
+            path="/app/freshlist/subcategory/paymentcompleted"
+            component={paymentcompleted}
+          />
           <AppRoute
             path="/app/freshlist/subcategory/addSubCategory"
             component={AddSubCategory}
@@ -1263,7 +1303,7 @@ class AppRouter extends React.Component {
             component={Freebies}
           />
           <AppRoute
-            path="/app/freshlist/cart/SuggestedProducts"
+            path="/app/freshlist/cart/budgetlist"
             component={SuggestedProducts}
           />
           <AppRoute

@@ -44,7 +44,7 @@ class Placeorder extends React.Component {
     userdata: {},
     category_name: "",
     Clientname: "",
-    DeliveryData: "",
+    DeliveryDate: "",
     Product: "",
     showProduct: false,
     Type: "",
@@ -320,6 +320,8 @@ class Placeorder extends React.Component {
 
   async componentDidMount() {
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
+
+    // console.log(pageparmission);
     this.setState({ userdata: pageparmission });
     let newparmisson = pageparmission?.role?.find(
       (value) => value?.pageName === "Place Order"
@@ -393,23 +395,29 @@ class Placeorder extends React.Component {
   }
   submitHandlerAssign = (e) => {
     e.preventDefault();
-
-    let formdata = new FormData();
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
+
+    const formdata = new FormData();
+    if (this.state.Clientname) {
+      formdata.append("user_assign_trupee_id", this.state.Clientname);
+    }
     formdata.append("user_id", pageparmission?.Userinfo?.id);
     formdata.append("category_id", this.state.category);
     formdata.append("brand_id", this.state.Brand);
     formdata.append("product_type_id", this.state.Type);
     formdata.append("product_id", this.state.Product);
-    formdata.append("client_id", this.state.Clientname);
+
     formdata.append("qty", this.state.quantity);
+    formdata.append("delivery_date", this.state.DeliveryDate);
 
     axiosConfig
-      .post(`/assign_to_client`, formdata)
+      .post(`/create_order`, formdata)
       .then((res) => {
-        console.log(res.data?.message);
+        console.log(res.data);
         if (res.data?.message) {
-          swal("Product Assigned Successfully");
+          this.setState({ qty: "" });
+          this.setState({ delivery_date: "" });
+          swal("Success", "Order Created Successfully");
         }
       })
       .catch((err) => {
@@ -681,7 +689,8 @@ class Placeorder extends React.Component {
                             ))}
                         </Input>
                       </Col>
-                      {/* {userdata && userdata?.Userinfo?.role === "Trupee" && (
+                      {this.state.userdata &&
+                      this.state.userdata?.Userinfo?.role === "Trupee" ? (
                         <Col lg="4" md="4" className="mb-1 ">
                           <Label>User List</Label>
                           <Input
@@ -703,7 +712,7 @@ class Placeorder extends React.Component {
                               ))}
                           </Input>
                         </Col>
-                      )} */}
+                      ) : null}
                       <Col lg="4" md="4" className="mb-1 ">
                         <Label>Quantity</Label>
                         <Input
@@ -722,11 +731,11 @@ class Placeorder extends React.Component {
                         <Input
                           required
                           type="date"
-                          name="DeliveryData"
+                          name="DeliveryDate"
                           // placeholder="Enter Quantity..."
-                          value={this.state.DeliveryData}
+                          value={this.state.DeliveryDate}
                           onChange={(e) =>
-                            this.setState({ DeliveryData: e.target.value })
+                            this.setState({ DeliveryDate: e.target.value })
                           }
                         />
                       </Col>

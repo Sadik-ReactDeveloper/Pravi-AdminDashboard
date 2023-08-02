@@ -149,6 +149,32 @@ class SuggestedProducts extends React.Component {
       },
     ],
   };
+  componentDidMount() {
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    console.log(pageparmission.role);
+    let newparmisson = pageparmission?.role?.find(
+      (value) => value?.pageName === "Budget List"
+    );
+    console.log(newparmisson);
+    this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
+    this.setState({
+      Createpermisson: newparmisson?.permission.includes("Create"),
+    });
+    this.setState({
+      Editpermisson: newparmisson?.permission.includes("Edit"),
+    });
+    this.setState({
+      Deletepermisson: newparmisson?.permission.includes("Delete"),
+    });
+    console.log(newparmisson?.permission.includes("View"));
+    console.log(newparmisson?.permission.includes("Create"));
+    console.log(newparmisson?.permission.includes("Edit"));
+    console.log(newparmisson?.permission.includes("Delete"));
+
+    const formdata = new FormData();
+    formdata.append("user_id", pageparmission?.Userinfo?.id);
+    formdata.append("role", pageparmission?.Userinfo?.role);
+  }
   onGridReady = (params) => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
@@ -182,7 +208,7 @@ class SuggestedProducts extends React.Component {
               <Row className="m-2">
                 <Col>
                   <h1 sm="6" className="float-left">
-                    SuggestedProducts
+                    Budget List
                   </h1>
                 </Col>
               </Row>

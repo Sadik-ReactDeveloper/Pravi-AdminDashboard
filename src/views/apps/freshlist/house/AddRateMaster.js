@@ -43,12 +43,17 @@ export class AddRateMaster extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   async componentDidMount() {
-    await axiosConfig.get("/getcategory").then((response) => {
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    const formdata = new FormData();
+    formdata.append("user_id", pageparmission?.Userinfo?.id);
+    formdata.append("role", pageparmission?.Userinfo?.role);
+
+    await axiosConfig.post("/getcategory", formdata).then((response) => {
       let rowData = response.data.data?.category;
       //   console.log(rowData);
       this.setState({ rowData });
     });
-    await axiosConfig.get("/getbrand").then((response) => {
+    await axiosConfig.post("/getbrand", formdata).then((response) => {
       let Brandlist = response.data.data?.brands;
       //   console.log(Brandlist);
       this.setState({ Brandlist });
