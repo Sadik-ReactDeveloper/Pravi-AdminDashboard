@@ -18,6 +18,17 @@ const styles = StyleSheet.create({
     fontFamily: "Helvetica",
     padding: 30,
   },
+  header: {
+    fontSize: "8px",
+    marginTop: "1px",
+    marginBottom: "2px",
+  },
+  GSTIN: {
+    fontSize: "10px",
+    fontWeight: "bold",
+    marginTop: "1px",
+    marginBottom: "2px",
+  },
   title: {
     fontSize: 18,
     marginBottom: 20,
@@ -72,7 +83,7 @@ const InvoiceTemplate = ({ invoiceData }) => {
               }}
             >
               <Image
-                style={{ width: "120px", padding: "22px 10px" }}
+                style={{ width: "150px", padding: "22px 10px" }}
                 src={logo}
                 // style={styles.image}
               >
@@ -87,23 +98,21 @@ const InvoiceTemplate = ({ invoiceData }) => {
                   style={{
                     fontSize: "8px",
                     marginTop: "5px",
-                    marginBottom: "5px",
+                    marginBottom: "2px",
                   }}
                 >
                   ROOM 7,A-WING,Shree Datta Digambar CHS Ltd.
                 </Text>
-                <Text style={{ fontSize: "8px", padding: "5px" }}>
+                <Text style={styles.header}>
                   Guru Datta Mandir Road ,Gaurishankarwadi No. 1{" "}
                 </Text>
-                <Text style={{ fontSize: "8px", padding: "5px" }}>
+                <Text style={styles.header}>
                   Opp. Yashomandir,Pant Nagar ,Ghatkopar East,
                 </Text>
-                <Text style={{ fontSize: "8px", padding: "5px" }}>
+                <Text style={styles.header}>
                   Mumbai,Maharastra, 400075. india
                 </Text>
-                <Text style={{ fontSize: "10px", padding: "5px" }}>
-                  GSTIN: 27AAHCP2196E1ZB
-                </Text>
+                <Text style={styles.GSTIN}>GSTIN: 27AAHCP2196E1ZB</Text>
               </View>
             </View>
 
