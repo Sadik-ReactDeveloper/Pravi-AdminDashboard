@@ -19,12 +19,15 @@ import axiosConfig from "../../../../axiosConfig";
 import { ContextLayout } from "../../../../utility/context/Layout";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
-import { Eye, Trash2, Edit, ChevronDown } from "react-feather";
+import { Eye, Trash2, Edit, ChevronDown, Trash, Edit2 } from "react-feather";
 import { history } from "../../../../history";
 import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
 import Moment from "react-moment";
 import swal from "sweetalert";
+import { BsEye } from "react-icons/bs";
+import { Route, Link } from "react-router-dom";
+
 class Pending extends React.Component {
   state = {
     rowData: [],
@@ -36,9 +39,9 @@ class Pending extends React.Component {
     currenPageSize: "",
     getPageSize: "",
     // defaultColDef: {
-    //   sortable: true,
-    //   editable: true,
-    //   resizable: true,
+    sortable: true,
+    // editable: true,
+    resizable: true,
     //   suppressMenu: true,
     // },
     columnDefs: [
@@ -46,41 +49,38 @@ class Pending extends React.Component {
         headerName: "S.No",
         valueGetter: "node.rowIndex + 1",
         field: "node.rowIndex + 1",
-        width: 150,
+        width: 80,
         filter: true,
       },
       {
         headerName: "Status",
         field: "order_status",
         filter: true,
-        width: 200,
+        width: 160,
         cellRendererFramework: (params) => {
-          // order_status= 'Inprogress, 'Completed'
-
           return params.data?.order_status === "Completed" ? (
             <div className="badge badge-pill badge-success">Completed</div>
           ) : params.data?.order_status === "Pending" ? (
             <div className="badge badge-pill badge-warning">
-              {params.data.order_status}
+              {params.data?.order_status}
             </div>
-          ) : params.data?.order_status === "Inprogress" ? (
-            <div className="badge badge-pill bg-primary">Inprogress</div>
-          ) : params.data?.order_status === "canceled" ? (
+          ) : params.data?.order_status === "Rejected" ? (
+            <div className="badge badge-pill bg-primary">Rejected</div>
+          ) : params.data?.order_status === "Cancelled" ? (
             <div className="badge badge-pill bg-danger">
               {params.data.order_status}
             </div>
-          ) : params.data?.order_status === "Order Placed" ? (
-            <div className="badge badge-pill bg-success">Order Placed</div>
+          ) : params.data?.order_status === "orderreceived" ? (
+            <div className="badge badge-pill bg-success">Order Received</div>
           ) : null;
         },
       },
-
       {
-        headerName: "Order ID ",
+        headerName: "order id ",
         field: "order_id",
         filter: true,
         resizable: true,
-        width: 180,
+        width: 150,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
@@ -91,24 +91,96 @@ class Pending extends React.Component {
           );
         },
       },
+
       {
-        headerName: "Name ",
-        field: "title",
+        headerName: "Product Image",
+        field: "product_images",
         filter: true,
         resizable: true,
-        width: 180,
+        width: 160,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
-                <span>{params.data?.title}</span>
+                {params?.data?.product_images &&
+                params.data?.product_images?.length ? (
+                  <>
+                    <img
+                      style={{ borderRadius: "12px" }}
+                      src={params.data?.product_images[0]}
+                      alt="image"
+                      width="60px"
+                    />
+                  </>
+                ) : (
+                  "No image"
+                )}
               </div>
             </div>
           );
         },
       },
+
       {
-        headerName: "category_name",
+        headerName: "Actions",
+        field: "sortorder",
+        field: "transactions",
+        width: 120,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="actions cursor-pointer">
+              {this.state.Viewpermisson && this.state.Viewpermisson && (
+                <BsEye
+                  className="mr-50"
+                  size="25px"
+                  color="green"
+                  onClick={() =>
+                    history.push(
+                      `/app/freshlist/order/viewAll/${params.data.id}`
+                    )
+                  }
+                />
+              )}
+              {this.state.Editpermisson && this.state.Editpermisson && (
+                <Route
+                  render={({ history }) => (
+                    <Edit2
+                      className="mr-50"
+                      size="25px"
+                      color="blue"
+                      onClick={() =>
+                        history.push(
+                          `/app/freshlist/order/EditOrder/${params.data.id}`
+                        )
+                      }
+                    />
+                  )}
+                />
+              )}
+
+              {this.state.Deletepermisson && this.state.Deletepermisson && (
+                <Route
+                  render={() => (
+                    <Trash
+                      className="mr-50"
+                      size="25px"
+                      color="red"
+                      onClick={() => {
+                        let selectedData = this.gridApi.getSelectedRows();
+                        this.runthisfunction(params.data.id);
+                        this.gridApi.updateRowData({ remove: selectedData });
+                      }}
+                    />
+                  )}
+                />
+              )}
+            </div>
+          );
+        },
+      },
+
+      {
+        headerName: "categoryName",
         field: "category_name",
         filter: true,
         resizable: true,
@@ -124,30 +196,32 @@ class Pending extends React.Component {
         },
       },
       {
-        headerName: "description",
-        field: "description",
+        headerName: "brandname ",
+        field: "brand_name",
         filter: true,
         resizable: true,
-        width: 200,
+        width: 180,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
-                <span>{params.data?.description}</span>
+                <span>{params.data?.brand_name}</span>
               </div>
             </div>
           );
         },
       },
+
       {
-        headerName: "Order Date",
+        headerName: "order Creation date",
         field: "order_date",
-        filter: "true",
-        width: 120,
+        filter: true,
+        resizable: true,
+        width: 230,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
+              <div>
                 <span>{params.data?.order_date}</span>
               </div>
             </div>
@@ -155,26 +229,58 @@ class Pending extends React.Component {
         },
       },
       {
-        headerName: "order_id",
-        field: "order_id",
-        filter: "true",
-        width: 160,
+        headerName: "deliverydate",
+        field: "delivery_date",
+        filter: true,
+        resizable: true,
+        width: 230,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{params.data?.order_id}</span>
+              <div>
+                <span>{params.data?.delivery_date}</span>
               </div>
             </div>
           );
         },
       },
       {
+        headerName: "description",
+        field: "description",
+        filter: "true",
+        width: 180,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params?.data?.description}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "discountprice",
+        field: "discountprice",
+        filter: "true",
+        width: 180,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params.data?.discountprice}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+
+      {
         headerName: "price",
         field: "price",
         filter: true,
         resizable: true,
-        width: 160,
+        width: 150,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
@@ -185,46 +291,10 @@ class Pending extends React.Component {
           );
         },
       },
+
       {
-        headerName: "discountprice",
-        field: "discountprice",
-        filter: true,
-        resizable: true,
-        width: 170,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.discountprice}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "product_images",
-        field: "product_images",
-        filter: true,
-        resizable: true,
-        width: 180,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <img
-                  style={{ borderRadius: "12px" }}
-                  src={params?.data?.product_images[0]}
-                  alt="image"
-                  width="60px"
-                />
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Quantity",
-        field: "qty",
+        headerName: "producttype",
+        field: "product_type",
         filter: true,
         resizable: true,
         width: 190,
@@ -232,14 +302,14 @@ class Pending extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
-                <span>{params.data?.qty}</span>
+                <span>{params.data?.product_type}</span>
               </div>
             </div>
           );
         },
       },
       {
-        headerName: "shipping_fee",
+        headerName: "shippingfee",
         field: "shipping_fee",
         filter: true,
         resizable: true,
@@ -254,12 +324,13 @@ class Pending extends React.Component {
           );
         },
       },
+
       {
         headerName: "stock",
         field: "stock",
         filter: true,
         resizable: true,
-        width: 190,
+        width: 180,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
@@ -270,12 +341,13 @@ class Pending extends React.Component {
           );
         },
       },
+
       {
         headerName: "tags",
         field: "tags",
         filter: true,
         resizable: true,
-        width: 190,
+        width: 180,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
@@ -302,105 +374,19 @@ class Pending extends React.Component {
           );
         },
       },
-      {
-        headerName: "subtotal",
-        field: "subtotal",
-        filter: true,
-        resizable: true,
-        width: 180,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.subtotal}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "total",
-        field: "total",
-        filter: true,
-        resizable: true,
-        width: 180,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.total}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Actions",
-        field: "sortorder",
-        field: "transactions",
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="actions cursor-pointer">
-              {this.state.Viewpermisson && (
-                <Eye
-                  className="mr-50"
-                  size="25px"
-                  color="green"
-                  onClick={() =>
-                    history.push(
-                      `/app/freshlist/order/viewAll/${params.data.id}`
-                    )
-                  }
-                />
-              )}
-              {this.state.Editpermisson && (
-                <Edit
-                  className="mr-50"
-                  size="25px"
-                  color="blue"
-                  onClick={() => history.push("/app/freshlist/order/EditOrder")}
-                />
-              )}
-              {this.state.Deletepermisson && (
-                <Trash2
-                  className="mr-50"
-                  size="25px"
-                  color="red"
-                  onClick={() => {
-                    let selectedData = this.gridApi.getSelectedRows();
-                    this.runthisfunction(params.data.id);
-                    this.gridApi.updateRowData({ remove: selectedData });
-                  }}
-                />
-              )}
-            </div>
-          );
-        },
-      },
     ],
   };
   async componentDidMount() {
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
     const formdata = new FormData();
     formdata.append("user_id", pageparmission?.Userinfo?.id);
-    formdata.append("order_status", "Inprogress");
-
-    await axiosConfig
-      .post(`/order_detail`, formdata)
-      .then((res) => {
-        // console.log(res.data.data);
-        let rowData = res.data.data;
-        this.setState({ rowData });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    formdata.append("role", pageparmission?.Userinfo?.role);
 
     let newparmisson = pageparmission?.role?.find(
       (value) => value?.pageName === "Order Raise List"
     );
 
+    console.log(newparmisson);
     this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
     this.setState({
       Createpermisson: newparmisson?.permission.includes("Create"),
@@ -411,6 +397,21 @@ class Pending extends React.Component {
     this.setState({
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
+    // console.log(newparmisson?.permission.includes("View"));
+    // console.log(newparmisson?.permission.includes("Delete"));
+    // console.log(newparmisson?.permission.includes("Create"));
+    // console.log(newparmisson?.permission.includes("Edit"));
+
+    await axiosConfig
+      .post(`/orderraiselist`, formdata)
+      .then((res) => {
+        console.log(res.data.data);
+        let rowData = res.data.data;
+        this.setState({ rowData: rowData });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   async runthisfunction(id) {

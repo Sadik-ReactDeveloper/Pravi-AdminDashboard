@@ -409,11 +409,7 @@ class Placeorder extends React.Component {
 
     formdata.append("qty", this.state.quantity);
     formdata.append("delivery_date", this.state.DeliveryDate);
-    if (
-      this.state.Clientlist &&
-      this.state.DeliveryDate &&
-      this.state.quantity
-    ) {
+    if (this.state.DeliveryDate && this.state.quantity) {
       axiosConfig
         .post(`/create_order`, formdata)
         .then((res) => {
@@ -702,7 +698,7 @@ class Placeorder extends React.Component {
                       {this.state.userdata &&
                       this.state.userdata?.Userinfo?.role === "Trupee" ? (
                         <Col lg="4" md="4" className="mb-1 ">
-                          <Label>User List *</Label>
+                          <Label>User List</Label>
                           <Input
                             required
                             type="select"

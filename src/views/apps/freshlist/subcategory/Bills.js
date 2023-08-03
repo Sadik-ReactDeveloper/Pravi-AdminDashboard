@@ -20,6 +20,7 @@ import { history } from "../../../../history";
 import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
 import { Route } from "react-router-dom";
+import InvoiceGenerator from "./InvoiceGenerator1";
 
 class Bills extends React.Component {
   state = {
@@ -185,7 +186,7 @@ class Bills extends React.Component {
 
   async componentDidMount() {
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
-    console.log(pageparmission.role);
+    // console.log(pageparmission.role);
     let newparmisson = pageparmission?.role?.find(
       (value) => value?.pageName === "Bills"
     );
@@ -246,6 +247,10 @@ class Bills extends React.Component {
       });
     }
   };
+  handlePrint = (e) => {
+    e.preventDefault();
+    window.print();
+  };
   render() {
     const { rowData, columnDefs, defaultColDef } = this.state;
     return (
@@ -255,6 +260,8 @@ class Bills extends React.Component {
           <Card>
             <Row className="m-2">
               <Col>
+                <InvoiceGenerator />
+
                 <h1 sm="6" className="float-left">
                   Bills List
                 </h1>
@@ -288,6 +295,18 @@ class Bills extends React.Component {
                 />
               </Col>
             </Row>
+            <Row>
+              <div class="h-screen bg-red-300 flex justify-center items-center">
+                <Button
+                  color="primary"
+                  onClick={this.handlePrint}
+                  // class="bg-yellow-200 text-yellow-900 py-2 px-4 rounded shadow hover:shadow-xl hover:bg-yellow-300 duration-300"
+                >
+                  Print This Page
+                </Button>
+              </div>
+            </Row>
+
             <CardBody>
               {this.state.rowData === null ? null : (
                 <div className="ag-theme-material w-100 my-2 ag-grid-table">

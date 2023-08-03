@@ -116,7 +116,7 @@ class RoleList extends React.Component {
                   color="red"
                   onClick={() => {
                     let selectedData = this.gridApi.getSelectedRows();
-                    // this.runthisfunction(params.data._id);
+                    this.runthisfunction(params.data.id);
                     this.gridApi.updateRowData({ remove: selectedData });
                   }}
                 />

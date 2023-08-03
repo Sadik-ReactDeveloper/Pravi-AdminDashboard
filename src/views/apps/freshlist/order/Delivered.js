@@ -56,15 +56,13 @@ class Delivered extends React.Component {
         headerName: "Status",
         field: "order_status",
         filter: true,
-        width: 200,
+        width: 160,
         cellRendererFramework: (params) => {
-          // order_status= 'Inprogress, 'Completed'
-
           return params.data?.order_status === "Completed" ? (
             <div className="badge badge-pill badge-success">Completed</div>
           ) : params.data?.order_status === "Pending" ? (
             <div className="badge badge-pill badge-warning">
-              {params.data.order_status}
+              {params.data?.order_status}
             </div>
           ) : params.data?.order_status === "Inprogress" ? (
             <div className="badge badge-pill bg-primary">Inprogress</div>
@@ -72,9 +70,105 @@ class Delivered extends React.Component {
             <div className="badge badge-pill bg-danger">
               {params.data.order_status}
             </div>
-          ) : params.data?.order_status === "Order Placed" ? (
-            <div className="badge badge-pill bg-success">Order Placed</div>
+          ) : params.data?.order_status === "orderreceived" ? (
+            <div className="badge badge-pill bg-success">Order Received</div>
           ) : null;
+        },
+      },
+      {
+        headerName: "Change Status ",
+        field: "Change Status",
+        filter: true,
+        resizable: true,
+        width: 230,
+        cellRendererFramework: (params) => {
+          // console.log(params.data?.order_id);
+
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <select
+                  // className="form-control"
+                  defaultValue={params.data?.order_status}
+                  onChange={(e) => {
+                    // console.log(e.target.value);
+                    let data = new FormData();
+                    data.append("order_id", params.data?.order_id);
+                    data.append("order_status", e.target.value);
+                    axiosConfig
+                      .post(`/change_order_status`, data)
+                      .then((res) => {
+                        console.log(res?.data.message);
+                        if (res?.data.message) {
+                          this.componentDidMount();
+                          swal("status Updated Succesfully");
+                        }
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
+                  }}
+                  name="changestatus"
+                  id="changeStatus"
+                >
+                  <option value={params.data?.order_status}>
+                    {params.data?.order_status}
+                  </option>
+                  <option value="Pending">--UpdateStatus--</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Rejected">Rejected</option>
+                  <option value="Cancelled">Cancelled</option>
+                </select>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "order id ",
+        field: "order_id",
+        filter: true,
+        resizable: true,
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.order_id}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+
+      {
+        headerName: "Product Image",
+        field: "product_images",
+        filter: true,
+        resizable: true,
+        width: 160,
+        cellRendererFramework: (params) => {
+          // console.log(params.data);
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                {params?.data?.product_images &&
+                params.data?.product_images?.length ? (
+                  <>
+                    <img
+                      style={{ borderRadius: "12px" }}
+                      src={params.data?.product_images[0]}
+                      alt="image"
+                      width="60px"
+                    />
+                  </>
+                ) : (
+                  "No image"
+                )}
+              </div>
+            </div>
+          );
         },
       },
 
@@ -82,20 +176,24 @@ class Delivered extends React.Component {
         headerName: "Actions",
         field: "sortorder",
         field: "transactions",
-        width: 180,
+        width: 120,
         cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
               {this.state.Viewpermisson && (
-                <Eye
-                  className="mr-50"
-                  size="25px"
-                  color="green"
-                  onClick={() =>
-                    history.push(
-                      `/app/freshlist/order/viewAll/${params.data.id}`
-                    )
-                  }
+                <Route
+                  render={({ history }) => (
+                    <Eye
+                      className="mr-50"
+                      size="25px"
+                      color="green"
+                      onClick={() =>
+                        history.push(
+                          `/app/freshlist/order/editplaceorder/${params.data?.order_id}`
+                        )
+                      }
+                    />
+                  )}
                 />
               )}
               {this.state.Editpermisson && (
@@ -107,7 +205,7 @@ class Delivered extends React.Component {
                       color="blue"
                       onClick={() =>
                         history.push(
-                          `/app/freshlist/order/EditOrder/${params.data.id}`
+                          `/app/freshlist/order/editplaceorder/${params.data?.order_id}`
                         )
                       }
                     />
@@ -135,40 +233,9 @@ class Delivered extends React.Component {
           );
         },
       },
+
       {
-        headerName: "Order ID ",
-        field: "order_id",
-        filter: true,
-        resizable: true,
-        width: 180,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.order_id}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Name ",
-        field: "title",
-        filter: true,
-        resizable: true,
-        width: 180,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.title}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "category_name",
+        headerName: "categoryName",
         field: "category_name",
         filter: true,
         resizable: true,
@@ -184,30 +251,47 @@ class Delivered extends React.Component {
         },
       },
       {
-        headerName: "description",
-        field: "description",
+        headerName: "brandname ",
+        field: "brand_name",
         filter: true,
         resizable: true,
-        width: 200,
+        width: 180,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
-                <span>{params.data?.description}</span>
+                <span>{params.data?.brand_name}</span>
               </div>
             </div>
           );
         },
       },
+      // {
+      //   headerName: "city",
+      //   field: "city",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 160,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.city}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       {
-        headerName: "Order Date",
+        headerName: "order Creation date",
         field: "order_date",
-        filter: "true",
-        width: 120,
+        filter: true,
+        resizable: true,
+        width: 230,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
+              <div>
                 <span>{params.data?.order_date}</span>
               </div>
             </div>
@@ -215,26 +299,107 @@ class Delivered extends React.Component {
         },
       },
       {
-        headerName: "order_id",
-        field: "order_id",
-        filter: "true",
-        width: 160,
+        headerName: "deliverydate",
+        field: "delivery_date",
+        filter: true,
+        resizable: true,
+        width: 230,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{params.data?.order_id}</span>
+              <div>
+                <span>{params.data?.delivery_date}</span>
               </div>
             </div>
           );
         },
       },
       {
+        headerName: "description",
+        field: "description",
+        filter: "true",
+        width: 180,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params.data?.description}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "discountprice",
+        field: "discountprice",
+        filter: "true",
+        width: 180,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params.data?.discountprice}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      // {
+      //   headerName: "email",
+      //   field: "email",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 190,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.email}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+
+      // {
+      //   headerName: "full_name",
+      //   field: "full_name",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 170,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.full_name}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+
+      // {
+      //   headerName: "mobile",
+      //   field: "mobile",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 190,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.mobile}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      {
         headerName: "price",
         field: "price",
         filter: true,
         resizable: true,
-        width: 160,
+        width: 150,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
@@ -247,45 +412,8 @@ class Delivered extends React.Component {
       },
 
       {
-        headerName: "discountprice",
-        field: "discountprice",
-        filter: true,
-        resizable: true,
-        width: 170,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.discountprice}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "product_images",
-        field: "product_images",
-        filter: true,
-        resizable: true,
-        width: 180,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <img
-                  style={{ borderRadius: "12px" }}
-                  src={params?.data?.product_images[0]}
-                  alt="image"
-                  width="60px"
-                />
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Quantity",
-        field: "qty",
+        headerName: "producttype",
+        field: "product_type",
         filter: true,
         resizable: true,
         width: 190,
@@ -293,14 +421,14 @@ class Delivered extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
-                <span>{params.data?.qty}</span>
+                <span>{params.data?.product_type}</span>
               </div>
             </div>
           );
         },
       },
       {
-        headerName: "shipping_fee",
+        headerName: "shippingfee",
         field: "shipping_fee",
         filter: true,
         resizable: true,
@@ -315,13 +443,28 @@ class Delivered extends React.Component {
           );
         },
       },
-
+      // {
+      //   headerName: "status",
+      //   field: "status",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 180,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.status}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       {
         headerName: "stock",
         field: "stock",
         filter: true,
         resizable: true,
-        width: 190,
+        width: 180,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
@@ -332,12 +475,28 @@ class Delivered extends React.Component {
           );
         },
       },
+      // {
+      //   headerName: "subtotal",
+      //   field: "subtotal",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 180,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.subtotal}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       {
         headerName: "tags",
         field: "tags",
         filter: true,
         resizable: true,
-        width: 190,
+        width: 180,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
@@ -359,38 +518,6 @@ class Delivered extends React.Component {
             <div className="d-flex align-items-center cursor-pointer">
               <div>
                 <span>{params.data?.tax_rate}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "subtotal",
-        field: "subtotal",
-        filter: true,
-        resizable: true,
-        width: 180,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.subtotal}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "total",
-        field: "total",
-        filter: true,
-        resizable: true,
-        width: 180,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.total}</span>
               </div>
             </div>
           );
@@ -426,8 +553,9 @@ class Delivered extends React.Component {
     const formdata = new FormData();
     formdata.append("user_id", pageparmission?.Userinfo?.id);
     formdata.append("order_status", "Completed");
+
     await axiosConfig
-      .post(`/order_detail`, formdata)
+      .post(`/orderstatuslist`, formdata)
       .then((res) => {
         // console.log(res.data.data);
         let rowData = res.data.data;
