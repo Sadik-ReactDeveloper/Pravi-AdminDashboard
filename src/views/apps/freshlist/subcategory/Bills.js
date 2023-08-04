@@ -260,7 +260,7 @@ class Bills extends React.Component {
           <Card>
             <Row className="m-2">
               <Col>
-                <InvoiceGenerator />
+                {/* <InvoiceGenerator /> */}
 
                 <h1 sm="6" className="float-left">
                   Bills List
