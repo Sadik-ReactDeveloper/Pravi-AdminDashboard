@@ -317,6 +317,7 @@ export class CreateAccount extends Component {
                     </h3>
                   </FormGroup>
                 </Col>
+
                 <Col lg="2" md="2">
                   <FormGroup>
                     <h3>
@@ -332,6 +333,7 @@ export class CreateAccount extends Component {
                           value="User"
                           onChange={(e) => {
                             this.setState({ setuserList: true });
+                            this.setState({ AssignRole: "User" });
                           }}
                         />
                       </span>
@@ -339,6 +341,48 @@ export class CreateAccount extends Component {
                   </FormGroup>
                 </Col>
               </Row>
+              {/* {this.state.AssignRole === "Client" && (
+                <Row>
+                  <Col lg="6" md="6">
+                    <FormGroup>
+                      <h3>
+                        Blling To
+                        <span>
+                          <Input
+                            required
+                            type="text"
+                            name="City"
+                            value="Bill to"
+                            // onChange={(e) => {
+                            //   this.setState({ setuserList: false });
+                            //   this.setState({ AssignRole: "Client" });
+                            // }}
+                          />
+                        </span>
+                      </h3>
+                    </FormGroup>
+                  </Col>
+                  <Col lg="6" md="6">
+                    <FormGroup>
+                      <h3>
+                        Shipping To
+                        <span>
+                          <Input
+                            type="text"
+                            name="City"
+                            value="Ship to"
+                            // onChange={(e) => {
+                            //   this.setState({ setuserList: false });
+                            //   this.setState({ AssignRole: "Client" });
+                            // }}
+                          />
+                        </span>
+                      </h3>
+                    </FormGroup>
+                  </Col>
+                </Row>
+              )} */}
+
               {this.state.setuserList && (
                 <Row className="mt-2">
                   <Col lg="6" md="6">

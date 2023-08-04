@@ -13,6 +13,9 @@ import {
   DropdownItem,
   DropdownToggle,
   Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
 } from "reactstrap";
 import "../../../../assets/css/main.css";
 import axiosConfig from "../../../../axiosConfig";
@@ -24,10 +27,17 @@ import { history } from "../../../../history";
 import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
 import Moment from "react-moment";
+import InvoiceGenerator from "../subcategory/InvoiceGenerator1";
+
 import { Route, Link } from "react-router-dom";
 import swal from "sweetalert";
+import { AiOutlineDownload } from "react-icons/ai";
 
 class Delivered extends React.Component {
+  state = {
+    modal: false,
+    PrintData: {},
+  };
   state = {
     rowData: [],
 
@@ -120,6 +130,28 @@ class Delivered extends React.Component {
                   <option value="Rejected">Rejected</option>
                   <option value="Cancelled">Cancelled</option>
                 </select>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Download Bill ",
+        field: "order_id",
+        filter: true,
+        resizable: true,
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center justify-content-center cursor-pointer">
+              <div>
+                <span>
+                  <AiOutlineDownload
+                    onClick={() => this.handleBillDownload(params.data)}
+                    fill="green"
+                    size="30px"
+                  />
+                </span>
               </div>
             </div>
           );
@@ -547,6 +579,17 @@ class Delivered extends React.Component {
   handleSwitchChange = () => {
     return swal("Success!", "Submitted SuccessFull!", "success");
   };
+  handleBillDownload = (data) => {
+    console.log(data);
+    this.setState({ PrintData: data });
+    // console.log("object");
+    this.toggleModal();
+  };
+  toggleModal = () => {
+    this.setState((prevState) => ({
+      modal: !prevState.modal,
+    }));
+  };
   async componentDidMount() {
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
     console.log(pageparmission.role);
@@ -735,6 +778,19 @@ class Delivered extends React.Component {
             </CardBody>
           </Card>
         </Col>
+        <Modal
+          isOpen={this.state.modal}
+          toggle={this.toggleModal}
+          className={this.props.className}
+          style={{ maxWidth: "1050px" }}
+        >
+          <ModalHeader toggle={this.toggleModal}>Basic Modal</ModalHeader>
+          <ModalBody>
+            <div style={{ width: "100%" }} className="">
+              <InvoiceGenerator PrintData={this.state.PrintData} />
+            </div>
+          </ModalBody>
+        </Modal>
       </Row>
     );
   }
