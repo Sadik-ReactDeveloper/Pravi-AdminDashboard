@@ -379,6 +379,24 @@ const InvoiceTemplate = ({ invoiceData }) => {
               </View>
               <View
                 style={{
+                  width: "10%",
+                  padding: "5px 2px",
+                  borderRight: "1px solid black",
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: "10px",
+                    color: "white",
+                    fontWeight: "1000",
+                    marginLeft: "5px",
+                  }}
+                >
+                  PO Number
+                </Text>
+              </View>
+              <View
+                style={{
                   width: "25%",
                   padding: "5px 2px",
 

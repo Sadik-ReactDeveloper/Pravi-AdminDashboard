@@ -277,7 +277,7 @@ class Bills extends React.Component {
                     Back
                   </Button>
                 </Col> */}
-              <Col>
+              {/* <Col>
                 <Route
                   render={({ history }) => (
                     <Button
@@ -293,9 +293,9 @@ class Bills extends React.Component {
                     </Button>
                   )}
                 />
-              </Col>
+              </Col> */}
             </Row>
-            <Row>
+            {/* <Row>
               <div class="h-screen bg-red-300 flex justify-center items-center">
                 <Button
                   color="primary"
@@ -305,7 +305,7 @@ class Bills extends React.Component {
                   Print This Page
                 </Button>
               </div>
-            </Row>
+            </Row> */}
 
             <CardBody>
               {this.state.rowData === null ? null : (

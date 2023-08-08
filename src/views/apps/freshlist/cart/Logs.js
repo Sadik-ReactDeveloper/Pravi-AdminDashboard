@@ -10,8 +10,8 @@ import {
   DropdownMenu,
   DropdownItem,
   DropdownToggle,
+  Badge,
 } from "reactstrap";
-import axiosConfig from "../../../../axiosConfig";
 import axios from "axios";
 import { ContextLayout } from "../../../../utility/context/Layout";
 import { AgGridReact } from "ag-grid-react";
@@ -20,14 +20,11 @@ import { history } from "../../../../history";
 import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
 import { Route, Link } from "react-router-dom";
+// import { components } from "react-select";
 
-class BrandList extends React.Component {
+class Logs extends React.Component {
   state = {
     rowData: [],
-    Viewpermisson: null,
-    Editpermisson: null,
-    Createpermisson: null,
-    Deletepermisson: null,
     paginationPageSize: 20,
     currenPageSize: "",
     getPageSize: "",
@@ -42,65 +39,86 @@ class BrandList extends React.Component {
         headerName: "S.No",
         valueGetter: "node.rowIndex + 1",
         field: "node.rowIndex + 1",
-        width: 100,
+        width: 150,
         filter: true,
       },
-      // {
-      //   headerName: "Image",
-      //   field: "image",
-      //   filter: true,
-      //   width: 100,
-      //   cellRendererFramework: (params) => {
-      //     return (
-      //       <div className="d-flex align-items-center cursor-pointer">
-      //         <img
-      //           className="rounded-circle mr-50"
-      //           src={params?.data?.image}
-      //           alt="user avatar"
-      //           height="40"
-      //           width="40"
-      //         />
-      //       </div>
-      //     );
-      //   },
-      // },
       {
-        headerName: "Brand Name",
-        field: "brand_name",
+        headerName: "Name",
+        field: "subscriptions",
         filter: true,
-        width: 160,
+        width: 200,
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data?.brand_name}</span>
+              <span>{params.data.subscriptions}</span>
             </div>
           );
         },
       },
       {
-        headerName: "Description",
-        field: "description",
+        headerName: "Product Name",
+        field: "product",
         filter: true,
         width: 190,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params?.data?.description}</span>
+              <span>{params.data.product}</span>
             </div>
           );
         },
       },
+      {
+        headerName: "How Many Day",
+        field: "validity",
+        filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <span>{params.data.validity}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "How Many Orders Placed",
+        field: "orders",
+        filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <span>{params.data.orders}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "How Many Remaining",
+        field: "remaining",
+        filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <span>{params.data.remaining}</span>
+            </div>
+          );
+        },
+      },
+
       {
         headerName: "Status",
         field: "status",
         filter: true,
         width: 150,
         cellRendererFramework: (params) => {
-          return params.data?.status === "Active" ? (
+          return params.value === "Block" ? (
             <div className="badge badge-pill badge-success">
               {params.data.status}
             </div>
-          ) : params.data?.status === "Deactive" ? (
+          ) : params.value === "Unblock" ? (
             <div className="badge badge-pill badge-warning">
               {params.data.status}
             </div>
@@ -115,49 +133,15 @@ class BrandList extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
-              <Route
-                render={({ history }) => (
-                  <>
-                    {/* {this.state.Viewpermisson && (
-                      <Eye
-                        className="mr-50"
-                        size="25px"
-                        color="green"
-                        onClick={() =>
-                          history.push(
-                            `/app/freshlist/brand/viewBrand/${params.data.id}`
-                          )
-                        }
-                      />
-                    )} */}
-
-                    {this.state.Editpermisson && (
-                      <Edit
-                        className="mr-50"
-                        size="25px"
-                        color="blue"
-                        onClick={() =>
-                          history.push(
-                            `/app/freshlist/brand/editBrand/${params.data.id}`
-                          )
-                        }
-                      />
-                    )}
-
-                    {this.state.Deletepermisson && (
-                      <Trash2
-                        className="mr-50"
-                        size="25px"
-                        color="red"
-                        onClick={() => {
-                          let selectedData = this.gridApi.getSelectedRows();
-                          this.runthisfunction(params.data.id);
-                          this.gridApi.updateRowData({ remove: selectedData });
-                        }}
-                      />
-                    )}
-                  </>
-                )}
+              <Eye
+                className="mr-50"
+                size="25px"
+                color="green"
+                onClick={() =>
+                  history.push(
+                    `/app/freshlist/subscriber/viewSubscriber/${params.data._id}`
+                  )
+                }
               />
             </div>
           );
@@ -165,14 +149,13 @@ class BrandList extends React.Component {
       },
     ],
   };
-
-  async componentDidMount() {
+  componentDidMount() {
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
-
+    console.log(pageparmission.role);
     let newparmisson = pageparmission?.role?.find(
-      (value) => value?.pageName === "Brand List"
+      (value) => value?.pageName === "Logs"
     );
-
+    console.log(newparmisson);
     this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
     this.setState({
       Createpermisson: newparmisson?.permission.includes("Create"),
@@ -183,29 +166,14 @@ class BrandList extends React.Component {
     this.setState({
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
-    const data = new FormData();
+    console.log(newparmisson?.permission.includes("View"));
+    console.log(newparmisson?.permission.includes("Create"));
+    console.log(newparmisson?.permission.includes("Edit"));
+    console.log(newparmisson?.permission.includes("Delete"));
 
-    data.append("user_id", pageparmission?.Userinfo?.id);
-    data.append("role", pageparmission?.Userinfo?.role);
-    await axiosConfig.post("/getbrand", data).then((response) => {
-      let rowData = response.data.data?.brands;
-      // console.log(rowData);
-      if (rowData) {
-        this.setState({ rowData });
-      }
-    });
-  }
-
-  async runthisfunction(id) {
-    console.log(id);
-    await axiosConfig.delete(`/admin/del_brand/${id}`).then(
-      (response) => {
-        console.log(response);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    const formdata = new FormData();
+    formdata.append("user_id", pageparmission?.Userinfo?.id);
+    formdata.append("role", pageparmission?.Userinfo?.role);
   }
   onGridReady = (params) => {
     this.gridApi = params.api;
@@ -240,25 +208,8 @@ class BrandList extends React.Component {
               <Row className="m-2">
                 <Col>
                   <h1 sm="6" className="float-left">
-                    Brand List here
+                    Logs Report
                   </h1>
-                </Col>
-                <Col>
-                  {this.state.Createpermisson && (
-                    <Route
-                      render={({ history }) => (
-                        <Button
-                          className="btn float-right"
-                          color="primary"
-                          onClick={() =>
-                            history.push("/app/freshlist/brand/addBrand")
-                          }
-                        >
-                          Add New
-                        </Button>
-                      )}
-                    />
-                  )}
                 </Col>
               </Row>
               <CardBody>
@@ -360,4 +311,4 @@ class BrandList extends React.Component {
     );
   }
 }
-export default BrandList;
+export default Logs;

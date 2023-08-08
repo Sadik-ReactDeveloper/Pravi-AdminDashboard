@@ -24,7 +24,7 @@ import ReactHtmlParser from "react-html-parser";
 import { ContextLayout } from "../../../../utility/context/Layout";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
-import { Trash2, ChevronDown } from "react-feather";
+import { Trash2, ChevronDown, Edit } from "react-feather";
 import { history } from "../../../../history";
 import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
@@ -283,6 +283,19 @@ class Invetory extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
+              {this.state.Editpermisson && (
+                <Edit
+                  className="mr-50"
+                  size="25px"
+                  color="blue"
+                  onClick={() =>
+                    this.props.history.push({
+                      pathname: `/app/freshlist/house/editinventory/${params.data?.id}`,
+                      state: params.data,
+                    })
+                  }
+                />
+              )}
               {this.state.Deletepermisson && (
                 <Trash2
                   className="mr-50"

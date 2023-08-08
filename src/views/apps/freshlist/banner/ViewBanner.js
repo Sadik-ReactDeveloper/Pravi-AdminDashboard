@@ -3,7 +3,7 @@ import { Card, CardBody, Media, Row, Col, Button } from "reactstrap";
 import axiosConfig from "../../../../axiosConfig";
 import { history } from "../../../../history";
 class ViewBanner extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.state = {
       data: {},
@@ -24,7 +24,6 @@ class ViewBanner extends React.Component {
       });
   }
   render() {
-
     return (
       <React.Fragment>
         <Row>
@@ -39,7 +38,9 @@ class ViewBanner extends React.Component {
                 <Col>
                   <Button
                     className=" btn btn-danger float-right"
-                    onClick={() => history.push("/app/freshlist/banner/BannerList")}
+                    onClick={() =>
+                      history.push("/app/freshlist/banner/reportsdatewise")
+                    }
                   >
                     Back
                   </Button>
@@ -50,7 +51,6 @@ class ViewBanner extends React.Component {
                   <Col className="pl-0" sm="12" lg="6">
                     <Media className="d-sm-flex d-block">
                       <Media className="mt-md-1 mt-0" left>
-
                         {this.state.data?.banner_img?.map((i) => (
                           <img
                             className="border-black m-0"
@@ -59,7 +59,6 @@ class ViewBanner extends React.Component {
                             height="400"
                           />
                         ))}
-
                       </Media>
                       <Media body>
                         <Row className="ml-4">
@@ -95,7 +94,6 @@ class ViewBanner extends React.Component {
                       </Media>
                     </Media>
                   </Col>
-
                 </Row>
               </CardBody>
             </Card>

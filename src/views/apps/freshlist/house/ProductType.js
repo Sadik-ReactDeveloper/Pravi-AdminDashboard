@@ -76,6 +76,21 @@ class ProductType extends React.Component {
         },
       },
       {
+        headerName: "created by",
+        field: "username",
+        filter: "agSetColumnFilter",
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params?.data?.username}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
         headerName: "FullName",
         field: "full_name",
         filter: "agSetColumnFilter",
@@ -121,20 +136,110 @@ class ProductType extends React.Component {
         },
       },
       {
-        headerName: "City",
-        field: "city",
+        headerName: "Phone No.",
+        field: "phone_no",
         filter: "agSetColumnFilter",
         width: 150,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{params?.data?.city}</span>
+                <span>{params?.data?.phone_no}</span>
               </div>
             </div>
           );
         },
       },
+      {
+        headerName: "companyname.",
+        field: "company_name",
+        filter: "agSetColumnFilter",
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params?.data?.company_name}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "companytype.",
+        field: "company_type",
+        filter: "agSetColumnFilter",
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params?.data?.company_type}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "place of supply.",
+        field: "place_supply",
+        filter: "agSetColumnFilter",
+        width: 180,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params?.data?.place_supply}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "billing Address.",
+        field: "billing_city",
+        filter: "agSetColumnFilter",
+        width: 180,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              {/* {this.state.billing_street && ( */}
+              <div className="">
+                <span>{params?.data?.billing_street} </span>
+                <span>{params?.data?.billing_city},</span>
+                <span>{params?.data?.billing_state},</span>
+                <span>{params?.data?.billing_country}, </span>
+                <span>{params?.data?.billing_pincode}</span>
+              </div>
+              {/* )} */}
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Shipping Address.",
+        field: "billing_city",
+        filter: "agSetColumnFilter",
+        width: 180,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                {/* {this.state.shipping_city && ( */}
+                <div>
+                  <span>{params?.data?.shipping_street},</span>
+                  <span>{params?.data?.shipping_state},</span>
+                  <span>{params?.data?.shipping_city},</span>
+                  <span>{params?.data?.shipping_country},</span>
+                  <span>{params?.data?.shipping_pincode}</span>
+                </div>
+                {/* )} */}
+              </div>
+            </div>
+          );
+        },
+      },
+
       {
         headerName: "Role",
         field: "role",
@@ -210,7 +315,7 @@ class ProductType extends React.Component {
                   size="25px"
                   color="Red"
                   onClick={() => {
-                    this.runthisfunction(params.data?.id);
+                    this.runthisfunction(params?.data?.id);
                   }}
                 />
               )}
@@ -224,7 +329,7 @@ class ProductType extends React.Component {
                       color="green"
                       onClick={() =>
                         history.push(
-                          `/app/freshlist/house/editProductType/${params.data?.id}`
+                          `/app/freshlist/house/editProductType/${params?.data?.id}`
                         )
                       }
                     />

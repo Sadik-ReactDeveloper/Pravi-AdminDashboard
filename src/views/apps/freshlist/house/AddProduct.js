@@ -430,7 +430,7 @@ export class AddProduct extends Component {
               ) : null}
 
               <Row>
-                <Col lg="6" md="6">
+                {/* <Col lg="6" md="6">
                   <FormGroup>
                     <Label> Quantity </Label>
                     <Input
@@ -442,7 +442,7 @@ export class AddProduct extends Component {
                       onChange={this.changeHandler}
                     />
                   </FormGroup>
-                </Col>
+                </Col> */}
                 <Col lg="6" md="6">
                   <FormGroup>
                     <Label>Discount Price</Label>

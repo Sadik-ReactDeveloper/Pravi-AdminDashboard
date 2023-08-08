@@ -393,6 +393,9 @@ const AddProduct = lazy(() =>
 const EditMyProduct = lazy(() =>
   import("./views/apps/freshlist/house/EditProduct")
 );
+const EditInventory = lazy(() =>
+  import("./views/apps/freshlist/house/EditInventory")
+);
 const AssignToClient = lazy(() =>
   import("./views/apps/freshlist/house/AssignToClient")
 );
@@ -450,6 +453,23 @@ const Freebies = lazy(() => import("./views/apps/freshlist/freebies/Freebies"));
 const SuggestedProducts = lazy(() =>
   import("./views/apps/freshlist/cart/SuggestedProducts")
 );
+const BudgetAssignment = lazy(() =>
+  import("./views/apps/freshlist/cart/BudgetAssignment")
+);
+const DateWiseReport = lazy(() =>
+  import("./views/apps/freshlist/cart/DateWiseReport")
+);
+const Clientwisereport = lazy(() =>
+  import("./views/apps/freshlist/cart/Clientwisereport")
+);
+const BranchwiseReport = lazy(() =>
+  import("./views/apps/freshlist/cart/BranchwiseReport")
+);
+const ProductWise = lazy(() =>
+  import("./views/apps/freshlist/cart/ProductWise")
+);
+const LogsReport = lazy(() => import("./views/apps/freshlist/cart/Logs"));
+const UniqueCode = lazy(() => import("./views/apps/freshlist/cart/UniqueCode"));
 // Subscriber
 const SubscriberList = lazy(() =>
   import("./views/apps/freshlist/subscriber/SubscriberList")
@@ -815,7 +835,7 @@ class AppRouter extends React.Component {
             component={ViewBanner}
           />
           <AppRoute
-            path="/app/freshlist/banner/bannerList"
+            path="/app/freshlist/banner/reportsdatewise"
             component={BannerList}
           />
           <AppRoute
@@ -1239,6 +1259,10 @@ class AppRouter extends React.Component {
             component={EditMyProduct}
           />
           <AppRoute
+            path="/app/freshlist/house/editinventory/:id"
+            component={EditInventory}
+          />
+          <AppRoute
             path="/app/freshlist/house/assignedPage/:id"
             component={AssignedPage}
           />
@@ -1281,7 +1305,7 @@ class AppRouter extends React.Component {
             component={ServiceMaster}
           />
           <AppRoute
-            path="/app/freshlist/house/producttype"
+            path="/app/freshlist/house/userlist"
             component={ProductType}
           />
           <AppRoute
@@ -1312,6 +1336,34 @@ class AppRouter extends React.Component {
           <AppRoute
             path="/app/freshlist/cart/budgetlist"
             component={SuggestedProducts}
+          />
+          <AppRoute
+            path="/app/freshlist/cart/BudgetAssignment"
+            component={BudgetAssignment}
+          />
+          <AppRoute
+            path="/app/freshlist/cart/DateWiseReport"
+            component={DateWiseReport}
+          />
+          <AppRoute
+            path="/app/freshlist/cart/Clientwisereport"
+            component={Clientwisereport}
+          />
+          <AppRoute
+            path="/app/freshlist/cart/BranchwiseReport"
+            component={BranchwiseReport}
+          />
+          <AppRoute
+            path="/app/freshlist/cart/ProductWise"
+            component={ProductWise}
+          />
+          <AppRoute
+            path="/app/freshlist/report/LogsReport"
+            component={LogsReport}
+          />
+          <AppRoute
+            path="/app/freshlist/code/UniqueCode"
+            component={UniqueCode}
           />
           <AppRoute
             path="/app/freshlist/subscriber/subscriberList"

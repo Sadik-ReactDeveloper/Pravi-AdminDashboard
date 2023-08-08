@@ -3,7 +3,7 @@ import { Row, Col, Card, Button, Label, Input, Form } from "reactstrap";
 import { Roles } from "./AddRole";
 import axios from "axios";
 import axiosConfig from "../../../../axiosConfig";
-import { Route, Link } from "react-router-dom";
+// import { Route, Link } from "react-router-dom";
 import swal from "sweetalert";
 import { BsFillArrowDownCircleFill } from "react-icons/bs";
 import { permission } from "./DummyPermissiom";

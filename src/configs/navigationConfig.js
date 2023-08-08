@@ -71,7 +71,7 @@ const navigationConfig = [
         type: "item",
         icon: <FaList size={8} />,
         permissions: ["admin", "editor"],
-        navLink: "/app/freshlist/house/producttype",
+        navLink: "/app/freshlist/house/userlist",
       },
       // {
       //   id: "clientAccounts",
@@ -79,7 +79,7 @@ const navigationConfig = [
       //   type: "item",
       //   icon: <FaCircle size={15} />,
       //   permissions: ["admin", "editor"],
-      //   navLink: "/app/freshlist/house/producttype",
+      //   navLink: "/app/freshlist/house/userlist",
       // },
       // {
       //   id: "accountantaccounts",
@@ -398,7 +398,7 @@ const navigationConfig = [
     type: "item",
     icon: <FaList size={15} />,
     permissions: ["admin", "editor"],
-    navLink: "/app/freshlist/cart/suggestedProducts",
+    navLink: "/app/freshlist/cart/BudgetAssignment",
   },
   {
     type: "groupHeader",
@@ -411,7 +411,7 @@ const navigationConfig = [
     type: "item",
     icon: <BsImage size={15} />,
     permissions: ["admin", "editor"],
-    navLink: "/app/freshlist/banner/BannerList",
+    navLink: "/app/freshlist/cart/DateWiseReport",
   },
   {
     id: "Client Wise",
@@ -419,7 +419,7 @@ const navigationConfig = [
     type: "item",
     icon: <FaCircleNotch size={15} />,
     permissions: ["admin", "editor"],
-    navLink: "/app/freshlist/banner/BannerList",
+    navLink: "/app/freshlist/cart/Clientwisereport",
   },
   {
     id: "Branch Wise",
@@ -427,7 +427,7 @@ const navigationConfig = [
     type: "item",
     icon: <FaCodeBranch size={15} />,
     permissions: ["admin", "editor"],
-    navLink: "/app/freshlist/banner/BannerList",
+    navLink: "/app/freshlist/cart/BranchwiseReport",
   },
   {
     id: "Product Wise",
@@ -435,7 +435,7 @@ const navigationConfig = [
     type: "item",
     icon: <FaProductHunt size={15} />,
     permissions: ["admin", "editor"],
-    navLink: "/app/freshlist/banner/BannerList",
+    navLink: "/app/freshlist/cart/ProductWise",
   },
   {
     type: "groupHeader",
@@ -448,7 +448,7 @@ const navigationConfig = [
     type: "item",
     icon: <FaCode size={15} />,
     permissions: ["admin", "editor"],
-    navLink: "/app/freshlist/banner/BannerList",
+    navLink: "/app/freshlist/code/UniqueCode",
   },
   {
     type: "groupHeader",
@@ -461,7 +461,7 @@ const navigationConfig = [
     type: "item",
     icon: <FaList size={15} />,
     permissions: ["admin", "editor"],
-    navLink: "/app/freshlist/banner/BannerList",
+    navLink: "/app/freshlist/report/LogsReport",
   },
   // {
   //   id: "refund",
@@ -710,7 +710,7 @@ const navigationConfig = [
   //   type: "item",
   //   icon: <BsImage size={15} />,
   //   permissions: ["admin", "editor"],
-  //   navLink: "/app/freshlist/banner/BannerList",
+  //   navLink: "/app/freshlist/banner/reportsdatewise",
   // },
   // {
   //   type: "groupHeader",
@@ -758,7 +758,7 @@ const navigationConfig = [
   //   type: "item",
   //   icon: <BsImage size={15} />,
   //   permissions: ["admin", "editor"],
-  //   navLink: "/app/freshlist/banner/BannerList",
+  //   navLink: "/app/freshlist/banner/reportsdatewise",
   // },
   // {
   //   type: "groupHeader",

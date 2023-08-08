@@ -57,8 +57,10 @@ class Login extends React.Component {
       .then((response) => {
         let msg = response.data?.success;
         if (msg) {
-          this.props.history.push("/dashboard");
           localStorage.setItem("userData", JSON.stringify(response.data?.data));
+          setTimeout(() => {
+            this.props.history.push("/dashboard");
+          }, 2000);
           swal(
             "Sucessfully login",
             "You are LoggedIn!",
@@ -73,7 +75,7 @@ class Login extends React.Component {
           ).then((value) => {
             switch (value) {
               case "ok":
-                window.location.reload();
+                // window.location.reload();
                 break;
               default:
             }

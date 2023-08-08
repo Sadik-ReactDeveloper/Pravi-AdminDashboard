@@ -12,29 +12,46 @@ import {
   CustomInput,
 } from "reactstrap";
 import { history } from "../../../../history";
-import Multiselect from "multiselect-react-dropdown";
+
 import axiosConfig from "../../../../axiosConfig";
 // import Multiselect from "multiselect-react-dropdown";
 import swal from "sweetalert";
 import "../../../../../src/layouts/assets/scss/pages/users.scss";
 import { Route } from "react-router-dom";
+import { CloudLightning } from "react-feather";
 export class CreateAccount extends Component {
   constructor(props) {
     super(props);
     this.state = {
       Address: "",
       fullname: "",
-      City: "",
-      phone_no: "",
+      B_City: "",
+      checkbox: "",
+      S_City: "",
+      Mobile_no: "",
+      B_Country: "",
+      S_Country: "",
+      Mobile_no: "",
+      Phone_no: "",
+      Place_of_Supply: "",
+      B_State: "",
+      S_State: "",
+      B_Street: "",
+      S_Street: "",
+      B_PinCode: "",
+      S_PinCode: "",
       setuserList: false,
       password: "",
       email: "",
       status: "",
       AssignRole: "",
+      CompanyName: "",
+      Companytype: "",
       Selectuser: "",
       UserName: "",
       productName: [],
     };
+    this.handleMatchaddress = this.handleMatchaddress.bind(this);
   }
   changeHandler = (e) => {
     this.setState({ [e.target.name]: e.target.value });
@@ -72,18 +89,29 @@ export class CreateAccount extends Component {
     formdata.append("password", this.state.password);
     formdata.append("full_name", this.state.fullname);
     formdata.append("username", this.state.UserName);
-    formdata.append("city", this.state.City);
-    formdata.append("mobile", this.state.phone_no);
+    formdata.append("city", this.state.B_City);
+    formdata.append("mobile", this.state.Mobile_no);
     formdata.append("email", this.state.email);
     formdata.append("status", this.state.status);
     formdata.append("role", this.state.AssignRole);
+    formdata.append("company_name", this.state.CompanyName);
+    formdata.append("company_type", this.state.Companytype);
+    formdata.append("place_supply", this.state.Place_of_Supply);
+    formdata.append("billing_street", this.state.B_Street);
+    formdata.append("billing_city", this.state.B_City);
+    formdata.append("billing_state", this.state.B_State);
+    formdata.append("billing_country", this.state.B_Country);
+    formdata.append("billing_pincode", this.state.B_PinCode);
+    formdata.append("shipping_street", this.state.S_Street);
+    formdata.append("shipping_city", this.state.S_City);
+    formdata.append("shipping_state", this.state.S_State);
+    formdata.append("shipping_country", this.state.S_Country);
+    formdata.append("shipping_pincode", this.state.S_PinCode);
+    formdata.append("phone_no", this.state.Phone_no);
 
-    // formdata.append("", this.state.AssignRole);
-    // formdata.append("username", this.state.UserName);
     axiosConfig
       .post("/createuser", formdata)
       .then((response) => {
-        // console.log(response.data?.success);
         if (response.data?.success) {
           swal("Success!", "Submitted SuccessFull!", "success");
           this.setState({ AssignRole: "" });
@@ -94,12 +122,33 @@ export class CreateAccount extends Component {
           this.setState({ UserName: "" });
           this.setState({ fullname: "" });
           this.setState({ password: "" });
+          this.setState({ S_Country: "" });
+          this.setState({ S_State: "" });
+          this.setState({ S_City: "" });
+          this.setState({ S_Street: "" });
+          this.setState({ S_PinCode: "" });
         }
         // this.props.history.push("/app/freshlist/order/all");
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+  handleMatchaddress = (e, value) => {
+    this.setState({ checkbox: value });
+    if (value) {
+      this.setState({ S_Country: this.state.B_Country });
+      this.setState({ S_State: this.state.B_State });
+      this.setState({ S_City: this.state.B_City });
+      this.setState({ S_Street: this.state.B_Street });
+      this.setState({ S_PinCode: this.state.B_PinCode });
+    } else {
+      this.setState({ S_Country: "" });
+      this.setState({ S_State: "" });
+      this.setState({ S_City: "" });
+      this.setState({ S_Street: "" });
+      this.setState({ S_PinCode: "" });
+    }
   };
 
   render() {
@@ -112,75 +161,62 @@ export class CreateAccount extends Component {
                 Add here
               </h1>
             </Col>
-            {/* <Col>
-              <Route
-                render={({ history }) => (
-                  <Button
-                    className=" btn btn-danger float-right"
-                    onClick={() => history.push("/app/freshlist/order/all")}
-                  >
-                    Back
-                  </Button>
-                )}
-              />
-            </Col> */}
           </Row>
+          <div className="container ">
+            <h4 className="py-2">Select User Type :-</h4>
+            <Row>
+              <Col lg="2" md="2">
+                <FormGroup>
+                  <h3>
+                    Client{" "}
+                    <span>
+                      <Input
+                        required
+                        className="mx-2"
+                        type="radio"
+                        name="City"
+                        value="Client"
+                        onChange={(e) => {
+                          this.setState({ setuserList: false });
+                          this.setState({ AssignRole: "Client" });
+                        }}
+                      />
+                    </span>
+                  </h3>
+                </FormGroup>
+              </Col>
+
+              <Col lg="2" md="2">
+                <FormGroup>
+                  <h3>
+                    User{" "}
+                    <span>
+                      <Input
+                        required
+                        height="21px"
+                        width="41px"
+                        className="mx-2"
+                        type="radio"
+                        name="City"
+                        value="User"
+                        onChange={(e) => {
+                          this.setState({ setuserList: true });
+                          this.setState({ AssignRole: "User" });
+                        }}
+                      />
+                    </span>
+                  </h3>
+                </FormGroup>
+              </Col>
+            </Row>
+          </div>
+
           <CardBody>
             <Form className="m-1" onSubmit={this.submitHandler}>
               <Row className="mb-2">
-                {/* <Col lg="6" md="6">
-                  <FormGroup>
-                    <Label>User Name</Label>
-                    <Multiselect
-                      selectionLimit="1"
-                      name="UserName"
-                      // singleSelect
-                      placeholder="user Name"
-                      value={this.state.UserName}
-                      isObject={false}
-                      onRemove={(e) => {
-                        console.log(e);
-                      }}
-                      onSelect={(e) => {
-                        this.setState({ UserName: e });
-                        // this.setState({ [e.target.name]: e.target.value });
-                        console.log(e);
-                      }}
-                      onChange={this.changeHandler}
-                      options={[
-                        "$6465464564664",
-                        "$65466464",
-                        "$6546ddd4646465464",
-                        "$65464dd465466",
-                        "$6546ss6464",
-                        "$65aa466464",
-                        "$6546464vv646f5464",
-                        "$654644dr65f466",
-                        "$6546646rrf4",
-                        "$654sff6646f4",
-                        "$6546464frtt6465464",
-                        "$6546446f5466",
-                        "$6546646f4",
-                        "$6546f46df4f6465464",
-                        "$654ddfd6f4465466",
-                      ]}
-                      showCheckbox
-                      className="mmm "
-                    />
-
-                   
-                    <Input
-                      type="number"
-                      placeholder=""
-                      name="UserName"
-                      value={this.state.UserName}
-                      onChange={this.changeHandler.bind(this)}
-                    /> 
-                  </FormGroup>
-                </Col> */}
                 <Col lg="6" md="6">
                   <FormGroup>
-                    <Label>Name</Label>
+                    <Label>Name *</Label>
                     <Input
                       required
                       type="text"
@@ -193,7 +229,7 @@ export class CreateAccount extends Component {
                 </Col>
                 <Col lg="6" md="6">
                   <FormGroup>
-                    <Label>Display Name</Label>
+                    <Label>Display Name *</Label>
                     <Input
                       required
                       type="text"
@@ -207,15 +243,30 @@ export class CreateAccount extends Component {
 
                 <Col lg="6" md="6">
                   <FormGroup>
-                    <Label>Mobile Number</Label>
+                    <Label>Mobile Number *</Label>
                     <Input
                       required
                       type="number"
                       maxLength={10}
                       size={10}
                       placeholder="0123456789"
-                      name="phone_no"
-                      value={this.state.phone_no}
+                      name="Mobile_no"
+                      value={this.state.Mobile_no}
+                      onChange={this.changeHandler.bind(this)}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col lg="6" md="6">
+                  <FormGroup>
+                    <Label>Phone Number </Label>
+                    <Input
+                      required
+                      type="number"
+                      maxLength={10}
+                      size={10}
+                      placeholder="0123456789"
+                      name="Phone_no"
+                      value={this.state.Phone_no}
                       onChange={this.changeHandler.bind(this)}
                     />
                   </FormGroup>
@@ -247,141 +298,232 @@ export class CreateAccount extends Component {
                     />
                   </FormGroup>
                 </Col>
-
-                {/* <Col lg="6" md="6">
-                  <FormGroup>
-                    <Label>Product Name</Label>
-                    <Multiselect
-                      name="UserName"
-                      placeholder="ata tamater Aalu "
-                      value={this.state.UserName}
-                      isObject={false}
-                      onRemove={(e) => {
-                        console.log(e);
-                      }}
-                      onSelect={(e) => {
-                        this.setState({ UserName: e });
-                        // this.setState({ [e.target.name]: e.target.value });
-                        console.log(e);
-                      }}
-                      onChange={this.changeHandler}
-                      options={[
-                        "Aalu",
-                        "tamater",
-                        "milk",
-                        "Soya Chunks",
-                        "Ata",
-                        "Ice Cream",
-                      ]}
-                      showCheckbox
-                      className="mmm "
-                    />
-                   
-                  </FormGroup>
-                </Col> */}
                 <Col lg="6" md="6">
                   <FormGroup>
-                    <Label>City</Label>
+                    <Label>Company Name</Label>
                     <Input
                       required
                       type="text"
-                      placeholder="Enter City"
-                      name="City"
-                      value={this.state.City}
+                      placeholder="Enter CompanyName"
+                      name="CompanyName"
+                      value={this.state.CompanyName}
+                      onChange={this.changeHandler}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col lg="6" md="6">
+                  <FormGroup>
+                    <Label>Company Type</Label>
+                    <Input
+                      required
+                      type="text"
+                      placeholder="Enter Companytype"
+                      name="Companytype"
+                      value={this.state.Companytype}
+                      onChange={this.changeHandler}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col lg="6" md="6">
+                  <FormGroup>
+                    <Label>Place of Supply</Label>
+                    <Input
+                      required
+                      type="text"
+                      placeholder="Enter Place_of_Supply"
+                      name="Place_of_Supply"
+                      value={this.state.Place_of_Supply}
                       onChange={this.changeHandler}
                     />
                   </FormGroup>
                 </Col>
               </Row>
               <hr />
-              <h4 className="py-2">Select User Type :-</h4>
-
               <Row>
-                <Col lg="2" md="2">
-                  <FormGroup>
-                    <h3>
-                      Client{" "}
-                      <span>
-                        <Input
-                          required
-                          className="mx-2"
-                          type="radio"
-                          name="City"
-                          value="Client"
-                          onChange={(e) => {
-                            this.setState({ setuserList: false });
-                            this.setState({ AssignRole: "Client" });
-                          }}
-                        />
-                      </span>
-                    </h3>
-                  </FormGroup>
-                </Col>
+                <Col>
+                  <h4 className="mt-4">Billing Address :</h4>
 
-                <Col lg="2" md="2">
-                  <FormGroup>
-                    <h3>
-                      User{" "}
-                      <span>
-                        <Input
-                          required
-                          height="21px"
-                          width="41px"
-                          className="mx-2"
-                          type="radio"
-                          name="City"
-                          value="User"
-                          onChange={(e) => {
-                            this.setState({ setuserList: true });
-                            this.setState({ AssignRole: "User" });
-                          }}
-                        />
-                      </span>
-                    </h3>
-                  </FormGroup>
+                  <Col className="py-2" lg="12" md="12" sm="12">
+                    <FormGroup>
+                      <label for="cars">Choose Country</label>
+                      <select
+                        placeholder="Enter City"
+                        name="B_Country"
+                        value={this.state.B_Country}
+                        onChange={this.changeHandler}
+                        className="form-control"
+                      >
+                        <option value="volvo">--Select Country--</option>
+                        <option value="India">India</option>
+                      </select>
+                    </FormGroup>
+                  </Col>
+                  <Col lg="12" md="12" sm="12">
+                    <FormGroup>
+                      <label for="cars">Choose State</label>
+                      <select
+                        name="B_State"
+                        value={this.state.B_State}
+                        onChange={this.changeHandler}
+                        className="form-control"
+                      >
+                        <option value="volvo">--Select State--</option>
+                        <option value="Madhya Pradesh">Madhya Pradesh</option>
+                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                        <option value="Maharastra">Maharastra</option>
+                      </select>
+                    </FormGroup>
+                  </Col>
+                  <Col lg="12" md="12" sm="12">
+                    <FormGroup>
+                      <FormGroup>
+                        <label for="cars">Choose City</label>
+                        <select
+                          placeholder="Enter City"
+                          name="B_City"
+                          value={this.state.B_City}
+                          onChange={this.changeHandler}
+                          className="form-control"
+                        >
+                          <option value="volvo">--Select City--</option>
+                          <option value="Indore">Indore</option>
+                          <option value="Panvel">Panvel</option>
+                          <option value="khandwa">khandwa</option>
+                        </select>
+                      </FormGroup>
+                    </FormGroup>
+                  </Col>
+                  <Col lg="12" md="12" sm="12">
+                    <FormGroup>
+                      <Label>Street</Label>
+                      <Input
+                        required
+                        type="text"
+                        placeholder="Enter Street"
+                        name="B_Street"
+                        value={this.state.B_Street}
+                        onChange={this.changeHandler}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col lg="12" md="12" sm="12">
+                    <FormGroup>
+                      <Label>PinCode</Label>
+                      <Input
+                        required
+                        type="text"
+                        placeholder="Enter PinCode"
+                        name="B_PinCode"
+                        value={this.state.B_PinCode}
+                        onChange={this.changeHandler}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Col>
+                <Col>
+                  <Row>
+                    <Col lg="1" md="1">
+                      <input
+                        name="check"
+                        onChange={(e) => {
+                          this.handleMatchaddress(e, e.target.checked);
+                        }}
+                        style={{
+                          height: "15px",
+                          width: "20px",
+                        }}
+                        type="checkbox"
+                      />
+                    </Col>
+                    <Col>
+                      <h5> Same as Billing Address </h5>
+                    </Col>
+                  </Row>
+                  <h4 className="py-2">Shipping Address :</h4>
+
+                  <Col lg="12" md="12" sm="12">
+                    <FormGroup>
+                      <label for="cars">Choose Country</label>
+                      <select
+                        placeholder="Enter City"
+                        name="S_Country"
+                        disabled={this.state.checkbox ? true : false}
+                        value={this.state.S_Country}
+                        onChange={this.changeHandler}
+                        className="form-control"
+                      >
+                        <option value="volvo">--Select Country--</option>
+                        <option value="India">India</option>
+                      </select>
+                    </FormGroup>
+                  </Col>
+                  <Col lg="12" md="12" sm="12">
+                    <FormGroup>
+                      <label for="cars">Choose State</label>
+                      <select
+                        name="S_State"
+                        disabled={this.state.checkbox ? true : false}
+                        value={this.state.S_State}
+                        onChange={this.changeHandler}
+                        className="form-control"
+                      >
+                        <option value="volvo">--Select State--</option>
+                        <option value="Madhya Pradesh">Madhya Pradesh</option>
+                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                        <option value="Maharastra">Maharastra</option>
+                      </select>
+                    </FormGroup>
+                  </Col>
+                  <Col lg="12" md="12" sm="12">
+                    <FormGroup>
+                      <FormGroup>
+                        <label for="cars">Choose City</label>
+                        <select
+                          disabled={this.state.checkbox ? true : false}
+                          placeholder="Enter City"
+                          name="S_City"
+                          value={this.state.S_City}
+                          onChange={this.changeHandler}
+                          className="form-control"
+                        >
+                          <option value="volvo">--Select City--</option>
+                          <option value="Indore">Indore</option>
+                          <option value="Panvel">Panvel</option>
+                          <option value="khandwa">khandwa</option>
+                        </select>
+                      </FormGroup>
+                    </FormGroup>
+                  </Col>
+                  <Col lg="12" md="12" sm="12">
+                    <FormGroup>
+                      <Label>Street</Label>
+                      <Input
+                        required
+                        disabled={this.state.checkbox ? true : false}
+                        type="text"
+                        placeholder="Enter Street"
+                        name="S_Street"
+                        value={this.state.S_Street}
+                        onChange={this.changeHandler}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col lg="12" md="12" sm="12">
+                    <FormGroup>
+                      <Label>PinCode</Label>
+                      <Input
+                        required
+                        disabled={this.state.checkbox ? true : false}
+                        type="text"
+                        placeholder="Enter PinCode"
+                        name="S_PinCode"
+                        value={this.state.S_PinCode}
+                        onChange={this.changeHandler}
+                      />
+                    </FormGroup>
+                  </Col>
                 </Col>
               </Row>
-              {/* {this.state.AssignRole === "Client" && (
-                <Row>
-                  <Col lg="6" md="6">
-                    <FormGroup>
-                      <h3>
-                        Blling To
-                        <span>
-                          <Input
-                            required
-                            type="text"
-                            name="City"
-                            value="Bill to"
-                            // onChange={(e) => {
-                            //   this.setState({ setuserList: false });
-                            //   this.setState({ AssignRole: "Client" });
-                            // }}
-                          />
-                        </span>
-                      </h3>
-                    </FormGroup>
-                  </Col>
-                  <Col lg="6" md="6">
-                    <FormGroup>
-                      <h3>
-                        Shipping To
-                        <span>
-                          <Input
-                            type="text"
-                            name="City"
-                            value="Ship to"
-                            // onChange={(e) => {
-                            //   this.setState({ setuserList: false });
-                            //   this.setState({ AssignRole: "Client" });
-                            // }}
-                          />
-                        </span>
-                      </h3>
-                    </FormGroup>
-                  </Col>
-                </Row>
-              )} */}
 
               {this.state.setuserList && (
                 <Row className="mt-2">
@@ -389,8 +531,8 @@ export class CreateAccount extends Component {
                     <Label className="mt-2  mb-2"> Select Role</Label>
 
                     <CustomInput
+                      id="AssignRole"
                       type="select"
-                      placeholder=""
                       name="AssignRole"
                       value={this.state.AssignRole}
                       onChange={this.changeHandler}

@@ -27,6 +27,7 @@ import "../../../../assets/scss/pages/users.scss";
 import swal from "sweetalert";
 import { Route } from "react-router-dom";
 import { BsEye, BsTrash } from "react-icons/bs";
+
 class RoleList extends React.Component {
   static contextType = UserContext;
 
@@ -101,7 +102,6 @@ class RoleList extends React.Component {
                       onClick={() =>
                         history.push({
                           pathname: `/app/freshlist/account/editRole/${params?.data}`,
-                          // pathname: `/app/freshlist/account/editRole/${params.data.id}`,
                           data: params,
                         })
                       }
@@ -148,7 +148,7 @@ class RoleList extends React.Component {
     const formdata = new FormData();
     formdata.append("user_id", pageparmission?.Userinfo?.id);
     formdata.append("role", pageparmission?.Userinfo?.role);
-    axiosConfig
+    await axiosConfig
       .post("/getrolelist", formdata)
       .then((response) => {
         console.log(response.data?.data);
@@ -161,7 +161,7 @@ class RoleList extends React.Component {
       });
   }
 
-  async runthisfunction(id) {
+  runthisfunction(id) {
     console.log(id);
     // await axiosConfig.get(`/delcontactus/${id}`).then((response) => {
     //   console.log(response);
