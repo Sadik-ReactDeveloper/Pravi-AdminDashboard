@@ -11,10 +11,15 @@ import {
   FormGroup,
   CustomInput,
 } from "reactstrap";
+import Multiselect from "multiselect-react-dropdown";
+
 import { history } from "../../../../history";
 import axiosConfig from "../../../../axiosConfig";
 import { Route } from "react-router-dom";
 import swal from "sweetalert";
+
+const selectItem1 = [];
+const Selectedarray = [];
 export class EditProductType extends Component {
   constructor(props) {
     super(props);
@@ -23,6 +28,12 @@ export class EditProductType extends Component {
       fullname: "",
       B_City: "",
       checkbox: "",
+      SelectedState: "",
+      StateList: [],
+      SelectedSCity: [],
+
+      CityList: [],
+
       S_City: "",
       Mobile_no: "",
       B_Country: "",
@@ -59,10 +70,55 @@ export class EditProductType extends Component {
       .post("/usereditview", data)
       .then((response) => {
         console.log(response.data.data);
+        let myArray;
+        let newdata;
+        if (response.data.data?.city_id) {
+          myArray = response.data.data?.city_id.split(",");
+        }
+        console.log(myArray);
         if (this.state.B_Street === this.state.S_Street) {
           this.setState({ checkbox: true });
         }
+        const formdata = new FormData();
+        formdata.append("state_id", response.data.data.state_id);
+        axiosConfig
+          .post(`/getcity`, formdata)
+          .then((res) => {
+            console.log(res?.data?.cities);
+            newdata = res?.data?.cities?.filter((ele) => {
+              if (myArray.includes(ele?.id)) {
+                return ele;
+              }
+            });
+            console.log(newdata);
+            this.setState({ CityList: res?.data?.cities });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        formdata.append("state_id", response.data.data.billing_state);
+        axiosConfig
+          .post(`/getcity`, formdata)
+          .then((res) => {
+            // console.log(res?.data?.cities);
+            this.setState({ CityList: res?.data?.cities });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        formdata.append("state_id", response.data.data.shipping_state);
+        axiosConfig
+          .post(`/getcity`, formdata)
+          .then((res) => {
+            // console.log(res?.data?.cities);
+            this.setState({ CityList: res?.data?.cities });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
         this.setState({
+          SelectedState: response.data.data.state_id,
+          selectedValue: newdata,
           B_City: response.data.data.billing_city,
           B_Country: response.data.data.billing_country,
           B_PinCode: response.data.data.billing_pincode,
@@ -90,6 +146,16 @@ export class EditProductType extends Component {
       })
       .catch((error) => {
         console.log(error);
+      });
+    await axiosConfig
+      .get("/getallstates")
+      .then((response) => {
+        this.setState({
+          StateList: response.data?.states,
+        });
+      })
+      .catch((error) => {
+        console.log(error.response.data);
       });
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
     const formdata = new FormData();
@@ -208,127 +274,6 @@ export class EditProductType extends Component {
               />
             </Col>
           </Row>
-          {/* <CardBody>
-            <Form className="m-1" onSubmit={(e) => this.submitHandler(e)}>
-              <Row className="mb-2">
-                <Col lg="6" md="6" className="mb-1">
-                  <Label>UserName</Label>
-                  <Input
-                    type="text"
-                    placeholder="UserName"
-                    name="UserName"
-                    disabled
-                    value={this.state.UserName}
-                    onChange={this.changeHandler}
-                  />
-                </Col>
-                <Col lg="6" md="6" className="mb-1">
-                  <Label>FullName</Label>
-                  <Input
-                    type="text"
-                    placeholder="FullName"
-                    name="FullName"
-                    disabled
-                    value={this.state.FullName}
-                    onChange={this.changeHandler}
-                  />
-                </Col>
-                <Col lg="6" md="6" className="mb-1">
-                  <Label>Email</Label>
-                  <Input
-                    type="email"
-                    placeholder="Email"
-                    disabled
-                    name="Email"
-                    value={this.state.Email}
-                    onChange={this.changeHandler}
-                  />
-                </Col>
-                <Col lg="6" md="6" className="mb-1">
-                  <Label>Mobile</Label>
-                  <Input
-                    type="number"
-                    placeholder="Mobile"
-                    name="Mobile"
-                    disabled
-                    value={this.state.Mobile}
-                    onChange={this.changeHandler}
-                  />
-                </Col>
-                <Col lg="6" md="6" className="mb-1">
-                  <Label>City</Label>
-                  <Input
-                    type="text"
-                    placeholder="City"
-                    name="City"
-                    value={this.state.City}
-                    onChange={this.changeHandler}
-                  />
-                </Col>
-                <Col lg="6" md="6" className="mb-1">
-                  <Label>Password</Label>
-                  <Input
-                    type="text"
-                    placeholder="Password"
-                    name="Password"
-                    value={this.state.Password}
-                    onChange={this.changeHandler}
-                  />
-                </Col>
-
-                <Col lg="6" md="6">
-                  <Label className="mt-2  mb-2"> Select Role</Label>
-
-                  <CustomInput
-                    type="select"
-                    placeholder=""
-                    name="Role"
-                    value={this.state.Role}
-                    onChange={this.changeHandlerRole}
-                  >
-                    {this.state.productName &&
-                      this.state.productName?.map((list, i) => (
-                        <option key={i} value={list}>
-                          {list}
-                        </option>
-                      ))}
-                  </CustomInput>
-                </Col>
-                <Col lg="6" md="6" sm="6" className="mb-2">
-                  <Label className="mb-1">Status</Label>
-                  <div
-                    className="form-label-group"
-                    onChange={(e) => this.handlerStatus(e)}
-                  >
-                    <input
-                      style={{ marginRight: "3px" }}
-                      type="radio"
-                      name="status"
-                      value="Active"
-                    />
-                    <span style={{ marginRight: "20px" }}>Active</span>
-
-                    <input
-                      style={{ marginRight: "3px" }}
-                      type="radio"
-                      name="status"
-                      value="Inactive"
-                    />
-                    <span style={{ marginRight: "3px" }}>Inactive</span>
-                  </div>
-                </Col>
-              </Row>
-              <Row>
-                <Button.Ripple
-                  color="primary"
-                  type="submit"
-                  className="mr-1 mb-1"
-                >
-                  Edit User
-                </Button.Ripple>
-              </Row>
-            </Form>
-          </CardBody> */}
 
           <Card>
             <div className="container ">
@@ -336,61 +281,7 @@ export class EditProductType extends Component {
                 Selected User Type :-{" "}
                 {this.state.AssignRole === "Client" ? "Client" : "User"}
               </h4>
-              <Row>
-                {/* {this.state.AssignRole === "Client" && (
-                  <Col lg="2" md="2">
-                    <FormGroup>
-                      <h3>
-                        Client{" "}
-                        <span>
-                          <Input
-                            required
-                            checked={
-                              this.state.AssignRole === "Client" ? true : false
-                            }
-                            className="mx-2"
-                            type="radio"
-                            name="role"
-                            value="Client"
-                            onChange={(e) => {
-                              this.setState({ setuserList: false });
-                              this.setState({ AssignRole: "Client" });
-                            }}
-                          />
-                        </span>
-                      </h3>
-                    </FormGroup>
-                  </Col>
-                )} */}
-
-                {/* {this.state.AssignRole === "User" && (
-                  <Col lg="2" md="2">
-                    <FormGroup>
-                      <h3>
-                        User{" "}
-                        <span>
-                          <Input
-                            required
-                            height="21px"
-                            width="41px"
-                            className="mx-2"
-                            type="radio"
-                            checked={
-                              this.state.AssignRole === "User" ? true : false
-                            }
-                            name="City"
-                            value="User"
-                            onChange={(e) => {
-                              this.setState({ setuserList: true });
-                              this.setState({ AssignRole: "User" });
-                            }}
-                          />
-                        </span>
-                      </h3>
-                    </FormGroup>
-                  </Col>
-                )} */}
-              </Row>
+              <Row></Row>
             </div>
 
             <CardBody>
@@ -470,20 +361,7 @@ export class EditProductType extends Component {
                       />
                     </FormGroup>
                   </Col>
-                  {/* <Col lg="6" md="6">
-                    <FormGroup>
-                      <Label>Password</Label>
-                      <Input
-                        required
-                        disabled
-                        type="text"
-                        placeholder="Enter password"
-                        name="password"
-                        value={this.state.password}
-                        onChange={this.changeHandler}
-                      />
-                    </FormGroup>
-                  </Col> */}
+
                   <Col lg="6" md="6">
                     <FormGroup>
                       <Label>Company Name</Label>
@@ -523,6 +401,50 @@ export class EditProductType extends Component {
                       />
                     </FormGroup>
                   </Col>
+                  <Col lg="6" md="6">
+                    <FormGroup>
+                      <label for="cars">Choose State</label>
+                      <select
+                        name="SelectedState"
+                        value={this.state.SelectedState}
+                        onChange={(e) => {
+                          console.log(e.target.value);
+                          const formdata = new FormData();
+                          this.setState({ SelectedState: e.target.value });
+                          formdata.append("state_id", e.target.value);
+                          axiosConfig
+                            .post(`/getcity`, formdata)
+                            .then((res) => {
+                              console.log(res?.data?.cities);
+                              this.setState({ CityList: res?.data?.cities });
+                            })
+                            .catch((err) => {
+                              console.log(err);
+                            });
+                        }}
+                        // onChange={this.changeHandler}
+                        className="form-control"
+                      >
+                        <option value="volvo">--Select State--</option>
+                        {this.state.StateList &&
+                          this.state.StateList?.map((ele, i) => (
+                            <option key={i} value={ele?.id}>
+                              {ele?.state_title}
+                            </option>
+                          ))}
+                      </select>
+                    </FormGroup>
+                  </Col>
+                  <Col lg="6" md="6">
+                    <label for="cars">Choose City</label>
+                    <Multiselect
+                      options={this.state.CityList} // Options to display in the dropdown
+                      selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
+                      onSelect={this.onSelect} // Function will trigger on select event
+                      onRemove={this.onRemove} // Function will trigger on remove event
+                      displayValue="name" // Property name to display in the dropdown options
+                    />
+                  </Col>
                 </Row>
                 <hr />
                 <Row>
@@ -550,13 +472,30 @@ export class EditProductType extends Component {
                         <select
                           name="B_State"
                           value={this.state.B_State}
-                          onChange={this.changeHandler}
+                          onChange={(e) => {
+                            console.log(e.target.value);
+                            this.setState({ B_State: e.target.value });
+                            const formdata = new FormData();
+                            formdata.append("state_id", e.target.value);
+                            axiosConfig
+                              .post(`/getcity`, formdata)
+                              .then((res) => {
+                                this.setState({ CityList: res?.data?.cities });
+                              })
+                              .catch((err) => {
+                                console.log(err);
+                              });
+                          }}
+                          // onChange={this.changeHandler}
                           className="form-control"
                         >
                           <option value="volvo">--Select State--</option>
-                          <option value="Madhya Pradesh">Madhya Pradesh</option>
-                          <option value="Uttar Pradesh">Uttar Pradesh</option>
-                          <option value="Maharastra">Maharastra</option>
+                          {this.state.StateList &&
+                            this.state.StateList?.map((ele, i) => (
+                              <option key={i} value={ele?.id}>
+                                {ele?.state_title}
+                              </option>
+                            ))}
                         </select>
                       </FormGroup>
                     </Col>
@@ -572,9 +511,12 @@ export class EditProductType extends Component {
                             className="form-control"
                           >
                             <option value="volvo">--Select City--</option>
-                            <option value="Indore">Indore</option>
-                            <option value="Panvel">Panvel</option>
-                            <option value="khandwa">khandwa</option>
+                            {this.state.CityList &&
+                              this.state.CityList?.map((value, index) => (
+                                <option key={index} value={value?.id}>
+                                  {value?.name}
+                                </option>
+                              ))}
                           </select>
                         </FormGroup>
                       </FormGroup>
@@ -653,15 +595,32 @@ export class EditProductType extends Component {
                         <label for="cars">Choose State</label>
                         <select
                           name="S_State"
-                          disabled={this.state.checkbox ? true : false}
                           value={this.state.S_State}
-                          onChange={this.changeHandler}
+                          onChange={(e) => {
+                            // console.log(e.target.value);
+                            this.setState({ S_State: e.target.value });
+                            const formdata = new FormData();
+                            formdata.append("state_id", e.target.value);
+                            axiosConfig
+                              .post(`/getcity`, formdata)
+                              .then((res) => {
+                                console.log(res?.data?.cities);
+                                this.setState({ CityList: res?.data?.cities });
+                              })
+                              .catch((err) => {
+                                console.log(err);
+                              });
+                          }}
+                          // onChange={this.changeHandler}
                           className="form-control"
                         >
                           <option value="volvo">--Select State--</option>
-                          <option value="Madhya Pradesh">Madhya Pradesh</option>
-                          <option value="Uttar Pradesh">Uttar Pradesh</option>
-                          <option value="Maharastra">Maharastra</option>
+                          {this.state.StateList &&
+                            this.state.StateList?.map((ele, i) => (
+                              <option key={i} value={ele?.id}>
+                                {ele?.state_title}
+                              </option>
+                            ))}
                         </select>
                       </FormGroup>
                     </Col>
@@ -670,7 +629,6 @@ export class EditProductType extends Component {
                         <FormGroup>
                           <label for="cars">Choose City</label>
                           <select
-                            disabled={this.state.checkbox ? true : false}
                             placeholder="Enter City"
                             name="S_City"
                             value={this.state.S_City}
@@ -678,9 +636,12 @@ export class EditProductType extends Component {
                             className="form-control"
                           >
                             <option value="volvo">--Select City--</option>
-                            <option value="Indore">Indore</option>
-                            <option value="Panvel">Panvel</option>
-                            <option value="khandwa">khandwa</option>
+                            {this.state.CityList &&
+                              this.state.CityList?.map((value, index) => (
+                                <option key={index} value={value?.id}>
+                                  {value?.name}
+                                </option>
+                              ))}
                           </select>
                         </FormGroup>
                       </FormGroup>

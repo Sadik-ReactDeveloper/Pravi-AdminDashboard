@@ -194,6 +194,9 @@ const All = lazy(() => import("./views/apps/freshlist/order/All"));
 const Placeorder = lazy(() =>
   import("./views/apps/freshlist/order/Placeorder")
 );
+const Selectedorder = lazy(() =>
+  import("./views/apps/freshlist/order/Selectedorder")
+);
 const editPlaceorder = lazy(() =>
   import("./views/apps/freshlist/order/EditPlaceOrder")
 );
@@ -430,6 +433,9 @@ const ServiceMaster = lazy(() =>
 );
 const ProductType = lazy(() =>
   import("./views/apps/freshlist/house/ProductType")
+);
+const SupplierList = lazy(() =>
+  import("./views/apps/freshlist/house/SupplierList")
 );
 const EditProductType = lazy(() =>
   import("./views/apps/freshlist/house/EditProductType")
@@ -983,6 +989,10 @@ class AppRouter extends React.Component {
             component={Placeorder}
           />
           <AppRoute
+            path="/app/freshlist/order/Selectedorder"
+            component={Selectedorder}
+          />
+          <AppRoute
             path="/app/freshlist/order/editplaceorder/:id"
             component={editPlaceorder}
           />
@@ -1307,6 +1317,10 @@ class AppRouter extends React.Component {
           <AppRoute
             path="/app/freshlist/house/userlist"
             component={ProductType}
+          />
+          <AppRoute
+            path="/app/freshlist/house/SupplierList"
+            component={SupplierList}
           />
           <AppRoute
             path="/app/freshlist/house/editProductType/:id"

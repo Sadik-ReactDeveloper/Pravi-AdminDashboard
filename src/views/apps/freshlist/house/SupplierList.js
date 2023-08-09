@@ -59,16 +59,32 @@ class ProductType extends React.Component {
         width: 100,
         filter: true,
       },
+
       {
-        headerName: "Role",
-        field: "role",
+        headerName: "Username",
+        field: "username",
         filter: "agSetColumnFilter",
-        width: 120,
+        width: 150,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{params?.data?.role}</span>
+                <span>{params?.data?.username}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "created by",
+        field: "username",
+        filter: "agSetColumnFilter",
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params?.data?.username}</span>
               </div>
             </div>
           );
@@ -89,39 +105,6 @@ class ProductType extends React.Component {
           );
         },
       },
-      {
-        headerName: "Username",
-        field: "username",
-        filter: "agSetColumnFilter",
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{params?.data?.username}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-
-      {
-        headerName: "created by",
-        field: "created_by",
-        filter: "agSetColumnFilter",
-        width: 150,
-        cellRendererFramework: (params) => {
-          console.log(params?.data);
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{params?.data?.created_by}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-
       {
         headerName: "Email",
         field: "email",
@@ -257,6 +240,21 @@ class ProductType extends React.Component {
         },
       },
 
+      {
+        headerName: "Role",
+        field: "role",
+        filter: "agSetColumnFilter",
+        width: 120,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params?.data?.role}</span>
+              </div>
+            </div>
+          );
+        },
+      },
       {
         headerName: "Status",
         field: "status",

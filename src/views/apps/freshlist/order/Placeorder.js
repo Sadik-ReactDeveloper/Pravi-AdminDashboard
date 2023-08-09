@@ -21,7 +21,7 @@ import ReactHtmlParser from "react-html-parser";
 import { ContextLayout } from "../../../../utility/context/Layout";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
-import { Eye, Trash2, ChevronDown, Edit } from "react-feather";
+import { Eye, Trash2, ChevronDown, Edit, CloudLightning } from "react-feather";
 
 import { history } from "../../../../history";
 import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
@@ -38,6 +38,7 @@ class Placeorder extends React.Component {
     Typelist: [],
     SelectedProduct: [],
     Type: "",
+    Addedbtn: false,
     Viewpermisson: null,
     Editpermisson: null,
     Createpermisson: null,
@@ -65,14 +66,23 @@ class Placeorder extends React.Component {
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
                 <input
-                  onClick={() => {
-                    console.log(params.data);
-                    console.log(this.state.SelectedProduct);
-                    this.setState({
-                      SelectedProduct: this.state.SelectedProduct.concat(
-                        params.data
-                      ),
-                    });
+                  className="addinarray"
+                  onClick={(e) => {
+                    console.log(e.target.checked);
+                    if (e.target.checked) {
+                      console.log(this.state.SelectedProduct);
+                      this.setState({
+                        SelectedProduct: this.state.SelectedProduct.concat(
+                          params?.data
+                        ),
+                      });
+                    } else {
+                      let data = this.state.SelectedProduct.filter((ele, i) => {
+                        if (ele?.id === params?.data?.id) {
+                          this.state.SelectedProduct.splice(i, 1);
+                        }
+                      });
+                    }
                   }}
                   type="checkbox"
                 />
@@ -357,7 +367,9 @@ class Placeorder extends React.Component {
       },
     ],
   };
-
+  componentDidUpdate() {
+    console.log(this.state.SelectedProduct);
+  }
   async componentDidMount() {
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
 
@@ -439,80 +451,6 @@ class Placeorder extends React.Component {
     const { rowData, columnDefs, defaultColDef } = this.state;
     return (
       <>
-        <Row>
-          {/* <Col lg="4" md="12">
-            <Card
-              className="bg-secondary  py-3 "
-              body
-              inverse
-              style={{ borderColor: "white" }}
-            >
-              <CardTitle
-                className="fntweight"
-                tag="h3"
-                style={{ color: "black", fontSize: "16px" }}
-              >
-                <FaBoxOpen style={{ color: "orange" }} />
-                &nbsp;&nbsp; Total Products
-              </CardTitle>
-              <CardText
-                className="wt-text"
-                tag="span"
-                style={{ color: "black", marginLeft: "4px" }}
-              >
-                {this.state.product}
-              </CardText>
-            </Card>
-          </Col>
-          <Col lg="4" md="12">
-            <Card
-              className="bg-secondary  py-3"
-              body
-              inverse
-              style={{ borderColor: "white" }}
-            >
-              <CardTitle
-                className="fntweight"
-                tag="h3"
-                style={{ color: "black", fontSize: "16px" }}
-              >
-                <FaBoxOpen style={{ color: "orange" }} />
-                &nbsp;&nbsp; Total Categories
-              </CardTitle>
-              <CardText
-                className="wt-text"
-                tag="span"
-                style={{ color: "black", marginLeft: "4px" }}
-              >
-                {this.state.product}
-              </CardText>
-            </Card>
-          </Col>
-          <Col lg="4" md="12">
-            <Card
-              className="bg-secondary  py-3"
-              body
-              inverse
-              style={{ borderColor: "white" }}
-            >
-              <CardTitle
-                className="fntweight"
-                tag="h3"
-                style={{ color: "black", fontSize: "16px" }}
-              >
-                <FaBoxOpen style={{ color: "orange" }} />
-                &nbsp;&nbsp; Total Barnds
-              </CardTitle>
-              <CardText
-                className="wt-text"
-                tag="span"
-                style={{ color: "black", marginLeft: "4px" }}
-              >
-                {this.state.product}
-              </CardText>
-            </Card>
-          </Col> */}
-        </Row>
         <Row className="app-user-list">
           <Col sm="12">
             <Card>
@@ -522,11 +460,33 @@ class Placeorder extends React.Component {
                     Place Order
                   </h1>
                 </Col>
-                <Col>
+
+                <Col lg="3">
+                  {this.state.SelectedProduct &&
+                  this.state.SelectedProduct.length > 0 ? (
+                    <Route
+                      render={({ history }) => (
+                        <Button
+                          className="float-right mx-2"
+                          color="primary"
+                          onClick={() => {
+                            localStorage.setItem(
+                              "SelectedProduct",
+                              JSON.stringify(this.state.SelectedProduct)
+                            );
+                            history.push("/app/freshlist/order/Selectedorder");
+                          }}
+                        >
+                          Add
+                        </Button>
+                      )}
+                    />
+                  ) : null}
+
                   <Route
                     render={({ history }) => (
                       <Button
-                        className="float-right"
+                        className="float-right mx-2"
                         color="primary"
                         onClick={() => history.push("/app/freshlist/order/all")}
                       >
@@ -535,23 +495,6 @@ class Placeorder extends React.Component {
                     )}
                   />
                 </Col>
-                {/* <Col>
-                  <Route
-                    render={({ history }) => (
-                      <Button
-                        className="float-right"
-                        color="primary"
-                        onClick={() =>
-                          history.push(
-                            "/app/freshlist/options/ProductDashboard"
-                          )
-                        }
-                      >
-                        Add Type
-                      </Button>
-                    )}
-                  />
-                </Col> */}
               </Row>
               <CardBody>
                 {this.state.rowData === null ? null : (
@@ -611,8 +554,6 @@ class Placeorder extends React.Component {
                         </div>
                         <div className=" mr-1">
                           <FormGroup>
-                            {/* <label> Choose Type *</label> */}
-
                             <select
                               onChange={(e) => {
                                 this.setState({ Type: e.target.value });

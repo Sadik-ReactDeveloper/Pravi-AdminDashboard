@@ -736,30 +736,29 @@ class EditPlaceOrder extends React.Component {
                             ))}
                         </Input>
                       </Col>
-                      {this.state.userdata &&
-                      this.state.userdata?.Userinfo?.role === "Trupee" ? (
-                        <Col lg="4" md="4" className="mb-1 ">
-                          <Label>User List</Label>
-                          <Input
-                            required
-                            type="select"
-                            name="Clientname"
-                            placeholder="Enter Iden Type"
-                            value={this.state.Clientname}
-                            onChange={(e) =>
-                              this.setState({ Clientname: e.target.value })
-                            }
-                          >
-                            <option value="12ROW">--Selecte--</option>
-                            {this.state.Clientlist &&
-                              this.state.Clientlist?.map((val, i) => (
-                                <option key={i} value={val?.id}>
-                                  {val?.full_name}
-                                </option>
-                              ))}
-                          </Input>
-                        </Col>
-                      ) : null}
+
+                      <Col lg="4" md="4" className="mb-1 ">
+                        <Label>User List</Label>
+                        <Input
+                          required
+                          type="select"
+                          name="Clientname"
+                          placeholder="Enter Iden Type"
+                          value={this.state.Clientname}
+                          onChange={(e) =>
+                            this.setState({ Clientname: e.target.value })
+                          }
+                        >
+                          <option value="12ROW">--Selecte--</option>
+                          {this.state.Clientlist &&
+                            this.state.Clientlist?.map((val, i) => (
+                              <option key={i} value={val?.id}>
+                                {val?.full_name}
+                              </option>
+                            ))}
+                        </Input>
+                      </Col>
+
                       <Col lg="4" md="4" className="mb-1 ">
                         <Label>Quantity</Label>
                         <Input
