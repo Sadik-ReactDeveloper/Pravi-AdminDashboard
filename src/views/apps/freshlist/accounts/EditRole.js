@@ -384,8 +384,8 @@ export default function AddRoleNew() {
                                 height: `${
                                   Selected?.some(
                                     (item) =>
-                                      item.pagename === value?.title &&
-                                      item.permission.includes("parentPermit")
+                                      item?.pagename === value?.title &&
+                                      item?.permission.includes("parentPermit")
                                   )
                                     ? "340px"
                                     : "40px"
@@ -407,11 +407,10 @@ export default function AddRoleNew() {
                                 <Col className="gy-2" lg="4" sm="4" md="4">
                                   <div className="align-item-center">
                                     <input
-                                      // checked={hasParentPermission}
                                       checked={Selected?.some(
                                         (item) =>
-                                          item.pagename === value?.title &&
-                                          item.permission.includes(
+                                          item?.pagename === value?.title &&
+                                          item?.permission?.includes(
                                             "parentPermit"
                                           )
                                       )}

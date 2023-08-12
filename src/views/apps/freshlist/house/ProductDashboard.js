@@ -58,7 +58,7 @@ class ProductDashboard extends React.Component {
 
       {
         headerName: "PRODUCT Image",
-        field: "product",
+        field: "product_images",
         filter: "agSetColumnFilter",
         width: 150,
         cellRendererFramework: (params) => {

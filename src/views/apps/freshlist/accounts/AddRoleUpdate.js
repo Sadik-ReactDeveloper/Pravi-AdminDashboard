@@ -182,22 +182,7 @@ export default function AddRoleNew() {
                                 type="checkbox"
                               />
 
-                              <span className="mx-3 gy-0">
-                                {value?.title}
-                                {/* {!show ? (
-                                  <>
-                                    <BsFillArrowDownCircleFill
-                                      title="show Subpages"
-                                      onClick={() =>
-                                        handlesetparent("true", index)
-                                      }
-                                      style={{ cursor: "pointer" }}
-                                      fill="blue"
-                                      size="25px"
-                                    />
-                                  </>
-                                ) : null} */}
-                              </span>
+                              <span className="mx-3 gy-0">{value?.title}</span>
                             </div>
                           </Col>
                           <Col className="gy-2">
@@ -272,7 +257,6 @@ export default function AddRoleNew() {
                       <Button
                         type="submit"
                         style={{ cursor: "pointer" }}
-                        // onClick={(e) => handleSumit(e)}
                         color="primary"
                       >
                         Submit

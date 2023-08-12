@@ -22,7 +22,8 @@ import { ContextLayout } from "../../../../utility/context/Layout";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import { Eye, Trash2, ChevronDown, Edit, CloudLightning } from "react-feather";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { history } from "../../../../history";
 import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
@@ -30,14 +31,18 @@ import { FaWallet, Facart, FaCartArrowDown, FaBoxOpen } from "react-icons/fa";
 import "moment-timezone";
 import { Route } from "react-router-dom";
 import { timers } from "jquery";
+import swal from "sweetalert";
+import { BsFillCartCheckFill } from "react-icons/bs";
 
 class Placeorder extends React.Component {
   state = {
+    ProductQuantity: "",
     product: [],
     rowData: [],
     Typelist: [],
     SelectedProduct: [],
     Type: "",
+    productlength: "",
     Addedbtn: false,
     Viewpermisson: null,
     Editpermisson: null,
@@ -48,9 +53,9 @@ class Placeorder extends React.Component {
     getPageSize: "",
     defaultColDef: {
       sortable: true,
-      editable: true,
+      // editable: true,
       resizable: true,
-      rowSelection: "multiple",
+      // rowSelection: "multiple",
       suppressMenu: true,
     },
     columnDefs: [
@@ -61,35 +66,35 @@ class Placeorder extends React.Component {
         // checkboxSelection: true,
         width: 150,
         filter: true,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <input
-                  className="addinarray"
-                  onClick={(e) => {
-                    console.log(e.target.checked);
-                    if (e.target.checked) {
-                      console.log(this.state.SelectedProduct);
-                      this.setState({
-                        SelectedProduct: this.state.SelectedProduct.concat(
-                          params?.data
-                        ),
-                      });
-                    } else {
-                      let data = this.state.SelectedProduct.filter((ele, i) => {
-                        if (ele?.id === params?.data?.id) {
-                          this.state.SelectedProduct.splice(i, 1);
-                        }
-                      });
-                    }
-                  }}
-                  type="checkbox"
-                />
-              </div>
-            </div>
-          );
-        },
+        // cellRendererFramework: (params) => {
+        //   return (
+        //     <div className="d-flex align-items-center cursor-pointer">
+        //       <div className="">
+        //         <input
+        //           className="addinarray"
+        //           onClick={(e) => {
+        //             console.log(e.target.checked);
+        //             if (e.target.checked) {
+        //               console.log(this.state.SelectedProduct);
+        //               this.setState({
+        //                 SelectedProduct: this.state.SelectedProduct.concat(
+        //                   params?.data
+        //                 ),
+        //               });
+        //             } else {
+        //               let data = this.state.SelectedProduct.filter((ele, i) => {
+        //                 if (ele?.id === params?.data?.id) {
+        //                   this.state.SelectedProduct.splice(i, 1);
+        //                 }
+        //               });
+        //             }
+        //           }}
+        //           type="checkbox"
+        //         />
+        //       </div>
+        //     </div>
+        //   );
+        // },
       },
 
       {
@@ -113,6 +118,21 @@ class Placeorder extends React.Component {
                 ) : (
                   "No Image "
                 )}
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "PRODUCT",
+        field: "title",
+        filter: "agSetColumnFilter",
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params.data?.title}</span>
               </div>
             </div>
           );
@@ -148,21 +168,7 @@ class Placeorder extends React.Component {
           );
         },
       },
-      {
-        headerName: "PRODUCT",
-        field: "title",
-        filter: "agSetColumnFilter",
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{params.data?.title}</span>
-              </div>
-            </div>
-          );
-        },
-      },
+
       {
         headerName: "CATEGORY",
         field: "category_name",
@@ -178,16 +184,54 @@ class Placeorder extends React.Component {
           );
         },
       },
+      // {
+      //   headerName: "Description",
+      //   field: "description",
+      //   filter: "agSetColumnFilter",
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{ReactHtmlParser(params.data?.description)}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       {
-        headerName: "Description",
-        field: "description",
+        headerName: "Quantity",
+        field: "Quantity",
         filter: "agSetColumnFilter",
-        width: 120,
+        width: 250,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{ReactHtmlParser(params.data?.description)}</span>
+              <div className="d-flex">
+                {/* <Button color="primary">-</Button> */}
+                <input
+                  onChange={(e) => {
+                    this.setState({ ProductQuantity: e.target.value });
+                  }}
+                  type="number"
+                  className="form-control"
+                />
+
+                <Button
+                  // disabled={
+                  //   this.state.ProductQuantity && this.state.ProductQuantity > 0
+                  //     ? false
+                  //     : true
+                  // }
+                  onClick={(e) => {
+                    this.handleAddToCart(e, params?.data);
+                  }}
+                  size="sm"
+                  color="primary"
+                  className="mx-1"
+                >
+                  Add {this.state.ProductQuantity && this.state.ProductQuantity}
+                </Button>
               </div>
             </div>
           );
@@ -208,99 +252,99 @@ class Placeorder extends React.Component {
           );
         },
       },
-      {
-        headerName: "DiscountPrice",
-        field: "discountprice",
-        filter: "agSetColumnFilter",
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{params.data?.discountprice}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Shipping Fee",
-        field: "shipping_fee",
-        filter: "agSetColumnFilter",
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{params.data?.shipping_fee}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Tax Rate",
-        field: "tax_rate",
-        filter: "agSetColumnFilter",
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{params.data?.tax_rate}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Tags",
-        field: "tags",
-        filter: "agSetColumnFilter",
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{params.data?.tags}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "STOCK",
-        field: "stock",
+      // {
+      //   headerName: "DiscountPrice",
+      //   field: "discountprice",
+      //   filter: "agSetColumnFilter",
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{params.data?.discountprice}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Shipping Fee",
+      //   field: "shipping_fee",
+      //   filter: "agSetColumnFilter",
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{params.data?.shipping_fee}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Tax Rate",
+      //   field: "tax_rate",
+      //   filter: "agSetColumnFilter",
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{params.data?.tax_rate}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Tags",
+      //   field: "tags",
+      //   filter: "agSetColumnFilter",
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{params.data?.tags}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "STOCK",
+      //   field: "stock",
 
-        filter: "agSetColumnFilter",
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{ReactHtmlParser(params.data?.stock)}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Created ",
-        field: "created_date",
-        filter: "agSetColumnFilter",
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>
-                  {ReactHtmlParser(params.data?.created_date?.split(" ")[0])}
-                </span>
-              </div>
-            </div>
-          );
-        },
-      },
+      //   filter: "agSetColumnFilter",
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{ReactHtmlParser(params.data?.stock)}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Created ",
+      //   field: "created_date",
+      //   filter: "agSetColumnFilter",
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>
+      //             {ReactHtmlParser(params.data?.created_date?.split(" ")[0])}
+      //           </span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       // {
       //   headerName: "SALES",
       //   field: "pisces",
@@ -316,55 +360,55 @@ class Placeorder extends React.Component {
       //     );
       //   },
       // },
-      {
-        headerName: "Actions",
-        field: "transactions",
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="actions cursor-pointer">
-              {/* {this.state.Viewpermisson && (
-                <Eye
-                  className="mr-50"
-                  size="25px"
-                  color="green"
-                  onClick={() =>
-                    history.push(
-                      `/app/freshlist/order/viewAll/${params.data.id}`
-                    )
-                  }
-                />
-              )} */}
-              {this.state.Editpermisson && (
-                <Edit
-                  className="mr-50"
-                  size="25px"
-                  color="blue"
-                  onClick={() =>
-                    this.props.history.push({
-                      pathname: `/app/freshlist/house/editmyproduct/${params.data?.id}`,
-                      state: params.data,
-                    })
-                  }
-                />
-              )}
-              {this.state.Deletepermisson && (
-                <Trash2
-                  className="mr-50"
-                  size="25px"
-                  color="Red"
-                  onClick={() => {
-                    let selectedData = this.gridApi.getSelectedRows();
+      // {
+      //   headerName: "Actions",
+      //   field: "transactions",
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="actions cursor-pointer">
+      //         {/* {this.state.Viewpermisson && (
+      //           <Eye
+      //             className="mr-50"
+      //             size="25px"
+      //             color="green"
+      //             onClick={() =>
+      //               history.push(
+      //                 `/app/freshlist/order/viewAll/${params.data.id}`
+      //               )
+      //             }
+      //           />
+      //         )} */}
+      //         {/* {this.state.Editpermisson && (
+      //           <Edit
+      //             className="mr-50"
+      //             size="25px"
+      //             color="blue"
+      //             onClick={() =>
+      //               this.props.history.push({
+      //                 pathname: `/app/freshlist/house/editmyproduct/${params.data?.id}`,
+      //                 state: params.data,
+      //               })
+      //             }
+      //           />
+      //         )} */}
+      //         {/* {this.state.Deletepermisson && (
+      //           <Trash2
+      //             className="mr-50"
+      //             size="25px"
+      //             color="Red"
+      //             onClick={() => {
+      //               let selectedData = this.gridApi.getSelectedRows();
 
-                    this.runthisfunction(params.data?.id);
-                    this.gridApi.updateRowData({ remove: selectedData });
-                  }}
-                />
-              )}
-            </div>
-          );
-        },
-      },
+      //               this.runthisfunction(params.data?.id);
+      //               this.gridApi.updateRowData({ remove: selectedData });
+      //             }}
+      //           />
+      //         )} */}
+      //       </div>
+      //     );
+      //   },
+      // },
     ],
   };
   componentDidUpdate() {
@@ -391,7 +435,14 @@ class Placeorder extends React.Component {
     const formdata = new FormData();
     formdata.append("user_id", pageparmission?.Userinfo?.id);
     formdata.append("role", pageparmission?.Userinfo?.role);
-
+    await axiosConfig
+      .post(`/viewcart`, formdata)
+      .then((res) => {
+        this.setState({ productlength: res?.data?.data?.length });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     await axiosConfig
       .post("/productlistapi", formdata)
       .then((response) => {
@@ -408,6 +459,40 @@ class Placeorder extends React.Component {
       this.setState({ Typelist });
     });
   }
+  handleAddToCart = (e, data) => {
+    e.preventDefault();
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    const formdata = new FormData();
+    formdata.append("qty", this.state.ProductQuantity);
+    formdata.append("user_id", pageparmission?.Userinfo?.id);
+    formdata.append("product_id", data?.id);
+    formdata.append("price", data?.price);
+    if (this.state.ProductQuantity > 0) {
+      axiosConfig
+        .post(`/add_to_cart`, formdata)
+        .then((res) => {
+          this.setState({ ProductQuantity: "" });
+          // toast(`${this.state.ProductQuantity} Product Added`);
+
+          toast.success(`${this.state.ProductQuantity} Product Added`);
+          // this.componentDidMount();
+
+          axiosConfig
+            .post(`/viewcart`, formdata)
+            .then((res) => {
+              this.setState({ productlength: res?.data?.data?.length });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      swal("Add Quantity first");
+    }
+  };
 
   async runthisfunction(id) {
     console.log(id);
@@ -451,6 +536,20 @@ class Placeorder extends React.Component {
     const { rowData, columnDefs, defaultColDef } = this.state;
     return (
       <>
+        <ToastContainer />
+        {/* <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        /> */}
+
         <Row className="app-user-list">
           <Col sm="12">
             <Card>
@@ -462,31 +561,36 @@ class Placeorder extends React.Component {
                 </Col>
 
                 <Col lg="3">
-                  {this.state.SelectedProduct &&
-                  this.state.SelectedProduct.length > 0 ? (
-                    <Route
-                      render={({ history }) => (
-                        <Button
-                          className="float-right mx-2"
-                          color="primary"
-                          onClick={() => {
-                            localStorage.setItem(
-                              "SelectedProduct",
-                              JSON.stringify(this.state.SelectedProduct)
-                            );
-                            history.push("/app/freshlist/order/Selectedorder");
-                          }}
-                        >
-                          Add
-                        </Button>
-                      )}
-                    />
+                  {this.state.productlength && this.state.productlength > 0 ? (
+                    <>
+                      <Route
+                        render={({ history }) => (
+                          <Button
+                            className="float-right mt-1 mx-2"
+                            color="primary"
+                            // size="sm"
+                            onClick={() => {
+                              // localStorage.setItem(
+                              //   "SelectedProduct",
+                              //   JSON.stringify(this.state.productlength)
+                              // );
+                              history.push(
+                                "/app/freshlist/order/Selectedorder"
+                              );
+                            }}
+                          >
+                            View Cart
+                            <sup>{this.state.productlength}</sup>
+                          </Button>
+                        )}
+                      />
+                    </>
                   ) : null}
 
                   <Route
                     render={({ history }) => (
                       <Button
-                        className="float-right mx-2"
+                        className="float-right mt-1 "
                         color="primary"
                         onClick={() => history.push("/app/freshlist/order/all")}
                       >

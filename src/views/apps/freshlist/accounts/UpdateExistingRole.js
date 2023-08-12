@@ -21,10 +21,10 @@ export default function AddRoleNew() {
 
   const param = useParams();
 
-  useEffect(async () => {
+  useEffect(() => {
     const formdata = new FormData();
     formdata.append("role_name", param.id);
-    await axiosConfig
+    axiosConfig
       .post(`/editroleview`, formdata)
       .then((res) => {
         // setSelected(permission);

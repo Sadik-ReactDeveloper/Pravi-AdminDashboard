@@ -19,6 +19,7 @@ import { Route } from "react-router-dom";
 import swal from "sweetalert";
 
 const selectItem1 = [];
+
 const Selectedarray = [];
 export class EditProductType extends Component {
   constructor(props) {
@@ -193,6 +194,7 @@ export class EditProductType extends Component {
     let { id } = this.props.match.params;
     e.preventDefault();
     const formdata = new FormData();
+    let uniqueChars = [...new Set(selectItem1)];
     formdata.append("id", id);
     formdata.append("password", this.state.password);
     formdata.append("full_name", this.state.fullname);
@@ -216,6 +218,8 @@ export class EditProductType extends Component {
     formdata.append("shipping_country", this.state.S_Country);
     formdata.append("shipping_pincode", this.state.S_PinCode);
     formdata.append("phone_no", this.state.Phone_no);
+    formdata.append("state_id", this.state.SelectedState);
+    formdata.append("city_id", uniqueChars);
 
     axiosConfig
       .post("/usereditsubmit", formdata)
@@ -248,6 +252,20 @@ export class EditProductType extends Component {
       this.setState({ S_PinCode: "" });
     }
   };
+  onSelect(selectedList, selectedItem) {
+    console.log(selectedList);
+    console.log(selectedList.length);
+
+    if (selectedList.length) {
+      for (var i = 0; i < selectedList.length; i++) {
+        selectItem1.push(selectedList[i].id);
+      }
+    }
+  }
+  onRemove(selectedList, removedItem) {
+    console.log(selectedList);
+    console.log(selectItem1);
+  }
 
   render() {
     return (

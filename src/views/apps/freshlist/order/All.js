@@ -600,7 +600,7 @@ class All extends React.Component {
         this.setState({ rowData });
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.response);
       });
 
     let newparmisson = pageparmission?.role?.find(
@@ -620,7 +620,7 @@ class All extends React.Component {
 
     // await axiosConfig.get("/admin/allorder_list").then((response) => {
 
-    //   console.log(rowData);
+    // console.log(newparmisson?.permission.includes("Create"));
     // });
   }
 

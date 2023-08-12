@@ -221,7 +221,7 @@ export class EditInventory extends Component {
                     <Label> HSN / SAC </Label>
                     <Input
                       type="number"
-                      placeholder="Amount In Number"
+                      placeholder="Enter here"
                       name="Inventory"
                       bsSize="lg"
                       value={this.state.Inventory}

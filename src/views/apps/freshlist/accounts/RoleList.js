@@ -237,9 +237,7 @@ class RoleList extends React.Component {
           <Card>
             <Row className="m-2">
               <Col>
-                <h1 col-sm-6 className="float-left">
-                  Created Role List
-                </h1>
+                <h1 className="float-left">Created Role List</h1>
               </Col>
               {/* <Col>
                 <Route

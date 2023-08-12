@@ -230,14 +230,14 @@ class SideMenuContent extends React.Component {
             target={item.newTab ? "_blank" : undefined}
           >
             <li hidden="" className="menu-text">
-              {item.icon}
+              {item?.icon}
               <span className="menu-item menu-title">
-                <FormattedMessage id={item.title} />
+                <FormattedMessage id={item?.title} />
               </span>
             </li>
             {item.badge ? (
               <div className="menu-badge">
-                <Badge color={item.badge} className="mr-1" pill>
+                <Badge color={item?.badge} className="mr-1" pill>
                   {item.badgeText}
                 </Badge>
               </div>
