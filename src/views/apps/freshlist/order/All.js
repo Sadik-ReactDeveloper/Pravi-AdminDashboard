@@ -25,6 +25,7 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import { Eye, Trash2, ChevronDown, Edit } from "react-feather";
 import { history } from "../../../../history";
+import { ToWords } from "to-words";
 import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
 import swal from "sweetalert";
@@ -32,6 +33,27 @@ import AnalyticsDashboard from "../../../dashboard/analytics/AnalyticsDashboard"
 import { Route, Link } from "react-router-dom";
 import { AiOutlineDownload } from "react-icons/ai";
 import InvoiceGenerator from "../subcategory/InvoiceGenerator1";
+
+const toWords = new ToWords({
+  localeCode: "en-IN",
+  converterOptions: {
+    currency: true,
+    ignoreDecimal: false,
+    ignoreZeroCurrency: false,
+    doNotAddOnly: false,
+    currencyOptions: {
+      // can be used to override defaults for the selected locale
+      name: "Rupee",
+      plural: "Rupees",
+      symbol: "₹",
+      fractionalUnit: {
+        name: "Paisa",
+        plural: "Paise",
+        symbol: "",
+      },
+    },
+  },
+});
 class All extends React.Component {
   state = {
     modal: false,
@@ -586,22 +608,25 @@ class All extends React.Component {
     }));
   };
 
-  async componentDidMount() {
+  componentDidMount() {
+    const toWords = new ToWords();
+    let words = toWords.convert(4520.36, { currency: true });
+    console.log(words);
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
 
     const formdata = new FormData();
     formdata.append("user_id", pageparmission?.Userinfo?.id);
     formdata.append("role", pageparmission?.Userinfo?.role);
-    await axiosConfig
-      .post(`/orderlist`, formdata)
-      .then((res) => {
-        console.log(res.data.data);
-        let rowData = res.data.data;
-        this.setState({ rowData });
-      })
-      .catch((err) => {
-        console.log(err.response);
-      });
+    // axiosConfig
+    //   .post(`/orderlist`, formdata)
+    //   .then((res) => {
+    //     console.log(res.data.data);
+    //     let rowData = res?.data?.data;
+    //     this.setState({ rowData });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err?.response);
+    //   });
 
     let newparmisson = pageparmission?.role?.find(
       (value) => value?.pageName === "Place Order"
@@ -747,6 +772,7 @@ class All extends React.Component {
               <Col>
                 <h1 col-sm-6 className="float-left">
                   Place Order List
+                  <InvoiceGenerator PrintData={this.state.PrintData} />
                 </h1>
               </Col>
               <Col>

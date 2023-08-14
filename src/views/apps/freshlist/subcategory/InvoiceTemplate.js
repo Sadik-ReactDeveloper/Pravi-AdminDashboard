@@ -10,6 +10,7 @@ import {
   Rect,
 } from "@react-pdf/renderer";
 import logo from "../../../../assets/img/logo/paravilogo.jpeg";
+import signature from "../../../../assets/img/logo/signature.png";
 
 const styles = StyleSheet.create({
   page: {
@@ -377,7 +378,7 @@ const InvoiceTemplate = ({ invoiceData }) => {
                   #
                 </Text>
               </View>
-              <View
+              {/* <View
                 style={{
                   width: "10%",
                   padding: "5px 2px",
@@ -394,7 +395,7 @@ const InvoiceTemplate = ({ invoiceData }) => {
                 >
                   PO Number
                 </Text>
-              </View>
+              </View> */}
               <View
                 style={{
                   width: "25%",
@@ -934,12 +935,13 @@ const InvoiceTemplate = ({ invoiceData }) => {
                       fontSize: "12px",
                       width: "95%",
                       fontWeight: "bold",
+                      marginTop: "10px",
                     }}
                   >
                     Seven Hundread Five and sixty five Rupees only.
                   </Text>{" "}
                 </View>
-                <View style={{ margingTop: "50px" }}>
+                {/* <View style={{ margingTop: "50px" }}>
                   <Text style={{ fontSize: "8px", marginTop: "15px" }}>
                     Pay To: Kd Advertisement
                   </Text>
@@ -955,11 +957,14 @@ const InvoiceTemplate = ({ invoiceData }) => {
                   <Text style={{ fontSize: "8px", marginTop: "3px" }}>
                     IFSC: MAROLI , ANDHERI EAST
                   </Text>
-                </View>
+                </View> */}
                 <View
                   style={{
-                    margingTop: "50px",
-                    marginBottom: "40px",
+                    margingTop: "550px",
+                    marginBottom: "10px",
+                    height: "190px",
+                    justifyContent: "flex-end",
+                    // borderBottom: "1px solid black",
                   }}
                 >
                   <Text style={{ fontSize: "10px", marginTop: "15px" }}>
@@ -976,12 +981,13 @@ const InvoiceTemplate = ({ invoiceData }) => {
 
               <View
                 style={{
-                  // padding: "10px",
+                  // padding: "10px",\\
+                  // borderBottom: "1px solid black",
                   width: "45%",
-                  height: "120px",
+                  height: "250px",
                 }}
               >
-                <View style={{ height: "170px" }}>
+                <View style={{ height: "200px" }}>
                   <View
                     style={{
                       padding: "10px",
@@ -1175,11 +1181,8 @@ const InvoiceTemplate = ({ invoiceData }) => {
                   </View>
                 </View>
                 <View>
-                  <View style={{ padding: "5px 3px " }}>
-                    <Text style={{ fontSize: "11px", padding: "4px 4px" }}>
-                      {" "}
-                      For
-                    </Text>
+                  <View style={{ padding: "3px 3px ", height: "180px" }}>
+                    <Text style={{ fontSize: "11px" }}> For</Text>
                     <Text
                       style={{
                         fontSize: "8px",
@@ -1190,9 +1193,18 @@ const InvoiceTemplate = ({ invoiceData }) => {
                       {" "}
                       PRAVARI CORPORATE MANAGEMENT SERVICES PVT. LTD.
                     </Text>
+                    <View>
+                      <Image
+                        style={{ height: "50px", marginTop: "15px" }}
+                        src={signature}
+                      ></Image>
+                    </View>
                     <View
                       style={{
-                        marginBottom: "0px",
+                        flexDirection: "row",
+                        marginBottom: "2px",
+                        marginTop: "20px",
+                        justifyContent: "center",
                       }}
                     >
                       <Text style={{ fontSize: "10px" }}>

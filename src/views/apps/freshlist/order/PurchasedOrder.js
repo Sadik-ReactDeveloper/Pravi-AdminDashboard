@@ -80,19 +80,19 @@ class PurchasedOrder extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
-              {/* {this.state.Viewpermisson && (
+              {this.state.Viewpermisson && (
                 <Eye
                   className="mr-50"
                   size="25px"
                   color="green"
                   onClick={() =>
                     history.push(
-                      `/app/freshlist/order/viewAll/${params.data.id}`
+                      `/app/freshlist/order/viewAll/${params.data?.id}`
                     )
                   }
                 />
               )}
-              {this.state.Editpermisson && (
+              {/* {this.state.Editpermisson && (
                 <Route
                   render={({ history }) => (
                     <Edit
@@ -147,7 +147,7 @@ class PurchasedOrder extends React.Component {
               >
                 Stock Verify
               </Badge>
-              <span className="mx-2">
+              {/* <span className="mx-2">
                 <Badge
                   onClick={() => {
                     console.log("Dispatch");
@@ -156,7 +156,7 @@ class PurchasedOrder extends React.Component {
                 >
                   Dispatch
                 </Badge>
-              </span>
+              </span> */}
             </div>
           );
         },

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useDebugValue } from "react";
 import {
   Card,
   CardBody,
@@ -23,6 +23,7 @@ import { Route } from "react-router-dom";
 import { CloudLightning } from "react-feather";
 import { timers } from "jquery";
 const selectItem1 = [];
+const AllunSelectedCity = [];
 const Selectedarray = [];
 
 export class CreateAccount extends Component {
@@ -35,6 +36,7 @@ export class CreateAccount extends Component {
       Createpermisson: null,
       Deletepermisson: null,
       fullname: "",
+      GSTIN: "",
       StateList: [],
       CityList: [],
       SelectedSCity: [],
@@ -136,6 +138,7 @@ export class CreateAccount extends Component {
     formdata.append("created_by", pageparmission?.Userinfo?.id);
     formdata.append("password", this.state.password);
     formdata.append("full_name", this.state.fullname);
+    formdata.append("gstin", this.state.GSTIN);
     formdata.append("username", this.state.UserName);
     formdata.append("city", this.state.B_City);
     formdata.append("mobile", this.state.Mobile_no);
@@ -202,21 +205,34 @@ export class CreateAccount extends Component {
   };
   onSelect(selectedList, selectedItem) {
     console.log(selectedList);
-    console.log(selectedList.length);
 
     if (selectedList.length) {
       for (var i = 0; i < selectedList.length; i++) {
         selectItem1.push(selectedList[i].id);
       }
     }
-
-    // let newarr = selectItem1.filter(
-    //   (item, index) => selectItem1.indexOf(item) === index
-    // );
   }
-  componentDidUpdate() {}
+  componentDidUpdate() {
+    console.log(selectItem1);
+  }
 
-  onRemove(selectedList, removedItem) {}
+  onRemove = (selectedList, removedItem) => {
+    console.log(selectedList);
+    console.log(removedItem?.id);
+    debugger;
+    // let arr1 = selectItem1.includes(removedItem?.id);
+    // let newarr = selectItem1.filter((val) => {
+    //   console.log(((val = removedItem?.id), i));
+    //   debugger;
+    //   if (val === removedItem?.id) {
+    //     return null;
+    //   } else {
+    //     return val;
+    //   }
+    // });
+    console.log(newarr);
+    console.log(arr1);
+  };
   render() {
     const { selectedOptions } = this.state;
     return (
@@ -296,7 +312,7 @@ export class CreateAccount extends Component {
                 </Col>
                 <Col lg="6" md="6">
                   <FormGroup>
-                    <Label>Display Name *</Label>
+                    <Label>Display Code *</Label>
                     <Input
                       required
                       type="text"
@@ -323,25 +339,10 @@ export class CreateAccount extends Component {
                     />
                   </FormGroup>
                 </Col>
-                <Col lg="6" md="6">
-                  <FormGroup>
-                    <Label>Phone Number </Label>
-                    <Input
-                      required
-                      type="number"
-                      maxLength={10}
-                      size={10}
-                      placeholder="0123456789"
-                      name="Phone_no"
-                      value={this.state.Phone_no}
-                      onChange={this.changeHandler.bind(this)}
-                    />
-                  </FormGroup>
-                </Col>
 
                 <Col lg="6" md="6">
                   <FormGroup>
-                    <Label>Email</Label>
+                    <Label>Email *</Label>
                     <Input
                       required
                       type="email"
@@ -380,6 +381,21 @@ export class CreateAccount extends Component {
                 </Col>
                 <Col lg="6" md="6">
                   <FormGroup>
+                    <Label>Phone Number </Label>
+                    <Input
+                      required
+                      type="number"
+                      maxLength={10}
+                      size={10}
+                      placeholder="0123456789"
+                      name="Phone_no"
+                      value={this.state.Phone_no}
+                      onChange={this.changeHandler.bind(this)}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col lg="6" md="6">
+                  <FormGroup>
                     <Label>Company Type</Label>
                     <Input
                       required
@@ -387,6 +403,19 @@ export class CreateAccount extends Component {
                       placeholder="Enter Companytype"
                       name="Companytype"
                       value={this.state.Companytype}
+                      onChange={this.changeHandler}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col lg="6" md="6">
+                  <FormGroup>
+                    <Label>GSTIN</Label>
+                    <Input
+                      required
+                      type="text"
+                      placeholder="Enter GSTIN No."
+                      name="GSTIN"
+                      value={this.state.GSTIN}
                       onChange={this.changeHandler}
                     />
                   </FormGroup>
