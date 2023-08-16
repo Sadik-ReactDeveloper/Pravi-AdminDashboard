@@ -189,6 +189,70 @@ class All extends React.Component {
           );
         },
       },
+      {
+        headerName: "supplier",
+        field: "supplier_id",
+        filter: true,
+        resizable: true,
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.supplier_id}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "created_on",
+        field: "created_date",
+        filter: true,
+        resizable: true,
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.created_date}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "subtotal",
+        field: "subtotal",
+        filter: true,
+        resizable: true,
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.subtotal}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "total",
+        field: "total",
+        filter: true,
+        resizable: true,
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.total}</span>
+              </div>
+            </div>
+          );
+        },
+      },
 
       {
         headerName: "Product Image",
@@ -608,7 +672,7 @@ class All extends React.Component {
     }));
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     const toWords = new ToWords();
     let words = toWords.convert(4520.36, { currency: true });
     console.log(words);
@@ -617,16 +681,16 @@ class All extends React.Component {
     const formdata = new FormData();
     formdata.append("user_id", pageparmission?.Userinfo?.id);
     formdata.append("role", pageparmission?.Userinfo?.role);
-    // axiosConfig
-    //   .post(`/orderlist`, formdata)
-    //   .then((res) => {
-    //     console.log(res.data.data);
-    //     let rowData = res?.data?.data;
-    //     this.setState({ rowData });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err?.response);
-    //   });
+    await axiosConfig
+      .post(`/placedorder`, formdata)
+      .then((res) => {
+        console.log(res.data.data);
+        let rowData = res?.data?.data;
+        this.setState({ rowData });
+      })
+      .catch((err) => {
+        console.log(err?.response);
+      });
 
     let newparmisson = pageparmission?.role?.find(
       (value) => value?.pageName === "Place Order"
@@ -772,7 +836,7 @@ class All extends React.Component {
               <Col>
                 <h1 col-sm-6 className="float-left">
                   Place Order List
-                  <InvoiceGenerator PrintData={this.state.PrintData} />
+                  {/* <InvoiceGenerator PrintData={this.state.PrintData} /> */}
                 </h1>
               </Col>
               <Col>
