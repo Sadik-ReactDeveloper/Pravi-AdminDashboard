@@ -211,6 +211,49 @@ class BudgetAssignment extends React.Component {
                     Budget Assignement
                   </h1>
                 </Col>
+                <Col>
+                  <h5 sm="4" className="">
+                    Assigned Budget-5000
+                  </h5>
+                </Col>
+                <Col>
+                  <h5 sm="4" className="">
+                    Remaining Budget-5000
+                  </h5>
+                </Col>
+              </Row>
+              <Row className="m-2">
+                <Col>
+                  <input className="form-control mt-1" type="number" />
+                </Col>
+                <Col>
+                  <Button color="primary" className="mt-1">
+                    Assign Budget
+                  </Button>
+                </Col>
+                <Col>
+                  <input className="form-control mt-1" type="number" />
+                </Col>
+                <Col>
+                  <Button color="primary" className="mt-1">
+                    TOPUP Budget
+                  </Button>
+                </Col>
+                <Col>
+                  <label className="selectClient">Select a Client</label>
+
+                  <select className="form-control" name="cars" id="cars">
+                    <option value="volvo">Volvo</option>
+                    <option value="saab">Saab</option>
+                    <option value="mercedes">Mercedes</option>
+                    <option value="audi">Audi</option>
+                  </select>
+                </Col>
+                <Col>
+                  <Button color="primary" className="mt-1">
+                    Submit
+                  </Button>
+                </Col>
               </Row>
               <CardBody>
                 {this.state.rowData === null ? null : (

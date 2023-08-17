@@ -202,16 +202,16 @@ class SuggestedProducts extends React.Component {
       console.log(rowData),
       (
         <Row className="app-user-list">
-          <Col sm="12"></Col>
           <Col sm="12">
             <Card>
               <Row className="m-2">
                 <Col>
-                  <h1 sm="6" className="float-left">
+                  <h1 sm="4" className="">
                     Budget List
                   </h1>
                 </Col>
               </Row>
+
               <CardBody>
                 {this.state.rowData === null ? null : (
                   <div className="ag-theme-material w-100 my-2 ag-grid-table">

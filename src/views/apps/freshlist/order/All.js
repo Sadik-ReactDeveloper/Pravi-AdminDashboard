@@ -71,12 +71,28 @@ class All extends React.Component {
     getPageSize: "",
     info: true,
     columnDefs: [
+      // {
+      //   headerName: "S.No",
+      //   valueGetter: "node.rowIndex + 1",
+      //   field: "node.rowIndex + 1",
+      //   width: 80,
+      //   filter: true,
+      // },
       {
-        headerName: "S.No",
-        valueGetter: "node.rowIndex + 1",
-        field: "node.rowIndex + 1",
-        width: 80,
+        headerName: "order id ",
+        field: "order_id",
         filter: true,
+        resizable: true,
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params?.data?.order_id}</span>
+              </div>
+            </div>
+          );
+        },
       },
       {
         headerName: "Status",
@@ -101,6 +117,7 @@ class All extends React.Component {
           ) : null;
         },
       },
+
       {
         headerName: "Change Status ",
         field: "Change Status",
@@ -173,25 +190,26 @@ class All extends React.Component {
           );
         },
       },
-      {
-        headerName: "order id ",
-        field: "order_id",
-        filter: true,
-        resizable: true,
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.order_id}</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "Created By",
+      //   field: "create_order_user_full_name",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.create_order_user_full_name}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+
       {
         headerName: "supplier",
-        field: "supplier_id",
+        field: "supplier_name",
         filter: true,
         resizable: true,
         width: 150,
@@ -199,23 +217,23 @@ class All extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
-                <span>{params.data?.supplier_id}</span>
+                <span>{params.data?.supplier_name}</span>
               </div>
             </div>
           );
         },
       },
       {
-        headerName: "created_on",
-        field: "created_date",
+        headerName: "Order Date",
+        field: "order_date",
         filter: true,
         resizable: true,
-        width: 150,
+        width: 180,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
-                <span>{params.data?.created_date}</span>
+                <span>{params.data?.order_date}</span>
               </div>
             </div>
           );
@@ -223,7 +241,7 @@ class All extends React.Component {
       },
       {
         headerName: "subtotal",
-        field: "subtotal",
+        field: "sub_total",
         filter: true,
         resizable: true,
         width: 150,
@@ -231,7 +249,7 @@ class All extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
-                <span>{params.data?.subtotal}</span>
+                <span>{params.data?.sub_total}</span>
               </div>
             </div>
           );
@@ -254,35 +272,35 @@ class All extends React.Component {
         },
       },
 
-      {
-        headerName: "Product Image",
-        field: "product_images",
-        filter: true,
-        resizable: true,
-        width: 160,
-        cellRendererFramework: (params) => {
-          // console.log(params.data);
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                {params?.data?.product_images &&
-                params.data?.product_images?.length ? (
-                  <>
-                    <img
-                      style={{ borderRadius: "12px" }}
-                      src={params.data?.product_images[0]}
-                      alt="image"
-                      width="60px"
-                    />
-                  </>
-                ) : (
-                  "No image"
-                )}
-              </div>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "Product Image",
+      //   field: "product_images",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 160,
+      //   cellRendererFramework: (params) => {
+      //     // console.log(params.data);
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           {params?.data?.product_images &&
+      //           params.data?.product_images?.length ? (
+      //             <>
+      //               <img
+      //                 style={{ borderRadius: "12px" }}
+      //                 src={params.data?.product_images[0]}
+      //                 alt="image"
+      //                 width="60px"
+      //               />
+      //             </>
+      //           ) : (
+      //             "No image"
+      //           )}
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
 
       {
         headerName: "Actions",
@@ -308,7 +326,7 @@ class All extends React.Component {
                   )}
                 />
               )}
-              {this.state.Editpermisson && (
+              {/* {this.state.Editpermisson && (
                 <Route
                   render={({ history }) => (
                     <Edit
@@ -323,7 +341,7 @@ class All extends React.Component {
                     />
                   )}
                 />
-              )}
+              )} */}
 
               {this.state.Deletepermisson && (
                 <Route
@@ -346,38 +364,38 @@ class All extends React.Component {
         },
       },
 
-      {
-        headerName: "categoryName",
-        field: "category_name",
-        filter: true,
-        resizable: true,
-        width: 160,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.category_name}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "brandname ",
-        field: "brand_name",
-        filter: true,
-        resizable: true,
-        width: 180,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.brand_name}</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "categoryName",
+      //   field: "category_name",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 160,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.category_name}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "brandname ",
+      //   field: "brand_name",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 180,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.brand_name}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       // {
       //   headerName: "city",
       //   field: "city",
@@ -394,68 +412,68 @@ class All extends React.Component {
       //     );
       //   },
       // },
-      {
-        headerName: "order Creation date",
-        field: "order_date",
-        filter: true,
-        resizable: true,
-        width: 230,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.order_date}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "deliverydate",
-        field: "delivery_date",
-        filter: true,
-        resizable: true,
-        width: 230,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.delivery_date}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "description",
-        field: "description",
-        filter: "true",
-        width: 180,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{params.data?.description}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "discountprice",
-        field: "discountprice",
-        filter: "true",
-        width: 180,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{params.data?.discountprice}</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "order Creation date",
+      //   field: "order_date",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 230,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.order_date}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "deliverydate",
+      //   field: "delivery_date",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 230,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.delivery_date}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "description",
+      //   field: "description",
+      //   filter: "true",
+      //   width: 180,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{params.data?.description}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "discountprice",
+      //   field: "discountprice",
+      //   filter: "true",
+      //   width: 180,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{params.data?.discountprice}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       // {
       //   headerName: "email",
       //   field: "email",
@@ -506,55 +524,55 @@ class All extends React.Component {
       //     );
       //   },
       // },
-      {
-        headerName: "price",
-        field: "price",
-        filter: true,
-        resizable: true,
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.price}</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "price",
+      //   field: "price",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.price}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
 
-      {
-        headerName: "producttype",
-        field: "product_type",
-        filter: true,
-        resizable: true,
-        width: 190,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.product_type}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "shippingfee",
-        field: "shipping_fee",
-        filter: true,
-        resizable: true,
-        width: 190,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.shipping_fee}</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "producttype",
+      //   field: "product_type",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 190,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.product_type}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "shippingfee",
+      //   field: "shipping_fee",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 190,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.shipping_fee}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       // {
       //   headerName: "status",
       //   field: "status",
@@ -571,22 +589,22 @@ class All extends React.Component {
       //     );
       //   },
       // },
-      {
-        headerName: "stock",
-        field: "stock",
-        filter: true,
-        resizable: true,
-        width: 180,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.stock}</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "stock",
+      //   field: "stock",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 180,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.stock}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       // {
       //   headerName: "subtotal",
       //   field: "subtotal",
@@ -603,38 +621,38 @@ class All extends React.Component {
       //     );
       //   },
       // },
-      {
-        headerName: "tags",
-        field: "tags",
-        filter: true,
-        resizable: true,
-        width: 180,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.tags}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "tax_rate",
-        field: "tax_rate",
-        filter: true,
-        resizable: true,
-        width: 180,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.tax_rate}</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "tags",
+      //   field: "tags",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 180,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.tags}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "tax_rate",
+      //   field: "tax_rate",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 180,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.tax_rate}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
 
       // {
       //   headerName: "Permitions",
@@ -673,6 +691,8 @@ class All extends React.Component {
   };
 
   async componentDidMount() {
+    let { id } = this.props.match.params;
+    console.log(id);
     const toWords = new ToWords();
     let words = toWords.convert(4520.36, { currency: true });
     console.log(words);
@@ -682,7 +702,7 @@ class All extends React.Component {
     formdata.append("user_id", pageparmission?.Userinfo?.id);
     formdata.append("role", pageparmission?.Userinfo?.role);
     await axiosConfig
-      .post(`/placedorder`, formdata)
+      .post(`/orderlist`, formdata)
       .then((res) => {
         console.log(res.data.data);
         let rowData = res?.data?.data;

@@ -131,8 +131,8 @@ export class CreateAccount extends Component {
     e.preventDefault();
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
     let uniqueChars = [...new Set(selectItem1)];
-    // console.log(uniqueChars);
-    // debugger;
+    console.log(uniqueChars);
+
     const formdata = new FormData();
 
     formdata.append("created_by", pageparmission?.Userinfo?.id);
@@ -219,7 +219,7 @@ export class CreateAccount extends Component {
   onRemove = (selectedList, removedItem) => {
     console.log(selectedList);
     console.log(removedItem?.id);
-    debugger;
+
     // let arr1 = selectItem1.includes(removedItem?.id);
     // let newarr = selectItem1.filter((val) => {
     //   console.log(((val = removedItem?.id), i));

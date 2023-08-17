@@ -31,6 +31,7 @@ export class EditProductType extends Component {
       checkbox: "",
       SelectedState: "",
       StateList: [],
+      SelectedSupplierCity: [],
       SelectedSCity: [],
 
       CityList: [],
@@ -71,6 +72,7 @@ export class EditProductType extends Component {
       .post("/usereditview", data)
       .then((response) => {
         console.log(response.data.data);
+        // console.log(response.data.data?.city_id);
         let myArray;
         let newdata;
         if (response.data.data?.city_id) {
@@ -92,6 +94,8 @@ export class EditProductType extends Component {
               }
             });
             console.log(newdata);
+            this.setState({ SelectedSupplierCity: newdata });
+            this.setState({ selectedValue: newdata });
             this.setState({ CityList: res?.data?.cities });
           })
           .catch((err) => {
@@ -254,6 +258,7 @@ export class EditProductType extends Component {
   };
   onSelect(selectedList, selectedItem) {
     console.log(selectedList);
+
     console.log(selectedList.length);
 
     if (selectedList.length) {
@@ -457,7 +462,10 @@ export class EditProductType extends Component {
                     <label for="cars">Choose City</label>
                     <Multiselect
                       options={this.state.CityList} // Options to display in the dropdown
-                      selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
+                      selectedValues={
+                        this.state.selectedValue ||
+                        this.state.SelectedSupplierCity
+                      } // Preselected value to persist in dropdown
                       onSelect={this.onSelect} // Function will trigger on select event
                       onRemove={this.onRemove} // Function will trigger on remove event
                       displayValue="name" // Property name to display in the dropdown options

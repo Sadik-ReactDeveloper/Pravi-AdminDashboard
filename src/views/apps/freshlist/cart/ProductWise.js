@@ -211,6 +211,16 @@ class ProductWise extends React.Component {
                     Product Wise Report
                   </h1>
                 </Col>
+                <Col>
+                  <label for="cars">Select Product :</label>
+
+                  <select className="form-control" name="cars" id="cars">
+                    <option value="volvo">Volvo</option>
+                    <option value="saab">Saab</option>
+                    <option value="mercedes">Mercedes</option>
+                    <option value="audi">Audi</option>
+                  </select>
+                </Col>
               </Row>
               <CardBody>
                 {this.state.rowData === null ? null : (

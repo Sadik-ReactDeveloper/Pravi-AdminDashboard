@@ -27,7 +27,8 @@ class DateWiseReport extends React.Component {
     rowData: [],
     paginationPageSize: 20,
     currenPageSize: "",
-    getPageSize: "",
+    CurrentDate: "",
+    SelectedDate: "",
     defaultColDef: {
       sortable: true,
       editable: true,
@@ -150,6 +151,9 @@ class DateWiseReport extends React.Component {
     ],
   };
   componentDidMount() {
+    const date = new Date().toISOString();
+    console.log(date.split("T")[0]);
+    this.setState({ CurrentDate: date.split("T")[0] });
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
     console.log(pageparmission.role);
     let newparmisson = pageparmission?.role?.find(
@@ -210,6 +214,23 @@ class DateWiseReport extends React.Component {
                   <h1 sm="6" className="float-left">
                     Date Wise Report
                   </h1>
+                </Col>
+                <Col>
+                  <label for="start">Select Date:</label>
+
+                  <input
+                    onChange={(e) => {
+                      this.setState({ SelectedDate: e.target.value });
+                    }}
+                    className="form-control"
+                    type="date"
+                    id="start"
+                    name="trip-start"
+                    pattern="\d{4}-\d{2}-\d{2}"
+                    // value="2018-07-22"
+                    min="2019-01-01"
+                    max={this.state.CurrentDate && this.state.CurrentDate}
+                  />
                 </Col>
               </Row>
               <CardBody>

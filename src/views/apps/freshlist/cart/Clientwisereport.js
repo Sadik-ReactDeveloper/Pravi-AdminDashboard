@@ -202,7 +202,6 @@ class Clientwisereport extends React.Component {
       console.log(rowData),
       (
         <Row className="app-user-list">
-          <Col sm="12"></Col>
           <Col sm="12">
             <Card>
               <Row className="m-2">
@@ -210,6 +209,23 @@ class Clientwisereport extends React.Component {
                   <h1 sm="6" className="float-left">
                     Client Wise Report
                   </h1>
+                </Col>
+                <Col>
+                  <label for="cars">Select Client :</label>
+
+                  <select
+                    onChange={(e) => {
+                      console.log(e.target.value);
+                    }}
+                    className="form-control"
+                    name="cars"
+                    id="cars"
+                  >
+                    <option value="volvo">Volvo</option>
+                    <option value="saab">Saab</option>
+                    <option value="mercedes">Mercedes</option>
+                    <option value="audi">Audi</option>
+                  </select>
                 </Col>
               </Row>
               <CardBody>
