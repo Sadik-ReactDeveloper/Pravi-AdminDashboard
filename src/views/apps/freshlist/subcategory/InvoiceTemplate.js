@@ -66,12 +66,24 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontSize: 15,
   },
+  tableAmount: {
+    fontSize: "10px",
+    fontWeight: "1000",
+    marginLeft: "5px",
+  },
 });
 
-const InvoiceTemplate = ({ invoiceData }) => {
+const InvoiceTemplate = ({ tableList, invoiceData }) => {
   const { items, customerName, date, total } = invoiceData;
-  console.log(invoiceData);
+  const curentDate = new Date();
 
+  let day = curentDate.getDate();
+  let month = curentDate.getMonth() + 1;
+  let year = curentDate.getFullYear();
+
+  // This arrangement can be altered based on how we want the date's format to appear.
+  let currentDate = `${day}-${month}-${year}`;
+  // console.log(currentDate); // "17-6-2022"
   return (
     <>
       <Document>
@@ -104,7 +116,7 @@ const InvoiceTemplate = ({ invoiceData }) => {
                   ROOM 7,A-WING,Shree Datta Digambar CHS Ltd.
                 </Text>
                 <Text style={styles.header}>
-                  Guru Datta Mandir Road ,Gaurishankarwadi No. 1{" "}
+                  Guru Datta Mandir Road ,Gaurishankarwadi No. 1
                 </Text>
                 <Text style={styles.header}>
                   Opp. Yashomandir,Pant Nagar ,Ghatkopar East,
@@ -140,9 +152,9 @@ const InvoiceTemplate = ({ invoiceData }) => {
                     }}
                   >
                     Receipt No.
-                  </Text>{" "}
+                  </Text>
                   <Text style={{ fontSize: "10px", fontWeight: "bold" }}>
-                    : {invoiceData?.order_id}
+                    :{invoiceData?.order_id}
                   </Text>
                 </View>
                 <View style={{ flexDirection: "row", paddingBottom: "3px" }}>
@@ -156,7 +168,8 @@ const InvoiceTemplate = ({ invoiceData }) => {
                     Receipt Date.
                   </Text>{" "}
                   <Text style={{ fontSize: "10px", fontWeight: "bold" }}>
-                    : {invoiceData?.delivery_date}
+                    :{currentDate}
+                    {/* {invoiceData?.delivery_date} */}
                   </Text>
                 </View>
                 <View style={{ flexDirection: "row", paddingBottom: "3px" }}>
@@ -274,7 +287,7 @@ const InvoiceTemplate = ({ invoiceData }) => {
                   >
                     8Th Floor Tower,1 one India Bulls Centers, 841, S B marg
                     ,Mumbai-400013
-                  </Text>{" "}
+                  </Text>
                 </View>
               </View>
 
@@ -287,7 +300,7 @@ const InvoiceTemplate = ({ invoiceData }) => {
                     }}
                   >
                     IndusInd Bank
-                  </Text>{" "}
+                  </Text>
                   <Text
                     style={{
                       fontSize: "10px",
@@ -297,7 +310,7 @@ const InvoiceTemplate = ({ invoiceData }) => {
                   >
                     8Th Floor Tower,1 one India Bulls Centers, 841, S B marg
                     ,Mumbai-400013
-                  </Text>{" "}
+                  </Text>
                 </View>
               </View>
             </View>
@@ -418,9 +431,9 @@ const InvoiceTemplate = ({ invoiceData }) => {
               </View>
               <View
                 style={{
-                  width: "20%",
+                  width: "22%",
                   padding: "5px 2px",
-
+                  justifyContent: "center",
                   borderRight: "1px solid black",
                 }}
               >
@@ -437,7 +450,7 @@ const InvoiceTemplate = ({ invoiceData }) => {
               </View>
               <View
                 style={{
-                  width: "15%",
+                  width: "18%",
                   padding: "5px 2px",
 
                   borderRight: "1px solid black",
@@ -489,7 +502,7 @@ const InvoiceTemplate = ({ invoiceData }) => {
                     marginLeft: "5px",
                   }}
                 >
-                  Discount
+                  Discount(%)
                 </Text>
               </View>
               <View
@@ -512,136 +525,134 @@ const InvoiceTemplate = ({ invoiceData }) => {
                 </Text>
               </View>
             </View>
-            <View
-              style={{
-                flexDirection: "row",
+            {tableList.map((ele, ind) => {
+              return (
+                <>
+                  <View
+                    style={{
+                      flexDirection: "row",
 
-                borderBottom: "1px solid black",
-                borderRight: "1px solid black",
-                borderLeft: "1px solid black",
-                height: "50px",
-              }}
-            >
-              <View
-                style={{
-                  width: "5%",
-                  padding: "5px 2px",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: "10px",
-                    fontWeight: "1000",
-                    marginLeft: "5px",
-                  }}
-                >
-                  1
-                </Text>
-              </View>
-              <View
-                style={{
-                  width: "25%",
-                  padding: "5px 2px",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: "10px",
-                    fontWeight: "1000",
+                      borderBottom: "1px solid black",
+                      borderRight: "1px solid black",
+                      borderLeft: "1px solid black",
+                      height: "25px",
+                    }}
+                  >
+                    <View
+                      style={{
+                        width: "5%",
+                        padding: "5px 2px",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: "10px",
+                          fontWeight: "1000",
+                          marginLeft: "5px",
+                        }}
+                      >
+                        1
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        width: "25%",
+                        padding: "5px 2px",
+                      }}
+                    >
+                      <Text style={styles.tableAmount}>
+                        {ele?.title}
+                        {/* {invoiceData?.title} */}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        width: "20%",
+                        padding: "5px 2px",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: "10px",
 
-                    marginLeft: "5px",
-                  }}
-                >
-                  {invoiceData?.title}
-                </Text>
-              </View>
-              <View
-                style={{
-                  width: "20%",
-                  padding: "5px 2px",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: "10px",
+                          fontWeight: "1000",
+                          marginLeft: "5px",
+                        }}
+                      >
+                        5124588
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        width: "15%",
+                        padding: "5px 2px",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: "10px",
 
-                    fontWeight: "1000",
-                    marginLeft: "5px",
-                  }}
-                >
-                  5124588
-                </Text>
-              </View>
-              <View
-                style={{
-                  width: "15%",
-                  padding: "5px 2px",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: "10px",
+                          fontWeight: "1000",
+                          marginLeft: "5px",
+                        }}
+                      >
+                        {ele?.qty}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        width: "15%",
+                        padding: "5px 2px",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: "10px",
+                          fontWeight: "1000",
+                          marginLeft: "5px",
+                        }}
+                      >
+                        {ele?.price}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        width: "15%",
+                        padding: "5px 2px",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: "10px",
+                          fontWeight: "1000",
+                          marginLeft: "5px",
+                        }}
+                      >
+                        {ele?.discountprice}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        marginRight: "2px",
+                        padding: "5px 2px",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: "10px",
+                          fontWeight: "1000",
+                          marginLeft: "5px",
+                        }}
+                      >
+                        {ele?.qty * ele?.price}
+                      </Text>
+                    </View>
+                  </View>
+                  ;
+                </>
+              );
+            })}
 
-                    fontWeight: "1000",
-                    marginLeft: "5px",
-                  }}
-                >
-                  {invoiceData?.qty}
-                </Text>
-              </View>
-              <View
-                style={{
-                  width: "15%",
-                  padding: "5px 2px",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: "10px",
-
-                    fontWeight: "1000",
-                    marginLeft: "5px",
-                  }}
-                >
-                  {invoiceData?.price}
-                </Text>
-              </View>
-              <View
-                style={{
-                  width: "15%",
-                  padding: "5px 2px",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: "10px",
-
-                    fontWeight: "1000",
-                    marginLeft: "5px",
-                  }}
-                >
-                  {invoiceData?.discountprice}
-                </Text>
-              </View>
-              <View
-                style={{
-                  // width: "15%",
-                  marginRight: "2px",
-                  padding: "5px 2px",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: "10px",
-
-                    fontWeight: "1000",
-                    marginLeft: "5px",
-                  }}
-                >
-                  300.00
-                </Text>
-              </View>
-            </View>
             {/* <View
               style={{
                 flexDirection: "row",
@@ -981,8 +992,6 @@ const InvoiceTemplate = ({ invoiceData }) => {
 
               <View
                 style={{
-                  // padding: "10px",\\
-                  // borderBottom: "1px solid black",
                   width: "45%",
                   height: "250px",
                 }}
@@ -991,7 +1000,6 @@ const InvoiceTemplate = ({ invoiceData }) => {
                   <View
                     style={{
                       padding: "10px",
-                      // width: "30%",
                       height: "130px",
                       borderBottom: "1px solid black",
                     }}
@@ -1012,17 +1020,15 @@ const InvoiceTemplate = ({ invoiceData }) => {
                         }}
                       >
                         Sub Total
-                      </Text>{" "}
+                      </Text>
                       <Text
                         style={{
-                          // flexDirection: "row",
-                          // justifyContent: "flex-end",
                           fontSize: "10px",
                           fontWeight: "bold",
                           marginBottom: "6px",
                         }}
                       >
-                        630.00
+                        {invoiceData?.total}
                       </Text>
                     </View>
                     <View
@@ -1037,24 +1043,21 @@ const InvoiceTemplate = ({ invoiceData }) => {
                         style={{
                           fontSize: "10px",
                           fontWeight: "bold",
-                          // width: "70%",
                           marginBottom: "6px",
                         }}
                       >
                         CGST(12.00%)
-                      </Text>{" "}
-                      <Text
+                      </Text>
+                      {/* <Text
                         style={{
-                          // flexDirection: "row",
-                          // justifyContent: "flex-end",
                           fontSize: "10px",
                           fontWeight: "bold",
-                          // marginRight: "1px",
                           marginBottom: "6px",
                         }}
                       >
-                        37.00
-                      </Text>
+                        00.00
+                      </Text> */}
+                      <input type="number" placeholder="Enter CGST(12.00%)" />
                     </View>
                     <View
                       style={{
@@ -1068,24 +1071,21 @@ const InvoiceTemplate = ({ invoiceData }) => {
                         style={{
                           fontSize: "10px",
                           fontWeight: "bold",
-                          // width: "70%",
                           marginBottom: "6px",
                         }}
                       >
                         SGST(12.00%)
-                      </Text>{" "}
-                      <Text
+                      </Text>
+                      {/* <Text
                         style={{
-                          // flexDirection: "row",
-                          // justifyContent: "flex-end",
                           fontSize: "10px",
                           fontWeight: "bold",
-                          // marginRight: "1px",
                           marginBottom: "6px",
                         }}
                       >
-                        37.00
-                      </Text>
+                        00.00
+                      </Text> */}
+                      <input type="number" placeholder="Enter  SGST(12.00%)" />
                     </View>
                     <View
                       style={{
@@ -1099,7 +1099,6 @@ const InvoiceTemplate = ({ invoiceData }) => {
                         style={{
                           fontSize: "10px",
                           fontWeight: "bold",
-                          // width: "70%",
                           marginBottom: "6px",
                         }}
                       >
@@ -1107,11 +1106,8 @@ const InvoiceTemplate = ({ invoiceData }) => {
                       </Text>{" "}
                       <Text
                         style={{
-                          // flexDirection: "row",
-                          // justifyContent: "flex-end",
                           fontSize: "10px",
                           fontWeight: "bold",
-                          // marginRight: "1px",
                           marginBottom: "6px",
                         }}
                       >
@@ -1130,7 +1126,6 @@ const InvoiceTemplate = ({ invoiceData }) => {
                         style={{
                           fontSize: "10px",
                           fontWeight: "bold",
-                          // width: "70%",
                           marginBottom: "6px",
                         }}
                       >
@@ -1138,11 +1133,8 @@ const InvoiceTemplate = ({ invoiceData }) => {
                       </Text>{" "}
                       <Text
                         style={{
-                          // flexDirection: "row",
-                          // justifyContent: "flex-end",
                           fontSize: "10px",
                           fontWeight: "bold",
-                          // marginRight: "1px",
                           marginBottom: "6px",
                         }}
                       >
@@ -1168,8 +1160,6 @@ const InvoiceTemplate = ({ invoiceData }) => {
                       </Text>{" "}
                       <Text
                         style={{
-                          // flexDirection: "row",
-                          // justifyContent: "flex-end",
                           fontSize: "11px",
                           fontWeight: "bold",
                           marginTop: "2px",

@@ -33,6 +33,7 @@ import AnalyticsDashboard from "../../../dashboard/analytics/AnalyticsDashboard"
 import { Route, Link } from "react-router-dom";
 import { AiOutlineDownload } from "react-icons/ai";
 import InvoiceGenerator from "../subcategory/InvoiceGenerator1";
+import { TbPhysotherapist } from "react-icons/tb";
 
 const toWords = new ToWords({
   localeCode: "en-IN",
@@ -70,6 +71,11 @@ class All extends React.Component {
     currenPageSize: "",
     getPageSize: "",
     info: true,
+    ViewBill: true,
+    sgst: "",
+    cgst: "",
+    otherCharges: "",
+    deliveryCharges: "",
     columnDefs: [
       // {
       //   headerName: "S.No",
@@ -84,7 +90,7 @@ class All extends React.Component {
         filter: true,
         resizable: true,
         width: 150,
-        cellRendererFramework: (params) => {
+        cellRendererFramework: params => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
@@ -99,7 +105,7 @@ class All extends React.Component {
         field: "order_status",
         filter: true,
         width: 160,
-        cellRendererFramework: (params) => {
+        cellRendererFramework: params => {
           return params.data?.order_status === "Completed" ? (
             <div className="badge badge-pill badge-success">Completed</div>
           ) : params.data?.order_status === "Pending" ? (
@@ -124,7 +130,7 @@ class All extends React.Component {
         filter: true,
         resizable: true,
         width: 230,
-        cellRendererFramework: (params) => {
+        cellRendererFramework: params => {
           // console.log(params.data?.order_id);
 
           return (
@@ -133,21 +139,21 @@ class All extends React.Component {
                 <select
                   // className="form-control"
                   defaultValue={params.data?.order_status}
-                  onChange={(e) => {
+                  onChange={e => {
                     // console.log(e.target.value);
                     let data = new FormData();
                     data.append("order_id", params.data?.order_id);
                     data.append("order_status", e.target.value);
                     axiosConfig
                       .post(`/change_order_status`, data)
-                      .then((res) => {
+                      .then(res => {
                         console.log(res?.data.message);
                         if (res?.data.message) {
                           this.componentDidMount();
                           swal("status Updated Succesfully");
                         }
                       })
-                      .catch((err) => {
+                      .catch(err => {
                         console.log(err);
                       });
                   }}
@@ -174,7 +180,7 @@ class All extends React.Component {
         filter: true,
         resizable: true,
         width: 150,
-        cellRendererFramework: (params) => {
+        cellRendererFramework: params => {
           return (
             <div className="d-flex align-items-center justify-content-center cursor-pointer">
               <div>
@@ -213,7 +219,7 @@ class All extends React.Component {
         filter: true,
         resizable: true,
         width: 150,
-        cellRendererFramework: (params) => {
+        cellRendererFramework: params => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
@@ -229,7 +235,7 @@ class All extends React.Component {
         filter: true,
         resizable: true,
         width: 180,
-        cellRendererFramework: (params) => {
+        cellRendererFramework: params => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
@@ -245,7 +251,7 @@ class All extends React.Component {
         filter: true,
         resizable: true,
         width: 150,
-        cellRendererFramework: (params) => {
+        cellRendererFramework: params => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
@@ -261,7 +267,7 @@ class All extends React.Component {
         filter: true,
         resizable: true,
         width: 150,
-        cellRendererFramework: (params) => {
+        cellRendererFramework: params => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
@@ -307,7 +313,7 @@ class All extends React.Component {
         field: "sortorder",
         field: "transactions",
         width: 120,
-        cellRendererFramework: (params) => {
+        cellRendererFramework: params => {
           return (
             <div className="actions cursor-pointer">
               {this.state.Viewpermisson && (
@@ -678,14 +684,14 @@ class All extends React.Component {
     return swal("Success!", "Submitted SuccessFully!", "success");
   };
 
-  handleBillDownload = (data) => {
+  handleBillDownload = data => {
     console.log(data);
     this.setState({ PrintData: data });
     // console.log("object");
     this.toggleModal();
   };
   toggleModal = () => {
-    this.setState((prevState) => ({
+    this.setState(prevState => ({
       modal: !prevState.modal,
     }));
   };
@@ -703,17 +709,17 @@ class All extends React.Component {
     formdata.append("role", pageparmission?.Userinfo?.role);
     await axiosConfig
       .post(`/orderlist`, formdata)
-      .then((res) => {
+      .then(res => {
         console.log(res.data.data);
         let rowData = res?.data?.data;
         this.setState({ rowData });
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err?.response);
       });
 
     let newparmisson = pageparmission?.role?.find(
-      (value) => value?.pageName === "Place Order"
+      value => value?.pageName === "Place Order"
     );
 
     this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
@@ -734,12 +740,12 @@ class All extends React.Component {
   }
 
   async runthisfunction(id) {
-    await axiosConfig.delete(`/admin/del_order/${id}`).then((response) => {
+    await axiosConfig.delete(`/admin/del_order/${id}`).then(response => {
       swal("Row Deleted!", "SuccessFull Deleted!", "error");
       console.log(response);
     });
   }
-  onGridReady = (params) => {
+  onGridReady = params => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
     this.setState({
@@ -748,11 +754,11 @@ class All extends React.Component {
       totalPages: this.gridApi.paginationGetTotalPages(),
     });
   };
-  updateSearchQuery = (val) => {
+  updateSearchQuery = val => {
     this.gridApi.setQuickFilter(val);
   };
 
-  filterSize = (val) => {
+  filterSize = val => {
     if (this.gridApi) {
       this.gridApi.paginationSetPageSize(Number(val));
       this.setState({
@@ -761,24 +767,27 @@ class All extends React.Component {
       });
     }
   };
-  onChangeHandler = (event) => {
+  onChangeHandler = event => {
     this.setState({ selectedFile: event.target.files[0] });
     this.setState({ selectedName: event.target.files[0].name });
     console.log(event.target.files[0]);
   };
-  onChangeHandler = (event) => {
+  onChangeHandler = event => {
     this.setState({ selectedFile: event.target.files });
     this.setState({ selectedName: event.target.files.name });
     console.log(event.target.files);
   };
-  changeHandler1 = (e) => {
+  changeHandler1 = e => {
     this.setState({ status: e.target.value });
   };
-  changeHandler = (e) => {
+  changeHandler = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
-  submitHandler = (e) => {
+  submitHandler = e => {
     e.preventDefault();
+  };
+  handleSubmit = () => {
+    this.setState({ ViewBill: true });
   };
 
   render() {
@@ -930,9 +939,7 @@ class All extends React.Component {
                       <div className="table-input mr-1">
                         <Input
                           placeholder="Search here..."
-                          onChange={(e) =>
-                            this.updateSearchQuery(e.target.value)
-                          }
+                          onChange={e => this.updateSearchQuery(e.target.value)}
                           value={this.state.value}
                         />
                       </div>
@@ -948,7 +955,7 @@ class All extends React.Component {
                     </div>
                   </div>
                   <ContextLayout.Consumer>
-                    {(context) => (
+                    {context => (
                       <AgGridReact
                         gridOptions={{}}
                         rowSelection="multiple"
@@ -977,11 +984,77 @@ class All extends React.Component {
           className={this.props.className}
           style={{ maxWidth: "1050px" }}
         >
-          <ModalHeader toggle={this.toggleModal}>Basic Modal</ModalHeader>
+          <ModalHeader toggle={this.toggleModal}>Download Bill</ModalHeader>
           <ModalBody>
-            <div style={{ width: "100%" }} className="">
-              <InvoiceGenerator PrintData={this.state.PrintData} />
-            </div>
+            {this.state.ViewBill && this.state.ViewBill ? (
+              <>
+                <div style={{ width: "100%" }} className="">
+                  <InvoiceGenerator
+                    sgst={this.state.sgst}
+                    cgst={this.state.cgst}
+                    deliveryCharges={this.state.deliveryCharges}
+                    otherCharges={this.state.otherCharges}
+                    PrintData={this.state.PrintData}
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <div style={{ width: "100%" }} className="">
+                  <Form onSubmit={() => this.handleSubmit()}>
+                    <Row>
+                      <Col lg="6" className="mb-2">
+                        <Label>SGST</Label>
+                        <Input
+                          required
+                          type="number"
+                          name="sgst"
+                          placeholder="Enter SGST"
+                          value={this.state.sgst}
+                          onChange={this.changeHandler}
+                        ></Input>
+                      </Col>
+                      <Col lg="6" className="mb-2">
+                        <Label>CGST</Label>
+                        <Input
+                          required
+                          type="number"
+                          name="cgst"
+                          placeholder="Enter CGST"
+                          value={this.state.cgst}
+                          onChange={this.changeHandler}
+                        ></Input>
+                      </Col>
+                      <Col lg="6">
+                        <Label>Other Charges</Label>
+                        <Input
+                          type="number"
+                          name="otherCharges"
+                          placeholder="Enter Other Charges"
+                          value={this.state.otherCharges}
+                          onChange={this.changeHandler}
+                        ></Input>
+                      </Col>
+                      <Col lg="6">
+                        <Label>Delivery Charges</Label>
+                        <Input
+                          type="number"
+                          name="deliveryCharges"
+                          placeholder="Enter Delivery Charges"
+                          value={this.state.deliveryCharges}
+                          onChange={this.changeHandler}
+                        ></Input>
+                      </Col>
+                      <Col lg="3" className="mt-2">
+                        <Button color="primary" type="submit">
+                          Submit
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Form>
+                </div>
+              </>
+            )}
           </ModalBody>
         </Modal>
       </Row>
