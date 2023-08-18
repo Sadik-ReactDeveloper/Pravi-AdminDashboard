@@ -9,6 +9,7 @@ const InvoiceGenerator = (props) => {
   const [Printview, setPrintview] = useState({});
 
   useEffect(() => {
+    console.log(props?.PrintData);
     if (props?.PrintData) {
       setPrintview(props?.PrintData);
     }

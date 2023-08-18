@@ -698,14 +698,13 @@ class EditPlaceOrder extends React.Component {
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
 
     const formdata = new FormData();
-    formdata.append("user_id", pageparmission?.Userinfo?.id);
-    formdata.append("role", pageparmission?.Userinfo?.role);
+    formdata.append("order_id", id);
     await axiosConfig
-      .post(`/orderlist`, formdata)
+      .post(`/order_detail`, formdata)
       .then((res) => {
         console.log(res.data.data);
         let rowData = res?.data?.data;
-        this.setState({ rowData });
+        // this.setState({ rowData });
       })
       .catch((err) => {
         console.log(err?.response);
