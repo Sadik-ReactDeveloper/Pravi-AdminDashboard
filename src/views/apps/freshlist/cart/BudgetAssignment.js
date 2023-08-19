@@ -21,10 +21,27 @@ import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
 import { Route, Link } from "react-router-dom";
 // import { components } from "react-select";
-
+const AssignList = [
+  {
+    id: 1,
+    userName: "Abc",
+    currentbudget: 5000,
+    remainingBudget: 2000,
+    requiestedTopup: 1500,
+  },
+  {
+    id: 2,
+    userName: "bcvd",
+    currentbudget: 7000,
+    remainingBudget: 3000,
+    requiestedTopup: 1800,
+  },
+];
 class BudgetAssignment extends React.Component {
   state = {
     rowData: [],
+    RoleDefine: "",
+    IsTopup: false,
     paginationPageSize: 20,
     currenPageSize: "",
     getPageSize: "",
@@ -43,70 +60,89 @@ class BudgetAssignment extends React.Component {
         filter: true,
       },
       {
-        headerName: "Name",
-        field: "subscriptions",
+        headerName: "TopUp",
+        field: "username",
         filter: true,
-        width: 200,
+        width: "200",
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data.subscriptions}</span>
+              {this.state.RoleDefine === "Super Admin" && (
+                <>
+                  <Button className="btn " color="primary" size="sm">
+                    Top Up
+                  </Button>
+                </>
+              )}
             </div>
           );
         },
       },
       {
-        headerName: "Product Name",
+        headerName: "UserName",
+        field: "username",
+        filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <span>{params.data.userName}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Currentbudget",
         field: "product",
         filter: true,
         width: 190,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.product}</span>
+              <span>{params.data.currentbudget}</span>
             </div>
           );
         },
       },
       {
-        headerName: "How Many Day",
+        headerName: "remainingBudget",
         field: "validity",
         filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data.validity}</span>
+              <span>{params.data.remainingBudget}</span>
             </div>
           );
         },
       },
       {
-        headerName: "How Many Orders Placed",
-        field: "orders",
+        headerName: "requiestedTopup",
+        field: "requiestedTopup",
         filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data.orders}</span>
+              <span>{params.data.requiestedTopup}</span>
             </div>
           );
         },
       },
-      {
-        headerName: "How Many Remaining",
-        field: "remaining",
-        filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.remaining}</span>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "How Many Remaining",
+      //   field: "remaining",
+      //   filter: true,
+      //   width: 200,
+      //   cellRendererFramework: params => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.remaining}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
 
       {
         headerName: "Status",
@@ -151,10 +187,12 @@ class BudgetAssignment extends React.Component {
   };
   componentDidMount() {
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
-    console.log(pageparmission.role);
+    this.setState({ RoleDefine: pageparmission.Userinfo.role });
     let newparmisson = pageparmission?.role?.find(
       (value) => value?.pageName === "Budget Assignment"
     );
+    this.setState({ rowData: AssignList });
+    console.log(AssignList);
     console.log(newparmisson);
     this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
     this.setState({
@@ -175,6 +213,13 @@ class BudgetAssignment extends React.Component {
     formdata.append("user_id", pageparmission?.Userinfo?.id);
     formdata.append("role", pageparmission?.Userinfo?.role);
   }
+  handleTopup = () => {
+    this.setState({ IsTopup: true });
+  };
+  handSubmit = () => {
+    alert("Data Submited");
+    this.setState({ IsTopup: false });
+  };
   onGridReady = (params) => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
@@ -199,19 +244,20 @@ class BudgetAssignment extends React.Component {
   render() {
     const { rowData, columnDefs, defaultColDef } = this.state;
     return (
-      console.log(rowData),
-      (
-        <Row className="app-user-list">
-          <Col sm="12"></Col>
-          <Col sm="12">
-            <Card>
-              <Row className="m-2">
-                <Col>
-                  <h1 sm="6" className="float-left">
-                    Budget Assignement
-                  </h1>
-                </Col>
-                <Col>
+      <Row className="app-user-list">
+        <Col sm="12"></Col>
+        <Col sm="12">
+          <Card>
+            <Row className="m-2">
+              <Col>
+                <h1
+                // sm="6"
+                // className="float-left"
+                >
+                  Budget Assignement
+                </h1>
+              </Col>
+              {/* <Col>
                   <h5 sm="4" className="">
                     Assigned Budget-5000
                   </h5>
@@ -220,18 +266,64 @@ class BudgetAssignment extends React.Component {
                   <h5 sm="4" className="">
                     Remaining Budget-5000
                   </h5>
-                </Col>
-              </Row>
-              <Row className="m-2">
-                <Col>
+                </Col> */}
+              {this.state.IsTopup == false ? (
+                <>
+                  <Col>
+                    <Button
+                      color="primary"
+                      className="float-right"
+                      onClick={this.handleTopup}
+                    >
+                      TopUp Request
+                    </Button>
+                  </Col>
+                </>
+              ) : (
+                <>
+                  <Col>
+                    <Input
+                      className="form-control"
+                      type="number"
+                      placeholder="Enter Top up"
+                    />
+                  </Col>
+                  <Col>
+                    <Button
+                      className="float-right"
+                      color="primary"
+                      onClick={this.handSubmit}
+                    >
+                      Submit
+                    </Button>
+                  </Col>
+                </>
+              )}
+            </Row>
+            {/* <Row className="m-2">
+              <Col>
+                <input className="form-control " type="number" />
+              </Col>
+              <Col>
+                <Button
+                  color="primary"
+                  // className="float-right"
+                  onClick={this.handSubmit}
+                >
+                  Submit
+                </Button>
+              </Col>
+            </Row> */}
+
+            {/* <Col>
                   <input className="form-control mt-1" type="number" />
                 </Col>
                 <Col>
                   <Button color="primary" className="mt-1">
                     Assign Budget
                   </Button>
-                </Col>
-                <Col>
+                </Col> */}
+            {/* <Col>
                   <input className="form-control mt-1" type="number" />
                 </Col>
                 <Col>
@@ -253,104 +345,101 @@ class BudgetAssignment extends React.Component {
                   <Button color="primary" className="mt-1">
                     Submit
                   </Button>
-                </Col>
-              </Row>
-              <CardBody>
-                {this.state.rowData === null ? null : (
-                  <div className="ag-theme-material w-100 my-2 ag-grid-table">
-                    <div className="d-flex flex-wrap justify-content-between align-items-center">
-                      <div className="mb-1">
-                        <UncontrolledDropdown className="p-1 ag-dropdown">
-                          <DropdownToggle tag="div">
-                            {this.gridApi
-                              ? this.state.currenPageSize
-                              : "" * this.state.getPageSize -
-                                (this.state.getPageSize - 1)}{" "}
-                            -{" "}
-                            {this.state.rowData.length -
-                              this.state.currenPageSize *
-                                this.state.getPageSize >
-                            0
-                              ? this.state.currenPageSize *
-                                this.state.getPageSize
-                              : this.state.rowData.length}{" "}
-                            of {this.state.rowData.length}
-                            <ChevronDown className="ml-50" size={15} />
-                          </DropdownToggle>
-                          <DropdownMenu right>
-                            <DropdownItem
-                              tag="div"
-                              onClick={() => this.filterSize(20)}
-                            >
-                              20
-                            </DropdownItem>
-                            <DropdownItem
-                              tag="div"
-                              onClick={() => this.filterSize(50)}
-                            >
-                              50
-                            </DropdownItem>
-                            <DropdownItem
-                              tag="div"
-                              onClick={() => this.filterSize(100)}
-                            >
-                              100
-                            </DropdownItem>
-                            <DropdownItem
-                              tag="div"
-                              onClick={() => this.filterSize(134)}
-                            >
-                              134
-                            </DropdownItem>
-                          </DropdownMenu>
-                        </UncontrolledDropdown>
-                      </div>
-                      <div className="d-flex flex-wrap justify-content-between mb-1">
-                        <div className="table-input mr-1">
-                          <Input
-                            placeholder="search..."
-                            onChange={(e) =>
-                              this.updateSearchQuery(e.target.value)
-                            }
-                            value={this.state.value}
-                          />
-                        </div>
-                        <div className="export-btn">
-                          <Button.Ripple
-                            color="primary"
-                            onClick={() => this.gridApi.exportDataAsCsv()}
+                </Col> */}
+
+            <CardBody>
+              {this.state.rowData === null ? null : (
+                <div className="ag-theme-material w-100 my-2 ag-grid-table">
+                  <div className="d-flex flex-wrap justify-content-between align-items-center">
+                    <div className="mb-1">
+                      <UncontrolledDropdown className="p-1 ag-dropdown">
+                        <DropdownToggle tag="div">
+                          {this.gridApi
+                            ? this.state.currenPageSize
+                            : "" * this.state.getPageSize -
+                              (this.state.getPageSize - 1)}{" "}
+                          -{" "}
+                          {this.state.rowData.length -
+                            this.state.currenPageSize * this.state.getPageSize >
+                          0
+                            ? this.state.currenPageSize * this.state.getPageSize
+                            : this.state.rowData.length}{" "}
+                          of {this.state.rowData.length}
+                          <ChevronDown className="ml-50" size={15} />
+                        </DropdownToggle>
+                        <DropdownMenu right>
+                          <DropdownItem
+                            tag="div"
+                            onClick={() => this.filterSize(20)}
                           >
-                            Export as CSV
-                          </Button.Ripple>
-                        </div>
+                            20
+                          </DropdownItem>
+                          <DropdownItem
+                            tag="div"
+                            onClick={() => this.filterSize(50)}
+                          >
+                            50
+                          </DropdownItem>
+                          <DropdownItem
+                            tag="div"
+                            onClick={() => this.filterSize(100)}
+                          >
+                            100
+                          </DropdownItem>
+                          <DropdownItem
+                            tag="div"
+                            onClick={() => this.filterSize(134)}
+                          >
+                            134
+                          </DropdownItem>
+                        </DropdownMenu>
+                      </UncontrolledDropdown>
+                    </div>
+                    <div className="d-flex flex-wrap justify-content-between mb-1">
+                      <div className="table-input mr-1">
+                        <Input
+                          placeholder="search..."
+                          onChange={(e) =>
+                            this.updateSearchQuery(e.target.value)
+                          }
+                          value={this.state.value}
+                        />
+                      </div>
+                      <div className="export-btn">
+                        <Button.Ripple
+                          color="primary"
+                          onClick={() => this.gridApi.exportDataAsCsv()}
+                        >
+                          Export as CSV
+                        </Button.Ripple>
                       </div>
                     </div>
-                    <ContextLayout.Consumer>
-                      {(context) => (
-                        <AgGridReact
-                          gridOptions={{}}
-                          rowSelection="multiple"
-                          defaultColDef={defaultColDef}
-                          columnDefs={columnDefs}
-                          rowData={rowData}
-                          onGridReady={this.onGridReady}
-                          colResizeDefault={"shift"}
-                          animateRows={true}
-                          floatingFilter={false}
-                          pagination={true}
-                          paginationPageSize={this.state.paginationPageSize}
-                          pivotPanelShow="always"
-                          enableRtl={context.state.direction === "rtl"}
-                        />
-                      )}
-                    </ContextLayout.Consumer>
                   </div>
-                )}
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-      )
+                  <ContextLayout.Consumer>
+                    {(context) => (
+                      <AgGridReact
+                        gridOptions={{}}
+                        rowSelection="multiple"
+                        defaultColDef={defaultColDef}
+                        columnDefs={columnDefs}
+                        rowData={rowData}
+                        onGridReady={this.onGridReady}
+                        colResizeDefault={"shift"}
+                        animateRows={true}
+                        floatingFilter={false}
+                        pagination={true}
+                        paginationPageSize={this.state.paginationPageSize}
+                        pivotPanelShow="always"
+                        enableRtl={context.state.direction === "rtl"}
+                      />
+                    )}
+                  </ContextLayout.Consumer>
+                </div>
+              )}
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
     );
   }
 }

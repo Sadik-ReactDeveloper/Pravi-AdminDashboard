@@ -124,9 +124,7 @@ class Typelist extends React.Component {
                         size="25px"
                         color="green"
                         onClick={() =>
-                          history.push(
-                            `/app/freshlist/house/EditType/${params.data.id}`
-                          )
+                          history.push(`/app/house/ViewType/${params.data.id}`)
                         }
                       />
                     )}

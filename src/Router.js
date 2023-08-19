@@ -427,6 +427,8 @@ const ViewoneAssigned = lazy(() =>
 const RateMaster = lazy(() =>
   import("./views/apps/freshlist/house/RateMaster")
 );
+
+const ViewType = lazy(() => import("./views/apps/freshlist/house/ViewTypes"));
 const AddRateMaster = lazy(() =>
   import("./views/apps/freshlist/house/AddRateMaster")
 );
@@ -1319,6 +1321,7 @@ class AppRouter extends React.Component {
             path="/app/freshlist/house/EditType/:id"
             component={EditType}
           />
+          <AppRoute path="/app/house/ViewType/:id" component={ViewType} />
           <AppRoute path="/app/freshlist/house/Typelist" component={Typelist} />
           <AppRoute
             path="/app/freshlist/house/inventory"

@@ -11,6 +11,8 @@ import {
   DropdownItem,
   DropdownToggle,
   Badge,
+  Label,
+  FormGroup,
 } from "reactstrap";
 import axios from "axios";
 import { ContextLayout } from "../../../../utility/context/Layout";
@@ -21,10 +23,14 @@ import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
 import { Route, Link } from "react-router-dom";
 // import { components } from "react-select";
+import axiosConfig from "../../../../axiosConfig";
 
 class SuggestedProducts extends React.Component {
   state = {
     rowData: [],
+    userDataList: [],
+    user: "",
+    mainRole: "",
     paginationPageSize: 20,
     currenPageSize: "",
     getPageSize: "",
@@ -151,7 +157,8 @@ class SuggestedProducts extends React.Component {
   };
   componentDidMount() {
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
-    console.log(pageparmission.role);
+    console.log("role", pageparmission.Userinfo.role);
+    this.setState({ mainRole: pageparmission?.Userinfo?.role });
     let newparmisson = pageparmission?.role?.find(
       (value) => value?.pageName === "Budget List"
     );
@@ -174,6 +181,11 @@ class SuggestedProducts extends React.Component {
     const formdata = new FormData();
     formdata.append("user_id", pageparmission?.Userinfo?.id);
     formdata.append("role", pageparmission?.Userinfo?.role);
+    axiosConfig.post("/getuserlist", formdata).then((response) => {
+      let userDataList = response?.data?.data?.users;
+      console.log(userDataList);
+      this.setState({ userDataList });
+    });
   }
   onGridReady = (params) => {
     this.gridApi = params.api;
@@ -210,8 +222,64 @@ class SuggestedProducts extends React.Component {
                     Budget List
                   </h1>
                 </Col>
+                {this.state.mainRole === "Super Admin" && (
+                  <>
+                    <Col>
+                      <label className="selectClient">Assign A Budget</label>
+                      <input className="form-control" type="number" />
+                    </Col>
+                    <Col>
+                      <FormGroup>
+                        <Label>Select A User</Label>
+
+                        <select
+                          required
+                          onChange={(e) =>
+                            this.setState({ user: e.target.value })
+                          }
+                          className="form-control"
+                          name="Select"
+                          id="Select"
+                        >
+                          <option value="">Select A User</option>
+                          {this.state.userDataList &&
+                            this.state.userDataList?.map((val, i) => (
+                              <option key={i} value={val?.id}>
+                                {val?.username}
+                              </option>
+                            ))}
+                        </select>
+                      </FormGroup>
+                    </Col>
+                    <Col>
+                      <Button color="primary" className="mt-1">
+                        Submit
+                      </Button>
+                    </Col>
+                  </>
+                )}
               </Row>
 
+              {/* <Col>
+                  <Button color="primary" className="mt-1">
+                    Assign Budget
+                  </Button>
+                </Col> */}
+              {/* <Col>
+                  <input className="form-control mt-1" type="number" />
+                </Col>
+                <Col>
+                  <Button color="primary" className="mt-1">
+                    TOPUP Budget
+                  </Button>
+                </Col> */}
+
+              {/* <Col>
+                  <Button color="primary" className="mt-1">
+                    Submit
+                  </Button>
+                </Col>
+              </Row> */}
               <CardBody>
                 {this.state.rowData === null ? null : (
                   <div className="ag-theme-material w-100 my-2 ag-grid-table">

@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const InvoiceTemplate = ({ tableList, invoiceData }) => {
+const InvoiceTemplate = ({ tableList, invoiceData, CurrentWords }) => {
   const { items, customerName, date, total } = invoiceData;
   const curentDate = new Date();
 
@@ -83,7 +83,6 @@ const InvoiceTemplate = ({ tableList, invoiceData }) => {
 
   // This arrangement can be altered based on how we want the date's format to appear.
   let currentDate = `${day}-${month}-${year}`;
-  // console.log(currentDate); // "17-6-2022"
   return (
     <>
       <Document>
@@ -653,269 +652,6 @@ const InvoiceTemplate = ({ tableList, invoiceData }) => {
               );
             })}
 
-            {/* <View
-              style={{
-                flexDirection: "row",
-                borderRight: "1px solid black",
-                borderLeft: "1px solid black",
-                borderBottom: "1px solid black",
-              }}
-            >
-              <View
-                style={{
-                  width: "50%",
-                  padding: "10px 10px",
-                  borderRight: "1px solid black",
-                }}
-              >
-                <View style={{ flexDirection: "", paddingBottom: "3px" }}>
-                  <Text
-                    style={{
-                      fontSize: "14px",
-                      fontWeight: "bold",
-                      // height: "40px",
-                    }}
-                  >
-                    Total In Words
-                  </Text>{" "}
-                  <Text
-                    style={{
-                      fontSize: "12px",
-                      width: "95%",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Seven Hundread Five and sixty five Rupees only.
-                  </Text>{" "}
-                </View>
-                <View style={{ margingTop: "50px" }}>
-                  <Text style={{ fontSize: "8px", marginTop: "15px" }}>
-                    Pay To: Kd Advertisement
-                  </Text>
-                  <Text style={{ fontSize: "8px", marginTop: "3px" }}>
-                    Bank: Kotak Mahindra
-                  </Text>
-                  <Text style={{ fontSize: "8px", marginTop: "3px" }}>
-                    A/c No.: 54623465
-                  </Text>
-                  <Text style={{ fontSize: "8px", marginTop: "3px" }}>
-                    IFSC: Kotak0001251
-                  </Text>
-                  <Text style={{ fontSize: "8px", marginTop: "3px" }}>
-                    IFSC: MAROLI , ANDHERI EAST
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    margingTop: "50px",
-                    marginBottom: "40px",
-                  }}
-                >
-                  <Text style={{ fontSize: "10px", marginTop: "15px" }}>
-                    Terms and Conditions
-                  </Text>
-                  <Text style={{ fontSize: "9px", marginTop: "3px" }}>
-                    1. Paid Amount/Payment are not refundable in any case.
-                  </Text>
-                  <Text style={{ fontSize: "9px", marginTop: "3px" }}>
-                    2. Pay Payment under 30 days.
-                  </Text>
-                </View>
-              </View>
-
-              <View
-                style={{
-                  padding: "10px",
-                  width: "30%",
-                  height: "120px",
-                  borderBottom: "1px solid black",
-                }}
-              ></View>
-              <View
-                style={{
-                  padding: "10px",
-                  width: "30%",
-                  height: "120px",
-                  borderBottom: "1px solid black",
-                }}
-              >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    gap: "10px",
-                    paddingBottom: "3px",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: "10px",
-                      fontWeight: "bold",
-                      // width: "70%",
-                    }}
-                  >
-                    Sub Total
-                  </Text>{" "}
-                  <Text
-                    style={{
-                      // flexDirection: "row",
-                      // justifyContent: "flex-end",
-                      fontSize: "10px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    630.00
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    gap: "10px",
-                    paddingBottom: "3px",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: "10px",
-                      fontWeight: "bold",
-                      // width: "70%",
-                    }}
-                  >
-                    CGST(12.00%)
-                  </Text>{" "}
-                  <Text
-                    style={{
-                      // flexDirection: "row",
-                      // justifyContent: "flex-end",
-                      fontSize: "10px",
-                      fontWeight: "bold",
-                      // marginRight: "1px",
-                    }}
-                  >
-                    37.00
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    gap: "10px",
-                    paddingBottom: "3px",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: "10px",
-                      fontWeight: "bold",
-                      // width: "70%",
-                    }}
-                  >
-                    SGST(12.00%)
-                  </Text>{" "}
-                  <Text
-                    style={{
-                      // flexDirection: "row",
-                      // justifyContent: "flex-end",
-                      fontSize: "10px",
-                      fontWeight: "bold",
-                      // marginRight: "1px",
-                    }}
-                  >
-                    37.00
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    gap: "10px",
-                    paddingBottom: "3px",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: "10px",
-                      fontWeight: "bold",
-                      // width: "70%",
-                    }}
-                  >
-                    Courier Charges
-                  </Text>{" "}
-                  <Text
-                    style={{
-                      // flexDirection: "row",
-                      // justifyContent: "flex-end",
-                      fontSize: "10px",
-                      fontWeight: "bold",
-                      // marginRight: "1px",
-                    }}
-                  >
-                    307.00
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    gap: "10px",
-                    paddingBottom: "3px",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: "10px",
-                      fontWeight: "bold",
-                      // width: "70%",
-                    }}
-                  >
-                    Other Charges
-                  </Text>{" "}
-                  <Text
-                    style={{
-                      // flexDirection: "row",
-                      // justifyContent: "flex-end",
-                      fontSize: "10px",
-                      fontWeight: "bold",
-                      // marginRight: "1px",
-                    }}
-                  >
-                    307.00
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    gap: "10px",
-                    paddingBottom: "3px",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: "10px",
-                      fontWeight: "bold",
-                      // width: "70%",
-                    }}
-                  >
-                    Grand Total :
-                  </Text>{" "}
-                  <Text
-                    style={{
-                      // flexDirection: "row",
-                      // justifyContent: "flex-end",
-                      fontSize: "10px",
-                      fontWeight: "bold",
-                      // marginRight: "1px",
-                    }}
-                  >
-                    710.00
-                  </Text>
-                </View>
-              </View>
-            </View> */}
-
-            {/* testing */}
             <View
               style={{
                 flexDirection: "row",
@@ -949,26 +685,11 @@ const InvoiceTemplate = ({ tableList, invoiceData }) => {
                       marginTop: "10px",
                     }}
                   >
-                    Seven Hundread Five and sixty five Rupees only.
+                    {CurrentWords}
+                    {/* Seven Hundread Five and sixty five Rupees only. */}
                   </Text>{" "}
                 </View>
-                {/* <View style={{ margingTop: "50px" }}>
-                  <Text style={{ fontSize: "8px", marginTop: "15px" }}>
-                    Pay To: Kd Advertisement
-                  </Text>
-                  <Text style={{ fontSize: "8px", marginTop: "3px" }}>
-                    Bank: Kotak Mahindra
-                  </Text>
-                  <Text style={{ fontSize: "8px", marginTop: "3px" }}>
-                    A/c No.: 54623465
-                  </Text>
-                  <Text style={{ fontSize: "8px", marginTop: "3px" }}>
-                    IFSC: Kotak0001251
-                  </Text>
-                  <Text style={{ fontSize: "8px", marginTop: "3px" }}>
-                    IFSC: MAROLI , ANDHERI EAST
-                  </Text>
-                </View> */}
+
                 <View
                   style={{
                     margingTop: "550px",
@@ -1111,7 +832,7 @@ const InvoiceTemplate = ({ tableList, invoiceData }) => {
                           marginBottom: "6px",
                         }}
                       >
-                        307.00
+                        {/* 307.00 */}
                       </Text>
                     </View>
                     <View
@@ -1138,7 +859,7 @@ const InvoiceTemplate = ({ tableList, invoiceData }) => {
                           marginBottom: "6px",
                         }}
                       >
-                        307.00
+                        {/* 307.00 */}
                       </Text>
                     </View>
                     <View
@@ -1165,7 +886,7 @@ const InvoiceTemplate = ({ tableList, invoiceData }) => {
                           marginTop: "2px",
                         }}
                       >
-                        710.00
+                        {invoiceData?.total}
                       </Text>
                     </View>
                   </View>
@@ -1205,16 +926,6 @@ const InvoiceTemplate = ({ tableList, invoiceData }) => {
                 </View>
               </View>
             </View>
-
-            {/* <View style={styles.section}>
-              {items.map((item, index) => (
-                <View style={styles.item} key={index}>
-                  <Text style={styles.itemName}>{item.name}</Text>
-                  <Text style={styles.itemQuantity}>{item.quantity}</Text>
-                  <Text style={styles.itemPrice}>${item.price}</Text>
-                </View>
-              ))}
-            </View> */}
           </View>
         </Page>
       </Document>

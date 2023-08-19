@@ -42,8 +42,8 @@ export class EditBrand extends Component {
   };
 
   componentDidMount() {
-    // console.log(this.props.match.params);
     let { id } = this.props.match.params;
+    console.log(id);
     axiosConfig
       .get(`/admin/viewone_brand/${id}`)
       .then((response) => {

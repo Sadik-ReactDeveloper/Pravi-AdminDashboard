@@ -72,6 +72,7 @@ class All extends React.Component {
     getPageSize: "",
     info: true,
     ViewBill: true,
+    wordsNumber: "",
     sgst: "",
     cgst: "",
     otherCharges: "",
@@ -85,7 +86,7 @@ class All extends React.Component {
       //   filter: true,
       // },
       {
-        headerName: "order id ",
+        headerName: "Order Id ",
         field: "order_id",
         filter: true,
         resizable: true,
@@ -124,62 +125,62 @@ class All extends React.Component {
         },
       },
 
-      {
-        headerName: "Change Status ",
-        field: "Change Status",
-        filter: true,
-        resizable: true,
-        width: 230,
-        cellRendererFramework: (params) => {
-          // console.log(params.data?.order_id);
+      // {
+      //   headerName: "Change Status ",
+      //   field: "Change Status",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 230,
+      //   cellRendererFramework: params => {
+      //     // console.log(params.data?.order_id);
 
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <select
-                  // className="form-control"
-                  defaultValue={params.data?.order_status}
-                  onChange={(e) => {
-                    // console.log(e.target.value);
-                    let data = new FormData();
-                    data.append("order_id", params.data?.order_id);
-                    data.append("order_status", e.target.value);
-                    axiosConfig
-                      .post(`/change_order_status`, data)
-                      .then((res) => {
-                        console.log(res?.data.message);
-                        if (res?.data.message) {
-                          this.componentDidMount();
-                          swal("status Updated Succesfully");
-                        }
-                      })
-                      .catch((err) => {
-                        console.log(err);
-                      });
-                  }}
-                  name="changestatus"
-                  id="changeStatus"
-                >
-                  <option value={params.data?.order_status}>
-                    {params.data?.order_status}
-                  </option>
-                  <option value="Pending">--UpdateStatus--</option>
-                  <option value="Pending">Pending</option>
-                  <option value="Completed">Completed</option>
-                  <option value="Rejected">Rejected</option>
-                  <option value="Cancelled">Cancelled</option>
-                </select>
-              </div>
-            </div>
-          );
-        },
-      },
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <select
+      //             // className="form-control"
+      //             defaultValue={params.data?.order_status}
+      //             onChange={e => {
+      //               // console.log(e.target.value);
+      //               let data = new FormData();
+      //               data.append("order_id", params.data?.order_id);
+      //               data.append("order_status", e.target.value);
+      //               axiosConfig
+      //                 .post(`/change_order_status`, data)
+      //                 .then(res => {
+      //                   console.log(res?.data.message);
+      //                   if (res?.data.message) {
+      //                     this.componentDidMount();
+      //                     swal("status Updated Succesfully");
+      //                   }
+      //                 })
+      //                 .catch(err => {
+      //                   console.log(err);
+      //                 });
+      //             }}
+      //             name="changestatus"
+      //             id="changeStatus"
+      //           >
+      //             <option value={params.data?.order_status}>
+      //               {params.data?.order_status}
+      //             </option>
+      //             <option value="Pending">--UpdateStatus--</option>
+      //             <option value="Pending">Pending</option>
+      //             <option value="Completed">Completed</option>
+      //             <option value="Rejected">Rejected</option>
+      //             <option value="Cancelled">Cancelled</option>
+      //           </select>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       {
         headerName: "Download Bill ",
         field: "order_id",
         filter: true,
         resizable: true,
-        width: 150,
+        width: 180,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center justify-content-center cursor-pointer">
@@ -214,7 +215,7 @@ class All extends React.Component {
       // },
 
       {
-        headerName: "supplier",
+        headerName: "Supplier",
         field: "supplier_name",
         filter: true,
         resizable: true,
@@ -246,7 +247,7 @@ class All extends React.Component {
         },
       },
       {
-        headerName: "subtotal",
+        headerName: "Subtotal",
         field: "sub_total",
         filter: true,
         resizable: true,
@@ -262,7 +263,7 @@ class All extends React.Component {
         },
       },
       {
-        headerName: "total",
+        headerName: "Total",
         field: "total",
         filter: true,
         resizable: true,
@@ -685,8 +686,12 @@ class All extends React.Component {
   };
 
   handleBillDownload = (data) => {
-    console.log(data);
+    console.log(data.sub_total);
     this.setState({ PrintData: data });
+    const toWords = new ToWords();
+    let words = toWords.convert(Number(data.sub_total), { currency: true });
+    this.setState({ wordsNumber: words });
+    console.log(words);
     // console.log("object");
     this.toggleModal();
   };
@@ -699,9 +704,7 @@ class All extends React.Component {
   async componentDidMount() {
     let { id } = this.props.match.params;
     console.log(id);
-    const toWords = new ToWords();
-    let words = toWords.convert(4520.36, { currency: true });
-    console.log(words);
+
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
 
     const formdata = new FormData();
@@ -794,78 +797,12 @@ class All extends React.Component {
     const { rowData, columnDefs, defaultColDef } = this.state;
     return (
       <Row className="app-user-list">
-        {/* <Col sm="12">
-          <h2> Select Date Range</h2>
-          <Card>
-            <CardBody>
-              <Form className="m-1" onSubmit={this.submitHandler}>
-                <Row>
-                  <Col lg="3" className="mb-2">
-                    <Label>All</Label>
-                    <Input
-                      required
-                      type="select"
-                      name="bannertype"
-                      placeholder=""
-                      value={this.state.bannertype}
-                      onChange={this.changeHandler}
-                    >
-                      <option value="select">--Select--</option>
-                      <option value="All">All</option>
-                      <option value="Painding">Painding</option>
-                      <option value="Confirmed">Confirmed</option>
-                      <option value="in_process">In Process</option>
-                      <option value="out_for_delivery">Out for Delivery</option>
-                      <option value="delivered">Delivered</option>
-                      <option value="returned">Returned</option>
-                      <option value="failed_to_deliver">
-                        Failed to Deliver
-                      </option>
-                    </Input>
-                  </Col>
-                  <Col lg="3" className="mb-2">
-                    <Label>Start Date</Label>
-                    <Input
-                      required
-                      type="date"
-                      name="bannertype"
-                      placeholder=""
-                      value={this.state.bannertype}
-                      onChange={this.changeHandler}
-                    ></Input>
-                  </Col>
-                  <Col lg="3" className="mb-2">
-                    <Label>End Date</Label>
-                    <Input
-                      required
-                      type="date"
-                      name="bannertype"
-                      placeholder=""
-                      value={this.state.bannertype}
-                      onChange={this.changeHandler}
-                    ></Input>
-                  </Col>
-
-                  <Col lg="3" className="mb-2">
-                    <Button.Ripple className="bt" color="primary" type="submit">
-                      Show Data
-                    </Button.Ripple>
-                  </Col>
-                </Row>
-              </Form>
-            </CardBody>
-          </Card>
-        </Col> */}
-        {/* <Col>
-          <AnalyticsDashboard />
-        </Col> */}
         <Col sm="12">
           <Card>
             <Row className="m-2">
               <Col>
                 <h1 col-sm-6 className="float-left">
                   Place Order List
-                  {/* <InvoiceGenerator PrintData={this.state.PrintData} /> */}
                 </h1>
               </Col>
               <Col>
@@ -875,9 +812,8 @@ class All extends React.Component {
                       <Button
                         className=" float-right"
                         color="primary"
-                        onClick={
-                          () => history.push("/app/freshlist/order/Placeorder")
-                          // history.push("/app/freshlist/order/addOrder")
+                        onClick={() =>
+                          history.push("/app/freshlist/order/Placeorder")
                         }
                       >
                         Create Order
@@ -997,6 +933,7 @@ class All extends React.Component {
                     deliveryCharges={this.state.deliveryCharges}
                     otherCharges={this.state.otherCharges}
                     PrintData={this.state.PrintData}
+                    wordsNumber={this.state.wordsNumber}
                   />
                 </div>
               </>

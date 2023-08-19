@@ -321,27 +321,30 @@ export default function AddRoleNew() {
     <>
       {Selected && Selected.length ? (
         <>
-          <Row className="m-2">
-            <Button
-              className=" btn btn-danger float-right"
-              onClick={() => history.push("/app/Trupee/account/RoleList")}
-            >
-              Back{" "}
-            </Button>
-          </Row>
+          {/* <Row className="m-2">
+        
+          </Row> */}
           <Row className="">
             <Col xl={12}>
               <Card>
                 <Row>
-                  <Col>
-                    <div className="d-flex justify-content-center">
-                      <h3 className="py-2">Update Role</h3>
-                    </div>
+                  <Col className="m-1">
+                    <h3 className="py-2">Update Role</h3>
+                  </Col>
+                  <Col className="m-1">
+                    <Button
+                      className=" btn btn-danger float-right "
+                      onClick={() =>
+                        history.push("/app/Trupee/account/RoleList")
+                      }
+                    >
+                      Back
+                    </Button>
                   </Col>
                 </Row>
                 <div className="container" />
                 <Form onSubmit={handleSumit}>
-                  <div className="container mt-5">
+                  <div className="container mt-2">
                     <Row className="mb-3 container">
                       <Col>
                         <Label>Existing Role *</Label>
