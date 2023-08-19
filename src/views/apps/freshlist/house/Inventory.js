@@ -56,7 +56,7 @@ class Invetory extends React.Component {
         valueGetter: "node.rowIndex + 1",
         field: "node.rowIndex + 1",
         // checkboxSelection: true,
-        width: 150,
+        width: 100,
         filter: true,
       },
 
@@ -118,22 +118,22 @@ class Invetory extends React.Component {
           );
         },
       },
-      {
-        headerName: "Description",
-        field: "description",
-        filter: "agSetColumnFilter",
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                {/* <span>{ReactHtmlParser(params.data.volume)}</span> */}
-                <span>{params?.data?.description}</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "Description",
+      //   field: "description",
+      //   filter: "agSetColumnFilter",
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           {/* <span>{ReactHtmlParser(params.data.volume)}</span> */}
+      //           <span>{params?.data?.description}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       {
         headerName: " Price",
         field: "price",
@@ -149,42 +149,42 @@ class Invetory extends React.Component {
           );
         },
       },
-      {
-        headerName: "Discount Price",
-        field: "discountprice",
-        filter: "agSetColumnFilter",
-        width: 190,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{ReactHtmlParser(params.data?.discountprice)}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "shipping fee",
-        field: "shipping_fee",
+      // {
+      //   headerName: "Discount Price",
+      //   field: "discountprice",
+      //   filter: "agSetColumnFilter",
+      //   width: 190,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{ReactHtmlParser(params.data?.discountprice)}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "shipping fee",
+      //   field: "shipping_fee",
 
-        filter: "agSetColumnFilter",
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{ReactHtmlParser(params?.data?.shipping_fee)}</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      //   filter: "agSetColumnFilter",
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{ReactHtmlParser(params?.data?.shipping_fee)}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       {
-        headerName: "Stock",
+        headerName: "Current Stock",
         field: "stock",
         filter: "agSetColumnFilter",
-        width: 120,
+        width: 180,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
@@ -196,90 +196,90 @@ class Invetory extends React.Component {
         },
       },
 
-      {
-        headerName: "Tag",
-        field: "tags",
+      // {
+      //   headerName: "Tag",
+      //   field: "tags",
 
-        filter: "agSetColumnFilter",
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{ReactHtmlParser(params.data?.tags)}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "TAX Rate",
-        field: "tax_rate",
-        filter: "agSetColumnFilter",
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{ReactHtmlParser(params.data?.tax_rate)}</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      //   filter: "agSetColumnFilter",
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{ReactHtmlParser(params.data?.tags)}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "TAX Rate",
+      //   field: "tax_rate",
+      //   filter: "agSetColumnFilter",
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{ReactHtmlParser(params.data?.tax_rate)}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
 
-      {
-        headerName: "MIN STOCK LEVEL",
-        field: "minstocklevel",
+      // {
+      //   headerName: "MIN STOCK LEVEL",
+      //   field: "minstocklevel",
 
-        filter: "agSetColumnFilter",
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{ReactHtmlParser(params?.data?.pisces)}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "STOCK STATUS",
-        field: "stockstatus",
+      //   filter: "agSetColumnFilter",
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{ReactHtmlParser(params?.data?.pisces)}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "STOCK STATUS",
+      //   field: "stockstatus",
 
-        filter: "agSetColumnFilter",
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{ReactHtmlParser(params.data?.pisces)}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "MAX STOCK LEVEL",
-        field: "maxstocklevel",
+      //   filter: "agSetColumnFilter",
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{ReactHtmlParser(params.data?.pisces)}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "MAX STOCK LEVEL",
+      //   field: "maxstocklevel",
 
-        filter: "agSetColumnFilter",
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{ReactHtmlParser(params.data?.pisces)}</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      //   filter: "agSetColumnFilter",
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{ReactHtmlParser(params.data?.pisces)}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       {
         headerName: "Actions",
         field: "transactions",
-        width: 150,
+        width: 200,
         cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">

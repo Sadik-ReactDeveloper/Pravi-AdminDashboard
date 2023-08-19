@@ -52,6 +52,7 @@ export class EditInventory extends Component {
   async componentDidMount() {
     let { id } = this.props?.match.params;
     console.log(id);
+
     // console.log(this.props?.location?.state);
     // console.log(JSON.parse(this.props?.location?.state?.veriety));
     // let variety = JSON.parse(this.props?.location?.state?.veriety);
@@ -88,11 +89,11 @@ export class EditInventory extends Component {
     this.setState({ Tags: this.props?.location?.state?.tags });
     this.setState({ taxrate: this.props?.location?.state?.tax_rate });
     this.setState({ status: this.props?.location?.state?.status });
-    await axiosConfig.get("/getcategory").then((response) => {
-      let rowData = response.data.data?.category;
-      console.log(rowData);
-      this.setState({ rowData });
-    });
+    // await axiosConfig.get("/getcategory").then((response) => {
+    //   let rowData = response.data.data?.category;
+    //   console.log(rowData);
+    //   this.setState({ rowData });
+    // });
   }
 
   handleChange(i, e) {
@@ -132,49 +133,47 @@ export class EditInventory extends Component {
   };
   submitHandler = (e) => {
     e.preventDefault();
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
     const data = new FormData();
 
-    data.append("id", this.props?.location?.state?.id);
-    data.append("title", this.state.P_Title);
-    data.append("veriety", JSON.stringify(this.state.formValues));
-    data.append("category_id", this.state.category_name);
-    data.append("stock", this.state.stock);
-    data.append("price", this.state.Price);
-    data.append("discountprice", this.state.DiscountPrice);
-    data.append("description", this.state.description);
-    data.append("shipping_fee", this.state.shipmentfee);
-    data.append("tax_rate", this.state.taxrate);
-    data.append("tags", this.state.Tags);
-    data.append("status", "Active");
+    data.append("user_id", pageparmission?.Userinfo?.id);
+    data.append("quantity", this.state.stock);
+    data.append("HSN_SAC", this.state.Inventory);
+    data.append("product_id", id);
+
+    // data.append("id", id);
+
+    // data.append("id", this.props?.location?.state?.id);
+    // data.append("title", this.state.P_Title);
+    // data.append("veriety", JSON.stringify(this.state.formValues));
+    // data.append("category_id", this.state.category_name);
+    // data.append("stock", this.state.stock);
+    // data.append("price", this.state.Price);
+    // data.append("discountprice", this.state.DiscountPrice);
+    // data.append("description", this.state.description);
+    // data.append("shipping_fee", this.state.shipmentfee);
+    // data.append("tax_rate", this.state.taxrate);
+    // data.append("tags", this.state.Tags);
+    // data.append("status", "Active");
     // this.state.selectedFile3.forEach((image, index) => {
     //   data.append(`image`, image);
     // });
-    // debugger;
-    for (let i = 0; i < this.state.selectedFile3?.length; i++) {
-      data.append("images[]", this.state.selectedFile3[i]);
+    if (this.state.stock) {
+      axiosConfig
+        .post(`/updateinventory`, data)
+        .then((response) => {
+          console.log(response);
+          if (response.data.success) {
+            swal("Success!", "You Data iS been Submitted", "success");
+            // this.props.history.push("/app/freshlist/category/categoryList");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      swal("Enter Value in field");
     }
-    // for (const file of this.state.selectedFile3) {
-    //   if (this.state.selectedFile3 !== null) {
-    //     data.append("image_name", file);
-    //   }
-    // }
-    axiosConfig
-      .post(`/editproduct`, data, {
-        //   .post(`/addproduct`, data, {
-        headers: {
-          "Content-Type": "multipart/form-data; ",
-        },
-      })
-      .then((response) => {
-        console.log(response);
-        if (response.data.success) {
-          swal("Success!", "You Data iS been Submitted", "success");
-          // this.props.history.push("/app/freshlist/category/categoryList");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   };
   render() {
     return (
@@ -220,7 +219,7 @@ export class EditInventory extends Component {
                   <FormGroup>
                     <Label> HSN / SAC </Label>
                     <Input
-                      type="number"
+                      type="text"
                       placeholder="Enter here"
                       name="Inventory"
                       bsSize="lg"
