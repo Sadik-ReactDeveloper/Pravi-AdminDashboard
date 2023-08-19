@@ -71,14 +71,15 @@ export class CreateAccount extends Component {
     };
     this.handleMatchaddress = this.handleMatchaddress.bind(this);
   }
-  changeHandler = (e) => {
+  changeHandler = e => {
+    console.log(e.target.value);
     this.setState({ [e.target.name]: e.target.value });
   };
-  changeHandler1 = (e) => {
+  changeHandler1 = e => {
     this.setState({ status: e.target.value });
   };
 
-  handleMultiSelectChange = (selectedOptions) => {
+  handleMultiSelectChange = selectedOptions => {
     this.setState({ selectedOptions });
     console.log(selectedOptions);
   };
@@ -86,7 +87,7 @@ export class CreateAccount extends Component {
   async componentDidMount() {
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
     let newparmisson = pageparmission?.role?.find(
-      (value) => value?.pageName === "Create Account"
+      value => value?.pageName === "Create Account"
     );
 
     this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
@@ -103,31 +104,29 @@ export class CreateAccount extends Component {
     const formdata = new FormData();
     formdata.append("user_id", pageparmission?.Userinfo?.id);
     formdata.append("role", pageparmission?.Userinfo?.role);
-    await axiosConfig
-      .post("/getrolelistdropdown", formdata)
-      .then((response) => {
-        console.log(response);
-        const propertyNames = Object.values(response.data?.data?.roles);
+    await axiosConfig.post("/getrolelistdropdown", formdata).then(response => {
+      console.log(response);
+      const propertyNames = Object.values(response.data?.data?.roles);
 
-        console.log(propertyNames);
-        this.setState({
-          productName: propertyNames,
-        });
+      console.log(propertyNames);
+      this.setState({
+        productName: propertyNames,
       });
+    });
     // state List
     await axiosConfig
       .get("/getallstates")
-      .then((response) => {
+      .then(response => {
         this.setState({
           StateList: response.data?.states,
         });
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error.response.data);
       });
   }
 
-  submitHandler = (e) => {
+  submitHandler = e => {
     e.preventDefault();
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
     let uniqueChars = [...new Set(selectItem1)];
@@ -164,7 +163,7 @@ export class CreateAccount extends Component {
 
     axiosConfig
       .post("/createuser", formdata)
-      .then((response) => {
+      .then(response => {
         if (response.data?.success) {
           swal("Success!", "Submitted SuccessFull!", "success");
           this.setState({ AssignRole: "" });
@@ -183,7 +182,7 @@ export class CreateAccount extends Component {
         }
         // this.props.history.push("/app/freshlist/order/all");
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   };
@@ -212,9 +211,9 @@ export class CreateAccount extends Component {
       }
     }
   }
-  componentDidUpdate() {
-    console.log(selectItem1);
-  }
+  // componentDidUpdate() {
+  //   console.log(selectItem1);
+  // }
 
   onRemove = (selectedList, removedItem) => {
     console.log(selectedList);
@@ -298,6 +297,29 @@ export class CreateAccount extends Component {
             <Form className="m-1" onSubmit={this.submitHandler}>
               <Row className="mb-2">
                 <Col lg="6" md="6">
+                  <FormGroup>
+                    <Label> Select Role*</Label>
+                    <CustomInput
+                      required
+                      id="AssignRole"
+                      type="select"
+                      name="AssignRole"
+                      value={this.state.AssignRole}
+                      defaultValue={"Admin"}
+                      onChange={this.changeHandler}
+                    >
+                      <option value={"Admin"}>--Select Role--</option>
+
+                      {this.state.productName &&
+                        this.state.productName?.map((value, index) => (
+                          <option key={index} value={value}>
+                            {value}
+                          </option>
+                        ))}
+                    </CustomInput>
+                  </FormGroup>
+                </Col>
+                <Col lg="6" md="6" sm="12">
                   <FormGroup>
                     <Label>Name *</Label>
                     <Input
@@ -420,95 +442,75 @@ export class CreateAccount extends Component {
                     />
                   </FormGroup>
                 </Col>
-                <Col lg="6" md="6">
-                  <FormGroup>
-                    <Label>Place of Supply</Label>
-                    <Input
-                      required
-                      type="text"
-                      placeholder="Enter Place_of_Supply"
-                      name="Place_of_Supply"
-                      value={this.state.Place_of_Supply}
-                      onChange={this.changeHandler}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col lg="6" md="6">
-                  <FormGroup>
-                    <label for="cars">Choose State</label>
-                    <select
-                      name="SelectedState"
-                      value={this.state.SelectedState}
-                      onChange={(e) => {
-                        console.log(e.target.value);
-                        const formdata = new FormData();
-                        this.setState({ SelectedState: e.target.value });
-                        formdata.append("state_id", e.target.value);
-                        axiosConfig
-                          .post(`/getcity`, formdata)
-                          .then((res) => {
-                            console.log(res?.data?.cities);
-                            this.setState({ CityList: res?.data?.cities });
-                          })
-                          .catch((err) => {
-                            console.log(err);
-                          });
-                      }}
-                      // onChange={this.changeHandler}
-                      className="form-control"
-                    >
-                      <option value="volvo">--Select State--</option>
-                      {this.state.StateList &&
-                        this.state.StateList?.map((ele, i) => (
-                          <option key={i} value={ele?.id}>
-                            {ele?.state_title}
-                          </option>
-                        ))}
-                    </select>
-                  </FormGroup>
-                </Col>
-                <Col lg="6" md="6">
-                  <label for="cars">Choose City</label>
-                  <Multiselect
-                    options={this.state.CityList} // Options to display in the dropdown
-                    selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
-                    onSelect={this.onSelect} // Function will trigger on select event
-                    onRemove={this.onRemove} // Function will trigger on remove event
-                    displayValue="name" // Property name to display in the dropdown options
-                  />
-                  {/* <Select
-                    options={this.state.CityList}
-                    value={selectedOptions}
-                    onChange={this.handleMultiSelectChange}
-                    isMulti
-                  /> */}
 
-                  {/* <FormGroup>
-                    <label for="cars">Choose City</label>
-                    <select
-                      disabled={this.state.checkbox ? true : false}
-                      placeholder="Enter City"
-                      name="S_City"
-                      value={this.state.S_City}
-                      onChange={this.changeHandler}
-                      className="form-control"
-                    >
-                      <option value="volvo">--Select City--</option>
-                      <option value="Indore">Indore</option>
-                      <option value="Panvel">Panvel</option>
-                      <option value="khandwa">khandwa</option>
-                    </select>
-                  </FormGroup> */}
-                </Col>
+                {this.state.AssignRole === "supplier" ? (
+                  <>
+                    <Col lg="6" md="6">
+                      <FormGroup>
+                        <Label>Place of Supply</Label>
+                        <Input
+                          required
+                          type="text"
+                          placeholder="Enter Place_of_Supply"
+                          name="Place_of_Supply"
+                          value={this.state.Place_of_Supply}
+                          onChange={this.changeHandler}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6" md="6">
+                      <FormGroup>
+                        <Label for="cars">Supply State </Label>
+                        <select
+                          name="SelectedState"
+                          value={this.state.SelectedState}
+                          onChange={e => {
+                            const formdata = new FormData();
+                            this.setState({ SelectedState: e.target.value });
+                            formdata.append("state_id", e.target.value);
+                            axiosConfig
+                              .post(`/getcity`, formdata)
+                              .then(res => {
+                                this.setState({ CityList: res?.data?.cities });
+                              })
+                              .catch(err => {
+                                console.log(err);
+                              });
+                          }}
+                          // onChange={this.changeHandler}
+                          className="form-control"
+                        >
+                          <option value="volvo">--Select State--</option>
+                          {this.state.StateList &&
+                            this.state.StateList?.map((ele, i) => (
+                              <option key={i} value={ele?.id}>
+                                {ele?.state_title}
+                              </option>
+                            ))}
+                        </select>
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6" md="6">
+                      <Label for="cars">Supply City </Label>
+                      <Multiselect
+                        options={this.state.CityList} // Options to display in the dropdown
+                        selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
+                        onSelect={this.onSelect} // Function will trigger on select event
+                        onRemove={this.onRemove} // Function will trigger on remove event
+                        displayValue="name" // Property name to display in the dropdown options
+                      />
+                    </Col>
+                  </>
+                ) : null}
               </Row>
               <hr />
               <Row>
                 <Col>
-                  <h4 className="mt-4">Billing Address :</h4>
+                  <h4 className="mt-4 pb-2">Billing Address :</h4>
 
-                  <Col className="py-2" lg="12" md="12" sm="12">
+                  <Col className="" lg="12" md="12" sm="12">
                     <FormGroup>
-                      <label for="cars">Choose Country</label>
+                      <Label for="cars">Choose Country</Label>
                       <select
                         placeholder="Enter City"
                         name="B_Country"
@@ -523,21 +525,21 @@ export class CreateAccount extends Component {
                   </Col>
                   <Col lg="12" md="12" sm="12">
                     <FormGroup>
-                      <label for="cars">Choose State</label>
+                      <Label for="cars">Choose State</Label>
                       <select
                         name="B_State"
                         value={this.state.B_State}
-                        onChange={(e) => {
+                        onChange={e => {
                           console.log(e.target.value);
                           this.setState({ B_State: e.target.value });
                           const formdata = new FormData();
                           formdata.append("state_id", e.target.value);
                           axiosConfig
                             .post(`/getcity`, formdata)
-                            .then((res) => {
+                            .then(res => {
                               this.setState({ CityList: res?.data?.cities });
                             })
-                            .catch((err) => {
+                            .catch(err => {
                               console.log(err);
                             });
                         }}
@@ -557,7 +559,7 @@ export class CreateAccount extends Component {
                   <Col lg="12" md="12" sm="12">
                     <FormGroup>
                       <FormGroup>
-                        <label for="cars">Choose City</label>
+                        <Label for="cars">Choose City</Label>
                         <select
                           placeholder="Enter City"
                           name="B_City"
@@ -608,7 +610,7 @@ export class CreateAccount extends Component {
                     <Col lg="1" md="1">
                       <input
                         name="check"
-                        onChange={(e) => {
+                        onChange={e => {
                           this.handleMatchaddress(e, e.target.checked);
                         }}
                         style={{
@@ -626,7 +628,7 @@ export class CreateAccount extends Component {
 
                   <Col lg="12" md="12" sm="12">
                     <FormGroup>
-                      <label for="cars">Choose Country</label>
+                      <Label for="cars">Choose Country</Label>
                       <select
                         placeholder="Enter City"
                         name="S_Country"
@@ -642,22 +644,22 @@ export class CreateAccount extends Component {
                   </Col>
                   <Col lg="12" md="12" sm="12">
                     <FormGroup>
-                      <label for="cars">Choose State</label>
+                      <Label for="cars">Choose State</Label>
                       <select
                         name="S_State"
                         value={this.state.S_State}
-                        onChange={(e) => {
+                        onChange={e => {
                           // console.log(e.target.value);
                           this.setState({ S_State: e.target.value });
                           const formdata = new FormData();
                           formdata.append("state_id", e.target.value);
                           axiosConfig
                             .post(`/getcity`, formdata)
-                            .then((res) => {
+                            .then(res => {
                               console.log(res?.data?.cities);
                               this.setState({ CityList: res?.data?.cities });
                             })
-                            .catch((err) => {
+                            .catch(err => {
                               console.log(err);
                             });
                         }}
@@ -687,7 +689,7 @@ export class CreateAccount extends Component {
                     </FormGroup>
                   </Col>
                   <Col lg="12" md="12" sm="12">
-                    <label for="cars">Choose City</label>
+                    <Label for="cars">Choose City</Label>
 
                     <FormGroup>
                       <select
@@ -755,47 +757,8 @@ export class CreateAccount extends Component {
 
               {/* {this.state.setuserList && ( */}
               <Row className="mt-2">
-                <Col lg="6" md="6">
-                  <Label className="mt-2  mb-2"> Select Role</Label>
-
-                  <CustomInput
-                    id="AssignRole"
-                    type="select"
-                    name="AssignRole"
-                    value={this.state.AssignRole}
-                    onChange={this.changeHandler}
-                  >
-                    <option value="Admin">--Select Role--</option>
-
-                    {this.state.productName &&
-                      this.state.productName?.map((value, index) => (
-                        <option key={index} value={value}>
-                          {value}
-                        </option>
-                      ))}
-                  </CustomInput>
-                </Col>
-                {/* <Col lg="6" md="6">
-                  <Label className="mt-2  mb-2"> Select User</Label>
-
-                  <CustomInput
-                    type="select"
-                    placeholder=""
-                    name="Selectuser"
-                    value={this.state.Selectuser}
-                    onChange={this.changeHandler}
-                  >
-                    <option value="user1">user 1</option>
-                    <option value="user2">user2</option>
-                    <option value="user2">UPI</option>
-                    <option value="user2">Other</option>
-                  </CustomInput>
-                </Col> */}
-              </Row>
-              {/* )} */}
-              <Row>
                 <Col lg="6" md="6" sm="6" className="mb-2">
-                  <Label className="mb-1 py-2">
+                  <Label className="">
                     <h4>Status</h4>
                   </Label>
                   <div
@@ -819,7 +782,25 @@ export class CreateAccount extends Component {
                     <span style={{ marginRight: "3px" }}>Deactive</span>
                   </div>
                 </Col>
+                {/* <Col lg="6" md="6">
+                  <Label className="mt-2  mb-2"> Select User</Label>
+
+                  <CustomInput
+                    type="select"
+                    placeholder=""
+                    name="Selectuser"
+                    value={this.state.Selectuser}
+                    onChange={this.changeHandler}
+                  >
+                    <option value="user1">user 1</option>
+                    <option value="user2">user2</option>
+                    <option value="user2">UPI</option>
+                    <option value="user2">Other</option>
+                  </CustomInput>
+                </Col> */}
               </Row>
+              {/* )} */}
+
               <Row>
                 <Button.Ripple
                   color="primary"
