@@ -53,7 +53,7 @@ export class EditInventory extends Component {
     let { id } = this.props?.match.params;
     console.log(id);
 
-    // console.log(this.props?.location?.state);
+    console.log(this.props?.location?.state);
     // console.log(JSON.parse(this.props?.location?.state?.veriety));
     // let variety = JSON.parse(this.props?.location?.state?.veriety);
     // if (variety.length > 0) {
@@ -70,25 +70,27 @@ export class EditInventory extends Component {
     //     console.log(err);
     //   });
 
-    this.setState({
-      category_name: this.props?.location?.state?.category_name,
-    });
-    this.setState({ P_Title: this.props?.location?.state?.title });
+    // this.setState({
+    //   category_name: this.props?.location?.state?.category_name,
+    // });
+    // this.setState({ P_Title: this.props?.location?.state?.title });
+    this.setState({ Inventory: this.props?.location?.state?.HSN_SAC });
+    this.setState({ stock: this.props?.location?.state?.quantity });
 
-    this.setState({ Price: this.props?.location?.state?.price });
-    this.setState({ stock: this.props?.location?.state?.stock });
+    // this.setState({ Price: this.props?.location?.state?.price });
+    // this.setState({ stock: this.props?.location?.state?.stock });
 
-    this.setState({
-      DiscountPrice: this.props?.location?.state?.discountprice,
-    });
-    this.setState({ description: this.props?.location?.state?.description });
-    this.setState({
-      formValues: JSON.parse(this.props?.location?.state?.veriety),
-    });
-    this.setState({ shipmentfee: this.props?.location?.state?.shipping_fee });
-    this.setState({ Tags: this.props?.location?.state?.tags });
-    this.setState({ taxrate: this.props?.location?.state?.tax_rate });
-    this.setState({ status: this.props?.location?.state?.status });
+    // this.setState({
+    //   DiscountPrice: this.props?.location?.state?.discountprice,
+    // });
+    // this.setState({ description: this.props?.location?.state?.description });
+    // this.setState({
+    //   formValues: JSON.parse(this.props?.location?.state?.veriety),
+    // });
+    // this.setState({ shipmentfee: this.props?.location?.state?.shipping_fee });
+    // this.setState({ Tags: this.props?.location?.state?.tags });
+    // this.setState({ taxrate: this.props?.location?.state?.tax_rate });
+    // this.setState({ status: this.props?.location?.state?.status });
     // await axiosConfig.get("/getcategory").then((response) => {
     //   let rowData = response.data.data?.category;
     //   console.log(rowData);
@@ -166,7 +168,7 @@ export class EditInventory extends Component {
         console.log(response);
         if (response.data.success) {
           swal("Success!", "You Data iS been Submitted", "success");
-          // this.props.history.push("/app/freshlist/category/categoryList");
+          this.props.history.push("/app/freshlist/house/inventory");
         }
       })
       .catch((error) => {

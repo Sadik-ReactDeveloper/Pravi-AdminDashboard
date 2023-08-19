@@ -98,8 +98,8 @@ class ViewOneReceivedorder extends React.Component {
             <div className="badge badge-pill bg-danger">
               {params.data.inventory_status}
             </div>
-          ) : params.data?.order_status === "Approved" ? (
-            <div className="badge badge-pill bg-success">Approved</div>
+          ) : params.data?.order_status === "Completed" ? (
+            <div className="badge badge-pill bg-success">Completed</div>
           ) : null;
         },
       },
