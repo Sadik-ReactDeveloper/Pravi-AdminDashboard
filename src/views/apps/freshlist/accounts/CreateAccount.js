@@ -505,8 +505,8 @@ export class CreateAccount extends Component {
               </Row>
               <hr />
               <Row>
-                <Col>
-                  <h4 className="mt-4 pb-2">Billing Address :</h4>
+                <Col className="mt-2" lg="6" md="6" sm="12">
+                  <h4 className="mt-5 pb-2">Billing Address :</h4>
 
                   <Col className="" lg="12" md="12" sm="12">
                     <FormGroup>
@@ -605,10 +605,11 @@ export class CreateAccount extends Component {
                     </FormGroup>
                   </Col>
                 </Col>
-                <Col>
+                <Col lg="6" md="6" sm="12">
+                  <hr />
                   <Row>
-                    <Col lg="1" md="1">
-                      <input
+                    <Col className="ml-2" lg="6" md="6" sm="12">
+                      <Input
                         name="check"
                         onChange={e => {
                           this.handleMatchaddress(e, e.target.checked);
@@ -620,7 +621,7 @@ export class CreateAccount extends Component {
                         type="checkbox"
                       />
                     </Col>
-                    <Col>
+                    <Col lg="6" md="6" sm="6" className="ml-3">
                       <h5> Same as Billing Address </h5>
                     </Col>
                   </Row>
