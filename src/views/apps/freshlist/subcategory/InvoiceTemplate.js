@@ -524,133 +524,134 @@ const InvoiceTemplate = ({ tableList, invoiceData, CurrentWords }) => {
                 </Text>
               </View>
             </View>
-            {tableList.map((ele, ind) => {
-              return (
-                <>
-                  <View
-                    style={{
-                      flexDirection: "row",
+            {tableList &&
+              tableList.map((ele, ind) => {
+                return (
+                  <>
+                    <View
+                      style={{
+                        flexDirection: "row",
 
-                      borderBottom: "1px solid black",
-                      borderRight: "1px solid black",
-                      borderLeft: "1px solid black",
-                      height: "25px",
-                    }}
-                  >
-                    <View
-                      style={{
-                        width: "5%",
-                        padding: "5px 2px",
+                        borderBottom: "1px solid black",
+                        borderRight: "1px solid black",
+                        borderLeft: "1px solid black",
+                        height: "25px",
                       }}
                     >
-                      <Text
+                      <View
                         style={{
-                          fontSize: "10px",
-                          fontWeight: "1000",
-                          marginLeft: "5px",
+                          width: "5%",
+                          padding: "5px 2px",
                         }}
                       >
-                        1
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        width: "25%",
-                        padding: "5px 2px",
-                      }}
-                    >
-                      <Text style={styles.tableAmount}>
-                        {ele?.title}
-                        {/* {invoiceData?.title} */}
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        width: "20%",
-                        padding: "5px 2px",
-                      }}
-                    >
-                      <Text
+                        <Text
+                          style={{
+                            fontSize: "10px",
+                            fontWeight: "1000",
+                            marginLeft: "5px",
+                          }}
+                        >
+                          1
+                        </Text>
+                      </View>
+                      <View
                         style={{
-                          fontSize: "10px",
+                          width: "25%",
+                          padding: "5px 2px",
+                        }}
+                      >
+                        <Text style={styles.tableAmount}>
+                          {ele?.title}
+                          {/* {invoiceData?.title} */}
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          width: "20%",
+                          padding: "5px 2px",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: "10px",
 
-                          fontWeight: "1000",
-                          marginLeft: "5px",
+                            fontWeight: "1000",
+                            marginLeft: "5px",
+                          }}
+                        >
+                          5124588
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          width: "15%",
+                          padding: "5px 2px",
                         }}
                       >
-                        5124588
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        width: "15%",
-                        padding: "5px 2px",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: "10px",
+                        <Text
+                          style={{
+                            fontSize: "10px",
 
-                          fontWeight: "1000",
-                          marginLeft: "5px",
-                        }}
-                      >
-                        {ele?.qty}
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        width: "15%",
-                        padding: "5px 2px",
-                      }}
-                    >
-                      <Text
+                            fontWeight: "1000",
+                            marginLeft: "5px",
+                          }}
+                        >
+                          {ele?.qty}
+                        </Text>
+                      </View>
+                      <View
                         style={{
-                          fontSize: "10px",
-                          fontWeight: "1000",
-                          marginLeft: "5px",
+                          width: "15%",
+                          padding: "5px 2px",
                         }}
                       >
-                        {ele?.price}
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        width: "15%",
-                        padding: "5px 2px",
-                      }}
-                    >
-                      <Text
+                        <Text
+                          style={{
+                            fontSize: "10px",
+                            fontWeight: "1000",
+                            marginLeft: "5px",
+                          }}
+                        >
+                          {ele?.price}
+                        </Text>
+                      </View>
+                      <View
                         style={{
-                          fontSize: "10px",
-                          fontWeight: "1000",
-                          marginLeft: "5px",
+                          width: "15%",
+                          padding: "5px 2px",
                         }}
                       >
-                        {ele?.discountprice}
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        marginRight: "2px",
-                        padding: "5px 2px",
-                      }}
-                    >
-                      <Text
+                        <Text
+                          style={{
+                            fontSize: "10px",
+                            fontWeight: "1000",
+                            marginLeft: "5px",
+                          }}
+                        >
+                          {ele?.discountprice}
+                        </Text>
+                      </View>
+                      <View
                         style={{
-                          fontSize: "10px",
-                          fontWeight: "1000",
-                          marginLeft: "5px",
+                          marginRight: "2px",
+                          padding: "5px 2px",
                         }}
                       >
-                        {ele?.qty * ele?.price}
-                      </Text>
+                        <Text
+                          style={{
+                            fontSize: "10px",
+                            fontWeight: "1000",
+                            marginLeft: "5px",
+                          }}
+                        >
+                          {ele?.qty * ele?.price}
+                        </Text>
+                      </View>
                     </View>
-                  </View>
-                  ;
-                </>
-              );
-            })}
+                    ;
+                  </>
+                );
+              })}
 
             <View
               style={{

@@ -133,9 +133,10 @@ export class EditInventory extends Component {
   };
   submitHandler = (e) => {
     e.preventDefault();
+    let { id } = this.props?.match.params;
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
     const data = new FormData();
-
+    console.log(id);
     data.append("user_id", pageparmission?.Userinfo?.id);
     data.append("quantity", this.state.stock);
     data.append("HSN_SAC", this.state.Inventory);
@@ -158,22 +159,22 @@ export class EditInventory extends Component {
     // this.state.selectedFile3.forEach((image, index) => {
     //   data.append(`image`, image);
     // });
-    if (this.state.stock) {
-      axiosConfig
-        .post(`/updateinventory`, data)
-        .then((response) => {
-          console.log(response);
-          if (response.data.success) {
-            swal("Success!", "You Data iS been Submitted", "success");
-            // this.props.history.push("/app/freshlist/category/categoryList");
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } else {
-      swal("Enter Value in field");
-    }
+    // if (this.state.stock) {
+    axiosConfig
+      .post(`/updateinventory`, data)
+      .then((response) => {
+        console.log(response);
+        if (response.data.success) {
+          swal("Success!", "You Data iS been Submitted", "success");
+          // this.props.history.push("/app/freshlist/category/categoryList");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    // } else {
+    //   swal("Enter Value in field");
+    // }
   };
   render() {
     return (
@@ -207,7 +208,7 @@ export class EditInventory extends Component {
                     <Label> Quantity </Label>
                     <Input
                       type="number"
-                      placeholder="Amount In Number"
+                      placeholder="Quantity In Number"
                       name="stock"
                       bsSize="lg"
                       value={this.state.stock}
@@ -222,7 +223,6 @@ export class EditInventory extends Component {
                       type="text"
                       placeholder="Enter here"
                       name="Inventory"
-                      bsSize="lg"
                       value={this.state.Inventory}
                       onChange={this.changeHandler}
                     />

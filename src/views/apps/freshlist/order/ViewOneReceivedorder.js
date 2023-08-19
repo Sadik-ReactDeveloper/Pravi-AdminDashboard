@@ -40,6 +40,7 @@ const toWords = new ToWords({
   converterOptions: {
     currency: true,
     ignoreDecimal: false,
+    IsVerified: false,
     ignoreZeroCurrency: false,
     doNotAddOnly: false,
     currencyOptions: {
@@ -80,22 +81,22 @@ class ViewOneReceivedorder extends React.Component {
         filter: true,
       },
       {
-        headerName: "Status",
-        field: "order_status",
+        headerName: "inventoryStatus",
+        field: "inventory_status",
         filter: true,
         width: 160,
         cellRendererFramework: (params) => {
-          return params.data?.order_status === "Completed" ? (
-            <div className="badge badge-pill badge-success">Completed</div>
-          ) : params.data?.order_status === "Pending" ? (
+          return params.data?.inventory_status === "verified" ? (
+            <div className="badge badge-pill badge-success">verified</div>
+          ) : params.data?.inventory_status === "unverified" ? (
             <div className="badge badge-pill badge-warning">
-              {params.data?.order_status}
+              {params.data?.inventory_status}
             </div>
-          ) : params.data?.order_status === "Rejected" ? (
+          ) : params.data?.inventory_status === "Rejected" ? (
             <div className="badge badge-pill bg-primary">Rejected</div>
-          ) : params.data?.order_status === "Cancelled" ? (
+          ) : params.data?.inventory_status === "Cancelled" ? (
             <div className="badge badge-pill bg-danger">
-              {params.data.order_status}
+              {params.data.inventory_status}
             </div>
           ) : params.data?.order_status === "Approved" ? (
             <div className="badge badge-pill bg-success">Approved</div>
@@ -119,8 +120,24 @@ class ViewOneReceivedorder extends React.Component {
         },
       },
       {
-        headerName: "Stock Status",
-        field: "order_id",
+        headerName: "Quantity",
+        field: "qty",
+        filter: true,
+        resizable: true,
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.qty}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "current Stock ",
+        field: "current_stock",
         filter: true,
         resizable: true,
         width: 190,
@@ -128,7 +145,7 @@ class ViewOneReceivedorder extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
-                <span>{params.data?.order_id}</span>
+                <span>{params.data?.current_stock}</span>
               </div>
             </div>
           );
@@ -287,22 +304,6 @@ class ViewOneReceivedorder extends React.Component {
             <div className="d-flex align-items-center cursor-pointer">
               <div>
                 <span>{params.data?.price}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Quantity",
-        field: "qty",
-        filter: true,
-        resizable: true,
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.qty}</span>
               </div>
             </div>
           );
@@ -767,8 +768,8 @@ class ViewOneReceivedorder extends React.Component {
     let { id } = this.props.match.params;
 
     const toWords = new ToWords();
-    let words = toWords.convert(4520.36, { currency: true });
-    console.log(words);
+    // let words = toWords.convert(4520.36, { currency: true });
+    // console.log(words);
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
 
     const formdata = new FormData();
@@ -779,6 +780,11 @@ class ViewOneReceivedorder extends React.Component {
         console.log(res.data.data);
         let rowData = res?.data?.data;
         this.setState({ rowData });
+        let Verificatinstatus = res.data?.data?.every(
+          (ele) => ele?.inventory_status === "verified"
+        );
+        console.log(Verificatinstatus);
+        this.setState({ IsVerified: Verificatinstatus });
       })
       .catch((err) => {
         console.log(err?.response);
@@ -853,6 +859,30 @@ class ViewOneReceivedorder extends React.Component {
     e.preventDefault();
   };
 
+  handleDispatch = () => {
+    let DispatchItem = [];
+    let { id } = this.props.match.params;
+    this.state.rowData?.map((ele) => {
+      return DispatchItem.push({
+        product_id: ele?.product_id,
+        Required_quantity: ele?.qty,
+        Current_stock: ele?.current_stock,
+      });
+    });
+    const formdata = new FormData();
+    formdata.append("Dispatchitem", JSON.stringify(DispatchItem));
+    formdata.append("order_id", id);
+    axiosConfig
+      .post(`/order_dispatch`, formdata)
+      .then((res) => {
+        console.log(res.data.data);
+      })
+      .catch((err) => {
+        console.log(er);
+      });
+
+    console.log(DispatchItem);
+  };
   render() {
     const { rowData, columnDefs, defaultColDef } = this.state;
     return (
@@ -934,29 +964,32 @@ class ViewOneReceivedorder extends React.Component {
               {/* <Col className="float-right">
               
               </Col> */}
-              <Col>
-                <Button
-                  onClick={() => {
-                    console.log("Dispatch");
-                  }}
-                  color="primary"
-                >
-                  Dispatch
-                </Button>
-                <Route
-                  render={({ history }) => (
-                    <Button
-                      className=" float-right"
-                      color="primary"
-                      onClick={() =>
-                        history.push("/app/freshlist/order/confirmed")
-                      }
-                    >
-                      Back
-                    </Button>
-                  )}
-                />
-              </Col>
+              {this.state.IsVerified && (
+                <Col>
+                  <Button
+                    onClick={() => {
+                      this.handleDispatch();
+                      console.log("Dispatch");
+                    }}
+                    color="primary"
+                  >
+                    Dispatch
+                  </Button>
+                  <Route
+                    render={({ history }) => (
+                      <Button
+                        className=" float-right"
+                        color="danger"
+                        onClick={() =>
+                          history.push("/app/freshlist/order/confirmed")
+                        }
+                      >
+                        Back
+                      </Button>
+                    )}
+                  />
+                </Col>
+              )}
             </Row>
             <CardBody>
               {this.state.rowData === null ? null : (

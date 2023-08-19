@@ -441,7 +441,7 @@ class Placeorder extends React.Component {
         this.setState({ productlength: res?.data?.data?.length });
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.response);
       });
     await axiosConfig
       .post("/productlistapi", formdata)
@@ -472,11 +472,8 @@ class Placeorder extends React.Component {
         .post(`/add_to_cart`, formdata)
         .then((res) => {
           this.setState({ ProductQuantity: "" });
-          // toast(`${this.state.ProductQuantity} Product Added`);
-
           toast.success(`${this.state.ProductQuantity} Product Added`);
           // this.componentDidMount();
-
           axiosConfig
             .post(`/viewcart`, formdata)
             .then((res) => {
@@ -484,6 +481,7 @@ class Placeorder extends React.Component {
             })
             .catch((err) => {
               console.log(err);
+              swal("Something Went wrong with Cart");
             });
         })
         .catch((err) => {

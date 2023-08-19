@@ -182,14 +182,29 @@ class Invetory extends React.Component {
       // },
       {
         headerName: "Current Stock",
-        field: "stock",
+        field: "quantity",
         filter: "agSetColumnFilter",
         width: 180,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{ReactHtmlParser(params.data?.stock)}</span>
+                <span>{ReactHtmlParser(params.data?.quantity)}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "HSN/SAC",
+        field: "HSN_SAC",
+        filter: "agSetColumnFilter",
+        width: 180,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{ReactHtmlParser(params.data?.HSN_SAC)}</span>
               </div>
             </div>
           );
@@ -337,12 +352,17 @@ class Invetory extends React.Component {
     this.setState({
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
-
-    await axiosConfig.get("/getproductinventory").then((response) => {
-      let rowData = response.data.data;
-      console.log(response.data.data);
-      this.setState({ rowData });
-    });
+    const formdata = new FormData();
+    formdata.append("user_id", pageparmission?.Userinfo?.id);
+    // formdata.append("role", pageparmission?.Userinfo?.role);
+    await axiosConfig
+      .post("/getproductinventory", formdata)
+      .then((response) => {
+        // await axiosConfig.get("/getproductinventory").then((response) => {
+        let rowData = response.data.data;
+        console.log(response.data.data);
+        this.setState({ rowData });
+      });
   }
 
   async runthisfunction(id) {
