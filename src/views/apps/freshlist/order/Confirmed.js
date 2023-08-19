@@ -116,7 +116,6 @@ class Confirmed extends React.Component {
                   <option value="Pending">Pending</option>
                   <option value="Completed">Completed</option>
                   <option value="Rejected">Rejected</option>
-                  <option value="Cancelled">Cancelled</option>
                 </select>
               </div>
             </div>
@@ -545,19 +544,20 @@ class Confirmed extends React.Component {
 
   async componentDidMount() {
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
-    console.log(pageparmission?.Userinfo?.id);
+    // console.log(pageparmission?.Userinfo?.id);
 
     const formdata = new FormData();
     formdata.append("user_id", pageparmission?.Userinfo?.id);
     // formdata.append("order_status", "Pending");
-    formdata.append("order_status", "Pending");
+    // formdata.append("order_status", "Pending");
 
     await axiosConfig
-      .post(`/orderstatuslist`, formdata)
+      // .post(`/orderstatuslist`, formdata)
+      .post(`/orderrecieved`, formdata)
       .then((res) => {
         console.log(res.data.data);
         let rowData = res.data.data;
-        this.setState({ rowData });
+        // this.setState({ rowData });
       })
       .catch((err) => {
         console.log(err);

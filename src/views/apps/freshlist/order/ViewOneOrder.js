@@ -29,7 +29,7 @@ import { ToWords } from "to-words";
 import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
 import swal from "sweetalert";
-import AnalyticsDashboard from "../../../dashboard/analytics/AnalyticsDashboard";
+// import AnalyticsDashboard from "../../../dashboard/analytics/AnalyticsDashboard";
 import { Route, Link } from "react-router-dom";
 import { AiOutlineDownload } from "react-icons/ai";
 import InvoiceGenerator from "../subcategory/InvoiceGenerator1";
@@ -54,7 +54,7 @@ const toWords = new ToWords({
     },
   },
 });
-class EditPlaceOrder extends React.Component {
+class ViewOneOrder extends React.Component {
   state = {
     modal: false,
     PrintData: {},
@@ -96,8 +96,8 @@ class EditPlaceOrder extends React.Component {
             <div className="badge badge-pill bg-danger">
               {params.data.order_status}
             </div>
-          ) : params.data?.order_status === "orderreceived" ? (
-            <div className="badge badge-pill bg-success">Order Received</div>
+          ) : params.data?.order_status === "Approved" ? (
+            <div className="badge badge-pill bg-success">Approved</div>
           ) : null;
         },
       },
@@ -723,6 +723,7 @@ class EditPlaceOrder extends React.Component {
 
   async componentDidMount() {
     let { id } = this.props.match.params;
+
     const toWords = new ToWords();
     let words = toWords.convert(4520.36, { currency: true });
     console.log(words);
@@ -895,7 +896,7 @@ class EditPlaceOrder extends React.Component {
                       className=" float-right"
                       color="primary"
                       onClick={
-                        () => history.push("/app/freshlist/order/all")
+                        () => history.push("/app/freshlist/order/pending")
                         // history.push("/app/freshlist/order/addOrder")
                       }
                     >
@@ -1015,4 +1016,4 @@ class EditPlaceOrder extends React.Component {
     );
   }
 }
-export default EditPlaceOrder;
+export default ViewOneOrder;

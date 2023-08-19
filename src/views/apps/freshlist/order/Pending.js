@@ -70,13 +70,60 @@ class Pending extends React.Component {
             <div className="badge badge-pill bg-danger">
               {params.data.order_status}
             </div>
-          ) : params.data?.order_status === "orderreceived" ? (
-            <div className="badge badge-pill bg-success">Order Received</div>
+          ) : params.data?.order_status === "Approved" ? (
+            <div className="badge badge-pill bg-success">Approved</div>
           ) : null;
         },
       },
       {
-        headerName: "order id ",
+        headerName: "Change Status",
+        field: "Change Status",
+        filter: true,
+        resizable: true,
+        width: 230,
+        cellRendererFramework: (params) => {
+          // console.log(params.data?.order_id);
+
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                {this.state.Editpermisson && (
+                  <select
+                    // className="form-control"
+                    defaultValue={params.data?.order_status}
+                    onChange={(e) => {
+                      // console.log(e.target.value);
+                      let data = new FormData();
+                      data.append("order_id", params.data?.order_id);
+                      data.append("order_status", e.target.value);
+                      axiosConfig
+                        .post(`/change_order_status`, data)
+                        .then((res) => {
+                          console.log(res?.data.message);
+                          if (res?.data.message) {
+                            this.componentDidMount();
+                            swal("status Updated Succesfully");
+                          }
+                        })
+                        .catch((err) => {
+                          console.log(err);
+                        });
+                    }}
+                    name="changestatus"
+                    id="changeStatus"
+                  >
+                    <option value="NoStatus">--UpdateStatus--</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Rejected">Rejected</option>
+                  </select>
+                )}
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "orderid",
         field: "order_id",
         filter: true,
         resizable: true,
@@ -92,34 +139,34 @@ class Pending extends React.Component {
         },
       },
 
-      {
-        headerName: "Product Image",
-        field: "product_images",
-        filter: true,
-        resizable: true,
-        width: 160,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                {params?.data?.product_images &&
-                params.data?.product_images?.length ? (
-                  <>
-                    <img
-                      style={{ borderRadius: "12px" }}
-                      src={params.data?.product_images[0]}
-                      alt="image"
-                      width="60px"
-                    />
-                  </>
-                ) : (
-                  "No image"
-                )}
-              </div>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "Product Image",
+      //   field: "product_images",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 160,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           {params?.data?.product_images &&
+      //           params.data?.product_images?.length ? (
+      //             <>
+      //               <img
+      //                 style={{ borderRadius: "12px" }}
+      //                 src={params.data?.product_images[0]}
+      //                 alt="image"
+      //                 width="60px"
+      //               />
+      //             </>
+      //           ) : (
+      //             "No image"
+      //           )}
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
 
       {
         headerName: "Actions",
@@ -130,18 +177,22 @@ class Pending extends React.Component {
           return (
             <div className="actions cursor-pointer">
               {this.state.Viewpermisson && this.state.Viewpermisson && (
-                <BsEye
-                  className="mr-50"
-                  size="25px"
-                  color="green"
-                  onClick={() =>
-                    history.push(
-                      `/app/freshlist/order/viewAll/${params.data.id}`
-                    )
-                  }
+                <Route
+                  render={({ history }) => (
+                    <BsEye
+                      className="mr-50"
+                      size="25px"
+                      color="green"
+                      onClick={() =>
+                        history.push(
+                          `/app/freshlist/order/ViewOneOrder/${params?.data?.order_id}`
+                        )
+                      }
+                    />
+                  )}
                 />
               )}
-              {this.state.Editpermisson && this.state.Editpermisson && (
+              {/* {this.state.Editpermisson && this.state.Editpermisson && (
                 <Route
                   render={({ history }) => (
                     <Edit2
@@ -156,9 +207,9 @@ class Pending extends React.Component {
                     />
                   )}
                 />
-              )}
+              )} */}
 
-              {this.state.Deletepermisson && this.state.Deletepermisson && (
+              {/* {this.state.Deletepermisson && this.state.Deletepermisson && (
                 <Route
                   render={() => (
                     <Trash
@@ -173,15 +224,15 @@ class Pending extends React.Component {
                     />
                   )}
                 />
-              )}
+              )} */}
             </div>
           );
         },
       },
 
       {
-        headerName: "categoryName",
-        field: "category_name",
+        headerName: "total",
+        field: "total",
         filter: true,
         resizable: true,
         width: 160,
@@ -189,28 +240,28 @@ class Pending extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
-                <span>{params.data?.category_name}</span>
+                <span>{params.data?.total}</span>
               </div>
             </div>
           );
         },
       },
-      {
-        headerName: "brandname ",
-        field: "brand_name",
-        filter: true,
-        resizable: true,
-        width: 180,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.brand_name}</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "create_order_user_full_name",
+      //   field: "create_order_user_full_name",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 180,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.create_order_user_full_name}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
 
       {
         headerName: "order Creation date",
@@ -228,159 +279,159 @@ class Pending extends React.Component {
           );
         },
       },
-      {
-        headerName: "deliverydate",
-        field: "delivery_date",
-        filter: true,
-        resizable: true,
-        width: 230,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.delivery_date}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "description",
-        field: "description",
-        filter: "true",
-        width: 180,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{params?.data?.description}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "discountprice",
-        field: "discountprice",
-        filter: "true",
-        width: 180,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{params.data?.discountprice}</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "deliverydate",
+      //   field: "delivery_date",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 230,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.delivery_date}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "description",
+      //   field: "description",
+      //   filter: "true",
+      //   width: 180,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{params?.data?.description}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "discountprice",
+      //   field: "discountprice",
+      //   filter: "true",
+      //   width: 180,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{params.data?.discountprice}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
 
-      {
-        headerName: "price",
-        field: "price",
-        filter: true,
-        resizable: true,
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.price}</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "price",
+      //   field: "price",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.price}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
 
-      {
-        headerName: "producttype",
-        field: "product_type",
-        filter: true,
-        resizable: true,
-        width: 190,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.product_type}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "shippingfee",
-        field: "shipping_fee",
-        filter: true,
-        resizable: true,
-        width: 190,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.shipping_fee}</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "producttype",
+      //   field: "product_type",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 190,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.product_type}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "shippingfee",
+      //   field: "shipping_fee",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 190,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.shipping_fee}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
 
-      {
-        headerName: "stock",
-        field: "stock",
-        filter: true,
-        resizable: true,
-        width: 180,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.stock}</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "stock",
+      //   field: "stock",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 180,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.stock}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
 
-      {
-        headerName: "tags",
-        field: "tags",
-        filter: true,
-        resizable: true,
-        width: 180,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.tags}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "tax_rate",
-        field: "tax_rate",
-        filter: true,
-        resizable: true,
-        width: 180,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.tax_rate}</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "tags",
+      //   field: "tags",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 180,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.tags}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "tax_rate",
+      //   field: "tax_rate",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 180,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.tax_rate}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
     ],
   };
   async componentDidMount() {
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
     const formdata = new FormData();
     formdata.append("user_id", pageparmission?.Userinfo?.id);
-    formdata.append("role", pageparmission?.Userinfo?.role);
+    // formdata.append("role", pageparmission?.Userinfo?.role);
 
     let newparmisson = pageparmission?.role?.find(
       (value) => value?.pageName === "Order Raise List"
