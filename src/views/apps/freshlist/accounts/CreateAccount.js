@@ -71,15 +71,15 @@ export class CreateAccount extends Component {
     };
     this.handleMatchaddress = this.handleMatchaddress.bind(this);
   }
-  changeHandler = e => {
+  changeHandler = (e) => {
     console.log(e.target.value);
     this.setState({ [e.target.name]: e.target.value });
   };
-  changeHandler1 = e => {
+  changeHandler1 = (e) => {
     this.setState({ status: e.target.value });
   };
 
-  handleMultiSelectChange = selectedOptions => {
+  handleMultiSelectChange = (selectedOptions) => {
     this.setState({ selectedOptions });
     console.log(selectedOptions);
   };
@@ -87,7 +87,7 @@ export class CreateAccount extends Component {
   async componentDidMount() {
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
     let newparmisson = pageparmission?.role?.find(
-      value => value?.pageName === "Create Account"
+      (value) => value?.pageName === "Create Account"
     );
 
     this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
@@ -104,29 +104,31 @@ export class CreateAccount extends Component {
     const formdata = new FormData();
     formdata.append("user_id", pageparmission?.Userinfo?.id);
     formdata.append("role", pageparmission?.Userinfo?.role);
-    await axiosConfig.post("/getrolelistdropdown", formdata).then(response => {
-      console.log(response);
-      const propertyNames = Object.values(response.data?.data?.roles);
+    await axiosConfig
+      .post("/getrolelistdropdown", formdata)
+      .then((response) => {
+        console.log(response);
+        const propertyNames = Object.values(response.data?.data?.roles);
 
-      console.log(propertyNames);
-      this.setState({
-        productName: propertyNames,
+        console.log(propertyNames);
+        this.setState({
+          productName: propertyNames,
+        });
       });
-    });
     // state List
     await axiosConfig
       .get("/getallstates")
-      .then(response => {
+      .then((response) => {
         this.setState({
           StateList: response.data?.states,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error.response.data);
       });
   }
 
-  submitHandler = e => {
+  submitHandler = (e) => {
     e.preventDefault();
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
     let uniqueChars = [...new Set(selectItem1)];
@@ -163,7 +165,7 @@ export class CreateAccount extends Component {
 
     axiosConfig
       .post("/createuser", formdata)
-      .then(response => {
+      .then((response) => {
         if (response.data?.success) {
           swal("Success!", "Submitted SuccessFull!", "success");
           this.setState({ AssignRole: "" });
@@ -182,7 +184,7 @@ export class CreateAccount extends Component {
         }
         // this.props.history.push("/app/freshlist/order/all");
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -464,16 +466,16 @@ export class CreateAccount extends Component {
                         <select
                           name="SelectedState"
                           value={this.state.SelectedState}
-                          onChange={e => {
+                          onChange={(e) => {
                             const formdata = new FormData();
                             this.setState({ SelectedState: e.target.value });
                             formdata.append("state_id", e.target.value);
                             axiosConfig
                               .post(`/getcity`, formdata)
-                              .then(res => {
+                              .then((res) => {
                                 this.setState({ CityList: res?.data?.cities });
                               })
-                              .catch(err => {
+                              .catch((err) => {
                                 console.log(err);
                               });
                           }}
@@ -529,17 +531,17 @@ export class CreateAccount extends Component {
                       <select
                         name="B_State"
                         value={this.state.B_State}
-                        onChange={e => {
+                        onChange={(e) => {
                           console.log(e.target.value);
                           this.setState({ B_State: e.target.value });
                           const formdata = new FormData();
                           formdata.append("state_id", e.target.value);
                           axiosConfig
                             .post(`/getcity`, formdata)
-                            .then(res => {
+                            .then((res) => {
                               this.setState({ CityList: res?.data?.cities });
                             })
-                            .catch(err => {
+                            .catch((err) => {
                               console.log(err);
                             });
                         }}
@@ -611,7 +613,7 @@ export class CreateAccount extends Component {
                     <Col className="ml-2" lg="6" md="6" sm="12">
                       <Input
                         name="check"
-                        onChange={e => {
+                        onChange={(e) => {
                           this.handleMatchaddress(e, e.target.checked);
                         }}
                         style={{
@@ -649,18 +651,18 @@ export class CreateAccount extends Component {
                       <select
                         name="S_State"
                         value={this.state.S_State}
-                        onChange={e => {
+                        onChange={(e) => {
                           // console.log(e.target.value);
                           this.setState({ S_State: e.target.value });
                           const formdata = new FormData();
                           formdata.append("state_id", e.target.value);
                           axiosConfig
                             .post(`/getcity`, formdata)
-                            .then(res => {
+                            .then((res) => {
                               console.log(res?.data?.cities);
                               this.setState({ CityList: res?.data?.cities });
                             })
-                            .catch(err => {
+                            .catch((err) => {
                               console.log(err);
                             });
                         }}

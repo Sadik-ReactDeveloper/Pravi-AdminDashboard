@@ -92,8 +92,6 @@ class Delivered extends React.Component {
         resizable: true,
         width: 150,
         cellRendererFramework: (params) => {
-          // console.log(params.data?.order_id);
-
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
@@ -623,10 +621,6 @@ class Delivered extends React.Component {
     this.setState({
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
-    // console.log(newparmisson?.permission.includes("View"));
-    // console.log(newparmisson?.permission.includes("Create"));
-    // console.log(newparmisson?.permission.includes("Edit"));
-    // console.log(newparmisson?.permission.includes("Delete"));
   }
 
   async runthisfunction(id) {
@@ -785,9 +779,7 @@ class Delivered extends React.Component {
           className={this.props.className}
           style={{ maxWidth: "1050px" }}
         >
-          <ModalHeader toggle={this.toggleModal}>
-            Download bill here
-          </ModalHeader>
+          <ModalHeader toggle={this.toggleModal}>Download bill Now</ModalHeader>
           <ModalBody>
             <div style={{ width: "100%" }} className="">
               <InvoiceGenerator PrintData={this.state.PrintData} />
