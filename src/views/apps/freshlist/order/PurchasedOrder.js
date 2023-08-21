@@ -13,8 +13,12 @@ import {
   DropdownItem,
   DropdownToggle,
   Button,
-  Badge,
+  Modal,
+  ModalHeader,
+  ModalBody,
 } from "reactstrap";
+import { AiOutlineDownload } from "react-icons/ai";
+
 import "../../../../assets/css/main.css";
 import axiosConfig from "../../../../axiosConfig";
 import { ContextLayout } from "../../../../utility/context/Layout";
@@ -25,11 +29,15 @@ import { history } from "../../../../history";
 import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
 import swal from "sweetalert";
+import InvoiceGenerator from "../subcategory/InvoiceGenerator1";
+
 import AnalyticsDashboard from "../../../dashboard/analytics/AnalyticsDashboard";
 import { Route, Link } from "react-router-dom";
 class PurchasedOrder extends React.Component {
   state = {
     rowData: [],
+    modal: false,
+    PrintData: {},
     Viewpermisson: null,
     Editpermisson: null,
     Createpermisson: null,
@@ -38,6 +46,490 @@ class PurchasedOrder extends React.Component {
     currenPageSize: "",
     getPageSize: "",
     info: true,
+    // columnDefs: [
+    //   {
+    //     headerName: "S.No",
+    //     valueGetter: "node.rowIndex + 1",
+    //     field: "node.rowIndex + 1",
+    //     width: 80,
+    //     filter: true,
+    //   },
+    //   //   {
+    //   //     headerName: "Status",
+    //   //     field: "order_status",
+    //   //     filter: true,
+    //   //     width: 200,
+    //   //     cellRendererFramework: (params) => {
+    //   //       // order_status= 'Inprogress, 'Completed'
+
+    //   //       return params.data?.order_status === "Active" ? (
+    //   //         <div className="badge badge-pill badge-success">Active</div>
+    //   //       ) : params.data?.order_status === "Deactive" ? (
+    //   //         <div className="badge badge-pill badge-warning">
+    //   //           {params.data.order_status}
+    //   //         </div>
+    //   //       ) : params.data?.order_status === "Inprogress" ? (
+    //   //         <div className="badge badge-pill bg-primary">Inprogress</div>
+    //   //       ) : params.data?.order_status === "canceled" ? (
+    //   //         <div className="badge badge-pill bg-danger">
+    //   //           {params.data.order_status}
+    //   //         </div>
+    //   //       ) : params.data?.order_status === "orderreceived" ? (
+    //   //         <div className="badge badge-pill bg-success">Order Received</div>
+    //   //       ) : null;
+    //   //     },
+    //   //   },
+
+    //   {
+    //     headerName: "Actions",
+    //     field: "sortorder",
+
+    //     width: 280,
+    //     cellRendererFramework: (params) => {
+    //       return (
+    //         <div className="actions cursor-pointer">
+    //           {this.state.Viewpermisson && (
+    //             <Eye
+    //               className="mr-50"
+    //               size="25px"
+    //               color="green"
+    //               onClick={() =>
+    //                 history.push(
+    //                   `/app/freshlist/order/viewAll/${params.data?.id}`
+    //                 )
+    //               }
+    //             />
+    //           )}
+    //           {/* {this.state.Editpermisson && (
+    //             <Route
+    //               render={({ history }) => (
+    //                 <Edit
+    //                   className="mr-50"
+    //                   size="25px"
+    //                   color="blue"
+    //                   onClick={() =>
+    //                     history.push(
+    //                       `/app/freshlist/order/EditOrder/${params.data.id}`
+    //                     )
+    //                   }
+    //                 />
+    //               )}
+    //             />
+    //           )}
+
+    //           {this.state.Deletepermisson && (
+    //             <Route
+    //               render={() => (
+    //                 <Trash2
+    //                   className="mr-50"
+    //                   size="25px"
+    //                   color="red"
+    //                   onClick={() => {
+    //                     let selectedData = this.gridApi.getSelectedRows();
+    //                     this.runthisfunction(params.data._id);
+    //                     this.gridApi.updateRowData({ remove: selectedData });
+    //                   }}
+    //                 />
+    //               )}
+    //             />
+    //           )} */}
+    //           <Badge
+    //             onClick={() => {
+    //               const formdata = new FormData();
+    //               console.log(params?.data?.product_id);
+    //               console.log(params?.data.stock);
+
+    //               formdata.append("product_id", params?.data?.product_id);
+    //               formdata.append("stock", params?.data.stock);
+    //               axiosConfig
+    //                 .post(`/stock_verify`, formdata)
+    //                 .then((res) => {
+    //                   swal(`${res.data?.message}`, `${res.data?.data}`);
+    //                 })
+    //                 .catch((err) => {
+    //                   console.log(err);
+    //                 });
+    //               // console.log("verified");
+    //             }}
+    //             color="info"
+    //           >
+    //             Stock Verify
+    //           </Badge>
+    //           {/* <span className="mx-2">
+    //             <Badge
+    //               onClick={() => {
+    //                 console.log("Dispatch");
+    //               }}
+    //               color="success"
+    //             >
+    //               Dispatch
+    //             </Badge>
+    //           </span> */}
+    //         </div>
+    //       );
+    //     },
+    //   },
+    //   {
+    //     headerName: "Order ID ",
+    //     field: "order_id",
+    //     filter: true,
+    //     resizable: true,
+    //     width: 180,
+    //     cellRendererFramework: (params) => {
+    //       return (
+    //         <div className="d-flex align-items-center cursor-pointer">
+    //           <div>
+    //             <span>{params.data?.order_id}</span>
+    //           </div>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    //   {
+    //     headerName: "Name ",
+    //     field: "title",
+    //     filter: true,
+    //     resizable: true,
+    //     width: 180,
+    //     cellRendererFramework: (params) => {
+    //       return (
+    //         <div className="d-flex align-items-center cursor-pointer">
+    //           <div>
+    //             <span>{params.data?.title}</span>
+    //           </div>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    //   {
+    //     headerName: "client_id",
+    //     field: "client_id",
+    //     filter: true,
+    //     resizable: true,
+    //     width: 160,
+    //     cellRendererFramework: (params) => {
+    //       return (
+    //         <div className="d-flex align-items-center cursor-pointer">
+    //           <div>
+    //             <span>{params.data?.client_id}</span>
+    //           </div>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    //   {
+    //     headerName: "client_mobile_no",
+    //     field: "client_mobile_no",
+    //     filter: true,
+    //     resizable: true,
+    //     width: 160,
+    //     cellRendererFramework: (params) => {
+    //       return (
+    //         <div className="d-flex align-items-center cursor-pointer">
+    //           <div>
+    //             <span>{params.data?.client_mobile_no}</span>
+    //           </div>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    //   {
+    //     headerName: "client_full_name",
+    //     field: "client_full_name",
+    //     filter: true,
+    //     resizable: true,
+    //     width: 160,
+    //     cellRendererFramework: (params) => {
+    //       return (
+    //         <div className="d-flex align-items-center cursor-pointer">
+    //           <div>
+    //             <span>{params.data?.client_full_name}</span>
+    //           </div>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    //   {
+    //     headerName: "client_email",
+    //     field: "client_email",
+    //     filter: true,
+    //     resizable: true,
+    //     width: 160,
+    //     cellRendererFramework: (params) => {
+    //       return (
+    //         <div className="d-flex align-items-center cursor-pointer">
+    //           <div>
+    //             <span>{params.data?.client_email}</span>
+    //           </div>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    //   {
+    //     headerName: "client_city",
+    //     field: "client_city",
+    //     filter: true,
+    //     resizable: true,
+    //     width: 160,
+    //     cellRendererFramework: (params) => {
+    //       return (
+    //         <div className="d-flex align-items-center cursor-pointer">
+    //           <div>
+    //             <span>{params.data?.client_city}</span>
+    //           </div>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    //   {
+    //     headerName: "category_name",
+    //     field: "category_name",
+    //     filter: true,
+    //     resizable: true,
+    //     width: 160,
+    //     cellRendererFramework: (params) => {
+    //       return (
+    //         <div className="d-flex align-items-center cursor-pointer">
+    //           <div>
+    //             <span>{params.data?.category_name}</span>
+    //           </div>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    //   {
+    //     headerName: "description",
+    //     field: "description",
+    //     filter: true,
+    //     resizable: true,
+    //     width: 200,
+    //     cellRendererFramework: (params) => {
+    //       return (
+    //         <div className="d-flex align-items-center cursor-pointer">
+    //           <div>
+    //             <span>{params.data?.description}</span>
+    //           </div>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    //   {
+    //     headerName: "Order Date",
+    //     field: "created_date",
+    //     filter: "true",
+    //     width: 120,
+    //     cellRendererFramework: (params) => {
+    //       return (
+    //         <div className="d-flex align-items-center cursor-pointer">
+    //           <div className="">
+    //             <span>{params?.data?.created_date}</span>
+    //           </div>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    //   {
+    //     headerName: "order_id",
+    //     field: "order_id",
+    //     filter: "true",
+    //     width: 160,
+    //     cellRendererFramework: (params) => {
+    //       return (
+    //         <div className="d-flex align-items-center cursor-pointer">
+    //           <div className="">
+    //             <span>{params?.data?.order_id}</span>
+    //           </div>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    //   //   {
+    //   //     headerName: "price",
+    //   //     field: "price",
+    //   //     filter: true,
+    //   //     resizable: true,
+    //   //     width: 160,
+    //   //     cellRendererFramework: (params) => {
+    //   //       return (
+    //   //         <div className="d-flex align-items-center cursor-pointer">
+    //   //           <div>
+    //   //             <span>{params.data?.price}</span>
+    //   //           </div>
+    //   //         </div>
+    //   //       );
+    //   //     },
+    //   //   },
+
+    //   //   {
+    //   //     headerName: "discountprice",
+    //   //     field: "discountprice",
+    //   //     filter: true,
+    //   //     resizable: true,
+    //   //     width: 170,
+    //   //     cellRendererFramework: (params) => {
+    //   //       return (
+    //   //         <div className="d-flex align-items-center cursor-pointer">
+    //   //           <div>
+    //   //             <span>{params.data?.discountprice}</span>
+    //   //           </div>
+    //   //         </div>
+    //   //       );
+    //   //     },
+    //   //   },
+    //   //   {
+    //   //     headerName: "product_images",
+    //   //     field: "product_images",
+    //   //     filter: true,
+    //   //     resizable: true,
+    //   //     width: 180,
+    //   //     cellRendererFramework: (params) => {
+    //   //       return (
+    //   //         <div className="d-flex align-items-center cursor-pointer">
+    //   //           <div>
+    //   //             <img
+    //   //               style={{ borderRadius: "12px" }}
+    //   //               src={params?.data?.product_images[0]}
+    //   //               alt="image"
+    //   //               width="60px"
+    //   //             />
+    //   //           </div>
+    //   //         </div>
+    //   //       );
+    //   //     },
+    //   //   },
+    //   {
+    //     headerName: "Quantity",
+    //     field: "qty",
+    //     filter: true,
+    //     resizable: true,
+    //     width: 190,
+    //     cellRendererFramework: (params) => {
+    //       return (
+    //         <div className="d-flex align-items-center cursor-pointer">
+    //           <div>
+    //             <span>{params.data?.qty}</span>
+    //           </div>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    //   //   {
+    //   //     headerName: "shipping_fee",
+    //   //     field: "shipping_fee",
+    //   //     filter: true,
+    //   //     resizable: true,
+    //   //     width: 190,
+    //   //     cellRendererFramework: (params) => {
+    //   //       return (
+    //   //         <div className="d-flex align-items-center cursor-pointer">
+    //   //           <div>
+    //   //             <span>{params.data?.shipping_fee}</span>
+    //   //           </div>
+    //   //         </div>
+    //   //       );
+    //   //     },
+    //   //   },
+
+    //   {
+    //     headerName: "stock",
+    //     field: "stock",
+    //     filter: true,
+    //     resizable: true,
+    //     width: 190,
+    //     cellRendererFramework: (params) => {
+    //       return (
+    //         <div className="d-flex align-items-center cursor-pointer">
+    //           <div>
+    //             <span>{params.data?.stock}</span>
+    //           </div>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    //   //   {
+    //   //     headerName: "tags",
+    //   //     field: "tags",
+    //   //     filter: true,
+    //   //     resizable: true,
+    //   //     width: 190,
+    //   //     cellRendererFramework: (params) => {
+    //   //       return (
+    //   //         <div className="d-flex align-items-center cursor-pointer">
+    //   //           <div>
+    //   //             <span>{params.data?.tags}</span>
+    //   //           </div>
+    //   //         </div>
+    //   //       );
+    //   //     },
+    //   //   },
+    //   //   {
+    //   //     headerName: "tax_rate",
+    //   //     field: "tax_rate",
+    //   //     filter: true,
+    //   //     resizable: true,
+    //   //     width: 180,
+    //   //     cellRendererFramework: (params) => {
+    //   //       return (
+    //   //         <div className="d-flex align-items-center cursor-pointer">
+    //   //           <div>
+    //   //             <span>{params.data?.tax_rate}</span>
+    //   //           </div>
+    //   //         </div>
+    //   //       );
+    //   //     },
+    //   //   },
+    //   {
+    //     headerName: "subtotal",
+    //     field: "sub_total",
+    //     filter: true,
+    //     resizable: true,
+    //     width: 180,
+    //     cellRendererFramework: (params) => {
+    //       return (
+    //         <div className="d-flex align-items-center cursor-pointer">
+    //           <div>
+    //             <span>{params.data?.sub_total}</span>
+    //           </div>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    //   {
+    //     headerName: "total",
+    //     field: "total",
+    //     filter: true,
+    //     resizable: true,
+    //     width: 180,
+    //     cellRendererFramework: (params) => {
+    //       return (
+    //         <div className="d-flex align-items-center cursor-pointer">
+    //           <div>
+    //             <span>{params.data?.total}</span>
+    //           </div>
+    //         </div>
+    //       );
+    //     },
+    //   },
+
+    //   // {
+    //   //   headerName: "Permitions",
+    //   //   field: "permitions",
+    //   //   filter: true,
+    //   //   width: 180,
+    //   //   cellRendererFramework: (params) => {
+    //   //     return (
+    //   //       <CustomInput
+    //   //         type="switch"
+    //   //         className="mr-1"
+    //   //         id="primary"
+    //   //         name="primary"
+    //   //         inline
+    //   //         onChange={this.handleSwitchChange}
+    //   //       ></CustomInput>
+    //   //     );
+    //   //   },
+    //   // },
+    // ],
     columnDefs: [
       {
         headerName: "S.No",
@@ -46,50 +538,194 @@ class PurchasedOrder extends React.Component {
         width: 80,
         filter: true,
       },
-      //   {
-      //     headerName: "Status",
-      //     field: "order_status",
-      //     filter: true,
-      //     width: 200,
-      //     cellRendererFramework: (params) => {
-      //       // order_status= 'Inprogress, 'Completed'
+      {
+        headerName: "Status",
+        field: "order_status",
+        filter: true,
+        width: 160,
+        cellRendererFramework: (params) => {
+          return params.data?.order_status === "Completed" ? (
+            <div className="badge badge-pill badge-success">Completed</div>
+          ) : params.data?.order_status === "Pending" ? (
+            <div className="badge badge-pill badge-warning">
+              {params.data?.order_status}
+            </div>
+          ) : params.data?.order_status === "Inprogress" ? (
+            <div className="badge badge-pill bg-primary">Inprogress</div>
+          ) : params.data?.order_status === "canceled" ? (
+            <div className="badge badge-pill bg-danger">
+              {params.data.order_status}
+            </div>
+          ) : params.data?.order_status === "Completed" ? (
+            <div className="badge badge-pill bg-success">Completed</div>
+          ) : null;
+        },
+      },
+      {
+        headerName: "order_id",
+        field: "order_id",
+        filter: true,
+        resizable: true,
+        width: 150,
+        cellRendererFramework: (params) => {
+          // console.log(params.data?.order_id);
 
-      //       return params.data?.order_status === "Active" ? (
-      //         <div className="badge badge-pill badge-success">Active</div>
-      //       ) : params.data?.order_status === "Deactive" ? (
-      //         <div className="badge badge-pill badge-warning">
-      //           {params.data.order_status}
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                {/* <select
+                  // className="form-control"
+                  defaultValue={params.data?.order_status}
+                  onChange={(e) => {
+                    // console.log(e.target.value);
+                    let data = new FormData();
+                    data.append("order_id", params.data?.order_id);
+                    data.append("order_status", e.target.value);
+                    axiosConfig
+                      .post(`/change_order_status`, data)
+                      .then((res) => {
+                        console.log(res?.data.message);
+                        if (res?.data.message) {
+                          this.componentDidMount();
+                          swal("status Updated Succesfully");
+                        }
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
+                  }}
+                  name="changestatus"
+                  id="changeStatus"
+                >
+                  <option value={params.data?.order_status}>
+                    {params.data?.order_status}
+                  </option>
+                  <option value="Pending">--UpdateStatus--</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Rejected">Rejected</option>
+                  <option value="Cancelled">Cancelled</option>
+                </select> */}
+                <span>{params?.data?.order_id}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Invoice",
+        field: "invoice",
+        filter: true,
+        resizable: true,
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center justify-content-center cursor-pointer">
+              <div>
+                <span>
+                  <AiOutlineDownload
+                    onClick={() => this.handleBillDownload(params.data)}
+                    fill="green"
+                    size="30px"
+                  />
+                </span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "username",
+        field: "user_full_name",
+        filter: true,
+        resizable: true,
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center justify-content-center cursor-pointer">
+              <div>
+                <span>
+                  {params?.data?.user_full_name}
+                  {/* <AiOutlineDownload
+                    onClick={() => this.handleBillDownload(params.data)}
+                    fill="green"
+                    size="30px"
+                  /> */}
+                </span>
+              </div>
+            </div>
+          );
+        },
+      },
+      // {
+      //   headerName: "order id ",
+      //   field: "user_full_name",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.user_full_name}</span>
       //         </div>
-      //       ) : params.data?.order_status === "Inprogress" ? (
-      //         <div className="badge badge-pill bg-primary">Inprogress</div>
-      //       ) : params.data?.order_status === "canceled" ? (
-      //         <div className="badge badge-pill bg-danger">
-      //           {params.data.order_status}
-      //         </div>
-      //       ) : params.data?.order_status === "orderreceived" ? (
-      //         <div className="badge badge-pill bg-success">Order Received</div>
-      //       ) : null;
-      //     },
+      //       </div>
+      //     );
       //   },
+      // },
+
+      // {
+      //   headerName: "Product Image",
+      //   field: "product_images",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 160,
+      //   cellRendererFramework: (params) => {
+      //     // console.log(params.data);
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           {params?.data?.product_images &&
+      //           params.data?.product_images?.length ? (
+      //             <>
+      //               <img
+      //                 style={{ borderRadius: "12px" }}
+      //                 src={params.data?.product_images[0]}
+      //                 alt="image"
+      //                 width="60px"
+      //               />
+      //             </>
+      //           ) : (
+      //             "No image"
+      //           )}
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
 
       {
         headerName: "Actions",
         field: "sortorder",
-
-        width: 280,
+        field: "transactions",
+        width: 120,
         cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
               {this.state.Viewpermisson && (
-                <Eye
-                  className="mr-50"
-                  size="25px"
-                  color="green"
-                  onClick={() =>
-                    history.push(
-                      `/app/freshlist/order/viewAll/${params.data?.id}`
-                    )
-                  }
+                <Route
+                  render={({ history }) => (
+                    <Eye
+                      className="mr-50"
+                      size="25px"
+                      color="green"
+                      onClick={() =>
+                        history.push(
+                          `/app/freshlist/order/EditCompletedorders/${params.data?.order_id}`
+                        )
+                      }
+                    />
+                  )}
                 />
               )}
               {/* {this.state.Editpermisson && (
@@ -101,15 +737,15 @@ class PurchasedOrder extends React.Component {
                       color="blue"
                       onClick={() =>
                         history.push(
-                          `/app/freshlist/order/EditOrder/${params.data.id}`
+                          `/app/freshlist/order/editplaceorder/${params.data?.order_id}`
                         )
                       }
                     />
                   )}
                 />
-              )}
+              )} */}
 
-              {this.state.Deletepermisson && (
+              {/* {this.state.Deletepermisson && (
                 <Route
                   render={() => (
                     <Trash2
@@ -118,380 +754,24 @@ class PurchasedOrder extends React.Component {
                       color="red"
                       onClick={() => {
                         let selectedData = this.gridApi.getSelectedRows();
-                        this.runthisfunction(params.data._id);
+                        this.runthisfunction(params.data.id);
                         this.gridApi.updateRowData({ remove: selectedData });
                       }}
                     />
                   )}
                 />
               )} */}
-              <Badge
-                onClick={() => {
-                  const formdata = new FormData();
-                  console.log(params?.data?.product_id);
-                  console.log(params?.data.stock);
+            </div>
+          );
+        },
+      },
 
-                  formdata.append("product_id", params?.data?.product_id);
-                  formdata.append("stock", params?.data.stock);
-                  axiosConfig
-                    .post(`/stock_verify`, formdata)
-                    .then((res) => {
-                      swal(`${res.data?.message}`, `${res.data?.data}`);
-                    })
-                    .catch((err) => {
-                      console.log(err);
-                    });
-                  // console.log("verified");
-                }}
-                color="info"
-              >
-                Stock Verify
-              </Badge>
-              {/* <span className="mx-2">
-                <Badge
-                  onClick={() => {
-                    console.log("Dispatch");
-                  }}
-                  color="success"
-                >
-                  Dispatch
-                </Badge>
-              </span> */}
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Order ID ",
-        field: "order_id",
-        filter: true,
-        resizable: true,
-        width: 180,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.order_id}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Name ",
-        field: "title",
-        filter: true,
-        resizable: true,
-        width: 180,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.title}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "client_id",
-        field: "client_id",
-        filter: true,
-        resizable: true,
-        width: 160,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.client_id}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "client_mobile_no",
-        field: "client_mobile_no",
-        filter: true,
-        resizable: true,
-        width: 160,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.client_mobile_no}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "client_full_name",
-        field: "client_full_name",
-        filter: true,
-        resizable: true,
-        width: 160,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.client_full_name}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "client_email",
-        field: "client_email",
-        filter: true,
-        resizable: true,
-        width: 160,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.client_email}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "client_city",
-        field: "client_city",
-        filter: true,
-        resizable: true,
-        width: 160,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.client_city}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "category_name",
-        field: "category_name",
-        filter: true,
-        resizable: true,
-        width: 160,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.category_name}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "description",
-        field: "description",
-        filter: true,
-        resizable: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.description}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Order Date",
-        field: "created_date",
-        filter: "true",
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{params?.data?.created_date}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "order_id",
-        field: "order_id",
-        filter: "true",
-        width: 160,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{params?.data?.order_id}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      //   {
-      //     headerName: "price",
-      //     field: "price",
-      //     filter: true,
-      //     resizable: true,
-      //     width: 160,
-      //     cellRendererFramework: (params) => {
-      //       return (
-      //         <div className="d-flex align-items-center cursor-pointer">
-      //           <div>
-      //             <span>{params.data?.price}</span>
-      //           </div>
-      //         </div>
-      //       );
-      //     },
-      //   },
-
-      //   {
-      //     headerName: "discountprice",
-      //     field: "discountprice",
-      //     filter: true,
-      //     resizable: true,
-      //     width: 170,
-      //     cellRendererFramework: (params) => {
-      //       return (
-      //         <div className="d-flex align-items-center cursor-pointer">
-      //           <div>
-      //             <span>{params.data?.discountprice}</span>
-      //           </div>
-      //         </div>
-      //       );
-      //     },
-      //   },
-      //   {
-      //     headerName: "product_images",
-      //     field: "product_images",
-      //     filter: true,
-      //     resizable: true,
-      //     width: 180,
-      //     cellRendererFramework: (params) => {
-      //       return (
-      //         <div className="d-flex align-items-center cursor-pointer">
-      //           <div>
-      //             <img
-      //               style={{ borderRadius: "12px" }}
-      //               src={params?.data?.product_images[0]}
-      //               alt="image"
-      //               width="60px"
-      //             />
-      //           </div>
-      //         </div>
-      //       );
-      //     },
-      //   },
-      {
-        headerName: "Quantity",
-        field: "qty",
-        filter: true,
-        resizable: true,
-        width: 190,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.qty}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      //   {
-      //     headerName: "shipping_fee",
-      //     field: "shipping_fee",
-      //     filter: true,
-      //     resizable: true,
-      //     width: 190,
-      //     cellRendererFramework: (params) => {
-      //       return (
-      //         <div className="d-flex align-items-center cursor-pointer">
-      //           <div>
-      //             <span>{params.data?.shipping_fee}</span>
-      //           </div>
-      //         </div>
-      //       );
-      //     },
-      //   },
-
-      {
-        headerName: "stock",
-        field: "stock",
-        filter: true,
-        resizable: true,
-        width: 190,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.stock}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      //   {
-      //     headerName: "tags",
-      //     field: "tags",
-      //     filter: true,
-      //     resizable: true,
-      //     width: 190,
-      //     cellRendererFramework: (params) => {
-      //       return (
-      //         <div className="d-flex align-items-center cursor-pointer">
-      //           <div>
-      //             <span>{params.data?.tags}</span>
-      //           </div>
-      //         </div>
-      //       );
-      //     },
-      //   },
-      //   {
-      //     headerName: "tax_rate",
-      //     field: "tax_rate",
-      //     filter: true,
-      //     resizable: true,
-      //     width: 180,
-      //     cellRendererFramework: (params) => {
-      //       return (
-      //         <div className="d-flex align-items-center cursor-pointer">
-      //           <div>
-      //             <span>{params.data?.tax_rate}</span>
-      //           </div>
-      //         </div>
-      //       );
-      //     },
-      //   },
-      {
-        headerName: "subtotal",
-        field: "sub_total",
-        filter: true,
-        resizable: true,
-        width: 180,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.sub_total}</span>
-              </div>
-            </div>
-          );
-        },
-      },
       {
         headerName: "total",
         field: "total",
         filter: true,
         resizable: true,
-        width: 180,
+        width: 160,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
@@ -502,6 +782,279 @@ class PurchasedOrder extends React.Component {
           );
         },
       },
+      // {
+      //   headerName: "brandname ",
+      //   field: "brand_name",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 180,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.brand_name}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "city",
+      //   field: "city",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 160,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.city}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      {
+        headerName: "order Creation date",
+        field: "order_date",
+        filter: true,
+        resizable: true,
+        width: 230,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.order_date}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      // {
+      //   headerName: "deliverydate",
+      //   field: "delivery_date",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 230,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.delivery_date}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "description",
+      //   field: "description",
+      //   filter: "true",
+      //   width: 180,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{params.data?.description}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "discountprice",
+      //   field: "discountprice",
+      //   filter: "true",
+      //   width: 180,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{params.data?.discountprice}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "email",
+      //   field: "email",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 190,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.email}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+
+      // {
+      //   headerName: "full_name",
+      //   field: "full_name",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 170,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.full_name}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+
+      // {
+      //   headerName: "mobile",
+      //   field: "mobile",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 190,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.mobile}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "price",
+      //   field: "price",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.price}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+
+      // {
+      //   headerName: "producttype",
+      //   field: "product_type",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 190,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.product_type}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "shippingfee",
+      //   field: "shipping_fee",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 190,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.shipping_fee}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "status",
+      //   field: "status",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 180,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.status}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "stock",
+      //   field: "stock",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 180,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.stock}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "subtotal",
+      //   field: "subtotal",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 180,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.subtotal}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "tags",
+      //   field: "tags",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 180,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.tags}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "tax_rate",
+      //   field: "tax_rate",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 180,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.tax_rate}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
 
       // {
       //   headerName: "Permitions",
@@ -523,18 +1076,27 @@ class PurchasedOrder extends React.Component {
       // },
     ],
   };
+  handleBillDownload = (data) => {
+    console.log(data);
+    this.setState({ PrintData: data });
+    this.toggleModal();
+  };
+  toggleModal = () => {
+    this.setState((prevState) => ({
+      modal: !prevState.modal,
+    }));
+  };
   handleSwitchChange = () => {
     return swal("Success!", "Submitted SuccessFully!", "success");
   };
   async componentDidMount() {
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
     // console.log(pageparmission?.Userinfo?.id);
-
     const formdata = new FormData();
     formdata.append("user_id", pageparmission?.Userinfo?.id);
-
+    formdata.append("role", pageparmission?.Userinfo?.role);
     await axiosConfig
-      .post(`/purchase_order`, formdata)
+      .post(`/getallcompleteorders`, formdata)
       .then((res) => {
         console.log(res.data.data);
         let rowData = res.data.data;
@@ -543,6 +1105,19 @@ class PurchasedOrder extends React.Component {
       .catch((err) => {
         console.log(err);
       });
+    // const formdata = new FormData();
+    // formdata.append("user_id", pageparmission?.Userinfo?.id);
+
+    // await axiosConfig
+    //   .post(`/purchase_order`, formdata)
+    //   .then((res) => {
+    //     console.log(res.data.data);
+    //     let rowData = res.data.data;
+    //     this.setState({ rowData });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
 
     let newparmisson = pageparmission?.role?.find(
       (value) => value?.pageName === "Purchase Order"
@@ -781,7 +1356,7 @@ class PurchasedOrder extends React.Component {
                     {(context) => (
                       <AgGridReact
                         gridOptions={{}}
-                        rowSelection="multiple"
+                        // rowSelection="multiple"
                         defaultColDef={defaultColDef}
                         columnDefs={columnDefs}
                         rowData={rowData}
@@ -801,6 +1376,19 @@ class PurchasedOrder extends React.Component {
             </CardBody>
           </Card>
         </Col>
+        <Modal
+          isOpen={this.state.modal}
+          toggle={this.toggleModal}
+          className={this.props.className}
+          style={{ maxWidth: "1050px" }}
+        >
+          <ModalHeader toggle={this.toggleModal}>Download Bill</ModalHeader>
+          <ModalBody>
+            <div style={{ width: "100%" }} className="">
+              <InvoiceGenerator PrintData={this.state.PrintData} />
+            </div>
+          </ModalBody>
+        </Modal>
       </Row>
     );
   }

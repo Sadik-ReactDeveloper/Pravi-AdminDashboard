@@ -181,7 +181,7 @@ class Invetory extends React.Component {
       //   },
       // },
       {
-        headerName: "Current Stock",
+        headerName: "available Stock",
         field: "quantity",
         filter: "agSetColumnFilter",
         width: 180,

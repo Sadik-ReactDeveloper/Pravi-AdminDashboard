@@ -551,7 +551,7 @@ const InvoiceTemplate = ({ tableList, invoiceData, CurrentWords }) => {
                             marginLeft: "5px",
                           }}
                         >
-                          1
+                          {ind + 1}
                         </Text>
                       </View>
                       <View

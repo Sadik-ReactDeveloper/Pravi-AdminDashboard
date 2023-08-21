@@ -16,6 +16,7 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
+  ModalFooter,
 } from "reactstrap";
 import "../../../../assets/css/main.css";
 import axiosConfig from "../../../../axiosConfig";
@@ -24,23 +25,43 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import { Eye, Trash2, ChevronDown, Edit } from "react-feather";
 import { history } from "../../../../history";
+import { ToWords } from "to-words";
 import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
-import Moment from "react-moment";
+import swal from "sweetalert";
+import AnalyticsDashboard from "../../../dashboard/analytics/AnalyticsDashboard";
+import { Route, Link } from "react-router-dom";
+import { AiOutlineDownload } from "react-icons/ai";
 import InvoiceGenerator from "../subcategory/InvoiceGenerator1";
 
-import { Route, Link } from "react-router-dom";
-import swal from "sweetalert";
-import { AiOutlineDownload } from "react-icons/ai";
-
-class Delivered extends React.Component {
+const toWords = new ToWords({
+  localeCode: "en-IN",
+  converterOptions: {
+    currency: true,
+    ignoreDecimal: false,
+    ignoreZeroCurrency: false,
+    doNotAddOnly: false,
+    currencyOptions: {
+      // can be used to override defaults for the selected locale
+      name: "Rupee",
+      plural: "Rupees",
+      symbol: "₹",
+      fractionalUnit: {
+        name: "Paisa",
+        plural: "Paise",
+        symbol: "",
+      },
+    },
+  },
+});
+class EditPlaceOrder extends React.Component {
   state = {
     modal: false,
     PrintData: {},
   };
+
   state = {
     rowData: [],
-
     Viewpermisson: null,
     Editpermisson: null,
     Createpermisson: null,
@@ -48,12 +69,7 @@ class Delivered extends React.Component {
     paginationPageSize: 20,
     currenPageSize: "",
     getPageSize: "",
-    defaultColDef: {
-      sortable: true,
-      editable: true,
-      resizable: true,
-      suppressMenu: true,
-    },
+    info: true,
     columnDefs: [
       {
         headerName: "S.No",
@@ -74,94 +90,234 @@ class Delivered extends React.Component {
             <div className="badge badge-pill badge-warning">
               {params.data?.order_status}
             </div>
-          ) : params.data?.order_status === "Inprogress" ? (
-            <div className="badge badge-pill bg-primary">Inprogress</div>
-          ) : params.data?.order_status === "canceled" ? (
+          ) : params.data?.order_status === "Rejected" ? (
+            <div className="badge badge-pill bg-primary">Rejected</div>
+          ) : params.data?.order_status === "Cancelled" ? (
             <div className="badge badge-pill bg-danger">
               {params.data.order_status}
             </div>
-          ) : params.data?.order_status === "Completed" ? (
-            <div className="badge badge-pill bg-success">Completed</div>
+          ) : params.data?.order_status === "orderreceived" ? (
+            <div className="badge badge-pill bg-success">Order Received</div>
           ) : null;
         },
       },
       {
-        headerName: "order_id",
-        field: "order_id",
+        headerName: "product_id",
+        field: "product_id",
         filter: true,
         resizable: true,
         width: 150,
         cellRendererFramework: (params) => {
-          // console.log(params.data?.order_id);
-
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
-                {/* <select
-                  // className="form-control"
-                  defaultValue={params.data?.order_status}
-                  onChange={(e) => {
-                    // console.log(e.target.value);
-                    let data = new FormData();
-                    data.append("order_id", params.data?.order_id);
-                    data.append("order_status", e.target.value);
-                    axiosConfig
-                      .post(`/change_order_status`, data)
-                      .then((res) => {
-                        console.log(res?.data.message);
-                        if (res?.data.message) {
-                          this.componentDidMount();
-                          swal("status Updated Succesfully");
-                        }
-                      })
-                      .catch((err) => {
-                        console.log(err);
-                      });
-                  }}
-                  name="changestatus"
-                  id="changeStatus"
-                >
-                  <option value={params.data?.order_status}>
-                    {params.data?.order_status}
-                  </option>
-                  <option value="Pending">--UpdateStatus--</option>
-                  <option value="Pending">Pending</option>
-                  <option value="Completed">Completed</option>
-                  <option value="Rejected">Rejected</option>
-                  <option value="Cancelled">Cancelled</option>
-                </select> */}
-                <span>{params?.data?.order_id}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "username",
-        field: "user_full_name",
-        filter: true,
-        resizable: true,
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center justify-content-center cursor-pointer">
-              <div>
-                <span>
-                  {params?.data?.user_full_name}
-                  {/* <AiOutlineDownload
-                    onClick={() => this.handleBillDownload(params.data)}
-                    fill="green"
-                    size="30px"
-                  /> */}
-                </span>
+                <span>{params.data?.product_id}</span>
               </div>
             </div>
           );
         },
       },
       // {
-      //   headerName: "order id ",
-      //   field: "user_full_name",
+      //   headerName: "Change Status",
+      //   field: "Change Status",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 230,
+      //   cellRendererFramework: (params) => {
+      //     // console.log(params.data?.order_id);
+
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <select
+      //             // className="form-control"
+      //             defaultValue={params.data?.order_status}
+      //             onChange={(e) => {
+      //               // console.log(e.target.value);
+      //               let data = new FormData();
+      //               data.append("order_id", params.data?.order_id);
+      //               data.append("order_status", e.target.value);
+      //               axiosConfig
+      //                 .post(`/change_order_status`, data)
+      //                 .then((res) => {
+      //                   console.log(res?.data.message);
+      //                   if (res?.data.message) {
+      //                     this.componentDidMount();
+      //                     swal("status Updated Succesfully");
+      //                   }
+      //                 })
+      //                 .catch((err) => {
+      //                   console.log(err);
+      //                 });
+      //             }}
+      //             name="changestatus"
+      //             id="changeStatus"
+      //           >
+      //             <option value={params.data?.order_status}>
+      //               {params.data?.order_status}
+      //             </option>
+      //             <option value="Pending">--UpdateStatus--</option>
+      //             <option value="Pending">Pending</option>
+      //             <option value="Completed">Completed</option>
+      //             <option value="Rejected">Rejected</option>
+      //             <option value="Cancelled">Cancelled</option>
+      //           </select>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Download Bill ",
+      //   field: "order_id",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center justify-content-center cursor-pointer">
+      //         <div>
+      //           <span>
+      //             <AiOutlineDownload
+      //               onClick={() => this.handleBillDownload(params.data)}
+      //               fill="green"
+      //               size="30px"
+      //             />
+      //           </span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      {
+        headerName: "Product Name",
+        field: "title",
+        filter: true,
+        resizable: true,
+        width: 180,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.title}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Product Image",
+        field: "product_images",
+        filter: true,
+        resizable: true,
+        width: 160,
+        cellRendererFramework: (params) => {
+          // console.log(params.data);
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                {params?.data?.product_images &&
+                params.data?.product_images?.length ? (
+                  <>
+                    <img
+                      style={{ borderRadius: "12px" }}
+                      src={params.data?.product_images[0]}
+                      alt="image"
+                      width="60px"
+                    />
+                  </>
+                ) : (
+                  "No image"
+                )}
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Price",
+        field: "price",
+        filter: true,
+        resizable: true,
+        width: 180,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.price}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Quantity",
+        field: "qty",
+        filter: true,
+        resizable: true,
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.qty}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+
+      {
+        headerName: "description",
+        field: "description",
+        filter: true,
+        resizable: true,
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.description}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "tags",
+        field: "tags",
+        filter: true,
+        resizable: true,
+        width: 180,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.tags}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "created_on",
+        field: "order_date",
+        filter: true,
+        resizable: true,
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.order_date}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      // {
+      //   headerName: "sub_total",
+      //   field: "subtotal",
       //   filter: true,
       //   resizable: true,
       //   width: 150,
@@ -169,7 +325,23 @@ class Delivered extends React.Component {
       //     return (
       //       <div className="d-flex align-items-center cursor-pointer">
       //         <div>
-      //           <span>{params.data?.user_full_name}</span>
+      //           <span>{params.data?.sub_total && params.data?.sub_total}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "total",
+      //   field: "total",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.total && params.data?.total}</span>
       //         </div>
       //       </div>
       //     );
@@ -177,113 +349,83 @@ class Delivered extends React.Component {
       // },
 
       // {
-      //   headerName: "Product Image",
-      //   field: "product_images",
-      //   filter: true,
-      //   resizable: true,
-      //   width: 160,
+      //   headerName: "Actions",
+      //   field: "sortorder",
+      //   field: "transactions",
+      //   width: 120,
       //   cellRendererFramework: (params) => {
-      //     // console.log(params.data);
       //     return (
-      //       <div className="d-flex align-items-center cursor-pointer">
-      //         <div>
-      //           {params?.data?.product_images &&
-      //           params.data?.product_images?.length ? (
-      //             <>
-      //               <img
-      //                 style={{ borderRadius: "12px" }}
-      //                 src={params.data?.product_images[0]}
-      //                 alt="image"
-      //                 width="60px"
+      //       <div className="actions cursor-pointer">
+      //         {this.state.Viewpermisson && (
+      //           <Route
+      //             render={({ history }) => (
+      //               <Eye
+      //                 className="mr-50"
+      //                 size="25px"
+      //                 color="green"
+      //                 onClick={() =>
+      //                   history.push(
+      //                     `/app/freshlist/order/editplaceorder/${params.data?.order_id}`
+      //                   )
+      //                 }
       //               />
-      //             </>
-      //           ) : (
-      //             "No image"
-      //           )}
-      //         </div>
+      //             )}
+      //           />
+      //         )}
+      //         {this.state.Editpermisson && (
+      //           <Route
+      //             render={({ history }) => (
+      //               <Edit
+      //                 className="mr-50"
+      //                 size="25px"
+      //                 color="blue"
+      //                 onClick={() =>
+      //                   history.push(
+      //                     `/app/freshlist/order/editplaceorder/${params.data?.order_id}`
+      //                   )
+      //                 }
+      //               />
+      //             )}
+      //           />
+      //         )}
+
+      //         {this.state.Deletepermisson && (
+      //           <Route
+      //             render={() => (
+      //               <Trash2
+      //                 className="mr-50"
+      //                 size="25px"
+      //                 color="red"
+      //                 onClick={() => {
+      //                   let selectedData = this.gridApi.getSelectedRows();
+      //                   this.runthisfunction(params.data.id);
+      //                   this.gridApi.updateRowData({ remove: selectedData });
+      //                 }}
+      //               />
+      //             )}
+      //           />
+      //         )}
       //       </div>
       //     );
       //   },
       // },
 
-      {
-        headerName: "Actions",
-        field: "sortorder",
-        field: "transactions",
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="actions cursor-pointer">
-              {this.state.Viewpermisson && (
-                <Route
-                  render={({ history }) => (
-                    <Eye
-                      className="mr-50"
-                      size="25px"
-                      color="green"
-                      onClick={() =>
-                        history.push(
-                          `/app/freshlist/order/EditCompletedorders/${params.data?.order_id}`
-                        )
-                      }
-                    />
-                  )}
-                />
-              )}
-              {/* {this.state.Editpermisson && (
-                <Route
-                  render={({ history }) => (
-                    <Edit
-                      className="mr-50"
-                      size="25px"
-                      color="blue"
-                      onClick={() =>
-                        history.push(
-                          `/app/freshlist/order/editplaceorder/${params.data?.order_id}`
-                        )
-                      }
-                    />
-                  )}
-                />
-              )} */}
-
-              {/* {this.state.Deletepermisson && (
-                <Route
-                  render={() => (
-                    <Trash2
-                      className="mr-50"
-                      size="25px"
-                      color="red"
-                      onClick={() => {
-                        let selectedData = this.gridApi.getSelectedRows();
-                        this.runthisfunction(params.data.id);
-                        this.gridApi.updateRowData({ remove: selectedData });
-                      }}
-                    />
-                  )}
-                />
-              )} */}
-            </div>
-          );
-        },
-      },
-
-      {
-        headerName: "total",
-        field: "total",
-        filter: true,
-        resizable: true,
-        width: 160,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.total}</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "categoryName",
+      //   field: "category_name",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 160,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.category_name}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       // {
       //   headerName: "brandname ",
       //   field: "brand_name",
@@ -316,22 +458,22 @@ class Delivered extends React.Component {
       //     );
       //   },
       // },
-      {
-        headerName: "order Creation date",
-        field: "order_date",
-        filter: true,
-        resizable: true,
-        width: 230,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.order_date}</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "order Creation date",
+      //   field: "order_date",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 230,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.order_date}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       // {
       //   headerName: "deliverydate",
       //   field: "delivery_date",
@@ -525,22 +667,7 @@ class Delivered extends React.Component {
       //     );
       //   },
       // },
-      // {
-      //   headerName: "tags",
-      //   field: "tags",
-      //   filter: true,
-      //   resizable: true,
-      //   width: 180,
-      //   cellRendererFramework: (params) => {
-      //     return (
-      //       <div className="d-flex align-items-center cursor-pointer">
-      //         <div>
-      //           <span>{params.data?.tags}</span>
-      //         </div>
-      //       </div>
-      //     );
-      //   },
-      // },
+
       // {
       //   headerName: "tax_rate",
       //   field: "tax_rate",
@@ -579,40 +706,45 @@ class Delivered extends React.Component {
     ],
   };
   handleSwitchChange = () => {
-    return swal("Success!", "Submitted SuccessFull!", "success");
+    return swal("Success!", "Submitted SuccessFully!", "success");
   };
-  // handleBillDownload = (data) => {
-  //   console.log(data);
-  //   this.setState({ PrintData: data });
-  //   // console.log("object");
-  //   this.toggleModal();
-  // };
-  // toggleModal = () => {
-  //   this.setState((prevState) => ({
-  //     modal: !prevState.modal,
-  //   }));
-  // };
+
+  handleBillDownload = (data) => {
+    console.log(data);
+    this.setState({ PrintData: data });
+    // console.log("object");
+    this.toggleModal();
+  };
+  toggleModal = () => {
+    this.setState((prevState) => ({
+      modal: !prevState.modal,
+    }));
+  };
+
   async componentDidMount() {
+    let { id } = this.props.match.params;
+    const toWords = new ToWords();
+    let words = toWords.convert(4520.36, { currency: true });
+    console.log(words);
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
-    // console.log(pageparmission.role);
+
     const formdata = new FormData();
-    formdata.append("user_id", pageparmission?.Userinfo?.id);
-    formdata.append("role", pageparmission?.Userinfo?.role);
+    formdata.append("order_id", id);
     await axiosConfig
-      .post(`/getallcompleteorders`, formdata)
+      .post(`/order_detail`, formdata)
       .then((res) => {
         console.log(res.data.data);
-        let rowData = res.data.data;
+        let rowData = res?.data?.data;
         this.setState({ rowData });
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err?.response);
       });
 
     let newparmisson = pageparmission?.role?.find(
-      (value) => value?.pageName === "Completed Order List"
+      (value) => value?.pageName === "Place Order"
     );
-    console.log(newparmisson);
+
     this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
     this.setState({
       Createpermisson: newparmisson?.permission.includes("Create"),
@@ -623,10 +755,11 @@ class Delivered extends React.Component {
     this.setState({
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
-    // console.log(newparmisson?.permission.includes("View"));
+
+    // await axiosConfig.get("/admin/allorder_list").then((response) => {
+
     // console.log(newparmisson?.permission.includes("Create"));
-    // console.log(newparmisson?.permission.includes("Edit"));
-    // console.log(newparmisson?.permission.includes("Delete"));
+    // });
   }
 
   async runthisfunction(id) {
@@ -673,18 +806,103 @@ class Delivered extends React.Component {
   changeHandler = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
+  submitHandler = (e) => {
+    e.preventDefault();
+  };
 
   render() {
     const { rowData, columnDefs, defaultColDef } = this.state;
     return (
       <Row className="app-user-list">
+        {/* <Col sm="12">
+          <h2> Select Date Range</h2>
+          <Card>
+            <CardBody>
+              <Form className="m-1" onSubmit={this.submitHandler}>
+                <Row>
+                  <Col lg="3" className="mb-2">
+                    <Label>All</Label>
+                    <Input
+                      required
+                      type="select"
+                      name="bannertype"
+                      placeholder=""
+                      value={this.state.bannertype}
+                      onChange={this.changeHandler}
+                    >
+                      <option value="select">--Select--</option>
+                      <option value="All">All</option>
+                      <option value="Painding">Painding</option>
+                      <option value="Confirmed">Confirmed</option>
+                      <option value="in_process">In Process</option>
+                      <option value="out_for_delivery">Out for Delivery</option>
+                      <option value="delivered">Delivered</option>
+                      <option value="returned">Returned</option>
+                      <option value="failed_to_deliver">
+                        Failed to Deliver
+                      </option>
+                    </Input>
+                  </Col>
+                  <Col lg="3" className="mb-2">
+                    <Label>Start Date</Label>
+                    <Input
+                      required
+                      type="date"
+                      name="bannertype"
+                      placeholder=""
+                      value={this.state.bannertype}
+                      onChange={this.changeHandler}
+                    ></Input>
+                  </Col>
+                  <Col lg="3" className="mb-2">
+                    <Label>End Date</Label>
+                    <Input
+                      required
+                      type="date"
+                      name="bannertype"
+                      placeholder=""
+                      value={this.state.bannertype}
+                      onChange={this.changeHandler}
+                    ></Input>
+                  </Col>
+
+                  <Col lg="3" className="mb-2">
+                    <Button.Ripple className="bt" color="primary" type="submit">
+                      Show Data
+                    </Button.Ripple>
+                  </Col>
+                </Row>
+              </Form>
+            </CardBody>
+          </Card>
+        </Col> */}
+        {/* <Col>
+          <AnalyticsDashboard />
+        </Col> */}
         <Col sm="12">
           <Card>
             <Row className="m-2">
               <Col>
                 <h1 col-sm-6 className="float-left">
-                  Completed Order List
+                  ViewOne Completed Order
+                  {/* <InvoiceGenerator PrintData={this.state.PrintData} /> */}
                 </h1>
+              </Col>
+              <Col>
+                <Route
+                  render={({ history }) => (
+                    <Button
+                      className=" float-right"
+                      color="primary"
+                      onClick={
+                        () => history.push("/app/freshlist/order/delivered")
+                        // history.push("/app/freshlist/order/addOrder")
+                      }
+                    >
+                      Back
+                    </Button>
+                  )}
+                />
               </Col>
             </Row>
             <CardBody>
@@ -697,13 +915,13 @@ class Delivered extends React.Component {
                           {this.gridApi
                             ? this.state.currenPageSize
                             : "" * this.state.getPageSize -
-                              (this.state.getPageSize - 1)}{" "}
-                          -{" "}
+                              (this.state.getPageSize - 1)}
+                          -
                           {this.state.rowData.length -
                             this.state.currenPageSize * this.state.getPageSize >
                           0
                             ? this.state.currenPageSize * this.state.getPageSize
-                            : this.state.rowData.length}{" "}
+                            : this.state.rowData.length}
                           of {this.state.rowData.length}
                           <ChevronDown className="ml-50" size={15} />
                         </DropdownToggle>
@@ -738,13 +956,14 @@ class Delivered extends React.Component {
                     <div className="d-flex flex-wrap justify-content-between mb-1">
                       <div className="table-input mr-1">
                         <Input
-                          placeholder="Search here"
+                          placeholder="Search here..."
                           onChange={(e) =>
                             this.updateSearchQuery(e.target.value)
                           }
                           value={this.state.value}
                         />
                       </div>
+
                       <div className="export-btn">
                         <Button.Ripple
                           color="primary"
@@ -785,9 +1004,7 @@ class Delivered extends React.Component {
           className={this.props.className}
           style={{ maxWidth: "1050px" }}
         >
-          <ModalHeader toggle={this.toggleModal}>
-            Download bill here
-          </ModalHeader>
+          <ModalHeader toggle={this.toggleModal}>Basic Modal</ModalHeader>
           <ModalBody>
             <div style={{ width: "100%" }} className="">
               <InvoiceGenerator PrintData={this.state.PrintData} />
@@ -798,4 +1015,4 @@ class Delivered extends React.Component {
     );
   }
 }
-export default Delivered;
+export default EditPlaceOrder;
