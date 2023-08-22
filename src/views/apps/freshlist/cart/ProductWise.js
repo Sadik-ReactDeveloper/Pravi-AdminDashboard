@@ -149,6 +149,7 @@ class ProductWise extends React.Component {
       },
     ],
   };
+
   componentDidMount() {
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
     console.log(pageparmission.role);
