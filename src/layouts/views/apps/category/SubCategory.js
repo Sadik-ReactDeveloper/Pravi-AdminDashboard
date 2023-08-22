@@ -28,12 +28,11 @@ class SubCategory extends React.Component {
     getPageSize: "",
     defaultColDef: {
       sortable: true,
-      editable: true,
+      // editable: true,
       resizable: true,
       suppressMenu: true,
     },
     columnDefs: [
- 
       {
         headerName: "S.No",
         valueGetter: "node.rowIndex + 1",
@@ -128,17 +127,21 @@ class SubCategory extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
-             <Eye
+              <Eye
                 className="mr-50"
                 size={20}
                 onClick={() =>
-                  history.push(`/app/category/subcategory/viewSubcategory/${params.data._id}`)
+                  history.push(
+                    `/app/category/subcategory/viewSubcategory/${params.data._id}`
+                  )
                 }
               />
               <Edit
                 className="mr-50"
                 size={20}
-                onClick={() => history.push("/app/category/subcategory/editSubcategory")}
+                onClick={() =>
+                  history.push("/app/category/subcategory/editSubcategory")
+                }
               />
               <Trash2
                 size={20}
@@ -162,8 +165,6 @@ class SubCategory extends React.Component {
       this.setState({ rowData });
     });
   }
-
-
 
   async runthisfunction(id) {
     console.log(id);
@@ -202,9 +203,7 @@ class SubCategory extends React.Component {
     const { rowData, columnDefs, defaultColDef } = this.state;
     return (
       <Row className="app-user-list">
-        <Col sm="12">
-          
-        </Col>
+        <Col sm="12"></Col>
         <Col sm="12">
           <Card>
             <Row className="m-2">

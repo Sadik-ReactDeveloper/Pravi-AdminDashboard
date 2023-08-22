@@ -42,7 +42,7 @@ class ProductDashboard extends React.Component {
     getPageSize: "",
     defaultColDef: {
       sortable: true,
-      editable: true,
+      // editable: true,
       resizable: true,
       suppressMenu: true,
     },

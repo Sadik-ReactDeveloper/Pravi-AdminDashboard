@@ -1127,7 +1127,7 @@ const POInVoice = ({ invoiceData, CurrentWords, BilData, tableList }) => {
                           marginBottom: "6px",
                         }}
                       >
-                        CGST(12.00%)
+                        CGST
                       </Text>{" "}
                       <Text
                         style={{
@@ -1139,7 +1139,7 @@ const POInVoice = ({ invoiceData, CurrentWords, BilData, tableList }) => {
                           marginBottom: "6px",
                         }}
                       >
-                        37.00
+                        0.00
                       </Text>
                     </View>
                     <View
@@ -1158,7 +1158,7 @@ const POInVoice = ({ invoiceData, CurrentWords, BilData, tableList }) => {
                           marginBottom: "6px",
                         }}
                       >
-                        SGST(12.00%)
+                        SGST
                       </Text>{" "}
                       <Text
                         style={{
@@ -1170,7 +1170,7 @@ const POInVoice = ({ invoiceData, CurrentWords, BilData, tableList }) => {
                           marginBottom: "6px",
                         }}
                       >
-                        37.00
+                        0.00
                       </Text>
                     </View>
                     <View
@@ -1201,7 +1201,7 @@ const POInVoice = ({ invoiceData, CurrentWords, BilData, tableList }) => {
                           marginBottom: "6px",
                         }}
                       >
-                        307.00
+                        0.00
                       </Text>
                     </View>
                     <View
@@ -1232,7 +1232,7 @@ const POInVoice = ({ invoiceData, CurrentWords, BilData, tableList }) => {
                           marginBottom: "6px",
                         }}
                       >
-                        307.00
+                        0.00
                       </Text>
                     </View>
                     <View

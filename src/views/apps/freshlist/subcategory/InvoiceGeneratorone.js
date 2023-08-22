@@ -32,20 +32,13 @@ const InvoiceGenerator = (props) => {
     <div>
       {/* {/ Use PDFViewer to preview the generated PDF /} */}
       <PDFViewer width="1000" height="800">
-        <InvoiceTemplate
+        <POInVoice
           invoiceData={Printview}
           CurrentWords={props.wordsNumber}
           BilData={props}
           tableList={details}
           fileName="invoice.pdf"
         />
-        {/* <POInVoice
-          invoiceData={Printview}
-          CurrentWords={props.wordsNumber}
-          BilData={props}
-          tableList={details}
-          fileName="invoice.pdf"
-        /> */}
       </PDFViewer>
     </div>
   );

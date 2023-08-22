@@ -23,6 +23,7 @@ import { Route } from "react-router-dom";
 import { CloudLightning } from "react-feather";
 import { timers } from "jquery";
 const selectItem1 = [];
+
 const AllunSelectedCity = [];
 const Selectedarray = [];
 
@@ -218,8 +219,15 @@ export class CreateAccount extends Component {
   // }
 
   onRemove = (selectedList, removedItem) => {
+    // selectItem1 = [];
     console.log(selectedList);
-    console.log(removedItem?.id);
+    // if (selectedList.length) {
+    //   for (var i = 0; i < selectedList.length; i++) {
+
+    //     selectItem1.push(selectedList[i].id);
+    //   }
+    // }
+    console.log(removedItem);
 
     // let arr1 = selectItem1.includes(removedItem?.id);
     // let newarr = selectItem1.filter((val) => {
@@ -231,8 +239,8 @@ export class CreateAccount extends Component {
     //     return val;
     //   }
     // });
-    console.log(newarr);
-    console.log(arr1);
+    // console.log(newarr);
+    // console.log(arr1);
   };
   render() {
     const { selectedOptions } = this.state;

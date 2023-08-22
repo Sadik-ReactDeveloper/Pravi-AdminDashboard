@@ -36,7 +36,7 @@ class CreateAttribute extends React.Component {
     getPageSize: "",
     defaultColDef: {
       sortable: true,
-      editable: true,
+      // editable: true,
       resizable: true,
       suppressMenu: true,
     },
@@ -55,7 +55,7 @@ class CreateAttribute extends React.Component {
         field: "product",
         filter: "agSetColumnFilter",
         width: 150,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
@@ -70,7 +70,7 @@ class CreateAttribute extends React.Component {
         field: "category",
         filter: "agSetColumnFilter",
         width: 150,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
@@ -86,7 +86,7 @@ class CreateAttribute extends React.Component {
         field: "brand",
         filter: "agSetColumnFilter",
         width: 120,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
@@ -101,7 +101,7 @@ class CreateAttribute extends React.Component {
         field: "price",
         filter: "agSetColumnFilter",
         width: 120,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
@@ -117,7 +117,7 @@ class CreateAttribute extends React.Component {
 
         filter: "agSetColumnFilter",
         width: 150,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
@@ -133,7 +133,7 @@ class CreateAttribute extends React.Component {
 
         filter: "agSetColumnFilter",
         width: 120,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
@@ -149,7 +149,7 @@ class CreateAttribute extends React.Component {
 
         filter: "agSetColumnFilter",
         width: 120,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
@@ -163,7 +163,7 @@ class CreateAttribute extends React.Component {
         headerName: "Actions",
         field: "transactions",
         width: 150,
-        cellRendererFramework: params => {
+        cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
               <Trash2
@@ -193,7 +193,7 @@ class CreateAttribute extends React.Component {
     //   .catch(error => {
     //     console.log(error);
     //   });
-    await axiosConfig.get("/gettermsconditions").then(response => {
+    await axiosConfig.get("/gettermsconditions").then((response) => {
       let rowData = response.data.data;
       this.setState({ rowData });
     });
@@ -201,12 +201,12 @@ class CreateAttribute extends React.Component {
 
   async runthisfunction(id) {
     console.log(id);
-    await axiosConfig.get(`/deltermcondition/${id}`).then(response => {
+    await axiosConfig.get(`/deltermcondition/${id}`).then((response) => {
       console.log(response);
     });
   }
 
-  onGridReady = params => {
+  onGridReady = (params) => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
     this.setState({
@@ -216,11 +216,11 @@ class CreateAttribute extends React.Component {
     });
   };
 
-  updateSearchQuery = val => {
+  updateSearchQuery = (val) => {
     this.gridApi.setQuickFilter(val);
   };
 
-  filterSize = val => {
+  filterSize = (val) => {
     if (this.gridApi) {
       this.gridApi.paginationSetPageSize(Number(val));
       this.setState({
@@ -452,7 +452,7 @@ class CreateAttribute extends React.Component {
                         <div className="table-input mr-1">
                           <Input
                             placeholder="search..."
-                            onChange={e =>
+                            onChange={(e) =>
                               this.updateSearchQuery(e.target.value)
                             }
                             value={this.state.value}
@@ -469,7 +469,7 @@ class CreateAttribute extends React.Component {
                       </div>
                     </div>
                     <ContextLayout.Consumer>
-                      {context => (
+                      {(context) => (
                         <AgGridReact
                           gridOptions={{}}
                           rowSelection="multiple"

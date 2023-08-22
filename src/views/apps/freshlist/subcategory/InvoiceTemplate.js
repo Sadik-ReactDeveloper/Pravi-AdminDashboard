@@ -74,8 +74,9 @@ const styles = StyleSheet.create({
 });
 
 const InvoiceTemplate = ({ tableList, invoiceData, CurrentWords }) => {
-  const { items, customerName, date, total } = invoiceData;
+  const { items, customerName, date, total, place_supply } = invoiceData;
   const curentDate = new Date();
+  console.log(invoiceData);
 
   let day = curentDate.getDate();
   let month = curentDate.getMonth() + 1;
@@ -199,7 +200,7 @@ const InvoiceTemplate = ({ tableList, invoiceData, CurrentWords }) => {
                     Place of Supply
                   </Text>{" "}
                   <Text style={{ fontSize: "10px", fontWeight: "bold" }}>
-                    : Tamilnadu
+                    : {place_supply}
                   </Text>
                 </View>
               </View>
@@ -275,7 +276,7 @@ const InvoiceTemplate = ({ tableList, invoiceData, CurrentWords }) => {
                       fontWeight: "bold",
                     }}
                   >
-                    IndusInd Bank
+                    {invoiceData?.billing_country}
                   </Text>{" "}
                   <Text
                     style={{
@@ -284,8 +285,9 @@ const InvoiceTemplate = ({ tableList, invoiceData, CurrentWords }) => {
                       fontWeight: "bold",
                     }}
                   >
-                    8Th Floor Tower,1 one India Bulls Centers, 841, S B marg
-                    ,Mumbai-400013
+                    {invoiceData?.billing_street},{invoiceData?.billing_city}
+                    {invoiceData?.billing_state} ,{invoiceData?.company_name} ,
+                    {invoiceData?.billing_pincode}
                   </Text>
                 </View>
               </View>
@@ -298,7 +300,7 @@ const InvoiceTemplate = ({ tableList, invoiceData, CurrentWords }) => {
                       fontWeight: "bold",
                     }}
                   >
-                    IndusInd Bank
+                    {invoiceData?.shipping_state}
                   </Text>
                   <Text
                     style={{
@@ -307,8 +309,9 @@ const InvoiceTemplate = ({ tableList, invoiceData, CurrentWords }) => {
                       fontWeight: "bold",
                     }}
                   >
-                    8Th Floor Tower,1 one India Bulls Centers, 841, S B marg
-                    ,Mumbai-400013
+                    {invoiceData?.shipping_street}
+                    {invoiceData?.shipping_city} {invoiceData?.shipping_state} ,
+                    {invoiceData?.shipping_pincode}
                   </Text>
                 </View>
               </View>
@@ -337,11 +340,12 @@ const InvoiceTemplate = ({ tableList, invoiceData, CurrentWords }) => {
                       fontSize: "13px",
                       fontWeight: "1000",
                       padding: "12px 12px",
+                      width: "90%",
 
-                      width: "50%",
+                      // width: "50%",
                     }}
                   >
-                    Client Code :
+                    Client Code : &nbsp; {invoiceData?.supplier_name}
                   </Text>
                 </View>
               </View>
@@ -353,10 +357,10 @@ const InvoiceTemplate = ({ tableList, invoiceData, CurrentWords }) => {
                       fontSize: "13px",
                       fontWeight: "1000",
                       padding: "12px 12px",
-                      width: "50%",
+                      width: "90%",
                     }}
                   >
-                    User Code :
+                    User Code : &nbsp; {invoiceData?.display_code}
                   </Text>
                 </View>
               </View>
@@ -493,7 +497,7 @@ const InvoiceTemplate = ({ tableList, invoiceData, CurrentWords }) => {
                   borderRight: "1px solid black",
                 }}
               >
-                <Text
+                {/* <Text
                   style={{
                     fontSize: "10px",
                     color: "white",
@@ -502,7 +506,7 @@ const InvoiceTemplate = ({ tableList, invoiceData, CurrentWords }) => {
                   }}
                 >
                   Discount(%)
-                </Text>
+                </Text> */}
               </View>
               <View
                 style={{
@@ -628,7 +632,7 @@ const InvoiceTemplate = ({ tableList, invoiceData, CurrentWords }) => {
                             marginLeft: "5px",
                           }}
                         >
-                          {ele?.discountprice}
+                          {/* {ele?.discountprice} */}
                         </Text>
                       </View>
                       <View

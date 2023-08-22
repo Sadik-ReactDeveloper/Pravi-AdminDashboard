@@ -77,6 +77,12 @@ class All extends React.Component {
     cgst: "",
     otherCharges: "",
     deliveryCharges: "",
+    defaultColDef: {
+      sortable: true,
+      // editable: true,
+      resizable: true,
+      suppressMenu: true,
+    },
     columnDefs: [
       // {
       //   headerName: "S.No",
@@ -187,7 +193,7 @@ class All extends React.Component {
               <div>
                 <span>
                   <AiOutlineDownload
-                    onClick={() => this.handleBillDownload(params.data)}
+                    onClick={() => this.handleBillDownload(params?.data)}
                     fill="green"
                     size="30px"
                   />

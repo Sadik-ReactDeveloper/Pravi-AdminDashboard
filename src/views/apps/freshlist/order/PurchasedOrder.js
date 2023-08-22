@@ -18,7 +18,7 @@ import {
   ModalBody,
 } from "reactstrap";
 import { AiOutlineDownload } from "react-icons/ai";
-
+import { ToWords } from "to-words";
 import "../../../../assets/css/main.css";
 import axiosConfig from "../../../../axiosConfig";
 import { ContextLayout } from "../../../../utility/context/Layout";
@@ -29,14 +29,40 @@ import { history } from "../../../../history";
 import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
 import swal from "sweetalert";
-import InvoiceGenerator from "../subcategory/InvoiceGenerator1";
-
-import AnalyticsDashboard from "../../../dashboard/analytics/AnalyticsDashboard";
+import InvoiceGenerator from "../subcategory/PurchaseOrderGenerator";
+// import AnalyticsDashboard from "../../../dashboard/analytics/AnalyticsDashboard";
 import { Route, Link } from "react-router-dom";
+
+const toWords = new ToWords({
+  localeCode: "en-IN",
+  converterOptions: {
+    currency: true,
+    ignoreDecimal: false,
+    ignoreZeroCurrency: false,
+    doNotAddOnly: false,
+    currencyOptions: {
+      // can be used to override defaults for the selected locale
+      name: "Rupee",
+      plural: "Rupees",
+      symbol: "₹",
+      fractionalUnit: {
+        name: "Paisa",
+        plural: "Paise",
+        symbol: "",
+      },
+    },
+  },
+});
 class PurchasedOrder extends React.Component {
   state = {
     rowData: [],
     modal: false,
+    sgst: "",
+    wordsNumber: "",
+    ViewBill: true,
+    cgst: "",
+    otherCharges: "",
+    deliveryCharges: "",
     PrintData: {},
     Viewpermisson: null,
     Editpermisson: null,
@@ -592,15 +618,25 @@ class PurchasedOrder extends React.Component {
       // },
     ],
   };
+  handleSubmit = (e) => {
+    // e.preventDefault();
+    this.setState({ ViewBill: true });
+  };
   handleBillDownload = (data) => {
     console.log(data);
     this.setState({ PrintData: data });
+    const toWords = new ToWords();
+    let words = toWords.convert(Number(data.sub_total), { currency: true });
+    this.setState({ wordsNumber: words });
     this.toggleModal();
   };
   toggleModal = () => {
     this.setState((prevState) => ({
       modal: !prevState.modal,
     }));
+  };
+  changeHandler = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
   };
   handleSwitchChange = () => {
     return swal("Success!", "Submitted SuccessFully!", "success");
@@ -900,9 +936,76 @@ class PurchasedOrder extends React.Component {
         >
           <ModalHeader toggle={this.toggleModal}>Download Bill</ModalHeader>
           <ModalBody>
-            <div style={{ width: "100%" }} className="">
-              <InvoiceGenerator PrintData={this.state.PrintData} />
-            </div>
+            {this.state.ViewBill && this.state.ViewBill ? (
+              <>
+                <div style={{ width: "100%" }} className="">
+                  <InvoiceGenerator
+                    PrintData={this.state.PrintData}
+                    wordsNumber={this.state.wordsNumber}
+                    sgst={this.state.sgst}
+                    cgst={this.state.cgst}
+                    deliveryCharges={this.state.deliveryCharges}
+                    otherCharges={this.state.otherCharges}
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <div style={{ width: "100%" }} className="">
+                  <Form onSubmit={() => this.handleSubmit()}>
+                    <Row>
+                      <Col lg="6" className="mb-2">
+                        <Label>SGST</Label>
+                        <Input
+                          required
+                          type="number"
+                          name="sgst"
+                          placeholder="Enter SGST"
+                          value={this.state.sgst}
+                          onChange={this.changeHandler}
+                        ></Input>
+                      </Col>
+                      <Col lg="6" className="mb-2">
+                        <Label>CGST</Label>
+                        <Input
+                          required
+                          type="number"
+                          name="cgst"
+                          placeholder="Enter CGST"
+                          value={this.state.cgst}
+                          onChange={this.changeHandler}
+                        ></Input>
+                      </Col>
+                      <Col lg="6">
+                        <Label>Other Charges</Label>
+                        <Input
+                          type="number"
+                          name="otherCharges"
+                          placeholder="Enter Other Charges"
+                          value={this.state.otherCharges}
+                          onChange={this.changeHandler}
+                        ></Input>
+                      </Col>
+                      <Col lg="6">
+                        <Label>Delivery Charges</Label>
+                        <Input
+                          type="number"
+                          name="deliveryCharges"
+                          placeholder="Enter Delivery Charges"
+                          value={this.state.deliveryCharges}
+                          onChange={this.changeHandler}
+                        ></Input>
+                      </Col>
+                      <Col lg="3" className="mt-2">
+                        <Button color="primary" type="submit">
+                          Submit
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Form>
+                </div>
+              </>
+            )}
           </ModalBody>
         </Modal>
       </Row>

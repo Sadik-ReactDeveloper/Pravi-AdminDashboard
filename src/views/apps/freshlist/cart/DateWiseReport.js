@@ -31,7 +31,7 @@ class DateWiseReport extends React.Component {
     SelectedDate: "",
     defaultColDef: {
       sortable: true,
-      editable: true,
+      // editable: true,
       resizable: true,
       suppressMenu: true,
     },

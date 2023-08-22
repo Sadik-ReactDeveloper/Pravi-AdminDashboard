@@ -895,7 +895,8 @@ class EditPlaceOrder extends React.Component {
                       className=" float-right"
                       color="primary"
                       onClick={
-                        () => history.push("/app/freshlist/order/delivered")
+                        () => history.goBack()
+                        // () => history.push("/app/freshlist/order/delivered")
                         // history.push("/app/freshlist/order/addOrder")
                       }
                     >

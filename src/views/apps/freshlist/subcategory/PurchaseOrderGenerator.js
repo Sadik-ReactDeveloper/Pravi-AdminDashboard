@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { PDFViewer } from "@react-pdf/renderer";
 import InvoiceTemplate from "./InvoiceTemplate";
 import ReactPDF from "@react-pdf/renderer";
-import POInVoice from "./POInVoice";
+import POInVoice from "./PurchaseOrderInvoicetemp";
 // import POInVoice from "./POInVoice";
 import axiosConfig from "../../../../axiosConfig";
 const InvoiceGenerator = (props) => {
@@ -32,20 +32,13 @@ const InvoiceGenerator = (props) => {
     <div>
       {/* {/ Use PDFViewer to preview the generated PDF /} */}
       <PDFViewer width="1000" height="800">
-        <InvoiceTemplate
+        <POInVoice
           invoiceData={Printview}
           CurrentWords={props.wordsNumber}
           BilData={props}
           tableList={details}
           fileName="invoice.pdf"
         />
-        {/* <POInVoice
-          invoiceData={Printview}
-          CurrentWords={props.wordsNumber}
-          BilData={props}
-          tableList={details}
-          fileName="invoice.pdf"
-        /> */}
       </PDFViewer>
     </div>
   );

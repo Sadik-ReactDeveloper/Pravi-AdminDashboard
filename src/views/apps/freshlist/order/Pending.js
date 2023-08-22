@@ -38,12 +38,12 @@ class Pending extends React.Component {
     paginationPageSize: 20,
     currenPageSize: "",
     getPageSize: "",
-    // defaultColDef: {
-    sortable: true,
-    // editable: true,
-    resizable: true,
-    //   suppressMenu: true,
-    // },
+    defaultColDef: {
+      sortable: true,
+      // editable: true,
+      resizable: true,
+      suppressMenu: true,
+    },
     columnDefs: [
       {
         headerName: "S.No",
