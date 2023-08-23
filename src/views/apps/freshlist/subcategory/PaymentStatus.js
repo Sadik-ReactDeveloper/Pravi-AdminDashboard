@@ -26,6 +26,7 @@ class PaymentStatus extends React.Component {
     rowData: [],
     paginationPageSize: 20,
     currenPageSize: "",
+    Addmoney: "",
     Viewpermisson: null,
     Editpermisson: null,
     Createpermisson: null,
@@ -77,27 +78,39 @@ class PaymentStatus extends React.Component {
       },
 
       {
-        headerName: "Category",
+        headerName: "Add Payment",
         field: "category.category_name",
         filter: true,
         width: 150,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center">
-              <span>{params.data.category?.category_name}</span>
+              <input
+                type="text"
+                placeholder="enter Payament"
+                onClick={(e) => {
+                  this.setState({ Addmoney: e.target.value });
+                }}
+              />
             </div>
           );
         },
       },
       {
-        headerName: "Type",
+        headerName: "Add Now",
         field: "type",
         filter: true,
         width: 150,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center">
-              <span>{params.data?.type}</span>
+              <Button
+                size="sm"
+                onClick={(e) => this.handleAddMoney(e, params?.data)}
+                color="primary"
+              >
+                ADD Payment
+              </Button>
             </div>
           );
         },
@@ -141,51 +154,77 @@ class PaymentStatus extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
-              {/* <Eye
-                                className="mr-50"
-                                size="25px"
-                                color="green"
-                                onClick={() =>
-                                    history.push(`/app/customer/viewCustomer/${params.data._id}`)}
-                            /> */}
-              <Route
-                render={({ history }) => (
-                  <Edit
-                    className="mr-50"
-                    size="25px"
-                    color="blue"
-                    onClick={() =>
-                      history.push(
-                        `/app/freshlist/subcategory/editSubCategory/${params.data._id}`
-                      )
-                    }
-                  />
-                )}
-              />
-              <Route
-                render={({ history }) => (
-                  <Trash2
-                    className="mr-50"
-                    size="25px"
-                    color="red"
-                    onClick={() => {
-                      let selectedData = this.gridApi.getSelectedRows();
-                      this.runthisfunction(params.data._id);
-                      this.gridApi.updateRowData({ remove: selectedData });
-                    }}
-                  />
-                )}
-              />
+              {this.state.Viewpermisson && (
+                <Route
+                  render={({ history }) => (
+                    <Eye
+                      className="mr-50"
+                      size="25px"
+                      color="blue"
+                      onClick={() =>
+                        history.push(
+                          `/app/freshlist/subcategory/editSubCategory/${params.data._id}`
+                        )
+                      }
+                    />
+                  )}
+                />
+              )}
+              {this.state.Editpermisson && (
+                <Route
+                  render={({ history }) => (
+                    <Edit
+                      className="mr-50"
+                      size="25px"
+                      color="blue"
+                      onClick={() =>
+                        history.push(
+                          `/app/freshlist/subcategory/editSubCategory/${params.data._id}`
+                        )
+                      }
+                    />
+                  )}
+                />
+              )}
+              {this.state.Deletepermisson && (
+                <Route
+                  render={({ history }) => (
+                    <Trash2
+                      className="mr-50"
+                      size="25px"
+                      color="red"
+                      onClick={() => {
+                        let selectedData = this.gridApi.getSelectedRows();
+                        this.runthisfunction(params.data._id);
+                        this.gridApi.updateRowData({ remove: selectedData });
+                      }}
+                    />
+                  )}
+                />
+              )}
             </div>
           );
         },
       },
     ],
   };
+  handleAddMoney = (e, data) => {
+    e.preventDefault();
+    console.log(data);
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    const formdata = new FormData();
+    formdata.append("user_id", pageparmission?.Userinfo?.id);
+    formdata.append("role", pageparmission?.Userinfo?.role);
+    //  axiosConfig.get(`/admin/getalldata`).then((response) => {
+    //   let rowData = response.data.data;
+    //   console.log(rowData);
+    //   this.setState({ rowData });
+    // });
+  };
 
   async componentDidMount() {
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
-    console.log(pageparmission.role);
+    // console.log(pageparmission.role);
     let newparmisson = pageparmission?.role?.find(
       (value) => value?.pageName === "Payment Status"
     );
@@ -270,7 +309,7 @@ class PaymentStatus extends React.Component {
                     Back
                   </Button>
                 </Col> */}
-              <Col>
+              {/* <Col>
                 {this.state.Createpermisson && (
                   <Route
                     render={({ history }) => (
@@ -288,7 +327,7 @@ class PaymentStatus extends React.Component {
                     )}
                   />
                 )}
-              </Col>
+              </Col> */}
             </Row>
             <CardBody>
               {this.state.rowData === null ? null : (

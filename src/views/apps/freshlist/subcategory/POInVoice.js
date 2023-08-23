@@ -68,11 +68,18 @@ const styles = StyleSheet.create({
   },
 });
 
-const POInVoice = ({ invoiceData, CurrentWords, BilData, tableList }) => {
-  console.log(tableList);
-  console.log(invoiceData);
-  console.log(BilData);
-  console.log(CurrentWords);
+const POInVoice = ({
+  invoiceData,
+  CurrentWords,
+  BilData,
+  tableList,
+  AllCharges,
+}) => {
+  // console.log(tableList);
+  // console.log(invoiceData);
+  // console.log(BilData);
+  // console.log(CurrentWords);
+  // console.log(AllCharges);
   const { items, customerName, date, total, place_supply } = invoiceData;
   const curentDate = new Date();
 
@@ -272,7 +279,7 @@ const POInVoice = ({ invoiceData, CurrentWords, BilData, tableList }) => {
                       fontWeight: "bold",
                     }}
                   >
-                    {invoiceData?.billing_country}
+                    {invoiceData?.company_name}
                   </Text>{" "}
                   <Text
                     style={{
@@ -281,8 +288,9 @@ const POInVoice = ({ invoiceData, CurrentWords, BilData, tableList }) => {
                       fontWeight: "bold",
                     }}
                   >
-                    {invoiceData?.billing_street},{invoiceData?.billing_city}
-                    {invoiceData?.billing_state} ,{invoiceData?.company_name} ,
+                    {invoiceData?.billing_street},
+                    {invoiceData?.billing_city_name}
+                    {invoiceData?.billing_state_name} ,
                     {invoiceData?.billing_pincode}
                   </Text>{" "}
                 </View>
@@ -296,7 +304,7 @@ const POInVoice = ({ invoiceData, CurrentWords, BilData, tableList }) => {
                       fontWeight: "bold",
                     }}
                   >
-                    {invoiceData?.shipping_state}
+                    {invoiceData?.company_name}
                   </Text>{" "}
                   <Text
                     style={{
@@ -306,7 +314,8 @@ const POInVoice = ({ invoiceData, CurrentWords, BilData, tableList }) => {
                     }}
                   >
                     {invoiceData?.shipping_street}
-                    {invoiceData?.shipping_city} {invoiceData?.shipping_state} ,
+                    {invoiceData?.shippingcity_city_name}{" "}
+                    {invoiceData?.shippingstate_state_name} ,
                     {invoiceData?.shipping_pincode}
                   </Text>{" "}
                 </View>
@@ -337,7 +346,7 @@ const POInVoice = ({ invoiceData, CurrentWords, BilData, tableList }) => {
                       fontWeight: "1000",
                       padding: "12px 12px",
 
-                      width: "80%",
+                      width: "90%",
                     }}
                   >
                     Client Code : &nbsp; {invoiceData?.supplier_name}
@@ -585,7 +594,7 @@ const POInVoice = ({ invoiceData, CurrentWords, BilData, tableList }) => {
                       marginLeft: "5px",
                     }}
                   >
-                    1
+                    {i + 1}
                   </Text>
                 </View>
                 <View
@@ -602,7 +611,7 @@ const POInVoice = ({ invoiceData, CurrentWords, BilData, tableList }) => {
                       marginLeft: "5px",
                     }}
                   >
-                    {invoiceData?.po_no}
+                    {ele?.po_no && ele?.po_no ? <>{ele?.po_no}</> : null}
                   </Text>
                 </View>
                 <View
@@ -1072,14 +1081,14 @@ const POInVoice = ({ invoiceData, CurrentWords, BilData, tableList }) => {
                 }}
               >
                 <View
-                  style={{ height: "200px", borderBottom: "1px solid black" }}
+                  style={{ height: "180px", borderBottom: "1px solid black" }}
                 >
                   <View
                     style={{
                       padding: "10px",
                       // width: "30%",
                       height: "130px",
-                      borderBottom: "1px solid black",
+                      // borderBottom: "1px solid black",
                     }}
                   >
                     <View
@@ -1108,7 +1117,7 @@ const POInVoice = ({ invoiceData, CurrentWords, BilData, tableList }) => {
                           marginBottom: "6px",
                         }}
                       >
-                        {invoiceData?.sub_total}
+                        {AllCharges?.subtotal}
                       </Text>
                     </View>
                     <View
@@ -1127,7 +1136,7 @@ const POInVoice = ({ invoiceData, CurrentWords, BilData, tableList }) => {
                           marginBottom: "6px",
                         }}
                       >
-                        CGST(12.00%)
+                        CGST({AllCharges?.cgst}.00%)
                       </Text>{" "}
                       <Text
                         style={{
@@ -1139,7 +1148,7 @@ const POInVoice = ({ invoiceData, CurrentWords, BilData, tableList }) => {
                           marginBottom: "6px",
                         }}
                       >
-                        37.00
+                        {AllCharges?.totcgst}
                       </Text>
                     </View>
                     <View
@@ -1158,7 +1167,7 @@ const POInVoice = ({ invoiceData, CurrentWords, BilData, tableList }) => {
                           marginBottom: "6px",
                         }}
                       >
-                        SGST(12.00%)
+                        SGST( {AllCharges?.sgst}.00%)
                       </Text>{" "}
                       <Text
                         style={{
@@ -1170,7 +1179,7 @@ const POInVoice = ({ invoiceData, CurrentWords, BilData, tableList }) => {
                           marginBottom: "6px",
                         }}
                       >
-                        37.00
+                        {AllCharges?.totsgst}
                       </Text>
                     </View>
                     <View
@@ -1201,7 +1210,7 @@ const POInVoice = ({ invoiceData, CurrentWords, BilData, tableList }) => {
                           marginBottom: "6px",
                         }}
                       >
-                        307.00
+                        {AllCharges?.delivery_charges}.00
                       </Text>
                     </View>
                     <View
@@ -1232,7 +1241,38 @@ const POInVoice = ({ invoiceData, CurrentWords, BilData, tableList }) => {
                           marginBottom: "6px",
                         }}
                       >
-                        307.00
+                        {AllCharges?.other_charges}.00
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        gap: "10px",
+                        paddingBottom: "3px",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: "10px",
+                          fontWeight: "bold",
+                          // width: "70%",
+                          marginBottom: "6px",
+                        }}
+                      >
+                        Discount :
+                      </Text>{" "}
+                      <Text
+                        style={{
+                          // flexDirection: "row",
+                          // justifyContent: "flex-end",
+                          fontSize: "10px",
+                          fontWeight: "bold",
+                          // marginRight: "1px",
+                          marginBottom: "6px",
+                        }}
+                      >
+                        {AllCharges?.discount_value}.00
                       </Text>
                     </View>
                     <View
@@ -1261,7 +1301,7 @@ const POInVoice = ({ invoiceData, CurrentWords, BilData, tableList }) => {
                           marginTop: "2px",
                         }}
                       >
-                        {invoiceData?.sub_total}
+                        {AllCharges?.grandtotal}
                       </Text>
                     </View>
                   </View>
@@ -1283,6 +1323,8 @@ const POInVoice = ({ invoiceData, CurrentWords, BilData, tableList }) => {
                       <Image
                         style={{ height: "50px", marginTop: "15px" }}
                         src={signature}
+                        width="200px"
+                        height="200px"
                       ></Image>
                     </View>
                     <View

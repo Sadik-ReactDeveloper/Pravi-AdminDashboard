@@ -29,6 +29,7 @@ import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
 import InvoicGenerator from "../subcategory/InvoiceGeneratorone";
 import { Route, Link } from "react-router-dom";
+import swal from "sweetalert";
 
 const toWords = new ToWords({
   localeCode: "en-IN",
@@ -50,14 +51,21 @@ const toWords = new ToWords({
     },
   },
 });
+const AddedBill = [];
+const AllProduct = [];
 
 class InvoiceGenerator extends React.Component {
   state = {
+    AllbillMerged: [],
     rowData: [],
+    Applied_Charges: {},
     paginationPageSize: 20,
     currenPageSize: "",
+    Mergebilllength: "",
     modal: false,
     sgst: "",
+    discount: "",
+    ViewBill: false,
     wordsNumber: "",
     cgst: "",
     otherCharges: "",
@@ -83,8 +91,8 @@ class InvoiceGenerator extends React.Component {
         filter: true,
       },
       {
-        headerName: "S.No",
-        width: 100,
+        headerName: "Multi Selection",
+        width: 180,
         filter: true,
         cellRendererFramework: (params) => {
           return (
@@ -94,8 +102,12 @@ class InvoiceGenerator extends React.Component {
                   <input
                     type="checkbox"
                     className="customcheckbox"
-                    onClick={() => {
-                      console.log(e.target.checked);
+                    onClick={(e) => {
+                      this.handleMultipleBillsAdd(
+                        params?.data,
+                        e.target.checked
+                      );
+                      // console.log(e.target.checked);
                     }}
                   />
                   {/* <AiOutlineDownload
@@ -183,28 +195,28 @@ class InvoiceGenerator extends React.Component {
           );
         },
       },
-      {
-        headerName: "Invoice",
-        field: "invoice",
-        filter: true,
-        resizable: true,
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center justify-content-center cursor-pointer">
-              <div>
-                <span>
-                  <AiOutlineDownload
-                    onClick={() => this.handleBillDownload(params.data)}
-                    fill="green"
-                    size="30px"
-                  />
-                </span>
-              </div>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "Invoice",
+      //   field: "invoice",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center justify-content-center cursor-pointer">
+      //         <div>
+      //           <span>
+      //             <AiOutlineDownload
+      //               onClick={() => this.handleBillDownload(params.data)}
+      //               fill="green"
+      //               size="30px"
+      //             />
+      //           </span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       {
         headerName: "username",
         field: "user_full_name",
@@ -228,22 +240,22 @@ class InvoiceGenerator extends React.Component {
           );
         },
       },
-      // {
-      //   headerName: "order id ",
-      //   field: "user_full_name",
-      //   filter: true,
-      //   resizable: true,
-      //   width: 150,
-      //   cellRendererFramework: (params) => {
-      //     return (
-      //       <div className="d-flex align-items-center cursor-pointer">
-      //         <div>
-      //           <span>{params.data?.user_full_name}</span>
-      //         </div>
-      //       </div>
-      //     );
-      //   },
-      // },
+      {
+        headerName: "supplier_name",
+        field: "supplier_name",
+        filter: true,
+        resizable: true,
+        width: 210,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.supplier_name}</span>
+              </div>
+            </div>
+          );
+        },
+      },
 
       // {
       //   headerName: "Product Image",
@@ -647,9 +659,83 @@ class InvoiceGenerator extends React.Component {
       // },
     ],
   };
+  handleMultipleBillsAdd = (data, check) => {
+    this.setState({ PrintData: data });
+
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    if (check) {
+      AddedBill.push({
+        order_id: data?.order_id,
+        user_id: pageparmission?.Userinfo?.id,
+        role: pageparmission?.Userinfo?.role,
+      });
+    } else {
+      let index = AddedBill.findIndex(
+        (ele) => ele?.order_id === data?.order_id
+      );
+      AddedBill.splice(index, 1);
+    }
+    this.setState({ Mergebilllength: AddedBill?.length });
+  };
+  MergeBillNow = (e) => {
+    e.preventDefault();
+    // let ids = AddedBill.map((ele) => {
+    //   const formdata = new FormData();
+    //   formdata.append("order_id", ele?.order_id);
+    //   axiosConfig
+    //     .post(`/order_detail`, formdata)
+    //     .then((response) => {
+    //       console.log(response.data.data.flat());
+    //       AllProduct.push(response.data.data.flat());
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // });
+
+    this.toggleModal();
+  };
   handleSubmit = (e) => {
-    // e.preventDefault();
-    this.setState({ ViewBill: true });
+    e.preventDefault();
+
+    if (this.state.sgst && this.state.cgst) {
+      let pageparmission = JSON.parse(localStorage.getItem("userData"));
+      let formdata = new FormData();
+
+      formdata.append("user_id", pageparmission?.Userinfo?.id);
+      formdata.append("order_id", JSON.stringify(AddedBill));
+      formdata.append("role", pageparmission?.Userinfo?.role);
+      formdata.append("sgst", this.state.sgst);
+      formdata.append("cgst", this.state.cgst);
+      formdata.append("discount_value", this.state.discount);
+      formdata.append("delivery_charges", this.state.deliveryCharges);
+      formdata.append("other_charges", this.state.otherCharges);
+
+      axiosConfig
+        .post(`/createmergebillapi`, formdata)
+        .then((res) => {
+          console.log(res.data?.data?.applied_charges);
+          this.setState({ Applied_Charges: res.data?.data?.applied_charges });
+          // console.log(res.data.data?.items);
+          this.setState({ AllbillMerged: res.data.data?.items });
+          this.setState({ ViewBill: true });
+
+          // this.setState({ PrintData: res.data });
+          const toWords = new ToWords();
+          let words = toWords.convert(
+            Number(res.data?.data?.applied_charges?.grandtotal),
+            {
+              currency: true,
+            }
+          );
+          this.setState({ wordsNumber: words });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      swal("Enter Values in field");
+    }
   };
   handleBillDownload = (data) => {
     console.log(data);
@@ -748,17 +834,22 @@ class InvoiceGenerator extends React.Component {
                   Generate invoice
                 </h1>
               </Col>
-              {/* <Col>
+
+              {this.state.Mergebilllength > 1 ? (
+                <Col>
                   <Button
-                    style={{ marginRight: "-22rem" }}
+                    // style={{ marginRight: "-22rem" }}
                     className=" btn btn-danger float-right"
-                    onClick={() =>
-                      history.push("/app/freshlist/subcategory/SubCategoryList")
-                    }
+                    // onClick={() =>
+                    // history.push("/app/freshlist/subcategory/SubCategoryList")
+                    // }
+                    onClick={this.MergeBillNow}
                   >
-                    Back
+                    Merge Bill
                   </Button>
-                </Col> */}
+                </Col>
+              ) : null}
+
               {/* <Col>
                 <Route
                   render={({ history }) => (
@@ -882,43 +973,56 @@ class InvoiceGenerator extends React.Component {
                 <div style={{ width: "100%" }} className="">
                   <InvoicGenerator
                     PrintData={this.state.PrintData}
+                    Applied_Charges={this.state.Applied_Charges}
+                    AllbillMerged={this.state.AllbillMerged}
                     wordsNumber={this.state.wordsNumber}
                     sgst={this.state.sgst}
                     cgst={this.state.cgst}
                     deliveryCharges={this.state.deliveryCharges}
                     otherCharges={this.state.otherCharges}
+                    discount={this.state.discount}
+                    AddedBill={AddedBill}
                   />
                 </div>
               </>
             ) : (
               <>
                 <div style={{ width: "100%" }} className="">
-                  <Form onSubmit={() => this.handleSubmit()}>
-                    <Row>
+                  <Form onSubmit={(e) => this.handleSubmit(e)}>
+                    <Row className="main div heading px-3 py-3">
                       <Col lg="6" className="mb-2">
                         <Label>SGST</Label>
-                        <Input
+                        <select
                           required
-                          type="number"
-                          name="sgst"
-                          placeholder="Enter SGST"
+                          className="form-control"
                           value={this.state.sgst}
                           onChange={this.changeHandler}
-                        ></Input>
+                          name="sgst"
+                        >
+                          <option value="not selected">--Select--</option>
+                          <option value="5">5%</option>
+                          <option value="9">9%</option>
+                          <option value="12">12%</option>
+                        </select>
                       </Col>
                       <Col lg="6" className="mb-2">
                         <Label>CGST</Label>
-                        <Input
+                        <select
                           required
-                          type="number"
+                          className="form-control"
                           name="cgst"
                           placeholder="Enter CGST"
                           value={this.state.cgst}
                           onChange={this.changeHandler}
-                        ></Input>
+                        >
+                          <option value="not selected">--Select--</option>
+                          <option value="5">5%</option>
+                          <option value="9">9%</option>
+                          <option value="12">12%</option>
+                        </select>
                       </Col>
                       <Col lg="6">
-                        <Label>Other Charges</Label>
+                        <Label className="mt-2">Other Charges</Label>
                         <Input
                           type="number"
                           name="otherCharges"
@@ -928,7 +1032,7 @@ class InvoiceGenerator extends React.Component {
                         ></Input>
                       </Col>
                       <Col lg="6">
-                        <Label>Delivery Charges</Label>
+                        <Label className="mt-2">Delivery Charges</Label>
                         <Input
                           type="number"
                           name="deliveryCharges"
@@ -937,10 +1041,24 @@ class InvoiceGenerator extends React.Component {
                           onChange={this.changeHandler}
                         ></Input>
                       </Col>
-                      <Col lg="3" className="mt-2">
-                        <Button color="primary" type="submit">
-                          Submit
-                        </Button>
+                      <Col lg="6">
+                        <Label className="mt-2">Discount </Label>
+                        <Input
+                          type="number"
+                          name="discount"
+                          placeholder="Enter discount value"
+                          value={this.state.discount}
+                          onChange={this.changeHandler}
+                        ></Input>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col lg="12" className="mt-2 mb-2">
+                        <div className="d-flex justify-content-center">
+                          <Button color="primary" type="submit">
+                            Submit
+                          </Button>
+                        </div>
                       </Col>
                     </Row>
                   </Form>

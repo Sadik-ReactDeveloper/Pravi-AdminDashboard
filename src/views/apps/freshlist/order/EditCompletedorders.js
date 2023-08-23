@@ -84,20 +84,23 @@ class EditPlaceOrder extends React.Component {
         filter: true,
         width: 160,
         cellRendererFramework: (params) => {
-          return params.data?.order_status === "Completed" ? (
+          return params.data?.inventory_status === "Completed" ? (
             <div className="badge badge-pill badge-success">Completed</div>
-          ) : params.data?.order_status === "Pending" ? (
+          ) : params.data?.inventory_status === "Pending" ? (
             <div className="badge badge-pill badge-warning">
-              {params.data?.order_status}
+              {params.data?.inventory_status}
             </div>
-          ) : params.data?.order_status === "Rejected" ? (
+          ) : params.data?.inventory_status === "Rejected" ? (
             <div className="badge badge-pill bg-primary">Rejected</div>
-          ) : params.data?.order_status === "Cancelled" ? (
+          ) : params.data?.inventory_status === "Cancelled" ? (
             <div className="badge badge-pill bg-danger">
-              {params.data.order_status}
+              {params.data.inventory_status}
             </div>
-          ) : params.data?.order_status === "orderreceived" ? (
-            <div className="badge badge-pill bg-success">Order Received</div>
+          ) : params.data?.inventory_status === "verified" ? (
+            <div className="badge badge-pill bg-success">
+              {" "}
+              {params.data.inventory_status}
+            </div>
           ) : null;
         },
       },

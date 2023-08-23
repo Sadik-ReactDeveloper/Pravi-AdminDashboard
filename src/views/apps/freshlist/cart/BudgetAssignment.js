@@ -60,6 +60,9 @@ class BudgetAssignment extends React.Component {
         filter: true,
       },
       {
+        // headerName: `${
+        //   this.state.RoleDefine === "Super Admin" ? "TopUp" : "Amount"
+        // }`,
         headerName: "TopUp",
         field: "username",
         filter: true,
@@ -267,38 +270,42 @@ class BudgetAssignment extends React.Component {
                     Remaining Budget-5000
                   </h5>
                 </Col> */}
-              {this.state.IsTopup == false ? (
+              {this.state.RoleDefine === "User" ? (
                 <>
-                  <Col>
-                    <Button
-                      color="primary"
-                      className="float-right"
-                      onClick={this.handleTopup}
-                    >
-                      TopUp Request
-                    </Button>
-                  </Col>
+                  {this.state.IsTopup == false ? (
+                    <>
+                      <Col>
+                        <Button
+                          color="primary"
+                          className="float-right"
+                          onClick={this.handleTopup}
+                        >
+                          TopUp Request
+                        </Button>
+                      </Col>
+                    </>
+                  ) : (
+                    <>
+                      <Col>
+                        <Input
+                          className="form-control"
+                          type="number"
+                          placeholder="Enter Top up"
+                        />
+                      </Col>
+                      <Col>
+                        <Button
+                          className="float-right"
+                          color="primary"
+                          onClick={this.handSubmit}
+                        >
+                          Submit
+                        </Button>
+                      </Col>
+                    </>
+                  )}
                 </>
-              ) : (
-                <>
-                  <Col>
-                    <Input
-                      className="form-control"
-                      type="number"
-                      placeholder="Enter Top up"
-                    />
-                  </Col>
-                  <Col>
-                    <Button
-                      className="float-right"
-                      color="primary"
-                      onClick={this.handSubmit}
-                    >
-                      Submit
-                    </Button>
-                  </Col>
-                </>
-              )}
+              ) : null}
             </Row>
             {/* <Row className="m-2">
               <Col>

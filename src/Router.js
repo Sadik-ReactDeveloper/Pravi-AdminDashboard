@@ -203,6 +203,9 @@ const editPlaceorder = lazy(() =>
 const EditCompletedorders = lazy(() =>
   import("./views/apps/freshlist/order/EditCompletedorders")
 );
+const ViewoneInvoiceRegen = lazy(() =>
+  import("./views/apps/freshlist/order/ViewoneInvoiceRege")
+);
 const ViewOneOrder = lazy(() =>
   import("./views/apps/freshlist/order/ViewOneOrder")
 );
@@ -1010,6 +1013,10 @@ class AppRouter extends React.Component {
           <AppRoute
             path="/app/freshlist/order/EditCompletedorders/:id"
             component={EditCompletedorders}
+          />
+          <AppRoute
+            path="/app/freshlist/order/ViewoneInvoiceRegen"
+            component={ViewoneInvoiceRegen}
           />
           <AppRoute
             path="/app/freshlist/order/ViewOneOrder/:id"

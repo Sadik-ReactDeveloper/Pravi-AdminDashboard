@@ -29,7 +29,7 @@ import { ToWords } from "to-words";
 import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
 import swal from "sweetalert";
-// import AnalyticsDashboard from "../../../dashboard/analytics/AnalyticsDashboard";
+import AnalyticsDashboard from "../../../dashboard/analytics/AnalyticsDashboard";
 import { Route, Link } from "react-router-dom";
 import { AiOutlineDownload } from "react-icons/ai";
 import InvoiceGenerator from "../subcategory/InvoiceGenerator1";
@@ -54,7 +54,7 @@ const toWords = new ToWords({
     },
   },
 });
-class ViewOneOrder extends React.Component {
+class ViewoneInvoiceRege extends React.Component {
   state = {
     modal: false,
     PrintData: {},
@@ -78,32 +78,32 @@ class ViewOneOrder extends React.Component {
         width: 80,
         filter: true,
       },
-      {
-        headerName: "Status",
-        field: "order_status",
-        filter: true,
-        width: 160,
-        cellRendererFramework: (params) => {
-          return params.data?.inventory_status === "Completed" ? (
-            <div className="badge badge-pill badge-success">Completed</div>
-          ) : params.data?.inventory_status === "Pending" ? (
-            <div className="badge badge-pill badge-warning">
-              {params.data?.inventory_status}
-            </div>
-          ) : params.data?.inventory_status === "Rejected" ? (
-            <div className="badge badge-pill bg-primary">Rejected</div>
-          ) : params.data?.inventory_status === "Cancelled" ? (
-            <div className="badge badge-pill bg-danger">
-              {params.data.inventory_status}
-            </div>
-          ) : params.data?.inventory_status === "verified" ? (
-            <div className="badge badge-pill bg-success">
-              {" "}
-              {params.data.inventory_status}
-            </div>
-          ) : null;
-        },
-      },
+      //   {
+      //     headerName: "Status",
+      //     field: "order_status",
+      //     filter: true,
+      //     width: 160,
+      //     cellRendererFramework: (params) => {
+      //       return params.data?.inventory_status === "Completed" ? (
+      //         <div className="badge badge-pill badge-success">Completed</div>
+      //       ) : params.data?.inventory_status === "Pending" ? (
+      //         <div className="badge badge-pill badge-warning">
+      //           {params.data?.inventory_status}
+      //         </div>
+      //       ) : params.data?.inventory_status === "Rejected" ? (
+      //         <div className="badge badge-pill bg-primary">Rejected</div>
+      //       ) : params.data?.inventory_status === "Cancelled" ? (
+      //         <div className="badge badge-pill bg-danger">
+      //           {params.data.inventory_status}
+      //         </div>
+      //       ) : params.data?.inventory_status === "verified" ? (
+      //         <div className="badge badge-pill bg-success">
+      //           {" "}
+      //           {params.data.inventory_status}
+      //         </div>
+      //       ) : null;
+      //     },
+      //   },
       {
         headerName: "product_id",
         field: "product_id",
@@ -712,38 +712,25 @@ class ViewOneOrder extends React.Component {
     return swal("Success!", "Submitted SuccessFully!", "success");
   };
 
-  handleBillDownload = (data) => {
-    console.log(data);
-    this.setState({ PrintData: data });
-    // console.log("object");
-    this.toggleModal();
-  };
-  toggleModal = () => {
-    this.setState((prevState) => ({
-      modal: !prevState.modal,
-    }));
-  };
+  //   handleBillDownload = (data) => {
+  //     console.log(data);
+  //     this.setState({ PrintData: data });
+  //     // console.log("object");
+  //     this.toggleModal();
+  //   };
+  //   toggleModal = () => {
+  //     this.setState((prevState) => ({
+  //       modal: !prevState.modal,
+  //     }));
+  //   };
 
   async componentDidMount() {
-    let { id } = this.props.match.params;
-
-    const toWords = new ToWords();
-    let words = toWords.convert(4520.36, { currency: true });
-    console.log(words);
+    let data = this.props?.location.state;
+    console.log(data);
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
-
-    const formdata = new FormData();
-    formdata.append("order_id", id);
-    await axiosConfig
-      .post(`/order_detail`, formdata)
-      .then((res) => {
-        console.log(res.data.data);
-        let rowData = res?.data?.data;
-        this.setState({ rowData });
-      })
-      .catch((err) => {
-        console.log(err?.response);
-      });
+    if (data?.allproducts) {
+      this.setState({ rowData: data?.allproducts });
+    }
 
     let newparmisson = pageparmission?.role?.find(
       (value) => value?.pageName === "Place Order"
@@ -759,11 +746,6 @@ class ViewOneOrder extends React.Component {
     this.setState({
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
-
-    // await axiosConfig.get("/admin/allorder_list").then((response) => {
-
-    // console.log(newparmisson?.permission.includes("Create"));
-    // });
   }
 
   async runthisfunction(id) {
@@ -888,7 +870,7 @@ class ViewOneOrder extends React.Component {
             <Row className="m-2">
               <Col>
                 <h1 col-sm-6 className="float-left">
-                  ViewOne Order
+                  ViewOne Merge Bills
                   {/* <InvoiceGenerator PrintData={this.state.PrintData} /> */}
                 </h1>
               </Col>
@@ -898,9 +880,10 @@ class ViewOneOrder extends React.Component {
                     <Button
                       className=" float-right"
                       color="primary"
-                      onClick={
-                        () => history.push("/app/freshlist/order/pending")
-                        // history.push("/app/freshlist/order/addOrder")
+                      onClick={() =>
+                        history.push(
+                          "/app/freshlist/subcategory/inVoiceRegenerator"
+                        )
                       }
                     >
                       Back
@@ -1002,7 +985,7 @@ class ViewOneOrder extends React.Component {
             </CardBody>
           </Card>
         </Col>
-        <Modal
+        {/* <Modal
           isOpen={this.state.modal}
           toggle={this.toggleModal}
           className={this.props.className}
@@ -1014,9 +997,9 @@ class ViewOneOrder extends React.Component {
               <InvoiceGenerator PrintData={this.state.PrintData} />
             </div>
           </ModalBody>
-        </Modal>
+        </Modal> */}
       </Row>
     );
   }
 }
-export default ViewOneOrder;
+export default ViewoneInvoiceRege;
