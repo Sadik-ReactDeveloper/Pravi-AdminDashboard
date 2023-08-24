@@ -42,145 +42,395 @@ class paymentcompleted extends React.Component {
         headerName: "S.No",
         valueGetter: "node.rowIndex + 1",
         field: "node.rowIndex + 1",
-        width: 100,
+        width: 80,
         filter: true,
-      },
-      {
-        headerName: "Image",
-        field: "image",
-        filter: true,
-        width: 100,
-        cellRendererFramework: (params) => {
-          return (
-            <img
-              className=" rounded-circle mr-50"
-              src={params.data.image}
-              alt="user avatar"
-              height="40"
-              width="40"
-            />
-          );
-        },
-      },
-      {
-        headerName: "Name",
-        field: "subcategory_name",
-        filter: true,
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center">
-              <span>{params.data.subcategory_name}</span>
-            </div>
-          );
-        },
       },
 
       {
-        headerName: "Category",
-        field: "category.category_name",
+        headerName: "Orderid",
+        field: "order_ids",
         filter: true,
+        resizable: true,
+        width: 120,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params?.data?.order_ids}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      // {
+      //   headerName: "Invoice",
+      //   field: "invoice",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center justify-content-center cursor-pointer">
+      //         <div>
+      //           <span>
+      //             <AiOutlineDownload
+      //               onClick={() => this.handleBillDownload(params.data)}
+      //               fill="green"
+      //               size="30px"
+      //             />
+      //           </span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      {
+        headerName: "created_date",
+        field: "created_date",
+        filter: true,
+        resizable: true,
         width: 150,
         cellRendererFramework: (params) => {
           return (
-            <div className="d-flex align-items-center">
-              <span>{params.data.category?.category_name}</span>
+            <div className="d-flex align-items-center justify-content-center cursor-pointer">
+              <div>
+                <span>{params?.data?.created_date}</span>
+              </div>
             </div>
           );
         },
       },
       {
-        headerName: "Type",
-        field: "type",
+        headerName: "Suppliername",
+        field: "supplier_name",
         filter: true,
-        width: 150,
+        resizable: true,
+        width: 210,
         cellRendererFramework: (params) => {
           return (
-            <div className="d-flex align-items-center">
-              <span>{params.data?.type}</span>
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.orders[0]?.supplier_name}</span>
+              </div>
             </div>
           );
         },
       },
-      {
-        headerName: "Feature",
-        field: "feature",
-        filter: true,
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center">
-              <span>{params.data?.feature}</span>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "CGST",
+      //   field: "totcgst",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 210,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.totcgst}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "SGST",
+      //   field: "totsgst",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 210,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.totsgst}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "discount_value",
+      //   field: "discount_value",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 210,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.discount_value}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "other_charges",
+      //   field: "other_charges",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 210,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.other_charges}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Discount",
+      //   field: "discount_value",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 210,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.discount_value}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
 
       {
-        headerName: "Status",
-        field: "status",
+        headerName: "Grandtotal",
+        field: "grandtotal",
         filter: true,
-        width: 150,
-        cellRendererFramework: (params) => {
-          return params.value === "Active" ? (
-            <div className="badge badge-pill badge-success">
-              {params.data.status}
-            </div>
-          ) : params.value === "Inactive" ? (
-            <div className="badge badge-pill badge-warning">
-              {params.data.status}
-            </div>
-          ) : null;
-        },
-      },
-      {
-        headerName: "Actions",
-        field: "sortorder",
-        field: "transactions",
-        width: 150,
+        resizable: true,
+        width: 160,
         cellRendererFramework: (params) => {
           return (
-            <div className="actions cursor-pointer">
-              {/* <Eye
-                                className="mr-50"
-                                size="25px"
-                                color="green"
-                                onClick={() =>
-                                    history.push(`/app/customer/viewCustomer/${params.data._id}`)}
-                            /> */}
-              <Route
-                render={({ history }) => (
-                  <Edit
-                    className="mr-50"
-                    size="25px"
-                    color="blue"
-                    onClick={() =>
-                      history.push(
-                        `/app/freshlist/subcategory/editSubCategory/${params.data._id}`
-                      )
-                    }
-                  />
-                )}
-              />
-              <Route
-                render={({ history }) => (
-                  <Trash2
-                    className="mr-50"
-                    size="25px"
-                    color="red"
-                    onClick={() => {
-                      let selectedData = this.gridApi.getSelectedRows();
-                      this.runthisfunction(params.data._id);
-                      this.gridApi.updateRowData({ remove: selectedData });
-                    }}
-                  />
-                )}
-              />
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.grandtotal}</span>
+              </div>
             </div>
           );
         },
       },
+      {
+        headerName: "Remaining",
+        field: "remaining_amt",
+        filter: true,
+        resizable: true,
+        width: 160,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.remaining_amt}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      // {
+      //   headerName: "Add Payment",
+      //   field: "category.category_name",
+      //   filter: true,
+      //   width: 300,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div
+      //         style={{ padding: "6px 0px" }}
+      //         className="d-flex align-items-center custominputbox"
+      //       >
+      //         <input
+      //           type="text"
+      //           className="form-control"
+      //           placeholder="Enter Amount"
+      //           onChange={(e) => {
+      //             this.setState({ Addmoney: e.target.value });
+      //           }}
+      //         />
+      //         <Button
+      //           style={{
+      //             position: "absolute",
+      //             right: "26px",
+      //             padding: "11px 11px",
+      //           }}
+      //           size="sm"
+      //           onClick={(e) => this.handleAddMoney(e, params?.data)}
+      //           color="primary"
+      //         >
+      //           add
+      //         </Button>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Add Now",
+      //   field: "type",
+      //   filter: true,
+      //   width: 210,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div
+      //         style={{ padding: "6px 0px" }}
+      //         className="d-flex align-items-center custombutton"
+      //       >
+      //         <Button
+      //           size="sm"
+      //           onClick={(e) => this.handleAddMoney(e, params?.data)}
+      //           color="primary"
+      //         >
+      //           ADD Payment
+      //         </Button>
+      //       </div>
+      //     );
+      //   },
+      // },
     ],
+    // columnDefs: [
+    //   {
+    //     headerName: "S.No",
+    //     valueGetter: "node.rowIndex + 1",
+    //     field: "node.rowIndex + 1",
+    //     width: 100,
+    //     filter: true,
+    //   },
+    //   {
+    //     headerName: "Image",
+    //     field: "image",
+    //     filter: true,
+    //     width: 100,
+    //     cellRendererFramework: (params) => {
+    //       return (
+    //         <img
+    //           className=" rounded-circle mr-50"
+    //           src={params.data.image}
+    //           alt="user avatar"
+    //           height="40"
+    //           width="40"
+    //         />
+    //       );
+    //     },
+    //   },
+    //   {
+    //     headerName: "Name",
+    //     field: "subcategory_name",
+    //     filter: true,
+    //     width: 150,
+    //     cellRendererFramework: (params) => {
+    //       return (
+    //         <div className="d-flex align-items-center">
+    //           <span>{params.data.subcategory_name}</span>
+    //         </div>
+    //       );
+    //     },
+    //   },
+
+    //   {
+    //     headerName: "Category",
+    //     field: "category.category_name",
+    //     filter: true,
+    //     width: 150,
+    //     cellRendererFramework: (params) => {
+    //       return (
+    //         <div className="d-flex align-items-center">
+    //           <span>{params.data.category?.category_name}</span>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    //   {
+    //     headerName: "Type",
+    //     field: "type",
+    //     filter: true,
+    //     width: 150,
+    //     cellRendererFramework: (params) => {
+    //       return (
+    //         <div className="d-flex align-items-center">
+    //           <span>{params.data?.type}</span>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    //   {
+    //     headerName: "Feature",
+    //     field: "feature",
+    //     filter: true,
+    //     width: 150,
+    //     cellRendererFramework: (params) => {
+    //       return (
+    //         <div className="d-flex align-items-center">
+    //           <span>{params.data?.feature}</span>
+    //         </div>
+    //       );
+    //     },
+    //   },
+
+    //   {
+    //     headerName: "Status",
+    //     field: "status",
+    //     filter: true,
+    //     width: 150,
+    //     cellRendererFramework: (params) => {
+    //       return params.value === "Active" ? (
+    //         <div className="badge badge-pill badge-success">
+    //           {params.data.status}
+    //         </div>
+    //       ) : params.value === "Inactive" ? (
+    //         <div className="badge badge-pill badge-warning">
+    //           {params.data.status}
+    //         </div>
+    //       ) : null;
+    //     },
+    //   },
+    //   {
+    //     headerName: "Actions",
+    //     field: "sortorder",
+    //     field: "transactions",
+    //     width: 150,
+    //     cellRendererFramework: (params) => {
+    //       return (
+    //         <div className="actions cursor-pointer">
+    //           {/* <Eye
+    //                             className="mr-50"
+    //                             size="25px"
+    //                             color="green"
+    //                             onClick={() =>
+    //                                 history.push(`/app/customer/viewCustomer/${params.data._id}`)}
+    //                         /> */}
+    //           <Route
+    //             render={({ history }) => (
+    //               <Edit
+    //                 className="mr-50"
+    //                 size="25px"
+    //                 color="blue"
+    //                 onClick={() =>
+    //                   history.push(
+    //                     `/app/freshlist/subcategory/editSubCategory/${params.data._id}`
+    //                   )
+    //                 }
+    //               />
+    //             )}
+    //           />
+    //           <Route
+    //             render={({ history }) => (
+    //               <Trash2
+    //                 className="mr-50"
+    //                 size="25px"
+    //                 color="red"
+    //                 onClick={() => {
+    //                   let selectedData = this.gridApi.getSelectedRows();
+    //                   this.runthisfunction(params.data._id);
+    //                   this.gridApi.updateRowData({ remove: selectedData });
+    //                 }}
+    //               />
+    //             )}
+    //           />
+    //         </div>
+    //       );
+    //     },
+    //   },
+    // ],
   };
 
   async componentDidMount() {
@@ -207,12 +457,17 @@ class paymentcompleted extends React.Component {
 
     const formdata = new FormData();
     formdata.append("user_id", pageparmission?.Userinfo?.id);
-    formdata.append("role", pageparmission?.Userinfo?.role);
-    await axiosConfig.get(`/admin/getalldata`).then((response) => {
-      let rowData = response.data.data;
-      console.log(rowData);
-      this.setState({ rowData });
-    });
+    // formdata.append("role", pageparmission?.Userinfo?.role);
+    await axiosConfig
+      .post(`/getAllGenerateInvoiceView`, formdata)
+      .then((res) => {
+        console.log(res.data.data);
+        let rowData = res.data.data;
+        this.setState({ rowData });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
   async runthisfunction(id) {
     console.log(id);
