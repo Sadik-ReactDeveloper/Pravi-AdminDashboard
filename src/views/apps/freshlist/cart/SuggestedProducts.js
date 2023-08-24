@@ -29,8 +29,9 @@ class SuggestedProducts extends React.Component {
   state = {
     rowData: [],
     userDataList: [],
-    user: "",
     mainRole: "",
+    userid: "",
+    BudgetValue: "",
     paginationPageSize: 20,
     currenPageSize: "",
     getPageSize: "",
@@ -173,19 +174,34 @@ class SuggestedProducts extends React.Component {
     this.setState({
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
-    console.log(newparmisson?.permission.includes("View"));
-    console.log(newparmisson?.permission.includes("Create"));
-    console.log(newparmisson?.permission.includes("Edit"));
-    console.log(newparmisson?.permission.includes("Delete"));
 
     const formdata = new FormData();
-    formdata.append("user_id", pageparmission?.Userinfo?.id);
     formdata.append("role", pageparmission?.Userinfo?.role);
-    axiosConfig.post("/getuserlist", formdata).then((response) => {
-      let userDataList = response?.data?.data?.users;
-      console.log(userDataList);
-      this.setState({ userDataList });
-    });
+    formdata.append("user_id", pageparmission?.Userinfo?.id);
+
+    // axiosConfig
+    //   .post("/getlistofBudget", formdata)
+    //   .then((response) => {
+    //     console.log(response.data.data);
+    //     let rowData = response?.data?.data;
+    //     this.setState({ rowData });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+
+    const data = new FormData();
+    data.append("user_id", pageparmission?.Userinfo?.id);
+    data.append("role", "User");
+    axiosConfig
+      .post("/getUserlistforBudget", data)
+      .then((response) => {
+        let userDataList = response?.data?.data?.users;
+        this.setState({ userDataList });
+      })
+      .catch((err) => {
+        // console.log(err);
+      });
   }
   onGridReady = (params) => {
     this.gridApi = params.api;
@@ -211,61 +227,74 @@ class SuggestedProducts extends React.Component {
   render() {
     const { rowData, columnDefs, defaultColDef } = this.state;
     return (
-      console.log(rowData),
-      (
-        <Row className="app-user-list">
-          <Col sm="12">
-            <Card>
-              <Row className="m-2">
-                <Col>
-                  <h1 sm="4" className="">
-                    Budget List
-                  </h1>
-                </Col>
-                {this.state.mainRole === "Super Admin" && (
-                  <>
-                    <Col>
-                      <label className="selectClient">Assign A Budget</label>
-                      <input className="form-control" type="number" />
-                    </Col>
-                    <Col>
-                      <FormGroup>
-                        <Label>Select A User</Label>
+      // console.log(rowData),
+      <Row className="app-user-list">
+        <Col sm="12">
+          <Card>
+            <Row className="m-2">
+              <Col>
+                <h1 sm="4" className="">
+                  Budget List
+                </h1>
+              </Col>
+              {this.state.mainRole === "Super Admin" && (
+                <>
+                  <Col>
+                    <label className="selectClient">Assign A Budget</label>
+                    <input
+                      onKeyDown={(e) =>
+                        ["e", "E", "+", "-"].includes(e.key) &&
+                        e.preventDefault()
+                      }
+                      onChange={(e) => {
+                        this.setState({ BudgetValue: e.target.value });
+                      }}
+                      className="form-control"
+                      type="number"
+                    />
+                  </Col>
+                  <Col>
+                    <FormGroup>
+                      <Label>Select A User</Label>
 
-                        <select
-                          required
-                          onChange={(e) =>
-                            this.setState({ user: e.target.value })
-                          }
-                          className="form-control"
-                          name="Select"
-                          id="Select"
-                        >
-                          <option value="">Select A User</option>
-                          {this.state.userDataList &&
-                            this.state.userDataList?.map((val, i) => (
-                              <option key={i} value={val?.id}>
-                                {val?.username}
-                              </option>
-                            ))}
-                        </select>
-                      </FormGroup>
-                    </Col>
-                    <Col>
-                      <Button color="primary" className="mt-1">
-                        Submit
-                      </Button>
-                    </Col>
-                  </>
-                )}
-              </Row>
+                      <select
+                        required
+                        onChange={(e) =>
+                          this.setState({ userid: e.target.value })
+                        }
+                        className="form-control"
+                        name="Select"
+                        id="Select"
+                      >
+                        <option value="">--Select A User--</option>
+                        {this.state.userDataList &&
+                          this.state.userDataList?.map((val, i) => (
+                            <option key={i} value={val?.id}>
+                              {val?.username}
+                            </option>
+                          ))}
+                      </select>
+                    </FormGroup>
+                  </Col>
+                  <Col>
+                    <Button
+                      title="Select user and Amount for Submit"
+                      color="primary"
+                      className="custom-button mt-1"
+                    >
+                      Submit
+                    </Button>
+                  </Col>
+                </>
+              )}
+            </Row>
 
-              {/* <Col>
+            {/* <Col>
                   <Button color="primary" className="mt-1">
                     Assign Budget
                   </Button>
                 </Col> */}
-              {/* <Col>
+            {/* <Col>
                   <input className="form-control mt-1" type="number" />
                 </Col>
                 <Col>
@@ -274,108 +303,105 @@ class SuggestedProducts extends React.Component {
                   </Button>
                 </Col> */}
 
-              {/* <Col>
+            {/* <Col>
                   <Button color="primary" className="mt-1">
                     Submit
                   </Button>
                 </Col>
               </Row> */}
-              <CardBody>
-                {this.state.rowData === null ? null : (
-                  <div className="ag-theme-material w-100 my-2 ag-grid-table">
-                    <div className="d-flex flex-wrap justify-content-between align-items-center">
-                      <div className="mb-1">
-                        <UncontrolledDropdown className="p-1 ag-dropdown">
-                          <DropdownToggle tag="div">
-                            {this.gridApi
-                              ? this.state.currenPageSize
-                              : "" * this.state.getPageSize -
-                                (this.state.getPageSize - 1)}{" "}
-                            -{" "}
-                            {this.state.rowData.length -
-                              this.state.currenPageSize *
-                                this.state.getPageSize >
-                            0
-                              ? this.state.currenPageSize *
-                                this.state.getPageSize
-                              : this.state.rowData.length}{" "}
-                            of {this.state.rowData.length}
-                            <ChevronDown className="ml-50" size={15} />
-                          </DropdownToggle>
-                          <DropdownMenu right>
-                            <DropdownItem
-                              tag="div"
-                              onClick={() => this.filterSize(20)}
-                            >
-                              20
-                            </DropdownItem>
-                            <DropdownItem
-                              tag="div"
-                              onClick={() => this.filterSize(50)}
-                            >
-                              50
-                            </DropdownItem>
-                            <DropdownItem
-                              tag="div"
-                              onClick={() => this.filterSize(100)}
-                            >
-                              100
-                            </DropdownItem>
-                            <DropdownItem
-                              tag="div"
-                              onClick={() => this.filterSize(134)}
-                            >
-                              134
-                            </DropdownItem>
-                          </DropdownMenu>
-                        </UncontrolledDropdown>
-                      </div>
-                      <div className="d-flex flex-wrap justify-content-between mb-1">
-                        <div className="table-input mr-1">
-                          <Input
-                            placeholder="search..."
-                            onChange={(e) =>
-                              this.updateSearchQuery(e.target.value)
-                            }
-                            value={this.state.value}
-                          />
-                        </div>
-                        <div className="export-btn">
-                          <Button.Ripple
-                            color="primary"
-                            onClick={() => this.gridApi.exportDataAsCsv()}
+            <CardBody>
+              {this.state.rowData === null ? null : (
+                <div className="ag-theme-material w-100 my-2 ag-grid-table">
+                  <div className="d-flex flex-wrap justify-content-between align-items-center">
+                    <div className="mb-1">
+                      <UncontrolledDropdown className="p-1 ag-dropdown">
+                        <DropdownToggle tag="div">
+                          {this.gridApi
+                            ? this.state.currenPageSize
+                            : "" * this.state.getPageSize -
+                              (this.state.getPageSize - 1)}{" "}
+                          -{" "}
+                          {this.state.rowData.length -
+                            this.state.currenPageSize * this.state.getPageSize >
+                          0
+                            ? this.state.currenPageSize * this.state.getPageSize
+                            : this.state.rowData.length}{" "}
+                          of {this.state.rowData.length}
+                          <ChevronDown className="ml-50" size={15} />
+                        </DropdownToggle>
+                        <DropdownMenu right>
+                          <DropdownItem
+                            tag="div"
+                            onClick={() => this.filterSize(20)}
                           >
-                            Export as CSV
-                          </Button.Ripple>
-                        </div>
+                            20
+                          </DropdownItem>
+                          <DropdownItem
+                            tag="div"
+                            onClick={() => this.filterSize(50)}
+                          >
+                            50
+                          </DropdownItem>
+                          <DropdownItem
+                            tag="div"
+                            onClick={() => this.filterSize(100)}
+                          >
+                            100
+                          </DropdownItem>
+                          <DropdownItem
+                            tag="div"
+                            onClick={() => this.filterSize(134)}
+                          >
+                            134
+                          </DropdownItem>
+                        </DropdownMenu>
+                      </UncontrolledDropdown>
+                    </div>
+                    <div className="d-flex flex-wrap justify-content-between mb-1">
+                      <div className="table-input mr-1">
+                        <Input
+                          placeholder="search..."
+                          onChange={(e) =>
+                            this.updateSearchQuery(e.target.value)
+                          }
+                          value={this.state.value}
+                        />
+                      </div>
+                      <div className="export-btn">
+                        <Button.Ripple
+                          color="primary"
+                          onClick={() => this.gridApi.exportDataAsCsv()}
+                        >
+                          Export as CSV
+                        </Button.Ripple>
                       </div>
                     </div>
-                    <ContextLayout.Consumer>
-                      {(context) => (
-                        <AgGridReact
-                          gridOptions={{}}
-                          rowSelection="multiple"
-                          defaultColDef={defaultColDef}
-                          columnDefs={columnDefs}
-                          rowData={rowData}
-                          onGridReady={this.onGridReady}
-                          colResizeDefault={"shift"}
-                          animateRows={true}
-                          floatingFilter={false}
-                          pagination={true}
-                          paginationPageSize={this.state.paginationPageSize}
-                          pivotPanelShow="always"
-                          enableRtl={context.state.direction === "rtl"}
-                        />
-                      )}
-                    </ContextLayout.Consumer>
                   </div>
-                )}
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-      )
+                  <ContextLayout.Consumer>
+                    {(context) => (
+                      <AgGridReact
+                        gridOptions={{}}
+                        rowSelection="multiple"
+                        defaultColDef={defaultColDef}
+                        columnDefs={columnDefs}
+                        rowData={rowData}
+                        onGridReady={this.onGridReady}
+                        colResizeDefault={"shift"}
+                        animateRows={true}
+                        floatingFilter={false}
+                        pagination={true}
+                        paginationPageSize={this.state.paginationPageSize}
+                        pivotPanelShow="always"
+                        enableRtl={context.state.direction === "rtl"}
+                      />
+                    )}
+                  </ContextLayout.Consumer>
+                </div>
+              )}
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
     );
   }
 }

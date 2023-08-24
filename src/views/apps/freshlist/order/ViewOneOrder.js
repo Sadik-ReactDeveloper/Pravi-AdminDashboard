@@ -84,6 +84,7 @@ class ViewOneOrder extends React.Component {
         filter: true,
         width: 160,
         cellRendererFramework: (params) => {
+          console.log(params.data);
           return params.data?.inventory_status === "Completed" ? (
             <div className="badge badge-pill badge-success">Completed</div>
           ) : params.data?.inventory_status === "Pending" ? (

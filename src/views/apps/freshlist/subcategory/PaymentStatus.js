@@ -112,7 +112,7 @@ class PaymentStatus extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
-                <span>{params.data?.orders[0]?.supplier_name}</span>
+                <span>{params.data?.orders[0].supplier_name}</span>
               </div>
             </div>
           );
@@ -243,7 +243,8 @@ class PaymentStatus extends React.Component {
               className="d-flex align-items-center custominputbox"
             >
               <input
-                type="text"
+                type="number"
+                onKeyDown={this.blockInvalidChar}
                 className="form-control"
                 placeholder="Enter Amount"
                 onChange={(e) => {
@@ -387,6 +388,8 @@ class PaymentStatus extends React.Component {
   changeHandler = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
+  blockInvalidChar = (e) =>
+    ["e", "E", "+", "-"].includes(e.key) && e.preventDefault();
   handleAddMoney = (e, data) => {
     e.preventDefault();
 

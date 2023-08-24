@@ -13,6 +13,7 @@ import {
   DropdownItem,
   DropdownToggle,
   Button,
+  Badge,
 } from "reactstrap";
 import "../../../../assets/css/main.css";
 import axiosConfig from "../../../../axiosConfig";
@@ -82,40 +83,44 @@ class Pending extends React.Component {
         resizable: true,
         width: 230,
         cellRendererFramework: (params) => {
-          // console.log(params.data?.order_id);
-
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
-                {this.state.Editpermisson && (
-                  <select
-                    // className="form-control"
-                    defaultValue={params.data?.order_status}
-                    onChange={(e) => {
-                      // console.log(e.target.value);
-                      let data = new FormData();
-                      data.append("order_id", params.data?.order_id);
-                      data.append("order_status", e.target.value);
-                      axiosConfig
-                        .post(`/change_order_status`, data)
-                        .then((res) => {
-                          console.log(res?.data.message);
-                          if (res?.data.message) {
-                            this.componentDidMount();
-                            swal("status Updated Succesfully");
-                          }
-                        })
-                        .catch((err) => {
-                          console.log(err);
-                        });
-                    }}
-                    name="changestatus"
-                    id="changeStatus"
-                  >
-                    <option value="NoStatus">--UpdateStatus--</option>
-                    <option value="Approved">Approved</option>
-                    <option value="Rejected">Rejected</option>
-                  </select>
+                {params.data?.order_status === "Completed" ? (
+                  <Badge color="success">Completed</Badge>
+                ) : (
+                  <>
+                    {this.state.Editpermisson && (
+                      <select
+                        // className="form-control"
+                        defaultValue={params.data?.order_status}
+                        onChange={(e) => {
+                          // console.log(e.target.value);
+                          let data = new FormData();
+                          data.append("order_id", params.data?.order_id);
+                          data.append("order_status", e.target.value);
+                          axiosConfig
+                            .post(`/change_order_status`, data)
+                            .then((res) => {
+                              console.log(res?.data.message);
+                              if (res?.data.message) {
+                                this.componentDidMount();
+                                swal("status Updated Succesfully");
+                              }
+                            })
+                            .catch((err) => {
+                              console.log(err);
+                            });
+                        }}
+                        name="changestatus"
+                        id="changeStatus"
+                      >
+                        <option value="NoStatus">--UpdateStatus--</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                      </select>
+                    )}
+                  </>
                 )}
               </div>
             </div>

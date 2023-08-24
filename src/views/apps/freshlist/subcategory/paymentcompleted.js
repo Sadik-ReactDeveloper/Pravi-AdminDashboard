@@ -10,6 +10,7 @@ import {
   DropdownMenu,
   DropdownItem,
   DropdownToggle,
+  Badge,
 } from "reactstrap";
 import axiosConfig from "../../../../axiosConfig";
 import axios from "axios";
@@ -62,6 +63,43 @@ class paymentcompleted extends React.Component {
           );
         },
       },
+      {
+        headerName: "Payment Status",
+        field: "status",
+        filter: true,
+        resizable: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span color="green">
+                  <Badge size="sm" color="success">
+                    {params.data?.status}
+                  </Badge>
+                </span>
+              </div>
+            </div>
+          );
+        },
+      },
+
+      {
+        headerName: "Grandtotal",
+        field: "grandtotal",
+        filter: true,
+        resizable: true,
+        width: 160,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <Badge color="success">{params.data?.grandtotal}</Badge>
+              </div>
+            </div>
+          );
+        },
+      },
       // {
       //   headerName: "Invoice",
       //   field: "invoice",
@@ -100,54 +138,54 @@ class paymentcompleted extends React.Component {
           );
         },
       },
+      // {
+      //   headerName: "Suppliername",
+      //   field: "supplier_name",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 210,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.orders[0]?.supplier_name}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       {
-        headerName: "Suppliername",
-        field: "supplier_name",
+        headerName: "CGST",
+        field: "totcgst",
         filter: true,
         resizable: true,
-        width: 210,
+        width: 150,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
-                <span>{params.data?.orders[0]?.supplier_name}</span>
+                <span>{params.data?.totcgst}</span>
               </div>
             </div>
           );
         },
       },
-      // {
-      //   headerName: "CGST",
-      //   field: "totcgst",
-      //   filter: true,
-      //   resizable: true,
-      //   width: 210,
-      //   cellRendererFramework: (params) => {
-      //     return (
-      //       <div className="d-flex align-items-center cursor-pointer">
-      //         <div>
-      //           <span>{params.data?.totcgst}</span>
-      //         </div>
-      //       </div>
-      //     );
-      //   },
-      // },
-      // {
-      //   headerName: "SGST",
-      //   field: "totsgst",
-      //   filter: true,
-      //   resizable: true,
-      //   width: 210,
-      //   cellRendererFramework: (params) => {
-      //     return (
-      //       <div className="d-flex align-items-center cursor-pointer">
-      //         <div>
-      //           <span>{params.data?.totsgst}</span>
-      //         </div>
-      //       </div>
-      //     );
-      //   },
-      // },
+      {
+        headerName: "SGST",
+        field: "totsgst",
+        filter: true,
+        resizable: true,
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.totsgst}</span>
+              </div>
+            </div>
+          );
+        },
+      },
       // {
       //   headerName: "discount_value",
       //   field: "discount_value",
@@ -164,71 +202,55 @@ class paymentcompleted extends React.Component {
       //     );
       //   },
       // },
-      // {
-      //   headerName: "other_charges",
-      //   field: "other_charges",
-      //   filter: true,
-      //   resizable: true,
-      //   width: 210,
-      //   cellRendererFramework: (params) => {
-      //     return (
-      //       <div className="d-flex align-items-center cursor-pointer">
-      //         <div>
-      //           <span>{params.data?.other_charges}</span>
-      //         </div>
-      //       </div>
-      //     );
-      //   },
-      // },
-      // {
-      //   headerName: "Discount",
-      //   field: "discount_value",
-      //   filter: true,
-      //   resizable: true,
-      //   width: 210,
-      //   cellRendererFramework: (params) => {
-      //     return (
-      //       <div className="d-flex align-items-center cursor-pointer">
-      //         <div>
-      //           <span>{params.data?.discount_value}</span>
-      //         </div>
-      //       </div>
-      //     );
-      //   },
-      // },
+      {
+        headerName: "other_charges",
+        field: "other_charges",
+        filter: true,
+        resizable: true,
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.other_charges}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Discount",
+        field: "discount_value",
+        filter: true,
+        resizable: true,
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.discount_value}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "delivery_charges",
+        field: "delivery_charges",
+        filter: true,
+        resizable: true,
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.delivery_charges}</span>
+              </div>
+            </div>
+          );
+        },
+      },
 
-      {
-        headerName: "Grandtotal",
-        field: "grandtotal",
-        filter: true,
-        resizable: true,
-        width: 160,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.grandtotal}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Remaining",
-        field: "remaining_amt",
-        filter: true,
-        resizable: true,
-        width: 160,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div>
-                <span>{params.data?.remaining_amt}</span>
-              </div>
-            </div>
-          );
-        },
-      },
       // {
       //   headerName: "Add Payment",
       //   field: "category.category_name",
@@ -450,16 +472,12 @@ class paymentcompleted extends React.Component {
     this.setState({
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
-    // console.log(newparmisson?.permission.includes("View"));
-    // console.log(newparmisson?.permission.includes("Create"));
-    // console.log(newparmisson?.permission.includes("Edit"));
-    // console.log(newparmisson?.permission.includes("Delete"));
 
     const formdata = new FormData();
     formdata.append("user_id", pageparmission?.Userinfo?.id);
     // formdata.append("role", pageparmission?.Userinfo?.role);
     await axiosConfig
-      .post(`/getAllGenerateInvoiceView`, formdata)
+      .post(`/getPaymentStatusComplete`, formdata)
       .then((res) => {
         console.log(res.data.data);
         let rowData = res.data.data;
