@@ -728,6 +728,7 @@ class InvoiceGenerator extends React.Component {
               currency: true,
             }
           );
+
           this.setState({ wordsNumber: words });
         })
         .catch((err) => {
@@ -749,6 +750,13 @@ class InvoiceGenerator extends React.Component {
     this.setState((prevState) => ({
       modal: !prevState.modal,
     }));
+  };
+  toggleModalclose = () => {
+    debugger;
+    this.setState({ modal: false });
+    window.location.reload();
+    // AddedBill = [];
+    // console.log(AddedBill);
   };
   changeHandler = (e) => {
     this.setState({ [e.target.name]: e.target.value });
@@ -835,7 +843,7 @@ class InvoiceGenerator extends React.Component {
                 </h1>
               </Col>
 
-              {this.state.Mergebilllength > 1 ? (
+              {this.state.Mergebilllength > 0 ? (
                 <Col>
                   <Button
                     // style={{ marginRight: "-22rem" }}
@@ -845,7 +853,7 @@ class InvoiceGenerator extends React.Component {
                     // }
                     onClick={this.MergeBillNow}
                   >
-                    Merge Bill
+                    Create Invoice
                   </Button>
                 </Col>
               ) : null}
@@ -966,7 +974,9 @@ class InvoiceGenerator extends React.Component {
           className={this.props.className}
           style={{ maxWidth: "1050px" }}
         >
-          <ModalHeader toggle={this.toggleModal}>Download Bill</ModalHeader>
+          <ModalHeader toggle={this.toggleModalclose}>
+            Download Bill
+          </ModalHeader>
           <ModalBody>
             {this.state.ViewBill && this.state.ViewBill ? (
               <>

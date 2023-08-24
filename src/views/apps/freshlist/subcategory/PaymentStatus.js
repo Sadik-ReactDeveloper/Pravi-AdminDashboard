@@ -15,11 +15,12 @@ import axiosConfig from "../../../../axiosConfig";
 import axios from "axios";
 import { ContextLayout } from "../../../../utility/context/Layout";
 import { AgGridReact } from "ag-grid-react";
-import { Edit, Trash2, ChevronDown } from "react-feather";
+import { Eye, Trash2, ChevronDown, Edit, CloudLightning } from "react-feather";
 import { history } from "../../../../history";
 import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
 import { Route } from "react-router-dom";
+import swal from "sweetalert";
 
 class PaymentStatus extends React.Component {
   state = {
@@ -43,183 +44,373 @@ class PaymentStatus extends React.Component {
         headerName: "S.No",
         valueGetter: "node.rowIndex + 1",
         field: "node.rowIndex + 1",
-        width: 100,
+        width: 80,
         filter: true,
       },
+
       {
-        headerName: "Image",
-        field: "image",
+        headerName: "Orderid",
+        field: "order_ids",
         filter: true,
-        width: 100,
+        resizable: true,
+        width: 120,
         cellRendererFramework: (params) => {
           return (
-            <img
-              className=" rounded-circle mr-50"
-              src={params.data.image}
-              alt="user avatar"
-              height="40"
-              width="40"
-            />
-          );
-        },
-      },
-      {
-        headerName: "Name",
-        field: "subcategory_name",
-        filter: true,
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center">
-              <span>{params.data.subcategory_name}</span>
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params?.data?.order_ids}</span>
+              </div>
             </div>
           );
         },
       },
+      // {
+      //   headerName: "Invoice",
+      //   field: "invoice",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center justify-content-center cursor-pointer">
+      //         <div>
+      //           <span>
+      //             <AiOutlineDownload
+      //               onClick={() => this.handleBillDownload(params.data)}
+      //               fill="green"
+      //               size="30px"
+      //             />
+      //           </span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      {
+        headerName: "created_date",
+        field: "created_date",
+        filter: true,
+        resizable: true,
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center justify-content-center cursor-pointer">
+              <div>
+                <span>{params?.data?.created_date}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Suppliername",
+        field: "supplier_name",
+        filter: true,
+        resizable: true,
+        width: 210,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.orders[0]?.supplier_name}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      // {
+      //   headerName: "CGST",
+      //   field: "totcgst",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 210,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.totcgst}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "SGST",
+      //   field: "totsgst",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 210,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.totsgst}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "discount_value",
+      //   field: "discount_value",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 210,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.discount_value}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "other_charges",
+      //   field: "other_charges",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 210,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.other_charges}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Discount",
+      //   field: "discount_value",
+      //   filter: true,
+      //   resizable: true,
+      //   width: 210,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div>
+      //           <span>{params.data?.discount_value}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
 
+      {
+        headerName: "Grandtotal",
+        field: "grandtotal",
+        filter: true,
+        resizable: true,
+        width: 160,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.grandtotal}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Remaining",
+        field: "remaining_amt",
+        filter: true,
+        resizable: true,
+        width: 160,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.remaining_amt}</span>
+              </div>
+            </div>
+          );
+        },
+      },
       {
         headerName: "Add Payment",
         field: "category.category_name",
         filter: true,
-        width: 150,
+        width: 300,
         cellRendererFramework: (params) => {
           return (
-            <div className="d-flex align-items-center">
+            <div
+              style={{ padding: "6px 0px" }}
+              className="d-flex align-items-center custominputbox"
+            >
               <input
                 type="text"
-                placeholder="enter Payament"
-                onClick={(e) => {
+                className="form-control"
+                placeholder="Enter Amount"
+                onChange={(e) => {
                   this.setState({ Addmoney: e.target.value });
                 }}
               />
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Add Now",
-        field: "type",
-        filter: true,
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center">
               <Button
+                style={{
+                  position: "absolute",
+                  right: "26px",
+                  padding: "11px 11px",
+                }}
                 size="sm"
                 onClick={(e) => this.handleAddMoney(e, params?.data)}
                 color="primary"
               >
-                ADD Payment
+                add
               </Button>
             </div>
           );
         },
       },
-      {
-        headerName: "Feature",
-        field: "feature",
-        filter: true,
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center">
-              <span>{params.data?.feature}</span>
-            </div>
-          );
-        },
-      },
-
-      {
-        headerName: "Status",
-        field: "status",
-        filter: true,
-        width: 150,
-        cellRendererFramework: (params) => {
-          return params.value === "Active" ? (
-            <div className="badge badge-pill badge-success">
-              {params.data.status}
-            </div>
-          ) : params.value === "Inactive" ? (
-            <div className="badge badge-pill badge-warning">
-              {params.data.status}
-            </div>
-          ) : null;
-        },
-      },
-      {
-        headerName: "Actions",
-        field: "sortorder",
-        field: "transactions",
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="actions cursor-pointer">
-              {this.state.Viewpermisson && (
-                <Route
-                  render={({ history }) => (
-                    <Eye
-                      className="mr-50"
-                      size="25px"
-                      color="blue"
-                      onClick={() =>
-                        history.push(
-                          `/app/freshlist/subcategory/editSubCategory/${params.data._id}`
-                        )
-                      }
-                    />
-                  )}
-                />
-              )}
-              {this.state.Editpermisson && (
-                <Route
-                  render={({ history }) => (
-                    <Edit
-                      className="mr-50"
-                      size="25px"
-                      color="blue"
-                      onClick={() =>
-                        history.push(
-                          `/app/freshlist/subcategory/editSubCategory/${params.data._id}`
-                        )
-                      }
-                    />
-                  )}
-                />
-              )}
-              {this.state.Deletepermisson && (
-                <Route
-                  render={({ history }) => (
-                    <Trash2
-                      className="mr-50"
-                      size="25px"
-                      color="red"
-                      onClick={() => {
-                        let selectedData = this.gridApi.getSelectedRows();
-                        this.runthisfunction(params.data._id);
-                        this.gridApi.updateRowData({ remove: selectedData });
-                      }}
-                    />
-                  )}
-                />
-              )}
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "Add Now",
+      //   field: "type",
+      //   filter: true,
+      //   width: 210,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div
+      //         style={{ padding: "6px 0px" }}
+      //         className="d-flex align-items-center custombutton"
+      //       >
+      //         <Button
+      //           size="sm"
+      //           onClick={(e) => this.handleAddMoney(e, params?.data)}
+      //           color="primary"
+      //         >
+      //           ADD Payment
+      //         </Button>
+      //       </div>
+      //     );
+      //   },
+      // },
     ],
+    // columnDefs: [
+
+    //   {
+    //     headerName: "Feature",
+    //     field: "feature",
+    //     filter: true,
+    //     width: 150,
+    //     cellRendererFramework: (params) => {
+    //       return (
+    //         <div className="d-flex align-items-center">
+    //           <span>{params.data?.feature}</span>
+    //         </div>
+    //       );
+    //     },
+    //   },
+
+    //   {
+    //     headerName: "Status",
+    //     field: "status",
+    //     filter: true,
+    //     width: 150,
+    //     cellRendererFramework: (params) => {
+    //       return params.value === "Active" ? (
+    //         <div className="badge badge-pill badge-success">
+    //           {params.data.status}
+    //         </div>
+    //       ) : params.value === "Inactive" ? (
+    //         <div className="badge badge-pill badge-warning">
+    //           {params.data.status}
+    //         </div>
+    //       ) : null;
+    //     },
+    //   },
+    //   {
+    //     headerName: "Actions",
+    //     field: "sortorder",
+    //     field: "transactions",
+    //     width: 150,
+    //     cellRendererFramework: (params) => {
+    //       return (
+    //         <div className="actions cursor-pointer">
+    //           {this.state.Viewpermisson && (
+    //             <Route
+    //               render={({ history }) => (
+    //                 <Eye
+    //                   className="mr-50"
+    //                   size="25px"
+    //                   color="blue"
+    //                   onClick={() =>
+    //                     history.push(
+    //                       `/app/freshlist/subcategory/editSubCategory/${params.data._id}`
+    //                     )
+    //                   }
+    //                 />
+    //               )}
+    //             />
+    //           )}
+    //           {this.state.Editpermisson && (
+    //             <Route
+    //               render={({ history }) => (
+    //                 <Edit
+    //                   className="mr-50"
+    //                   size="25px"
+    //                   color="blue"
+    //                   onClick={() =>
+    //                     history.push(
+    //                       `/app/freshlist/subcategory/editSubCategory/${params.data._id}`
+    //                     )
+    //                   }
+    //                 />
+    //               )}
+    //             />
+    //           )}
+    //           {this.state.Deletepermisson && (
+    //             <Route
+    //               render={({ history }) => (
+    //                 <Trash2
+    //                   className="mr-50"
+    //                   size="25px"
+    //                   color="red"
+    //                   onClick={() => {
+    //                     let selectedData = this.gridApi.getSelectedRows();
+    //                     this.runthisfunction(params.data._id);
+    //                     this.gridApi.updateRowData({ remove: selectedData });
+    //                   }}
+    //                 />
+    //               )}
+    //             />
+    //           )}
+    //         </div>
+    //       );
+    //     },
+    //   },
+    // ],
+  };
+  changeHandler = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
   };
   handleAddMoney = (e, data) => {
     e.preventDefault();
-    console.log(data);
+
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
-    const formdata = new FormData();
-    formdata.append("user_id", pageparmission?.Userinfo?.id);
-    formdata.append("role", pageparmission?.Userinfo?.role);
-    //  axiosConfig.get(`/admin/getalldata`).then((response) => {
-    //   let rowData = response.data.data;
-    //   console.log(rowData);
-    //   this.setState({ rowData });
-    // });
+    if (this.state.Addmoney) {
+      const formdata = new FormData();
+      formdata.append("user_id", pageparmission?.Userinfo?.id);
+      formdata.append("invoice_id", data?.invoice_id);
+      formdata.append("amount", this.state.Addmoney);
+      formdata.append("remaining_amt", data?.remaining_amt);
+      axiosConfig
+        .post(`addPaymentStatus`, formdata)
+        .then((response) => {
+          let rowData = response.data;
+          console.log(rowData);
+          swal("Amount Added Successfully");
+          this.componentDidMount();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      swal("Error", "Enter Value first to Add Amount");
+    }
   };
 
   async componentDidMount() {
@@ -246,12 +437,17 @@ class PaymentStatus extends React.Component {
 
     const formdata = new FormData();
     formdata.append("user_id", pageparmission?.Userinfo?.id);
-    formdata.append("role", pageparmission?.Userinfo?.role);
-    await axiosConfig.get(`/admin/getalldata`).then((response) => {
-      let rowData = response.data.data;
-      console.log(rowData);
-      this.setState({ rowData });
-    });
+    // formdata.append("role", pageparmission?.Userinfo?.role);
+    await axiosConfig
+      .post(`/getAllGenerateInvoiceView`, formdata)
+      .then((res) => {
+        console.log(res.data.data);
+        let rowData = res.data.data;
+        this.setState({ rowData });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
   async runthisfunction(id) {
     console.log(id);

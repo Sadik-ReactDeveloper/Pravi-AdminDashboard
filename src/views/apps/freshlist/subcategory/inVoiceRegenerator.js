@@ -854,7 +854,7 @@ class inVoiceRegenerator extends React.Component {
   };
 
   handleBillDownload = (data) => {
-    console.log(data);
+    // console.log(data);
     this.setState({ PrintData: data?.orders[0] });
     this.setState({ AllbillMerged: data.allproducts });
     this.setState({ Applied_Charges: data });
