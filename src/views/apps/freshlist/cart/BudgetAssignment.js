@@ -253,7 +253,7 @@ class BudgetAssignment extends React.Component {
     const data = new FormData();
     data.append("user_id", pageparmission?.Userinfo?.id);
     data.append("topup_budget", this.state.TopupAmount);
-    // data.append("user_request_id", 24);
+    data.append("user_request_id", 24);
     if (this.state.TopupAmount > 0) {
       axiosConfig
         .post(`/addtopuptouser`, data)
@@ -263,6 +263,7 @@ class BudgetAssignment extends React.Component {
         })
         .catch((err) => {
           console.log(err);
+          swal("Something went Wrong");
         });
     } else {
       swal("Something is Missing.Enter details before Submit");
@@ -302,7 +303,7 @@ class BudgetAssignment extends React.Component {
       .post(`/updatetopupuser`, data)
       .then((res) => {
         console.log(res.data);
-        // this.setState({ modalView: false });
+        this.setState({ modalView: false });
 
         swal("Success", "TopUp Added Successfully");
         this.componentDidMount();
