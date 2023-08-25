@@ -24,22 +24,6 @@ import { Route, Link } from "react-router-dom";
 import axiosConfig from "../../../../axiosConfig";
 import swal from "sweetalert";
 
-const AssignList = [
-  {
-    id: 1,
-    userName: "Abc",
-    currentbudget: 5000,
-    remainingBudget: 2000,
-    requiestedTopup: 1500,
-  },
-  {
-    id: 2,
-    userName: "bcvd",
-    currentbudget: 7000,
-    remainingBudget: 3000,
-    requiestedTopup: 1800,
-  },
-];
 class BudgetAssignment extends React.Component {
   state = {
     rowData: [],
@@ -212,7 +196,7 @@ class BudgetAssignment extends React.Component {
     let newparmisson = pageparmission?.role?.find(
       (value) => value?.pageName === "Budget Assignment"
     );
-    this.setState({ rowData: AssignList });
+    // this.setState({ rowData: AssignList });
     // console.log(AssignList);
     // console.log(newparmisson);
     this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
