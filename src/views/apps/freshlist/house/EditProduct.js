@@ -394,7 +394,7 @@ export class EditProduct extends Component {
                 </Col>
                 <Col lg="6" md="6">
                   <FormGroup>
-                    <Label>SHIPING FEE(₹)</Label>
+                    <Label>SHIPPING FEE(₹)</Label>
                     <Input
                       type="number"
                       placeholder="Number..."

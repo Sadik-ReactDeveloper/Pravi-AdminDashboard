@@ -675,6 +675,7 @@ class InvoiceGenerator extends React.Component {
       );
       AddedBill.splice(index, 1);
     }
+    // console.log(AddedBill);
     this.setState({ Mergebilllength: AddedBill?.length });
   };
   MergeBillNow = (e) => {

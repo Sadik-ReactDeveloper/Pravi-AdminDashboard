@@ -203,7 +203,7 @@ class Placeorder extends React.Component {
         headerName: "Quantity",
         field: "Quantity",
         filter: "agSetColumnFilter",
-        width: 250,
+        width: 260,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
@@ -228,7 +228,12 @@ class Placeorder extends React.Component {
                   }}
                   size="sm"
                   color="primary"
-                  className="mx-1"
+                  className="mx-1 addbutton"
+                  style={{
+                    position: "absolute",
+                    right: "24px",
+                    padding: "12px",
+                  }}
                 >
                   Add {this.state.ProductQuantity && this.state.ProductQuantity}
                 </Button>

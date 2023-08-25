@@ -33,6 +33,7 @@ import {
 } from "react-icons/fa";
 import "moment-timezone";
 import { Route } from "react-router-dom";
+import swal from "sweetalert";
 
 class ProductType extends React.Component {
   state = {
@@ -397,11 +398,23 @@ class ProductType extends React.Component {
       this.setState({ rowData });
     });
   };
-  async runthisfunction(id) {
-    const formData = new FormData();
-    formData.append("user_id", id);
-    await axiosConfig.post(`/userdelete`, formData).then((response) => {
-      this.getUserList();
+  runthisfunction(id) {
+    swal("Warning", "Sure You Want to Delete it", {
+      buttons: {
+        cancel: "cancel",
+        catch: { text: "Delete ", value: "delete" },
+      },
+    }).then((value) => {
+      switch (value) {
+        case "delete":
+          const formData = new FormData();
+          formData.append("user_id", id);
+          axiosConfig.post(`/userdelete`, formData).then((response) => {
+            this.getUserList();
+          });
+          break;
+        default:
+      }
     });
   }
 

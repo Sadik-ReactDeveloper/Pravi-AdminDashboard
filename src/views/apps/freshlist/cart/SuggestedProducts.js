@@ -24,6 +24,7 @@ import "../../../../assets/scss/pages/users.scss";
 import { Route, Link } from "react-router-dom";
 // import { components } from "react-select";
 import axiosConfig from "../../../../axiosConfig";
+import swal from "sweetalert";
 
 class SuggestedProducts extends React.Component {
   state = {
@@ -51,114 +52,114 @@ class SuggestedProducts extends React.Component {
       },
       {
         headerName: "Name",
-        field: "subscriptions",
+        field: "full_name",
         filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data.subscriptions}</span>
+              <span>{params.data.full_name}</span>
             </div>
           );
         },
       },
       {
-        headerName: "Product Name",
-        field: "product",
+        headerName: "Remaining Budget",
+        field: "budget",
         filter: true,
-        width: 190,
+        width: 220,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.product}</span>
+              <span>{params.data.budget}</span>
             </div>
           );
         },
       },
       {
-        headerName: "How Many Day",
-        field: "validity",
+        headerName: "Assigned Date",
+        field: "created_date",
         filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data.validity}</span>
+              <span>{params.data.created_date}</span>
             </div>
           );
         },
       },
-      {
-        headerName: "How Many Orders Placed",
-        field: "orders",
-        filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.orders}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "How Many Remaining",
-        field: "remaining",
-        filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.remaining}</span>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "How Many Orders Placed",
+      //   field: "orders",
+      //   filter: true,
+      //   width: 200,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.orders}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "How Many Remaining",
+      //   field: "remaining",
+      //   filter: true,
+      //   width: 200,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.remaining}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
 
-      {
-        headerName: "Status",
-        field: "status",
-        filter: true,
-        width: 150,
-        cellRendererFramework: (params) => {
-          return params.value === "Block" ? (
-            <div className="badge badge-pill badge-success">
-              {params.data.status}
-            </div>
-          ) : params.value === "Unblock" ? (
-            <div className="badge badge-pill badge-warning">
-              {params.data.status}
-            </div>
-          ) : null;
-        },
-      },
-      {
-        headerName: "Actions",
-        field: "sortorder",
-        field: "transactions",
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="actions cursor-pointer">
-              <Eye
-                className="mr-50"
-                size="25px"
-                color="green"
-                onClick={() =>
-                  history.push(
-                    `/app/freshlist/subscriber/viewSubscriber/${params.data._id}`
-                  )
-                }
-              />
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "Status",
+      //   field: "status",
+      //   filter: true,
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return params.value === "Block" ? (
+      //       <div className="badge badge-pill badge-success">
+      //         {params.data.status}
+      //       </div>
+      //     ) : params.value === "Unblock" ? (
+      //       <div className="badge badge-pill badge-warning">
+      //         {params.data.status}
+      //       </div>
+      //     ) : null;
+      //   },
+      // },
+      // {
+      //   headerName: "Actions",
+      //   field: "sortorder",
+      //   field: "transactions",
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="actions cursor-pointer">
+      //         <Eye
+      //           className="mr-50"
+      //           size="25px"
+      //           color="green"
+      //           onClick={() =>
+      //             history.push(
+      //               `/app/freshlist/subscriber/viewSubscriber/${params.data._id}`
+      //             )
+      //           }
+      //         />
+      //       </div>
+      //     );
+      //   },
+      // },
     ],
   };
   componentDidMount() {
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
-    console.log("role", pageparmission.Userinfo.role);
+    // console.log("role", pageparmission.Userinfo.role);
     this.setState({ mainRole: pageparmission?.Userinfo?.role });
     let newparmisson = pageparmission?.role?.find(
       (value) => value?.pageName === "Budget List"
@@ -179,16 +180,16 @@ class SuggestedProducts extends React.Component {
     formdata.append("role", pageparmission?.Userinfo?.role);
     formdata.append("user_id", pageparmission?.Userinfo?.id);
 
-    // axiosConfig
-    //   .post("/getlistofBudget", formdata)
-    //   .then((response) => {
-    //     console.log(response.data.data);
-    //     let rowData = response?.data?.data;
-    //     this.setState({ rowData });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    axiosConfig
+      .post("/getAllUsersBuget", formdata)
+      .then((response) => {
+        console.log(response.data.data);
+        let rowData = response?.data?.data;
+        this.setState({ rowData });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     const data = new FormData();
     data.append("user_id", pageparmission?.Userinfo?.id);
@@ -224,6 +225,30 @@ class SuggestedProducts extends React.Component {
       });
     }
   };
+  handleAssignBudget = (e) => {
+    e.preventDefault();
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    const data = new FormData();
+    data.append("user_id", pageparmission?.Userinfo?.id);
+    data.append("budget", this.state.BudgetValue);
+    data.append("assign_user_id", this.state.userid);
+    if (this.state.BudgetValue > 0 && this.state.userid) {
+      axiosConfig
+        .post(`/addbudget`, data)
+        .then((res) => {
+          console.log(res.data);
+          this.setState({ BudgetValue: "" });
+          this.setState({ userid: "" });
+          swal("Budget Assigned Successfully");
+          this.componentDidMount();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      swal("Something is Missing. Enter details before Submit");
+    }
+  };
   render() {
     const { rowData, columnDefs, defaultColDef } = this.state;
     return (
@@ -232,7 +257,7 @@ class SuggestedProducts extends React.Component {
         <Col sm="12">
           <Card>
             <Row className="m-2">
-              <Col>
+              <Col lg="4" md="4" sm="4">
                 <h1 sm="4" className="">
                   Budget List
                 </h1>
@@ -240,7 +265,7 @@ class SuggestedProducts extends React.Component {
               {this.state.mainRole === "Super Admin" && (
                 <>
                   <Col>
-                    <label className="selectClient">Assign A Budget</label>
+                    <label className="selectClient">Add Amount</label>
                     <input
                       onKeyDown={(e) =>
                         ["e", "E", "+", "-"].includes(e.key) &&
@@ -277,13 +302,18 @@ class SuggestedProducts extends React.Component {
                     </FormGroup>
                   </Col>
                   <Col>
-                    <Button
-                      title="Select user and Amount for Submit"
-                      color="primary"
-                      className="custom-button mt-1"
-                    >
-                      Submit
-                    </Button>
+                    <div className="d-flex justify-content-center">
+                      <Button
+                        title="Select user and Amount for Submit"
+                        color="primary"
+                        className="custom-button mt-2"
+                        onClick={(e) => {
+                          this.handleAssignBudget(e);
+                        }}
+                      >
+                        Assign Now
+                      </Button>
+                    </div>
                   </Col>
                 </>
               )}

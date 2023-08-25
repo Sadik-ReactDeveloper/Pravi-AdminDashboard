@@ -21,6 +21,9 @@ import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
 import { Route, Link } from "react-router-dom";
 // import { components } from "react-select";
+import axiosConfig from "../../../../axiosConfig";
+import swal from "sweetalert";
+
 const AssignList = [
   {
     id: 1,
@@ -41,6 +44,10 @@ class BudgetAssignment extends React.Component {
   state = {
     rowData: [],
     RoleDefine: "",
+    TopupAmount: "",
+    topupdata: "",
+    RequestedTopup: "",
+    modalView: false,
     IsTopup: false,
     paginationPageSize: 20,
     currenPageSize: "",
@@ -72,7 +79,12 @@ class BudgetAssignment extends React.Component {
             <div>
               {this.state.RoleDefine === "Super Admin" && (
                 <>
-                  <Button className="btn " color="primary" size="sm">
+                  <Button
+                    onClick={(e) => this.handleTopUp(e, params.data)}
+                    className="btn "
+                    color="primary"
+                    size="sm"
+                  >
                     Top Up
                   </Button>
                 </>
@@ -82,57 +94,57 @@ class BudgetAssignment extends React.Component {
         },
       },
       {
-        headerName: "UserName",
-        field: "username",
+        headerName: "full_name",
+        field: "full_name",
         filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data.userName}</span>
+              <span>{params.data.full_name}</span>
             </div>
           );
         },
       },
       {
-        headerName: "Currentbudget",
-        field: "product",
+        headerName: "Requested ",
+        field: "topup_budget",
         filter: true,
-        width: 190,
+        width: 230,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.currentbudget}</span>
+              <span>{params.data.topup_budget}</span>
             </div>
           );
         },
       },
       {
-        headerName: "remainingBudget",
-        field: "validity",
+        headerName: "created_date",
+        field: "created_date",
         filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data.remainingBudget}</span>
+              <span>{params.data.created_date}</span>
             </div>
           );
         },
       },
-      {
-        headerName: "requiestedTopup",
-        field: "requiestedTopup",
-        filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.requiestedTopup}</span>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "requiestedTopup",
+      //   field: "requiestedTopup",
+      //   filter: true,
+      //   width: 200,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.requiestedTopup}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
       // {
       //   headerName: "How Many Remaining",
       //   field: "remaining",
@@ -147,46 +159,52 @@ class BudgetAssignment extends React.Component {
       //   },
       // },
 
-      {
-        headerName: "Status",
-        field: "status",
-        filter: true,
-        width: 150,
-        cellRendererFramework: (params) => {
-          return params.value === "Block" ? (
-            <div className="badge badge-pill badge-success">
-              {params.data.status}
-            </div>
-          ) : params.value === "Unblock" ? (
-            <div className="badge badge-pill badge-warning">
-              {params.data.status}
-            </div>
-          ) : null;
-        },
-      },
-      {
-        headerName: "Actions",
-        field: "sortorder",
-        field: "transactions",
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="actions cursor-pointer">
-              <Eye
-                className="mr-50"
-                size="25px"
-                color="green"
-                onClick={() =>
-                  history.push(
-                    `/app/freshlist/subscriber/viewSubscriber/${params.data._id}`
-                  )
-                }
-              />
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "Status",
+      //   field: "status",
+      //   filter: true,
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return params.value === "Block" ? (
+      //       <div className="badge badge-pill badge-success">
+      //         {params.data.status}
+      //       </div>
+      //     ) : params.value === "Unblock" ? (
+      //       <div className="badge badge-pill badge-warning">
+      //         {params.data.status}
+      //       </div>
+      //     ) : null;
+      //   },
+      // },
+      // {
+      //   headerName: "Actions",
+      //   field: "sortorder",
+      //   field: "transactions",
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="actions cursor-pointer">
+      //         <Eye
+      //           className="mr-50"
+      //           size="25px"
+      //           color="green"
+      //           onClick={() =>
+      //             history.push(
+      //               `/app/freshlist/subscriber/viewSubscriber/${params.data._id}`
+      //             )
+      //           }
+      //         />
+      //       </div>
+      //     );
+      //   },
+      // },
     ],
+  };
+  handleTopUp = (e, params) => {
+    e.preventDefault();
+    this.setState({ modalView: true });
+    this.setState({ topupdata: params });
+    this.setState({ RequestedTopup: params?.topup_budget });
   };
   componentDidMount() {
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
@@ -195,8 +213,8 @@ class BudgetAssignment extends React.Component {
       (value) => value?.pageName === "Budget Assignment"
     );
     this.setState({ rowData: AssignList });
-    console.log(AssignList);
-    console.log(newparmisson);
+    // console.log(AssignList);
+    // console.log(newparmisson);
     this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
     this.setState({
       Createpermisson: newparmisson?.permission.includes("Create"),
@@ -207,21 +225,48 @@ class BudgetAssignment extends React.Component {
     this.setState({
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
-    console.log(newparmisson?.permission.includes("View"));
-    console.log(newparmisson?.permission.includes("Create"));
-    console.log(newparmisson?.permission.includes("Edit"));
-    console.log(newparmisson?.permission.includes("Delete"));
+    // console.log(newparmisson?.permission.includes("View"));
+    // console.log(newparmisson?.permission.includes("Create"));
+    // console.log(newparmisson?.permission.includes("Edit"));
+    // console.log(newparmisson?.permission.includes("Delete"));
 
     const formdata = new FormData();
     formdata.append("user_id", pageparmission?.Userinfo?.id);
     formdata.append("role", pageparmission?.Userinfo?.role);
+    axiosConfig
+      .post(`/getAllUsersTopupBuget`, formdata)
+      .then((res) => {
+        console.log(res.data?.data);
+        this.setState({ rowData: res.data.data });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
   handleTopup = () => {
     this.setState({ IsTopup: true });
   };
-  handSubmit = () => {
-    alert("Data Submited");
-    this.setState({ IsTopup: false });
+
+  HandleSubmitTopUpRequest = (e) => {
+    e.preventDefault();
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    const data = new FormData();
+    data.append("user_id", pageparmission?.Userinfo?.id);
+    data.append("topup_budget", this.state.TopupAmount);
+    data.append("user_request_id", 24);
+    if (this.state.TopupAmount > 0) {
+      axiosConfig
+        .post(`/addtopuptouser`, data)
+        .then((res) => {
+          console.log(res.data);
+          swal("Success", "TopUp Request Created Successfully");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      swal("Something is Missing.Enter details before Submit");
+    }
   };
   onGridReady = (params) => {
     this.gridApi = params.api;
@@ -244,6 +289,27 @@ class BudgetAssignment extends React.Component {
       });
     }
   };
+  handleTopupAssign = (e) => {
+    e.preventDefault();
+
+    let data = new FormData();
+    data.append("topup_id", this.state.topupdata?.id);
+    data.append("user_request_id", this.state.topupdata?.user_id);
+    data.append("super_user_id", this.state.topupdata?.user_request_id);
+    data.append("topup_budget", this.state.RequestedTopup);
+
+    axiosConfig
+      .post(`/updatetopupuser`, data)
+      .then((res) => {
+        console.log(res.data);
+        // this.setState({ modalView: false });
+
+        swal("Success", "TopUp Added Successfully");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   render() {
     const { rowData, columnDefs, defaultColDef } = this.state;
     return (
@@ -252,7 +318,7 @@ class BudgetAssignment extends React.Component {
         <Col sm="12">
           <Card>
             <Row className="m-2">
-              <Col>
+              <Col lg="4" md="4" sm="4">
                 <h1
                 // sm="6"
                 // className="float-left"
@@ -274,7 +340,7 @@ class BudgetAssignment extends React.Component {
                 <>
                   {this.state.IsTopup == false ? (
                     <>
-                      <Col>
+                      <Col className="d-flex justify-content-end">
                         <Button
                           color="primary"
                           className="float-right"
@@ -291,13 +357,16 @@ class BudgetAssignment extends React.Component {
                           className="form-control"
                           type="number"
                           placeholder="Enter Top up"
+                          onChange={(e) =>
+                            this.setState({ TopupAmount: e.target.value })
+                          }
                         />
                       </Col>
                       <Col>
                         <Button
                           className="float-right"
                           color="primary"
-                          onClick={this.handSubmit}
+                          onClick={this.HandleSubmitTopUpRequest}
                         >
                           Submit
                         </Button>
@@ -403,6 +472,47 @@ class BudgetAssignment extends React.Component {
                       </UncontrolledDropdown>
                     </div>
                     <div className="d-flex flex-wrap justify-content-between mb-1">
+                      {this.state.modalView && (
+                        <>
+                          <div className="table-input mr-1">
+                            {/* <label className="">
+                              User:
+                              {this.state.topupdata &&
+                                this.state.topupdata?.full_name}
+                            </label> */}
+                            <Input
+                              className="form-control"
+                              placeholder="Enter Topup Amount"
+                              onChange={(e) =>
+                                this.setState({
+                                  RequestedTopup: e.target.value,
+                                })
+                              }
+                              value={this.state.RequestedTopup}
+                            />
+                          </div>
+                          <div className="table-input mr-1">
+                            <Button
+                              onClick={(e) => this.handleTopupAssign(e)}
+                              color="primary"
+                            >
+                              Topup Now
+                            </Button>
+                          </div>
+                          <div className="table-input mr-1">
+                            <Button
+                              className="float-right"
+                              color="danger"
+                              onClick={(e) => {
+                                this.setState({ modalView: false });
+                                e.preventDefault();
+                              }}
+                            >
+                              Cancel
+                            </Button>
+                          </div>
+                        </>
+                      )}
                       <div className="table-input mr-1">
                         <Input
                           placeholder="search..."

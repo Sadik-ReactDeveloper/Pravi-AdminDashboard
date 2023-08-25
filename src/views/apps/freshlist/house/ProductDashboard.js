@@ -28,6 +28,7 @@ import "../../../../assets/scss/pages/users.scss";
 import { FaWallet, Facart, FaCartArrowDown, FaBoxOpen } from "react-icons/fa";
 import "moment-timezone";
 import { Route } from "react-router-dom";
+import swal from "sweetalert";
 
 class ProductDashboard extends React.Component {
   state = {
@@ -318,10 +319,10 @@ class ProductDashboard extends React.Component {
                   size="25px"
                   color="Red"
                   onClick={() => {
-                    let selectedData = this.gridApi.getSelectedRows();
+                    // let selectedData = this.gridApi.getSelectedRows();
 
                     this.runthisfunction(params.data?.id);
-                    this.gridApi.updateRowData({ remove: selectedData });
+                    // this.gridApi.updateRowData({ remove: selectedData });
                   }}
                 />
               )}
@@ -369,18 +370,32 @@ class ProductDashboard extends React.Component {
     // });
   }
 
-  async runthisfunction(id) {
-    console.log(id);
-    let data = new FormData();
-    data.append("id", id);
-    await axiosConfig
-      .post("/deleteproduct", data)
-      .then((resp) => {
-        console.log(resp);
-      })
-      .then((response) => {
-        console.log(response);
-      });
+  runthisfunction(id) {
+    let selectedData = this.gridApi.getSelectedRows();
+    swal("Warning", "Sure You Want to Delete it", {
+      buttons: {
+        cancel: "cancel",
+        catch: { text: "Delete ", value: "delete" },
+      },
+    }).then((value) => {
+      switch (value) {
+        case "delete":
+          let data = new FormData();
+          data.append("id", id);
+          axiosConfig
+            .post("/deleteproduct", data)
+            .then((resp) => {
+              console.log(resp);
+              this.gridApi.updateRowData({ remove: selectedData });
+            })
+            .then((response) => {
+              console.log(response);
+            });
+
+          break;
+        default:
+      }
+    });
   }
 
   onGridReady = (params) => {

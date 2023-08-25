@@ -115,9 +115,7 @@ class RoleList extends React.Component {
                   size="25px"
                   color="red"
                   onClick={() => {
-                    let selectedData = this.gridApi.getSelectedRows();
                     this.runthisfunction(params.data.id);
-                    this.gridApi.updateRowData({ remove: selectedData });
                   }}
                 />
               )}
@@ -162,10 +160,24 @@ class RoleList extends React.Component {
   }
 
   runthisfunction(id) {
-    console.log(id);
-    // await axiosConfig.get(`/delcontactus/${id}`).then((response) => {
-    //   console.log(response);
-    // });
+    // console.log(id);
+    let selectedData = this.gridApi.getSelectedRows();
+    swal("Warning", "Sure You Want to Delete it", {
+      buttons: {
+        cancel: "cancel",
+        catch: { text: "Delete ", value: "delete" },
+      },
+    }).then((value) => {
+      switch (value) {
+        case "delete":
+          const formData = new FormData();
+          formData.append("user_id", id);
+          this.gridApi.updateRowData({ remove: selectedData });
+          axiosConfig.post(`/userdelete`, formData).then((response) => {});
+          break;
+        default:
+      }
+    });
   }
   onGridReady = (params) => {
     this.gridApi = params.api;

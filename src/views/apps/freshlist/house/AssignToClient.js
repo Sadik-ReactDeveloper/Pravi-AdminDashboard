@@ -422,7 +422,7 @@ class AssignToClient extends React.Component {
     formdata.append("category_id", this.state.category);
     formdata.append("brand_id", this.state.Brand);
     formdata.append("product_type_id", this.state.Type);
-    if (this.state.category && this.state.Brand && this.state.Type) {
+    if (this.state.category && this.state.Brand) {
       axiosConfig
         .post(`/getproducts`, formdata)
         .then((res) => {
@@ -551,7 +551,7 @@ class AssignToClient extends React.Component {
               <Row className="m-2">
                 <Col>
                   <h1 col-sm-6 className="float-left">
-                    Assign To Client
+                    Product Assign To Client
                   </h1>
                 </Col>
                 {/* <Col>
@@ -701,7 +701,7 @@ class AssignToClient extends React.Component {
                             ))}
                         </Input>
                       </Col>
-                      <Col lg="4" md="4" className="mb-1 ">
+                      {/* <Col lg="4" md="4" className="mb-1 ">
                         <Label>Quantity</Label>
                         <Input
                           required
@@ -713,7 +713,7 @@ class AssignToClient extends React.Component {
                             this.setState({ quantity: e.target.value })
                           }
                         />
-                      </Col>
+                      </Col> */}
                       <Col lg="4" md="4" className="mb-1 ">
                         <Button.Ripple
                           color="primary"
