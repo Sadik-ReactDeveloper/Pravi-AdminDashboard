@@ -21,12 +21,14 @@ import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
 import { Route, Link } from "react-router-dom";
 // import { components } from "react-select";
+import axiosConfig from "../../../../axiosConfig";
 
 class ProductWise extends React.Component {
   state = {
     rowData: [],
     paginationPageSize: 20,
     currenPageSize: "",
+    SelectedProduct: "",
     getPageSize: "",
     defaultColDef: {
       sortable: true,
@@ -167,10 +169,6 @@ class ProductWise extends React.Component {
     this.setState({
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
-    console.log(newparmisson?.permission.includes("View"));
-    console.log(newparmisson?.permission.includes("Create"));
-    console.log(newparmisson?.permission.includes("Edit"));
-    console.log(newparmisson?.permission.includes("Delete"));
 
     const formdata = new FormData();
     formdata.append("user_id", pageparmission?.Userinfo?.id);
@@ -197,6 +195,23 @@ class ProductWise extends React.Component {
       });
     }
   };
+  handleProductWiseReport = (e) => {
+    e.preventDefault();
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    console.log("object", this.state.SelectedProduct);
+    const data = new FormData();
+    data.append("user_id", pageparmission?.Userinfo?.id);
+    data.append("role", "User");
+    axiosConfig
+      .post("/getUserlistforBudget", data)
+      .then((response) => {
+        let userDataList = response?.data?.data?.users;
+        // this.setState({ userDataList });
+      })
+      .catch((err) => {
+        // console.log(err);
+      });
+  };
   render() {
     const { rowData, columnDefs, defaultColDef } = this.state;
     return (
@@ -207,20 +222,36 @@ class ProductWise extends React.Component {
           <Col sm="12">
             <Card>
               <Row className="m-2">
-                <Col>
+                <Col sm="6" lg="6" md="6">
                   <h1 sm="6" className="float-left">
                     Product Wise Report
                   </h1>
                 </Col>
-                <Col>
+                <Col lg="4" md="4" sm="4">
                   <label for="cars">Select Product :</label>
 
-                  <select className="form-control" name="cars" id="cars">
+                  <select
+                    onChange={(e) => {
+                      this.setState({ SelectedProduct: e.target.value });
+                    }}
+                    className="form-control"
+                    name="cars"
+                    id="cars"
+                  >
                     <option value="volvo">Volvo</option>
                     <option value="saab">Saab</option>
                     <option value="mercedes">Mercedes</option>
                     <option value="audi">Audi</option>
                   </select>
+                </Col>
+                <Col>
+                  <Button
+                    className="mt-2"
+                    onClick={(e) => this.handleProductWiseReport(e)}
+                    color="primary"
+                  >
+                    Submit
+                  </Button>
                 </Col>
               </Row>
               <CardBody>

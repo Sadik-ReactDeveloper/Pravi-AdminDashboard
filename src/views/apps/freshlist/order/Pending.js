@@ -28,6 +28,7 @@ import Moment from "react-moment";
 import swal from "sweetalert";
 import { BsEye } from "react-icons/bs";
 import { Route, Link } from "react-router-dom";
+import { param } from "jquery";
 
 class Pending extends React.Component {
   state = {
@@ -66,7 +67,7 @@ class Pending extends React.Component {
               {params.data?.order_status}
             </div>
           ) : params.data?.order_status === "Rejected" ? (
-            <div className="badge badge-pill bg-primary">Rejected</div>
+            <div className="badge badge-pill bg-danger">Rejected</div>
           ) : params.data?.order_status === "Cancelled" ? (
             <div className="badge badge-pill bg-danger">
               {params.data.order_status}
@@ -83,11 +84,22 @@ class Pending extends React.Component {
         resizable: true,
         width: 230,
         cellRendererFramework: (params) => {
+          // console.log(params.data);
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
-                {params.data?.order_status === "Completed" ? (
-                  <Badge color="success">Completed</Badge>
+                {params.data?.order_status === "Completed" ||
+                params.data?.order_status === "Rejected" ||
+                params.data?.order_status === "Approved" ? (
+                  <Badge
+                    color={
+                      params.data?.order_status === "Rejected"
+                        ? "danger"
+                        : "success"
+                    }
+                  >
+                    {params.data?.order_status}
+                  </Badge>
                 ) : (
                   <>
                     {this.state.Editpermisson && (
@@ -98,6 +110,8 @@ class Pending extends React.Component {
                           // console.log(e.target.value);
                           let data = new FormData();
                           data.append("order_id", params.data?.order_id);
+                          data.append("budget_id", params.data?.budget_id);
+                          data.append("rejectedamount", params.data?.total);
                           data.append("order_status", e.target.value);
                           axiosConfig
                             .post(`/change_order_status`, data)
@@ -115,7 +129,7 @@ class Pending extends React.Component {
                         name="changestatus"
                         id="changeStatus"
                       >
-                        <option value="NoStatus">--UpdateStatus--</option>
+                        <option value="Pending">--UpdateStatus--</option>
                         <option value="Approved">Approved</option>
                         <option value="Rejected">Rejected</option>
                       </select>
@@ -138,6 +152,22 @@ class Pending extends React.Component {
             <div className="d-flex align-items-center cursor-pointer">
               <div>
                 <span>{params.data?.order_id}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Suppliername",
+        field: "supplier_name",
+        filter: true,
+        resizable: true,
+        width: 210,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.supplier_name}</span>
               </div>
             </div>
           );
@@ -442,7 +472,7 @@ class Pending extends React.Component {
       (value) => value?.pageName === "Order Raise List"
     );
 
-    console.log(newparmisson);
+    // console.log(newparmisson);
     this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
     this.setState({
       Createpermisson: newparmisson?.permission.includes("Create"),
@@ -453,10 +483,6 @@ class Pending extends React.Component {
     this.setState({
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
-    // console.log(newparmisson?.permission.includes("View"));
-    // console.log(newparmisson?.permission.includes("Delete"));
-    // console.log(newparmisson?.permission.includes("Create"));
-    // console.log(newparmisson?.permission.includes("Edit"));
 
     await axiosConfig
       .post(`/orderraiselist`, formdata)
@@ -545,6 +571,7 @@ class Pending extends React.Component {
 
   render() {
     const { rowData, columnDefs, defaultColDef } = this.state;
+
     return (
       <Row className="app-user-list">
         <Col sm="12">

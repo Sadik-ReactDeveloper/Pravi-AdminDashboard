@@ -21,12 +21,14 @@ import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
 import { Route, Link } from "react-router-dom";
 // import { components } from "react-select";
+import axiosConfig from "../../../../axiosConfig";
 
 class BranchwiseReport extends React.Component {
   state = {
     rowData: [],
     paginationPageSize: 20,
     currenPageSize: "",
+    SelectedBranch: "",
     getPageSize: "",
     defaultColDef: {
       sortable: true,
@@ -166,10 +168,10 @@ class BranchwiseReport extends React.Component {
     this.setState({
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
-    console.log(newparmisson?.permission.includes("View"));
-    console.log(newparmisson?.permission.includes("Create"));
-    console.log(newparmisson?.permission.includes("Edit"));
-    console.log(newparmisson?.permission.includes("Delete"));
+    // console.log(newparmisson?.permission.includes("View"));
+    // console.log(newparmisson?.permission.includes("Create"));
+    // console.log(newparmisson?.permission.includes("Edit"));
+    // console.log(newparmisson?.permission.includes("Delete"));
 
     const formdata = new FormData();
     formdata.append("user_id", pageparmission?.Userinfo?.id);
@@ -196,128 +198,156 @@ class BranchwiseReport extends React.Component {
       });
     }
   };
+  handleBranchWiseReport = (e) => {
+    e.preventDefault();
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    console.log("object", this.state.SelectedBranch);
+    const data = new FormData();
+    data.append("user_id", pageparmission?.Userinfo?.id);
+    data.append("role", "User");
+    axiosConfig
+      .post("/getUserlistforBudget", data)
+      .then((response) => {
+        let userDataList = response?.data?.data?.users;
+        // this.setState({ userDataList });
+      })
+      .catch((err) => {
+        // console.log(err);
+      });
+  };
   render() {
     const { rowData, columnDefs, defaultColDef } = this.state;
     return (
-      console.log(rowData),
-      (
-        <Row className="app-user-list">
-          <Col sm="12"></Col>
-          <Col sm="12">
-            <Card>
-              <Row className="m-2">
-                <Col>
-                  <h1 sm="6" className="float-left">
-                    Branch Wise Report
-                  </h1>
-                </Col>
-                <Col>
-                  <label for="cars">Select Branch :</label>
+      // console.log(rowData),
+      <Row className="app-user-list">
+        <Col sm="12">
+          <Card>
+            <Row className="m-2">
+              <Col sm="6" lg="6" md="6">
+                <h1 sm="6" className="float-left">
+                  Branch Wise Report
+                </h1>
+              </Col>
+              <Col lg="4" md="4" sm="4">
+                <label for="cars">Select Branch :</label>
 
-                  <select className="form-control" name="cars" id="cars">
-                    <option value="volvo">Volvo</option>
-                    <option value="saab">Saab</option>
-                    <option value="mercedes">Mercedes</option>
-                    <option value="audi">Audi</option>
-                  </select>
-                </Col>
-              </Row>
-              <CardBody>
-                {this.state.rowData === null ? null : (
-                  <div className="ag-theme-material w-100 my-2 ag-grid-table">
-                    <div className="d-flex flex-wrap justify-content-between align-items-center">
-                      <div className="mb-1">
-                        <UncontrolledDropdown className="p-1 ag-dropdown">
-                          <DropdownToggle tag="div">
-                            {this.gridApi
-                              ? this.state.currenPageSize
-                              : "" * this.state.getPageSize -
-                                (this.state.getPageSize - 1)}{" "}
-                            -{" "}
-                            {this.state.rowData.length -
-                              this.state.currenPageSize *
-                                this.state.getPageSize >
-                            0
-                              ? this.state.currenPageSize *
-                                this.state.getPageSize
-                              : this.state.rowData.length}{" "}
-                            of {this.state.rowData.length}
-                            <ChevronDown className="ml-50" size={15} />
-                          </DropdownToggle>
-                          <DropdownMenu right>
-                            <DropdownItem
-                              tag="div"
-                              onClick={() => this.filterSize(20)}
-                            >
-                              20
-                            </DropdownItem>
-                            <DropdownItem
-                              tag="div"
-                              onClick={() => this.filterSize(50)}
-                            >
-                              50
-                            </DropdownItem>
-                            <DropdownItem
-                              tag="div"
-                              onClick={() => this.filterSize(100)}
-                            >
-                              100
-                            </DropdownItem>
-                            <DropdownItem
-                              tag="div"
-                              onClick={() => this.filterSize(134)}
-                            >
-                              134
-                            </DropdownItem>
-                          </DropdownMenu>
-                        </UncontrolledDropdown>
-                      </div>
-                      <div className="d-flex flex-wrap justify-content-between mb-1">
-                        <div className="table-input mr-1">
-                          <Input
-                            placeholder="search..."
-                            onChange={(e) =>
-                              this.updateSearchQuery(e.target.value)
-                            }
-                            value={this.state.value}
-                          />
-                        </div>
-                        <div className="export-btn">
-                          <Button.Ripple
-                            color="primary"
-                            onClick={() => this.gridApi.exportDataAsCsv()}
+                <select
+                  onChange={(e) => {
+                    this.setState({ SelectedBranch: e.target.value });
+                  }}
+                  className="form-control"
+                  name="cars"
+                  id="cars"
+                >
+                  <option value="volvo">Volvo</option>
+                  <option value="saab">Saab</option>
+                  <option value="mercedes">Mercedes</option>
+                  <option value="audi">Audi</option>
+                </select>
+              </Col>
+              <Col>
+                <Button
+                  className="mt-2"
+                  onClick={(e) => this.handleBranchWiseReport(e)}
+                  color="primary"
+                >
+                  Submit
+                </Button>
+              </Col>
+            </Row>
+            <CardBody>
+              {this.state.rowData === null ? null : (
+                <div className="ag-theme-material w-100 my-2 ag-grid-table">
+                  <div className="d-flex flex-wrap justify-content-between align-items-center">
+                    <div className="mb-1">
+                      <UncontrolledDropdown className="p-1 ag-dropdown">
+                        <DropdownToggle tag="div">
+                          {this.gridApi
+                            ? this.state.currenPageSize
+                            : "" * this.state.getPageSize -
+                              (this.state.getPageSize - 1)}{" "}
+                          -{" "}
+                          {this.state.rowData.length -
+                            this.state.currenPageSize * this.state.getPageSize >
+                          0
+                            ? this.state.currenPageSize * this.state.getPageSize
+                            : this.state.rowData.length}{" "}
+                          of {this.state.rowData.length}
+                          <ChevronDown className="ml-50" size={15} />
+                        </DropdownToggle>
+                        <DropdownMenu right>
+                          <DropdownItem
+                            tag="div"
+                            onClick={() => this.filterSize(20)}
                           >
-                            Export as CSV
-                          </Button.Ripple>
-                        </div>
+                            20
+                          </DropdownItem>
+                          <DropdownItem
+                            tag="div"
+                            onClick={() => this.filterSize(50)}
+                          >
+                            50
+                          </DropdownItem>
+                          <DropdownItem
+                            tag="div"
+                            onClick={() => this.filterSize(100)}
+                          >
+                            100
+                          </DropdownItem>
+                          <DropdownItem
+                            tag="div"
+                            onClick={() => this.filterSize(134)}
+                          >
+                            134
+                          </DropdownItem>
+                        </DropdownMenu>
+                      </UncontrolledDropdown>
+                    </div>
+                    <div className="d-flex flex-wrap justify-content-between mb-1">
+                      <div className="table-input mr-1">
+                        <Input
+                          placeholder="search..."
+                          onChange={(e) =>
+                            this.updateSearchQuery(e.target.value)
+                          }
+                          value={this.state.value}
+                        />
+                      </div>
+                      <div className="export-btn">
+                        <Button.Ripple
+                          color="primary"
+                          onClick={() => this.gridApi.exportDataAsCsv()}
+                        >
+                          Export as CSV
+                        </Button.Ripple>
                       </div>
                     </div>
-                    <ContextLayout.Consumer>
-                      {(context) => (
-                        <AgGridReact
-                          gridOptions={{}}
-                          rowSelection="multiple"
-                          defaultColDef={defaultColDef}
-                          columnDefs={columnDefs}
-                          rowData={rowData}
-                          onGridReady={this.onGridReady}
-                          colResizeDefault={"shift"}
-                          animateRows={true}
-                          floatingFilter={false}
-                          pagination={true}
-                          paginationPageSize={this.state.paginationPageSize}
-                          pivotPanelShow="always"
-                          enableRtl={context.state.direction === "rtl"}
-                        />
-                      )}
-                    </ContextLayout.Consumer>
                   </div>
-                )}
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-      )
+                  <ContextLayout.Consumer>
+                    {(context) => (
+                      <AgGridReact
+                        gridOptions={{}}
+                        rowSelection="multiple"
+                        defaultColDef={defaultColDef}
+                        columnDefs={columnDefs}
+                        rowData={rowData}
+                        onGridReady={this.onGridReady}
+                        colResizeDefault={"shift"}
+                        animateRows={true}
+                        floatingFilter={false}
+                        pagination={true}
+                        paginationPageSize={this.state.paginationPageSize}
+                        pivotPanelShow="always"
+                        enableRtl={context.state.direction === "rtl"}
+                      />
+                    )}
+                  </ContextLayout.Consumer>
+                </div>
+              )}
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
     );
   }
 }

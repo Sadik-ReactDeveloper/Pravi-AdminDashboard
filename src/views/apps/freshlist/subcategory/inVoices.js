@@ -270,7 +270,7 @@ class inVoices extends React.Component {
                     Back
                   </Button>
                 </Col> */}
-              <Col>
+              {/* <Col>
                 <Route
                   render={({ history }) => (
                     <Button
@@ -286,7 +286,7 @@ class inVoices extends React.Component {
                     </Button>
                   )}
                 />
-              </Col>
+              </Col> */}
             </Row>
             <CardBody>
               {this.state.rowData === null ? null : (

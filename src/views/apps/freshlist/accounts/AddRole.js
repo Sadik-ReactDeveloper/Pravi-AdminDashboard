@@ -142,10 +142,10 @@ export const Roles = [
         title: "invoice Re-Generator",
         permission: ["View", "Create", "Edit", "Delete"],
       },
-      {
-        title: "invoices",
-        permission: ["View", "Create", "Edit", "Delete"],
-      },
+      // {
+      //   title: "invoices",
+      //   permission: ["View", "Create", "Edit", "Delete"],
+      // },
       {
         title: "Payment Status",
         permission: ["View", "Create", "Edit", "Delete"],

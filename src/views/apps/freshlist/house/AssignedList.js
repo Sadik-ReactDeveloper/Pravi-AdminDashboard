@@ -409,7 +409,7 @@ class AssignedList extends React.Component {
     return (
       <>
         <Row>
-          <Col lg="4" md="12">
+          {/* <Col lg="4" md="12">
             <Card
               className="bg-secondary  py-3 "
               body
@@ -480,7 +480,7 @@ class AssignedList extends React.Component {
                 {this.state.product}
               </CardText>
             </Card>
-          </Col>
+          </Col> */}
         </Row>
         <Row className="app-user-list">
           <Col sm="12"></Col>

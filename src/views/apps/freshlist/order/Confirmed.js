@@ -212,7 +212,7 @@ class Confirmed extends React.Component {
                 />
               )} */}
 
-              {this.state.Deletepermisson && (
+              {/* {this.state.Deletepermisson && (
                 <Route
                   render={() => (
                     <Trash2
@@ -227,7 +227,7 @@ class Confirmed extends React.Component {
                     />
                   )}
                 />
-              )}
+              )} */}
             </div>
           );
         },

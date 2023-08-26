@@ -355,14 +355,14 @@ const navigationConfig = [
     permissions: ["admin", "editor"],
     navLink: "/app/freshlist/subcategory/inVoiceRegenerator",
   },
-  {
-    id: "invoices",
-    title: "invoices",
-    type: "item",
-    icon: <FaCircle size={8} />,
-    permissions: ["admin", "editor"],
-    navLink: "/app/freshlist/subcategory/inVoices",
-  },
+  // {
+  //   id: "invoices",
+  //   title: "invoices",
+  //   type: "item",
+  //   icon: <FaCircle size={8} />,
+  //   permissions: ["admin", "editor"],
+  //   navLink: "/app/freshlist/subcategory/inVoices",
+  // },
   {
     id: "Payment Status",
     title: "Payment Status",

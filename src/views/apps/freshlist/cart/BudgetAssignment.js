@@ -237,7 +237,6 @@ class BudgetAssignment extends React.Component {
     const data = new FormData();
     data.append("user_id", pageparmission?.Userinfo?.id);
     data.append("topup_budget", this.state.TopupAmount);
-    data.append("user_request_id", 24);
     if (this.state.TopupAmount > 0) {
       axiosConfig
         .post(`/addtopuptouser`, data)

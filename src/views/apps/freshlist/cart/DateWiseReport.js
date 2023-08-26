@@ -21,6 +21,7 @@ import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
 import { Route, Link } from "react-router-dom";
 // import { components } from "react-select";
+import axiosConfig from "../../../../axiosConfig";
 
 class DateWiseReport extends React.Component {
   state = {
@@ -44,88 +45,206 @@ class DateWiseReport extends React.Component {
         filter: true,
       },
       {
-        headerName: "Name",
-        field: "subscriptions",
+        headerName: "po_no",
+        field: "po_no",
         filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data.subscriptions}</span>
+              <span>{params.data.po_no}</span>
             </div>
           );
         },
       },
       {
-        headerName: "Product Name",
+        headerName: "order_status",
+        field: "order_status",
+        filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <Badge color="success">{params.data.order_status}</Badge>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "username",
+        field: "username",
+        filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <span>{params.data.username}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "user_mobile_no",
         field: "product",
         filter: true,
         width: 190,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.product}</span>
+              <span>{params.data.user_mobile_no}</span>
             </div>
           );
         },
       },
       {
-        headerName: "How Many Day",
-        field: "validity",
+        headerName: "user_email",
+        field: "user_email",
         filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data.validity}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "How Many Orders Placed",
-        field: "orders",
-        filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.orders}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "How Many Remaining",
-        field: "remaining",
-        filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.remaining}</span>
+              <span>{params.data.user_email}</span>
             </div>
           );
         },
       },
 
       {
-        headerName: "Status",
-        field: "status",
+        headerName: "phone_no",
+        field: "phone_no",
         filter: true,
-        width: 150,
+        width: 200,
         cellRendererFramework: (params) => {
-          return params.value === "Block" ? (
-            <div className="badge badge-pill badge-success">
-              {params.data.status}
+          return (
+            <div>
+              <span>{params.data.phone_no}</span>
             </div>
-          ) : params.value === "Unblock" ? (
-            <div className="badge badge-pill badge-warning">
-              {params.data.status}
-            </div>
-          ) : null;
+          );
         },
       },
+      {
+        headerName: "created_by",
+        field: "created_by",
+        filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <span>{params.data.created_by}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "state_title",
+        field: "state_title",
+        filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <span>{params.data.state_title}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "supplier_name",
+        field: "supplier_name",
+        filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <span>{params.data.supplier_name}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "total",
+        field: "total",
+        filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <span>{params.data.total}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "supplier_city_name",
+        field: "supplier_city_name",
+        filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <span>{params.data.supplier_city_name}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "company_name",
+        field: "company_name",
+        filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <span>{params.data.company_name}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "company_type",
+        field: "company_type",
+        filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <span>{params.data.company_type}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "created_date",
+        field: "created_date",
+        filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <span>{params.data.created_date}</span>
+            </div>
+          );
+        },
+      },
+
+      // {
+      //   headerName: "Status",
+      //   field: "status",
+      //   filter: true,
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return params.value === "Block" ? (
+      //       <div className="badge badge-pill badge-success">
+      //         {params.data.status}
+      //       </div>
+      //     ) : params.value === "Unblock" ? (
+      //       <div className="badge badge-pill badge-warning">
+      //         {params.data.status}
+      //       </div>
+      //     ) : null;
+      //   },
+      // },
       {
         headerName: "Actions",
         field: "sortorder",
@@ -155,7 +274,7 @@ class DateWiseReport extends React.Component {
     console.log(date.split("T")[0]);
     this.setState({ CurrentDate: date.split("T")[0] });
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
-    console.log(pageparmission.role);
+    // console.log(pageparmission.role);
     let newparmisson = pageparmission?.role?.find(
       (value) => value?.pageName === "Date Wise"
     );
@@ -170,14 +289,20 @@ class DateWiseReport extends React.Component {
     this.setState({
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
-    console.log(newparmisson?.permission.includes("View"));
-    console.log(newparmisson?.permission.includes("Create"));
-    console.log(newparmisson?.permission.includes("Edit"));
-    console.log(newparmisson?.permission.includes("Delete"));
 
     const formdata = new FormData();
     formdata.append("user_id", pageparmission?.Userinfo?.id);
     formdata.append("role", pageparmission?.Userinfo?.role);
+    axiosConfig
+      .post("/reportApi", formdata)
+      .then((response) => {
+        console.log(response?.data?.data);
+        let rowData = response?.data?.data;
+        this.setState({ rowData });
+      })
+      .catch((err) => {
+        // console.log(err);
+      });
   }
   onGridReady = (params) => {
     this.gridApi = params.api;
@@ -200,8 +325,26 @@ class DateWiseReport extends React.Component {
       });
     }
   };
+  HandleDateWiseReport = (e) => {
+    e.preventDefault();
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    console.log("object", this.state.SelectedDate);
+    const data = new FormData();
+    data.append("user_id", pageparmission?.Userinfo?.id);
+    data.append("role", "User");
+    axiosConfig
+      .post("/getUserlistforBudget", data)
+      .then((response) => {
+        let userDataList = response?.data?.data?.users;
+        // this.setState({ userDataList });
+      })
+      .catch((err) => {
+        // console.log(err);
+      });
+  };
   render() {
     const { rowData, columnDefs, defaultColDef } = this.state;
+
     return (
       console.log(rowData),
       (
@@ -210,13 +353,11 @@ class DateWiseReport extends React.Component {
           <Col sm="12">
             <Card>
               <Row className="m-2">
-                <Col>
-                  <h1 sm="6" className="float-left">
-                    Date Wise Report
-                  </h1>
+                <Col sm="" lg="" md="">
+                  <h1 className="float-left">Date Wise Report</h1>
                 </Col>
-                <Col>
-                  <label for="start">Select Date:</label>
+                <Col lg="3" sm="3" md="3">
+                  <label for="start">Start Date:</label>
 
                   <input
                     onChange={(e) => {
@@ -231,6 +372,32 @@ class DateWiseReport extends React.Component {
                     min="2019-01-01"
                     max={this.state.CurrentDate && this.state.CurrentDate}
                   />
+                </Col>
+                <Col lg="3" sm="3" md="3">
+                  <label for="start">End Date:</label>
+
+                  <input
+                    onChange={(e) => {
+                      this.setState({ SelectedDate: e.target.value });
+                    }}
+                    className="form-control"
+                    type="date"
+                    id="start"
+                    name="trip-start"
+                    pattern="\d{4}-\d{2}-\d{2}"
+                    // value="2018-07-22"
+                    min="2019-01-01"
+                    max={this.state.CurrentDate && this.state.CurrentDate}
+                  />
+                </Col>
+                <Col>
+                  <Button
+                    className="mt-2"
+                    onClick={(e) => this.HandleDateWiseReport(e)}
+                    color="primary"
+                  >
+                    Submit
+                  </Button>
                 </Col>
               </Row>
               <CardBody>

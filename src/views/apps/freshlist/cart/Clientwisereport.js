@@ -21,11 +21,13 @@ import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
 import { Route, Link } from "react-router-dom";
 // import { components } from "react-select";
+import axiosConfig from "../../../../axiosConfig";
 
 class Clientwisereport extends React.Component {
   state = {
     rowData: [],
     paginationPageSize: 20,
+    SelectedClient: "",
     currenPageSize: "",
     getPageSize: "",
     defaultColDef: {
@@ -166,10 +168,10 @@ class Clientwisereport extends React.Component {
     this.setState({
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
-    console.log(newparmisson?.permission.includes("View"));
-    console.log(newparmisson?.permission.includes("Create"));
-    console.log(newparmisson?.permission.includes("Edit"));
-    console.log(newparmisson?.permission.includes("Delete"));
+    // console.log(newparmisson?.permission.includes("View"));
+    // console.log(newparmisson?.permission.includes("Create"));
+    // console.log(newparmisson?.permission.includes("Edit"));
+    // console.log(newparmisson?.permission.includes("Delete"));
 
     const formdata = new FormData();
     formdata.append("user_id", pageparmission?.Userinfo?.id);
@@ -196,6 +198,23 @@ class Clientwisereport extends React.Component {
       });
     }
   };
+  handleClientWiseReport = (e) => {
+    e.preventDefault();
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    console.log("object", this.state.SelectedClient);
+    const data = new FormData();
+    data.append("user_id", pageparmission?.Userinfo?.id);
+    data.append("role", "User");
+    axiosConfig
+      .post("/getUserlistforBudget", data)
+      .then((response) => {
+        let userDataList = response?.data?.data?.users;
+        // this.setState({ userDataList });
+      })
+      .catch((err) => {
+        // console.log(err);
+      });
+  };
   render() {
     const { rowData, columnDefs, defaultColDef } = this.state;
     return (
@@ -205,17 +224,15 @@ class Clientwisereport extends React.Component {
           <Col sm="12">
             <Card>
               <Row className="m-2">
-                <Col>
-                  <h1 sm="6" className="float-left">
-                    Client Wise Report
-                  </h1>
+                <Col sm="6" lg="6" md="6">
+                  <h1 className="float-left">Client Wise Report</h1>
                 </Col>
-                <Col>
+                <Col lg="4" md="4" sm="4">
                   <label for="cars">Select Client :</label>
 
                   <select
                     onChange={(e) => {
-                      console.log(e.target.value);
+                      this.setState({ SelectedClient: e.target.value });
                     }}
                     className="form-control"
                     name="cars"
@@ -226,6 +243,15 @@ class Clientwisereport extends React.Component {
                     <option value="mercedes">Mercedes</option>
                     <option value="audi">Audi</option>
                   </select>
+                </Col>
+                <Col>
+                  <Button
+                    className="mt-2"
+                    onClick={(e) => this.handleClientWiseReport(e)}
+                    color="primary"
+                  >
+                    Submit
+                  </Button>
                 </Col>
               </Row>
               <CardBody>

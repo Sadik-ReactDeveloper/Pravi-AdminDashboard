@@ -91,7 +91,7 @@ class InvoiceGenerator extends React.Component {
         filter: true,
       },
       {
-        headerName: "Multi Selection",
+        headerName: "Add Bills",
         width: 180,
         filter: true,
         cellRendererFramework: (params) => {
