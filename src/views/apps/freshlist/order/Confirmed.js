@@ -234,7 +234,7 @@ class Confirmed extends React.Component {
       },
 
       {
-        headerName: "Created By",
+        headerName: "Client Code",
         field: "user_full_name",
         filter: true,
         resizable: true,

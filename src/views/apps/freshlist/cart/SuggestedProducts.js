@@ -64,7 +64,7 @@ class SuggestedProducts extends React.Component {
         },
       },
       {
-        headerName: "Remaining Budget",
+        headerName: "Assigned Budget",
         field: "budget",
         filter: true,
         width: 220,
@@ -72,6 +72,19 @@ class SuggestedProducts extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <span>{params.data.budget}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Remaining Budget",
+        field: "remaining_budget",
+        filter: true,
+        width: 220,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <span>{params.data.remaining_budget}</span>
             </div>
           );
         },

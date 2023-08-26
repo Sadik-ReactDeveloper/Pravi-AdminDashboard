@@ -29,7 +29,8 @@ class DateWiseReport extends React.Component {
     paginationPageSize: 20,
     currenPageSize: "",
     CurrentDate: "",
-    SelectedDate: "",
+    StartDate: "",
+    EndDate: "",
     defaultColDef: {
       sortable: true,
       // editable: true,
@@ -328,10 +329,13 @@ class DateWiseReport extends React.Component {
   HandleDateWiseReport = (e) => {
     e.preventDefault();
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
-    console.log("object", this.state.SelectedDate);
+    console.log("start", this.state.StartDate);
+    console.log("end", this.state.EndDate);
     const data = new FormData();
     data.append("user_id", pageparmission?.Userinfo?.id);
     data.append("role", "User");
+    data.append("start_date", this.state.StartDate);
+    data.append("end_date", this.state.EndDate);
     axiosConfig
       .post("/getUserlistforBudget", data)
       .then((response) => {
@@ -361,7 +365,7 @@ class DateWiseReport extends React.Component {
 
                   <input
                     onChange={(e) => {
-                      this.setState({ SelectedDate: e.target.value });
+                      this.setState({ StartDate: e.target.value });
                     }}
                     className="form-control"
                     type="date"
@@ -378,7 +382,7 @@ class DateWiseReport extends React.Component {
 
                   <input
                     onChange={(e) => {
-                      this.setState({ SelectedDate: e.target.value });
+                      this.setState({ EndtDate: e.target.value });
                     }}
                     className="form-control"
                     type="date"
@@ -390,7 +394,7 @@ class DateWiseReport extends React.Component {
                     max={this.state.CurrentDate && this.state.CurrentDate}
                   />
                 </Col>
-                <Col>
+                <Col className="d-flex justify-content-end">
                   <Button
                     className="mt-2"
                     onClick={(e) => this.HandleDateWiseReport(e)}
