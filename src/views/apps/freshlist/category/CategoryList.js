@@ -135,30 +135,38 @@ class CategoryList extends React.Component {
                 <Route
                   render={({ history }) => (
                     <>
-                      <Eye
-                        className="mr-50"
-                        size="25px"
-                        color="green"
-                        onClick={() =>
-                          history.push(
-                            `/app/freshlist/category/viewCategory/${params?.data?.id}`
-                          )
-                        }
+                      <Route
+                        render={({ history }) => (
+                          <Eye
+                            className="mr-50"
+                            size="25px"
+                            color="green"
+                            onClick={() =>
+                              history.push(
+                                `/app/freshlist/category/editCategory/${params?.data?.id}`
+                              )
+                            }
+                          />
+                        )}
                       />
                     </>
                   )}
                 />
               )}
               {this.state.Editpermisson && (
-                <Edit
-                  className="mr-50"
-                  size="25px"
-                  color="blue"
-                  onClick={() =>
-                    history.push(
-                      `/app/freshlist/category/editCategory/${params?.data?.id}`
-                    )
-                  }
+                <Route
+                  render={({ history }) => (
+                    <Edit
+                      className="mr-50"
+                      size="25px"
+                      color="blue"
+                      onClick={() =>
+                        history.push(
+                          `/app/freshlist/category/editCategory/${params?.data?.id}`
+                        )
+                      }
+                    />
+                  )}
                 />
               )}
               {this.state.Deletepermisson && (

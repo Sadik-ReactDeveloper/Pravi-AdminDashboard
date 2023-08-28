@@ -19,13 +19,12 @@ import { BsBoxSeam } from "react-icons/bs";
 import { TbTruckDelivery } from "react-icons/tb";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import MainDash from "./MainDash";
-
+const Product = [];
 class AnalyticsDashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      product: "",
-
+      product: [],
       Viewpermisson: null,
       Editpermisson: null,
       Createpermisson: null,
@@ -43,34 +42,46 @@ class AnalyticsDashboard extends React.Component {
 
   componentDidMount() {
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
-    console.log(pageparmission.role);
+    // console.log(pageparmission.role);
     let newparmisson = pageparmission?.role?.find(
       (value) => value?.pageName === "Dashboard"
     );
-    console.log(newparmisson);
+    // console.log(newparmisson);
     this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
-    this.setState({
-      Createpermisson: newparmisson?.permission.includes("Create"),
-    });
-    this.setState({
-      Editpermisson: newparmisson?.permission.includes("Edit"),
-    });
-    this.setState({
-      Deletepermisson: newparmisson?.permission.includes("Delete"),
-    });
-    console.log(newparmisson?.permission.includes("View"));
-    console.log(newparmisson?.permission.includes("Create"));
-    console.log(newparmisson?.permission.includes("Edit"));
-    console.log(newparmisson?.permission.includes("Delete"));
-    // axiosConfig
-    //   .get("/admin/product_list")
-    //   .then((response) => {
-    //     console.log(response.data.data.length);
-    //     this.setState({ product: response.data.data.length });
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    // this.setState({
+    //   Createpermisson: newparmisson?.permission.includes("Create"),
+    // });
+    // this.setState({
+    //   Editpermisson: newparmisson?.permission.includes("Edit"),
+    // });
+    // this.setState({
+    //   Deletepermisson: newparmisson?.permission.includes("Delete"),
+    // });
+    // console.log(newparmisson?.permission.includes("View"));
+    // console.log(newparmisson?.permission.includes("Create"));
+    // console.log(newparmisson?.permission.includes("Edit"));
+    // console.log(newparmisson?.permission.includes("Delete"));
+    const data = new FormData();
+
+    data.append("user_id", pageparmission?.Userinfo?.id);
+    data.append("role", pageparmission?.Userinfo?.role);
+    axiosConfig
+      .post("/dashboard", data)
+      .then((response) => {
+        console.log(response?.data?.data?.Dashboard);
+
+        for (const [key, value] of Object.entries(
+          response?.data?.data?.Dashboard
+        )) {
+          Product.push(`${key}: ${value}`);
+          // console.log(`${key}: ${value}`);
+        }
+
+        this.setState({ product: Product });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     // axios
     //   .get("http://3.6.37.16:8000/admin/product_list")
     //   .then((response) => {
@@ -155,11 +166,49 @@ class AnalyticsDashboard extends React.Component {
     //   });
   }
   render() {
+    console.log(this.state.product);
     return (
       <React.Fragment>
         {this.state.Viewpermisson ? (
           <>
             <Row className="">
+              {this.state.product &&
+                this.state.product?.map((ele, i) => {
+                  let bgcolor = "";
+                  if ((i + 1) % 3 === 0) {
+                    bgcolor = "#62b5cfab";
+                  } else if ((i + 1) % 2 === 0) {
+                    bgcolor = "#4c4c9b4a";
+                  } else {
+                    bgcolor = "#0000ff8a";
+                  }
+
+                  return (
+                    <>
+                      <Col key={ele} lg="4" md="12">
+                        <Card
+                          style={{ backgroundColor: `${bgcolor}` }}
+                          // className={bgcolor}
+                        >
+                          <CardTitle
+                            className="mb-1 d-flex"
+                            // tag="h6"
+                            style={{ color: "black", padding: "30px 30px" }}
+                          >
+                            <FcOk />
+                            <CardText
+                              className="mx-2"
+                              style={{ color: "black" }}
+                            >
+                              <b>{ele} </b>
+                            </CardText>
+                          </CardTitle>
+                        </Card>
+                      </Col>
+                    </>
+                  );
+                })}
+
               {/* <Col lg="3" md="12">
             <Card
               className="bg-secondary"
@@ -219,31 +268,8 @@ class AnalyticsDashboard extends React.Component {
               </CardText> */}
               {/* </Card>
           </Col> */}
-              <Col lg="3" md="12">
-                <Card
-                  className="bg-secondary  py-3 "
-                  body
-                  inverse
-                  style={{ borderColor: "white" }}
-                >
-                  <CardTitle
-                    className="fntweight"
-                    tag="h3"
-                    style={{ color: "black", fontSize: "16px" }}
-                  >
-                    <FaBoxOpen style={{ color: "orange" }} />
-                    &nbsp;&nbsp; Total Products
-                  </CardTitle>
-                  <CardText
-                    className="wt-text"
-                    tag="span"
-                    style={{ color: "black", marginLeft: "4px" }}
-                  >
-                    {this.state.product}
-                  </CardText>
-                </Card>
-              </Col>
-              <Col lg="3" md="12">
+
+              {/* <Col lg="3" md="12">
                 <Card
                   className="bg-secondary  py-3"
                   body
@@ -266,87 +292,9 @@ class AnalyticsDashboard extends React.Component {
                     {this.state.product}
                   </CardText>
                 </Card>
-              </Col>
-              <Col lg="3" md="12">
-                <Card
-                  className="bg-secondary  py-3"
-                  body
-                  inverse
-                  style={{ borderColor: "white" }}
-                >
-                  <CardTitle
-                    className="fntweight"
-                    tag="h3"
-                    style={{ color: "black", fontSize: "16px" }}
-                  >
-                    <FaBoxOpen style={{ color: "orange" }} />
-                    &nbsp;&nbsp; Total Sales
-                  </CardTitle>
-                  <CardText
-                    className="wt-text"
-                    tag="span"
-                    style={{ color: "black", marginLeft: "4px" }}
-                  >
-                    {this.state.product}
-                  </CardText>
-                </Card>
-              </Col>
-              <Col lg="3" md="12">
-                <Card
-                  className="bg-secondary py-3"
-                  body
-                  inverse
-                  style={{ borderColor: "white" }}
-                >
-                  <CardTitle
-                    className="fntweight"
-                    tag="h3"
-                    style={{ color: "black", fontSize: "14px" }}
-                  >
-                    <FaBoxOpen style={{ color: "orange" }} />
-                    &nbsp;&nbsp; Total Customers
-                  </CardTitle>
-                  <CardText
-                    className="wt-text"
-                    tag="span"
-                    style={{ color: "black", marginLeft: "4px" }}
-                  >
-                    {this.state.product}
-                  </CardText>
-                </Card>
-              </Col>
-              <Col lg="3" md="12">
-                <Card className="bg-secondary" body inverse>
-                  <CardTitle
-                    className="mb-1"
-                    tag="h4"
-                    style={{ color: "black" }}
-                  >
-                    <FcNews />
-                    &nbsp;&nbsp; Pending(05)
-                  </CardTitle>
+              </Col> */}
 
-                  {/* <CardText tag="h3" style={{ color: "white" }}>
-                {this.state.brand.data}
-              </CardText> */}
-                </Card>
-              </Col>
-              <Col lg="3" md="12">
-                <Card className="bg-secondary" body inverse>
-                  <CardTitle
-                    className="mb-1"
-                    tag="h4"
-                    style={{ color: "black" }}
-                  >
-                    <FcOk />
-                    &nbsp;&nbsp;Confirmed(10)
-                  </CardTitle>
-                  {/* <CardText tag="h3" style={{ color: "white" }}>
-                {this.state.banner.data}
-              </CardText> */}
-                </Card>
-              </Col>
-              <Col lg="3" md="12">
+              {/* <Col lg="3" md="12">
                 <Card className="bg-secondary" body inverse>
                   <CardTitle
                     className="mb-1"
@@ -356,86 +304,9 @@ class AnalyticsDashboard extends React.Component {
                     <BsBoxSeam style={{ color: "cornflowerblue" }} />
                     &nbsp;&nbsp;Packaging(35)
                   </CardTitle>
-                  {/* <CardText tag="h3" style={{ color: "white" }}>
-                {this.state.total_sub.data}
-              </CardText> */}
+                  
                 </Card>
-              </Col>
-              <Col lg="3" md="12">
-                <Card className="bg-secondary" body inverse>
-                  <CardTitle
-                    className="mb-1"
-                    tag="h4"
-                    style={{ color: "black", fontSize: "15px" }}
-                  >
-                    <FcShipped />
-                    &nbsp;&nbsp;Out for delivery(39)
-                  </CardTitle>
-                  {/* <CardText tag="h3" style={{ color: "white" }}>
-                {this.state.Coupon.data}
-              </CardText> */}
-                </Card>
-              </Col>
-              <Col lg="3" md="12">
-                <Card className="bg-secondary" body inverse>
-                  <CardTitle
-                    className="mb-1"
-                    tag="h4"
-                    style={{ color: "black" }}
-                  >
-                    <TbTruckDelivery />
-                    &nbsp;&nbsp;Delivered(29)
-                  </CardTitle>
-                  {/* <CardText tag="h3" style={{ color: "white" }}>
-                {this.state.Coupon.data}
-              </CardText> */}
-                </Card>
-              </Col>
-              <Col lg="3" md="12">
-                <Card className="bg-secondary" body inverse>
-                  <CardTitle
-                    className="mb-1"
-                    tag="h4"
-                    style={{ color: "black" }}
-                  >
-                    <FcCancel />
-                    &nbsp;&nbsp;Cancelled(00)
-                  </CardTitle>
-                  {/* <CardText tag="h3" style={{ color: "white" }}>
-                {this.state.Coupon.data}
-              </CardText> */}
-                </Card>
-              </Col>
-              <Col lg="3" md="12">
-                <Card className="bg-secondary" body inverse>
-                  <CardTitle
-                    className="mb-1"
-                    tag="h4"
-                    style={{ color: "black" }}
-                  >
-                    <FcRules />
-                    &nbsp;&nbsp; Returned (00)
-                  </CardTitle>
-                  {/* <CardText tag="h3" style={{ color: "white" }}>
-                {this.state.Coupon.data}
-              </CardText> */}
-                </Card>
-              </Col>
-              <Col lg="3" md="12">
-                <Card className="bg-secondary" body inverse>
-                  <CardTitle
-                    className="mb-1"
-                    tag="h4"
-                    style={{ color: "black", fontSize: "15px" }}
-                  >
-                    <AiOutlineCloseCircle />
-                    &nbsp;&nbsp; Failed delivery(2)
-                  </CardTitle>
-                  {/* <CardText tag="h3" style={{ color: "white" }}>
-                {this.state.Coupon.data}
-              </CardText> */}
-                </Card>
-              </Col>
+              </Col> */}
             </Row>
           </>
         ) : (

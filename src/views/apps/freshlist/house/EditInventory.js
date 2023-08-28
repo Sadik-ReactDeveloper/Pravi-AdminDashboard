@@ -187,6 +187,23 @@ export class EditInventory extends Component {
             <Col>
               <h2>Existing Information</h2>
             </Col>
+            <Col>
+              <Route
+                render={({ history }) => (
+                  <Button
+                    className=" float-right"
+                    color="danger"
+                    onClick={
+                      () => history.goBack()
+                      // () => history.push("/app/freshlist/order/delivered")
+                      // history.push("/app/freshlist/order/addOrder")
+                    }
+                  >
+                    Back
+                  </Button>
+                )}
+              />
+            </Col>
             {/* <Col>
               <Route
                 render={({ history }) => (

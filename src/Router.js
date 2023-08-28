@@ -482,6 +482,9 @@ const DateWiseReport = lazy(() =>
 const Clientwisereport = lazy(() =>
   import("./views/apps/freshlist/cart/Clientwisereport")
 );
+const ViewoneFinalreport = lazy(() =>
+  import("./views/apps/freshlist/cart/ViewOneReport")
+);
 const BranchwiseReport = lazy(() =>
   import("./views/apps/freshlist/cart/BranchwiseReport")
 );
@@ -1393,6 +1396,10 @@ class AppRouter extends React.Component {
           <AppRoute
             path="/app/freshlist/cart/Clientwisereport"
             component={Clientwisereport}
+          />
+          <AppRoute
+            path="/app/freshlist/cart/ViewoneFinalreport"
+            component={ViewoneFinalreport}
           />
           <AppRoute
             path="/app/freshlist/cart/BranchwiseReport"

@@ -22,14 +22,16 @@ import "../../../../assets/scss/pages/users.scss";
 import { Route, Link } from "react-router-dom";
 // import { components } from "react-select";
 import axiosConfig from "../../../../axiosConfig";
+import swal from "sweetalert";
 
-class BranchwiseReport extends React.Component {
+class ViewOneReport extends React.Component {
   state = {
     rowData: [],
     paginationPageSize: 20,
     currenPageSize: "",
-    SelectedBranch: "",
-    getPageSize: "",
+    CurrentDate: "",
+    StartDate: "",
+    EndDate: "",
     defaultColDef: {
       sortable: true,
       // editable: true,
@@ -41,44 +43,84 @@ class BranchwiseReport extends React.Component {
         headerName: "S.No",
         valueGetter: "node.rowIndex + 1",
         field: "node.rowIndex + 1",
-        width: 80,
+        width: 150,
         filter: true,
+      },
+      {
+        headerName: "PRODUCT Image",
+        field: "product",
+        filter: "agSetColumnFilter",
+        width: 150,
+        cellRendererFramework: (params) => {
+          // console.log(params.data);
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                {/* <span>{params.data?.title}</span> */}
+                {params?.data?.product_images ? (
+                  <img
+                    style={{ borderRadius: "12px" }}
+                    width="60px"
+                    height="40px"
+                    src={params?.data?.product_images[0]}
+                    alt="image"
+                  />
+                ) : (
+                  "No Image "
+                )}
+              </div>
+            </div>
+          );
+        },
       },
       {
         headerName: "PoNo",
         field: "po_no",
         filter: true,
-        width: 120,
+        width: 200,
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data?.po_no}</span>
+              <span>{params.data.po_no}</span>
             </div>
           );
         },
       },
       {
-        headerName: "OrderStatus",
-        field: "order_status",
+        headerName: "product_id",
+        field: "product_id",
         filter: true,
-        width: 160,
+        width: 200,
         cellRendererFramework: (params) => {
           return (
             <div>
-              <Badge color="success">{params.data?.order_status}</Badge>
+              <span>{params.data.product_id}</span>
             </div>
           );
         },
       },
       {
-        headerName: "Branch Code",
-        field: "display_code",
+        headerName: "title",
+        field: "title",
         filter: true,
-        width: 160,
+        width: 200,
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data?.display_code}</span>
+              <Badge color="success">{params.data.title}</Badge>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "qty",
+        field: "qty",
+        filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <span>{params.data.qty}</span>
             </div>
           );
         },
@@ -149,32 +191,32 @@ class BranchwiseReport extends React.Component {
       //     );
       //   },
       // },
-      {
-        headerName: "suppliername",
-        field: "supplier_name",
-        filter: true,
-        width: 160,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data?.supplier_name}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "total",
-        field: "total",
-        filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data?.total}</span>
-            </div>
-          );
-        },
-      },
+      //   {
+      //     headerName: "suppliername",
+      //     field: "supplier_name",
+      //     filter: true,
+      //     width: 200,
+      //     cellRendererFramework: (params) => {
+      //       return (
+      //         <div>
+      //           <span>{params.data.supplier_name}</span>
+      //         </div>
+      //       );
+      //     },
+      //   },
+      //   {
+      //     headerName: "total",
+      //     field: "total",
+      //     filter: true,
+      //     width: 200,
+      //     cellRendererFramework: (params) => {
+      //       return (
+      //         <div>
+      //           <span>{params.data.total}</span>
+      //         </div>
+      //       );
+      //     },
+      //   },
       // {
       //   headerName: "suppliercity",
       //   field: "supplier_city_name",
@@ -214,19 +256,19 @@ class BranchwiseReport extends React.Component {
       //     );
       //   },
       // },
-      {
-        headerName: "createddate",
-        field: "created_date",
-        filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data?.created_date}</span>
-            </div>
-          );
-        },
-      },
+      //   {
+      //     headerName: "createddate",
+      //     field: "created_date",
+      //     filter: true,
+      //     width: 200,
+      //     cellRendererFramework: (params) => {
+      //       return (
+      //         <div>
+      //           <span>{params.data.created_date}</span>
+      //         </div>
+      //       );
+      //     },
+      //   },
 
       // {
       //   headerName: "Status",
@@ -245,42 +287,43 @@ class BranchwiseReport extends React.Component {
       //     ) : null;
       //   },
       // },
-      {
-        headerName: "Actions",
-        field: "sortorder",
-        field: "transactions",
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="actions cursor-pointer">
-              <Route
-                render={({ history }) => (
-                  <Eye
-                    className="mr-50"
-                    size="25px"
-                    color="blue"
-                    onClick={() =>
-                      history.push({
-                        pathname: `/app/freshlist/cart/ViewoneFinalreport`,
-                        state: params.data,
-                      })
-                    }
-                  />
-                )}
-              />
-            </div>
-          );
-        },
-      },
+      //   {
+      //     headerName: "Actions",
+      //     field: "sortorder",
+      //     field: "transactions",
+      //     width: 150,
+      //     cellRendererFramework: (params) => {
+      //       return (
+      //         <div className="actions cursor-pointer">
+      //           <Eye
+      //             className="mr-50"
+      //             size="25px"
+      //             color="green"
+      //             onClick={() =>
+      //               history.push(
+      //                 `/app/freshlist/subscriber/viewSubscriber/${params.data._id}`
+      //               )
+      //             }
+      //           />
+      //         </div>
+      //       );
+      //     },
+      //   },
     ],
   };
   componentDidMount() {
+    let data = this.props?.location.state?.products;
+    console.log(data);
+    this.setState({ rowData: data });
+    const date = new Date().toISOString();
+    // console.log(date.split("T")[0]);
+    this.setState({ CurrentDate: date.split("T")[0] });
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
-    console.log(pageparmission.role);
+    // console.log(pageparmission.role);
     let newparmisson = pageparmission?.role?.find(
-      (value) => value?.pageName === "Branch Wise"
+      (value) => value?.pageName === "Date Wise"
     );
-    console.log(newparmisson);
+    // console.log(newparmisson);
     this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
     this.setState({
       Createpermisson: newparmisson?.permission.includes("Create"),
@@ -291,23 +334,20 @@ class BranchwiseReport extends React.Component {
     this.setState({
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
-    // console.log(newparmisson?.permission.includes("View"));
-    // console.log(newparmisson?.permission.includes("Create"));
-    // console.log(newparmisson?.permission.includes("Edit"));
-    // console.log(newparmisson?.permission.includes("Delete"));
 
-    const formdata = new FormData();
-    formdata.append("user_id", pageparmission?.Userinfo?.id);
-    formdata.append("role", pageparmission?.Userinfo?.role);
-    axiosConfig
-      .post("/reportApi", formdata)
-      .then((response) => {
-        let rowData = response?.data?.data;
-        this.setState({ rowData });
-      })
-      .catch((err) => {
-        // console.log(err);
-      });
+    // const formdata = new FormData();
+    // formdata.append("user_id", pageparmission?.Userinfo?.id);
+    // formdata.append("role", pageparmission?.Userinfo?.role);
+    // axiosConfig
+    //   .post("/reportApi", formdata)
+    //   .then((response) => {
+    //     // console.log(response?.data?.data);
+    //     let rowData = response?.data?.data;
+    //     this.setState({ rowData });
+    //   })
+    //   .catch((err) => {
+    //     // console.log(err);
+    //   });
   }
   onGridReady = (params) => {
     this.gridApi = params.api;
@@ -330,62 +370,61 @@ class BranchwiseReport extends React.Component {
       });
     }
   };
-  handleBranchWiseReport = (e) => {
-    e.preventDefault();
-    let pageparmission = JSON.parse(localStorage.getItem("userData"));
-    console.log("object", this.state.SelectedBranch);
-    const data = new FormData();
-    data.append("user_id", pageparmission?.Userinfo?.id);
-    data.append("role", "User");
-    axiosConfig
-      .post("/getUserlistforBudget", data)
-      .then((response) => {
-        let userDataList = response?.data?.data?.users;
-        // this.setState({ userDataList });
-      })
-      .catch((err) => {
-        // console.log(err);
-      });
-  };
+  //   HandleDateWiseReport = (e) => {
+  //     e.preventDefault();
+  //     let pageparmission = JSON.parse(localStorage.getItem("userData"));
+  //     // console.log("start", this.state.StartDate);
+  //     // console.log("end", this.state.EndDate);
+  //     const data = new FormData();
+  //     data.append("user_id", pageparmission?.Userinfo?.id);
+  //     data.append("role", pageparmission?.Userinfo?.role);
+  //     data.append("from_date", this.state.StartDate);
+  //     data.append("to_date", this.state.EndDate);
+  //     axiosConfig
+  //       .post("/reportApi", data)
+  //       .then((response) => {
+  //         // debugger;
+
+  //         // console.log(response);
+  //         let rowData = response?.data?.data;
+  //         this.setState({ rowData });
+  //       })
+  //       .catch((err) => {
+  //         console.log(err?.response?.message);
+  //         swal("No Record Found");
+  //       });
+  //   };
   render() {
     const { rowData, columnDefs, defaultColDef } = this.state;
+
     return (
       // console.log(rowData),
       <Row className="app-user-list">
+        <Col sm="12"></Col>
         <Col sm="12">
           <Card>
             <Row className="m-2">
-              <Col sm="6" lg="6" md="6">
-                <h1 sm="6" className="float-left">
-                  Branch Wise Report
-                </h1>
+              <Col sm="4" lg="4" md="4">
+                <h1 className="float-left">View Report</h1>
               </Col>
-              {/* <Col lg="4" md="4" sm="4">
-                <label for="cars">Select Branch :</label>
 
-                <select
-                  onChange={(e) => {
-                    this.setState({ SelectedBranch: e.target.value });
-                  }}
-                  className="form-control"
-                  name="cars"
-                  id="cars"
-                >
-                  <option value="volvo">Volvo</option>
-                  <option value="saab">Saab</option>
-                  <option value="mercedes">Mercedes</option>
-                  <option value="audi">Audi</option>
-                </select>
-              </Col>
               <Col>
-                <Button
-                  className="mt-2"
-                  onClick={(e) => this.handleBranchWiseReport(e)}
-                  color="primary"
-                >
-                  Submit
-                </Button>
-              </Col> */}
+                <Route
+                  render={({ history }) => (
+                    <Button
+                      className=" float-right"
+                      color="danger"
+                      onClick={
+                        () => history.goBack()
+                        // () => history.push("/app/freshlist/order/delivered")
+                        // history.push("/app/freshlist/order/addOrder")
+                      }
+                    >
+                      Back
+                    </Button>
+                  )}
+                />
+              </Col>
             </Row>
             <CardBody>
               {this.state.rowData === null ? null : (
@@ -458,7 +497,7 @@ class BranchwiseReport extends React.Component {
                   <ContextLayout.Consumer>
                     {(context) => (
                       <AgGridReact
-                        // gridOptions={{}}
+                        gridOptions={{}}
                         rowSelection="multiple"
                         defaultColDef={defaultColDef}
                         columnDefs={columnDefs}
@@ -483,4 +522,4 @@ class BranchwiseReport extends React.Component {
     );
   }
 }
-export default BranchwiseReport;
+export default ViewOneReport;
