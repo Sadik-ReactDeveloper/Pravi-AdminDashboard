@@ -90,7 +90,7 @@ class ViewOneReport extends React.Component {
         headerName: "product_id",
         field: "product_id",
         filter: true,
-        width: 200,
+        width: 160,
         cellRendererFramework: (params) => {
           return (
             <div>
@@ -103,7 +103,7 @@ class ViewOneReport extends React.Component {
         headerName: "title",
         field: "title",
         filter: true,
-        width: 200,
+        width: 160,
         cellRendererFramework: (params) => {
           return (
             <div>
@@ -113,14 +113,40 @@ class ViewOneReport extends React.Component {
         },
       },
       {
+        headerName: "price",
+        field: "price",
+        filter: true,
+        width: 120,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <Badge color="success">{params.data.price}</Badge>
+            </div>
+          );
+        },
+      },
+      {
         headerName: "qty",
         field: "qty",
         filter: true,
-        width: 200,
+        width: 120,
         cellRendererFramework: (params) => {
           return (
             <div>
               <span>{params.data.qty}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Total",
+        field: "qty",
+        filter: true,
+        width: 120,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <span>{params.data.qty * params.data.price}</span>
             </div>
           );
         },
