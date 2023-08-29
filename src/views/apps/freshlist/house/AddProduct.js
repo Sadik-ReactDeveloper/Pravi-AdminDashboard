@@ -155,7 +155,7 @@ export class AddProduct extends Component {
       data.append("veriety", JSON.stringify(this.state.formValues));
     }
     data.append("category_id", this.state.category_name);
-    data.append("stock", this.state.stock);
+    // data.append("stock", this.state.stock);
     data.append("price", this.state.Price);
     data.append("discountprice", this.state.DiscountPrice);
     data.append("description", this.state.description);

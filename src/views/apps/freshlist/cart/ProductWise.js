@@ -71,6 +71,7 @@ class ProductWise extends React.Component {
         headerName: "Product Name",
         field: "products",
         filter: true,
+        // filter: "agTextColumnFilter",
         // innerHeight: 100,
         width: 200,
         // filterParams: {
@@ -100,6 +101,9 @@ class ProductWise extends React.Component {
         headerName: "OrderStatus",
         field: "order_status",
         filter: true,
+
+        // filter: "agSetColumnFilter",
+
         width: 160,
         cellRendererFramework: (params) => {
           return (
@@ -439,7 +443,7 @@ class ProductWise extends React.Component {
           swal(`${err.response?.data.message}`);
         });
     } else {
-      swal("Warning", "Select Product");
+      swal("Warning", "Select Product first");
     }
   };
   render() {
