@@ -331,6 +331,11 @@ export class AddProduct extends Component {
                   <FormGroup>
                     <Label> PRICE (₹)</Label>
                     <Input
+                      onKeyDown={(e) =>
+                        ["e", "E", "+", "-"].includes(e.key) &&
+                        e.preventDefault()
+                      }
+                      min={0}
                       type="number"
                       placeholder="Amount In Number"
                       name="Price"
@@ -394,6 +399,11 @@ export class AddProduct extends Component {
                             <Col lg="4" sm="4">
                               <label>Price</label>
                               <input
+                                onKeyDown={(e) =>
+                                  ["e", "E", "+", "-"].includes(e.key) &&
+                                  e.preventDefault()
+                                }
+                                min={0}
                                 className="form-control"
                                 type="number"
                                 name="price"
@@ -447,6 +457,11 @@ export class AddProduct extends Component {
                   <FormGroup>
                     <Label>Discount Price</Label>
                     <Input
+                      onKeyDown={(e) =>
+                        ["e", "E", "+", "-"].includes(e.key) &&
+                        e.preventDefault()
+                      }
+                      min={0}
                       type="number"
                       placeholder="Discount Price"
                       name="DiscountPrice"
@@ -460,6 +475,11 @@ export class AddProduct extends Component {
                   <FormGroup>
                     <Label>SHIPPING FEE(₹)</Label>
                     <Input
+                      onKeyDown={(e) =>
+                        ["e", "E", "+", "-"].includes(e.key) &&
+                        e.preventDefault()
+                      }
+                      min={0}
                       type="number"
                       placeholder="Number..."
                       name="shipmentfee"
@@ -473,6 +493,11 @@ export class AddProduct extends Component {
                   <FormGroup>
                     <Label>TAX RATE (%)</Label>
                     <Input
+                      onKeyDown={(e) =>
+                        ["e", "E", "+", "-"].includes(e.key) &&
+                        e.preventDefault()
+                      }
+                      min={0}
                       type="number"
                       placeholder="Tax in Percentage"
                       name="taxrate"
