@@ -15,6 +15,7 @@ import {
 import axios from "axios";
 import { ContextLayout } from "../../../../utility/context/Layout";
 import { AgGridReact } from "ag-grid-react";
+import Multiselect from "multiselect-react-dropdown";
 import { Edit, Trash2, ChevronDown, Eye } from "react-feather";
 import { history } from "../../../../history";
 import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
@@ -23,10 +24,14 @@ import { Route, Link } from "react-router-dom";
 // import { components } from "react-select";
 import axiosConfig from "../../../../axiosConfig";
 import swal from "sweetalert";
+const selectItem1 = [];
 
 class DateWiseReport extends React.Component {
   state = {
     rowData: [],
+    Userlist: [],
+    multiSelect: [],
+    SelectedClient: "",
     paginationPageSize: 20,
     currenPageSize: "",
     CurrentDate: "",
@@ -296,20 +301,32 @@ class DateWiseReport extends React.Component {
     this.setState({
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
-
-    const formdata = new FormData();
-    formdata.append("user_id", pageparmission?.Userinfo?.id);
-    formdata.append("role", pageparmission?.Userinfo?.role);
+    const data = new FormData();
+    data.append("user_id", pageparmission?.Userinfo?.id);
+    data.append("role", pageparmission?.Userinfo?.role);
     axiosConfig
-      .post("/reportApi", formdata)
+      .post("/getReportUserlist", data)
       .then((response) => {
-        // console.log(response?.data?.data);
-        let rowData = response?.data?.data;
-        this.setState({ rowData });
+        console.log(response?.data?.data?.users);
+        this.setState({ Userlist: response?.data?.data?.users });
       })
       .catch((err) => {
         // console.log(err);
       });
+
+    // const formdata = new FormData();
+    // formdata.append("user_id", pageparmission?.Userinfo?.id);
+    // formdata.append("role", pageparmission?.Userinfo?.role);
+    // axiosConfig
+    //   .post("/reportApi", formdata)
+    //   .then((response) => {
+    //     // console.log(response?.data?.data);
+    //     let rowData = response?.data?.data;
+    //     this.setState({ rowData });
+    //   })
+    //   .catch((err) => {
+    //     // console.log(err);
+    //   });
   }
   onGridReady = (params) => {
     this.gridApi = params.api;
@@ -335,29 +352,53 @@ class DateWiseReport extends React.Component {
   HandleDateWiseReport = (e) => {
     e.preventDefault();
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
-    // console.log("start", this.state.StartDate);
-    // console.log("end", this.state.EndDate);
+
     const data = new FormData();
     data.append("user_id", pageparmission?.Userinfo?.id);
     data.append("role", pageparmission?.Userinfo?.role);
-    data.append("from_date", this.state.StartDate);
+    data.append("client_id", this.state.SelectedClient);
+    data.append("from_date ", this.state.StartDate);
     data.append("to_date", this.state.EndDate);
     axiosConfig
       .post("/reportApi", data)
       .then((response) => {
-        // debugger;
-
-        // console.log(response);
-        let rowData = response?.data?.data;
-        this.setState({ rowData });
+        let alllist = response?.data?.data;
+        console.log(response.data?.message);
+        if (response.data?.message === "Record Not Found.") {
+          swal(`${response.data?.message}`);
+          this.setState({ rowData: "" });
+        } else {
+          this.setState({ rowData: alllist });
+        }
       })
       .catch((err) => {
-        console.log(err?.response?.message);
-        swal("No Record Found");
+        console.log(err.response?.data.message);
+        swal(`${err.response?.data.message}`);
+        // if (err.response?.data.message) {
+        // }
       });
   };
+  onSelect(selectedList, selectedItem) {
+    debugger;
+    // console.log(selectedList[0]?.id);
+    selectItem1 = [selectedList];
+    // if (selectedList.length) {
+    //   for (var i = 0; i < selectedList.length; i++) {
+    //     selectItem1.push(selectedList[i].id);
+    //   }
+    // }
+    // if (selectedList[0]?.id) {
+    //   this.setState({ SelectedClient: selectedList[0]?.id });
+    // }
+    console.log(selectItem1);
+  }
+  onRemove = (selectedList, removedItem) => {
+    console.log(selectedList);
+
+    console.log(removedItem);
+  };
   render() {
-    const { rowData, columnDefs, defaultColDef } = this.state;
+    const { rowData, columnDefs, defaultColDef, Userlist } = this.state;
 
     return (
       // console.log(rowData),
@@ -366,10 +407,10 @@ class DateWiseReport extends React.Component {
         <Col sm="12">
           <Card>
             <Row className="m-2">
-              <Col sm="4" lg="4" md="4">
+              <Col sm="3" lg="3" md="3">
                 <h1 className="float-left">Date Wise Report</h1>
               </Col>
-              <Col lg="3" sm="3" md="3">
+              <Col lg="2" sm="2" md="2">
                 <label for="start">Start Date:</label>
 
                 <input
@@ -386,7 +427,7 @@ class DateWiseReport extends React.Component {
                   max={this.state.CurrentDate && this.state.CurrentDate}
                 />
               </Col>
-              <Col lg="3" sm="3" md="3">
+              <Col lg="2" sm="2" md="2">
                 <label for="start">End Date:</label>
 
                 <input
@@ -403,6 +444,34 @@ class DateWiseReport extends React.Component {
                   max={this.state.CurrentDate && this.state.CurrentDate}
                 />
               </Col>
+              <Col lg="2" sm="2" md="2">
+                <label for="cars">Choose a User:</label>
+                {/* <Multiselect
+                  // singleSelect
+                  selectionLimit="1"
+                  options={Userlist} // Options to display in the dropdown
+                  selectedValues={this.state.SelectedClient} // Preselected value to persist in dropdown
+                  onSelect={this.onSelect} // Function will trigger on select event
+                  onRemove={this.onRemove} // Function will trigger on remove event
+                  displayValue="full_name" // Property name to display in the dropdown options
+                /> */}
+                <select
+                  onChange={(e) =>
+                    this.setState({ SelectedClient: e.target.value })
+                  }
+                  className="form-control"
+                  name="cars"
+                  id="cars"
+                >
+                  <option value="not Selected">--Select User--</option>
+                  {Userlist?.map((ele, i) => (
+                    <option key={i} value={ele.id}>
+                      {ele.full_name} &nbsp; &nbsp;({ele.role})
+                    </option>
+                  ))}
+                </select>
+              </Col>
+
               <Col lg="2" className="d-flex justify-content-end">
                 <Button
                   className="mt-2"

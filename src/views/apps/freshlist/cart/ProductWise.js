@@ -22,14 +22,19 @@ import "../../../../assets/scss/pages/users.scss";
 import { Route, Link } from "react-router-dom";
 // import { components } from "react-select";
 import axiosConfig from "../../../../axiosConfig";
+import swal from "sweetalert";
 const rowHeight = 100;
 const newarr = [];
 class ProductWise extends React.Component {
   state = {
     rowData: [],
     paginationPageSize: 20,
+    CurrentDate: "",
+    StartDate: "",
+    EndDate: "",
     currenPageSize: "",
     filteredRowData: [],
+    Productlist: [],
     originalRowData: [], // Store the original data
     productFilterText: "",
     SelectedProduct: "",
@@ -67,7 +72,7 @@ class ProductWise extends React.Component {
         field: "products",
         filter: true,
         // innerHeight: 100,
-        width: 160,
+        width: 200,
         // filterParams: {
         //   textCustomComparator: function (filter, value, filterText) {
         //     // Convert product titles to a single string for filtering
@@ -75,7 +80,12 @@ class ProductWise extends React.Component {
         //     return allTitles.toLowerCase().includes(filterText.toLowerCase());
         //   },
         // },
+
         cellRendererFramework: (params) => {
+          // let newdata = params?.data?.products?.filter(
+          //   (ele) => ele?.product_id === this.state.SelectedProduct
+          // );
+          // console.log(newdata[0]);
           return (
             <div className="d-flex flex-wrap">
               {params?.data?.products &&
@@ -346,6 +356,9 @@ class ProductWise extends React.Component {
   // }
 
   componentDidMount() {
+    const date = new Date().toISOString();
+    // console.log(date.split("T")[0]);
+    this.setState({ CurrentDate: date.split("T")[0] });
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
     // console.log(pageparmission.role);
     let newparmisson = pageparmission?.role?.find(
@@ -367,10 +380,11 @@ class ProductWise extends React.Component {
     formdata.append("user_id", pageparmission?.Userinfo?.id);
     formdata.append("role", pageparmission?.Userinfo?.role);
     axiosConfig
-      .post("/reportApi", formdata)
+      .post("/getReportProductList", formdata)
       .then((response) => {
         let rowData = response?.data?.data;
-        this.setState({ rowData });
+        console.log(rowData);
+        this.setState({ Productlist: rowData });
       })
       .catch((err) => {
         // console.log(err);
@@ -400,28 +414,37 @@ class ProductWise extends React.Component {
   handleProductWiseReport = (e) => {
     e.preventDefault();
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
-    console.log("object", this.state.SelectedProduct);
+
     const data = new FormData();
     data.append("user_id", pageparmission?.Userinfo?.id);
-    data.append("role", "User");
-    axiosConfig
-      .post("/getUserlistforBudget", data)
-      .then((response) => {
-        let userDataList = response?.data?.data?.users;
-        // this.setState({ userDataList });
-      })
-      .catch((err) => {
-        // console.log(err);
-      });
+    data.append("role", pageparmission?.Userinfo?.role);
+    data.append("product_id", this.state.SelectedProduct);
+    data.append("from_date ", this.state.StartDate);
+    data.append("to_date", this.state.EndDate);
+    if (this.state.SelectedProduct) {
+      axiosConfig
+        .post("/getReportProductWise", data)
+        .then((response) => {
+          let alllist = response?.data?.data;
+          console.log(response.data?.data);
+          if (response.data?.message === "Record Not Found.") {
+            swal(`${response.data?.message}`);
+            this.setState({ rowData: "" });
+          } else {
+            this.setState({ rowData: alllist });
+          }
+        })
+        .catch((err) => {
+          console.log(err.response?.data.message);
+          swal(`${err.response?.data.message}`);
+        });
+    } else {
+      swal("Warning", "Select Product");
+    }
   };
   render() {
-    const {
-      filteredRowData,
-      productFilterText,
-      rowData,
-      columnDefs,
-      defaultColDef,
-    } = this.state;
+    const { filteredRowData, Productlist, rowData, columnDefs, defaultColDef } =
+      this.state;
     return (
       // console.log(filteredRowData),
       // console.log(productFilterText),
@@ -430,29 +453,70 @@ class ProductWise extends React.Component {
         <Col sm="12">
           <Card>
             <Row className="m-2">
-              <Col sm="6" lg="6" md="6">
-                <h1 sm="6" className="float-left">
-                  Product Wise Report
-                </h1>
+              <Col sm="4" lg="4" md="4">
+                <h1 className="float-left">Product Wise Report</h1>
               </Col>
-              <Col lg="4" md="4" sm="4">
-                <label for="cars">Select Product :</label>
+              <Col lg="2" sm="2" md="2">
+                <label for="start">Start Date:</label>
 
-                <select
+                <input
+                  onChange={(e) => {
+                    this.setState({ StartDate: e.target.value });
+                  }}
+                  className="form-control"
+                  type="date"
+                  id="start"
+                  name="trip-start"
+                  pattern="\d{4}-\d{2}-\d{2}"
+                  // value="2018-07-22"
+                  min="2019-01-01"
+                  max={this.state.CurrentDate && this.state.CurrentDate}
+                />
+              </Col>
+              <Col lg="2" sm="2" md="2">
+                <label for="start">End Date:</label>
+
+                <input
+                  onChange={(e) => {
+                    this.setState({ EndDate: e.target.value });
+                  }}
+                  className="form-control"
+                  type="date"
+                  id="start"
+                  name="trip-start"
+                  pattern="\d{4}-\d{2}-\d{2}"
+                  // value="2018-07-22"
+                  min="2019-01-01"
+                  max={this.state.CurrentDate && this.state.CurrentDate}
+                />
+              </Col>
+              <Col lg="2" sm="2" md="2">
+                <label
                   onChange={(e) => {
                     this.setState({ SelectedProduct: e.target.value });
                   }}
+                  for="cars"
+                >
+                  Choose a Product:
+                </label>
+
+                <select
+                  onChange={(e) =>
+                    this.setState({ SelectedProduct: e.target.value })
+                  }
                   className="form-control"
                   name="cars"
                   id="cars"
                 >
-                  <option value="volvo">Volvo</option>
-                  <option value="saab">Saab</option>
-                  <option value="mercedes">Mercedes</option>
-                  <option value="audi">Audi</option>
+                  <option value="not Selected">--Select User--</option>
+                  {Productlist?.map((ele, i) => (
+                    <option key={i} value={ele.id}>
+                      {ele.title}
+                    </option>
+                  ))}
                 </select>
               </Col>
-              <Col>
+              <Col lg="2" className="d-flex justify-content-end">
                 <Button
                   className="mt-2"
                   onClick={(e) => this.handleProductWiseReport(e)}
@@ -515,8 +579,8 @@ class ProductWise extends React.Component {
                         <Input
                           placeholder="search..."
                           onChange={(e) => {
-                            // this.updateSearchQuery(e.target.value);
-                            this.handleProductFilterChange(e);
+                            this.updateSearchQuery(e.target.value);
+                            // this.handleProductFilterChange(e);
                           }}
                           value={this.state.value}
                         />

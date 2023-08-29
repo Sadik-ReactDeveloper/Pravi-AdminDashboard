@@ -32,6 +32,7 @@ import Moment from "react-moment";
 import { FaWallet, Facart, FaCartArrowDown, FaBoxOpen } from "react-icons/fa";
 import "moment-timezone";
 import { Route } from "react-router-dom";
+import swal from "sweetalert";
 
 class Invetory extends React.Component {
   state = {
@@ -317,9 +318,7 @@ class Invetory extends React.Component {
                   size="25px"
                   color="Red"
                   onClick={() => {
-                    let selectedData = this.gridApi.getSelectedRows();
                     this.runthisfunction(params.data._id);
-                    this.gridApi.updateRowData({ remove: selectedData });
                   }}
                 />
               )}
@@ -366,9 +365,32 @@ class Invetory extends React.Component {
   }
 
   async runthisfunction(id) {
-    console.log(id);
-    await axiosConfig.get(`/deltermcondition/${id}`).then((response) => {
-      console.log(response);
+    let selectedData = this.gridApi.getSelectedRows();
+
+    swal("Warning", "Sure You Want to Delete it", {
+      buttons: {
+        cancel: "cancel",
+        catch: { text: "Delete ", value: "delete" },
+      },
+    }).then((value) => {
+      switch (value) {
+        case "delete":
+          let data = new FormData();
+          data.append("id", id);
+          axiosConfig
+            .post("/deleteproduct", data)
+            .then((resp) => {
+              console.log(resp);
+
+              this.gridApi.updateRowData({ remove: selectedData });
+            })
+            .then((response) => {
+              console.log(response);
+            });
+
+          break;
+        default:
+      }
     });
   }
 

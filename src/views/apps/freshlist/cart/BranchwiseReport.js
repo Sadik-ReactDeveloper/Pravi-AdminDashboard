@@ -22,13 +22,18 @@ import "../../../../assets/scss/pages/users.scss";
 import { Route, Link } from "react-router-dom";
 // import { components } from "react-select";
 import axiosConfig from "../../../../axiosConfig";
+import swal from "sweetalert";
 
 class BranchwiseReport extends React.Component {
   state = {
     rowData: [],
+    Userlist: [],
     paginationPageSize: 20,
     currenPageSize: "",
     SelectedBranch: "",
+    CurrentDate: "",
+    StartDate: "",
+    EndDate: "",
     getPageSize: "",
     defaultColDef: {
       sortable: true,
@@ -275,6 +280,8 @@ class BranchwiseReport extends React.Component {
     ],
   };
   componentDidMount() {
+    const date = new Date().toISOString();
+    this.setState({ CurrentDate: date.split("T")[0] });
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
     console.log(pageparmission.role);
     let newparmisson = pageparmission?.role?.find(
@@ -296,18 +303,34 @@ class BranchwiseReport extends React.Component {
     // console.log(newparmisson?.permission.includes("Edit"));
     // console.log(newparmisson?.permission.includes("Delete"));
 
-    const formdata = new FormData();
-    formdata.append("user_id", pageparmission?.Userinfo?.id);
-    formdata.append("role", pageparmission?.Userinfo?.role);
+    const data = new FormData();
+    data.append("user_id", pageparmission?.Userinfo?.id);
+    data.append("role", pageparmission?.Userinfo?.role);
     axiosConfig
-      .post("/reportApi", formdata)
+      .post("/getReportUserlist", data)
       .then((response) => {
-        let rowData = response?.data?.data;
-        this.setState({ rowData });
+        console.log(response?.data?.data?.users);
+        let Branch = response?.data?.data?.users.filter(
+          (ele) => ele.role === "User"
+        );
+        this.setState({ Userlist: Branch });
       })
       .catch((err) => {
         // console.log(err);
       });
+
+    // const formdata = new FormData();
+    // formdata.append("user_id", pageparmission?.Userinfo?.id);
+    // formdata.append("role", pageparmission?.Userinfo?.role);
+    // axiosConfig
+    //   .post("/reportApi", formdata)
+    //   .then((response) => {
+    //     let rowData = response?.data?.data;
+    //     this.setState({ rowData });
+    //   })
+    //   .catch((err) => {
+    //     // console.log(err);
+    //   });
   }
   onGridReady = (params) => {
     this.gridApi = params.api;
@@ -333,51 +356,97 @@ class BranchwiseReport extends React.Component {
   handleBranchWiseReport = (e) => {
     e.preventDefault();
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
-    console.log("object", this.state.SelectedBranch);
+
     const data = new FormData();
     data.append("user_id", pageparmission?.Userinfo?.id);
-    data.append("role", "User");
+    data.append("role", pageparmission?.Userinfo?.role);
+    data.append("client_id", this.state.SelectedBranch);
+    data.append("from_date ", this.state.StartDate);
+    data.append("to_date", this.state.EndDate);
     axiosConfig
-      .post("/getUserlistforBudget", data)
+      .post("/reportApi", data)
       .then((response) => {
-        let userDataList = response?.data?.data?.users;
-        // this.setState({ userDataList });
+        let alllist = response?.data?.data;
+        console.log(response.data?.message);
+        if (response.data?.message === "Record Not Found.") {
+          swal(`${response.data?.message}`);
+          this.setState({ rowData: "" });
+        } else {
+          this.setState({ rowData: alllist });
+        }
       })
       .catch((err) => {
-        // console.log(err);
+        console.log(err.response?.data.message);
+        swal(`${err.response?.data.message}`);
+        // if (err.response?.data.message) {
+        // }
       });
   };
   render() {
-    const { rowData, columnDefs, defaultColDef } = this.state;
+    const { rowData, columnDefs, defaultColDef, Userlist } = this.state;
     return (
       // console.log(rowData),
       <Row className="app-user-list">
         <Col sm="12">
           <Card>
             <Row className="m-2">
-              <Col sm="6" lg="6" md="6">
-                <h1 sm="6" className="float-left">
-                  Branch Wise Report
-                </h1>
+              <Col sm="4" lg="4" md="4">
+                <h1 className="float-left">Branch Wise Report</h1>
               </Col>
-              {/* <Col lg="4" md="4" sm="4">
-                <label for="cars">Select Branch :</label>
+              <Col lg="2" sm="2" md="2">
+                <label for="start">Start Date:</label>
+
+                <input
+                  onChange={(e) => {
+                    this.setState({ StartDate: e.target.value });
+                  }}
+                  className="form-control"
+                  type="date"
+                  id="start"
+                  name="trip-start"
+                  pattern="\d{4}-\d{2}-\d{2}"
+                  // value="2018-07-22"
+                  min="2019-01-01"
+                  max={this.state.CurrentDate && this.state.CurrentDate}
+                />
+              </Col>
+              <Col lg="2" sm="2" md="2">
+                <label for="start">End Date:</label>
+
+                <input
+                  onChange={(e) => {
+                    this.setState({ EndDate: e.target.value });
+                  }}
+                  className="form-control"
+                  type="date"
+                  id="start"
+                  name="trip-start"
+                  pattern="\d{4}-\d{2}-\d{2}"
+                  // value="2018-07-22"
+                  min="2019-01-01"
+                  max={this.state.CurrentDate && this.state.CurrentDate}
+                />
+              </Col>
+              <Col lg="2" sm="2" md="2">
+                <label for="cars">Choose a Branch:</label>
 
                 <select
-                  onChange={(e) => {
-                    this.setState({ SelectedBranch: e.target.value });
-                  }}
+                  onChange={(e) =>
+                    this.setState({ SelectedBranch: e.target.value })
+                  }
                   className="form-control"
                   name="cars"
                   id="cars"
                 >
-                  <option value="volvo">Volvo</option>
-                  <option value="saab">Saab</option>
-                  <option value="mercedes">Mercedes</option>
-                  <option value="audi">Audi</option>
+                  <option value="not Selected">--Select User--</option>
+                  {Userlist?.map((ele, i) => (
+                    <option key={i} value={ele.id}>
+                      {ele.full_name}
+                    </option>
+                  ))}
                 </select>
               </Col>
-              <Col>
+              <Col lg="2" className="d-flex justify-content-end">
                 <Button
                   className="mt-2"
                   onClick={(e) => this.handleBranchWiseReport(e)}
@@ -385,7 +454,7 @@ class BranchwiseReport extends React.Component {
                 >
                   Submit
                 </Button>
-              </Col> */}
+              </Col>
             </Row>
             <CardBody>
               {this.state.rowData === null ? null : (

@@ -20,6 +20,7 @@ import { history } from "../../../../history";
 import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
 import { Route, Link } from "react-router-dom";
+import swal from "sweetalert";
 
 class BrandList extends React.Component {
   state = {
@@ -150,9 +151,9 @@ class BrandList extends React.Component {
                         size="25px"
                         color="red"
                         onClick={() => {
-                          let selectedData = this.gridApi.getSelectedRows();
+                          // let selectedData = this.gridApi.getSelectedRows();
                           this.runthisfunction(params.data.id);
-                          this.gridApi.updateRowData({ remove: selectedData });
+                          // this.gridApi.updateRowData({ remove: selectedData });
                         }}
                       />
                     )}
@@ -197,15 +198,33 @@ class BrandList extends React.Component {
   }
 
   async runthisfunction(id) {
-    console.log(id);
-    await axiosConfig.delete(`/admin/del_brand/${id}`).then(
-      (response) => {
-        console.log(response);
+    let selectedData = this.gridApi.getSelectedRows();
+
+    swal("Warning", "Sure You Want to Delete it", {
+      buttons: {
+        cancel: "cancel",
+        catch: { text: "Delete ", value: "delete" },
       },
-      (error) => {
-        console.log(error);
+    }).then((value) => {
+      switch (value) {
+        case "delete":
+          let data = new FormData();
+          data.append("id", id);
+          axiosConfig
+            .post("/deleteproduct", data)
+            .then((resp) => {
+              console.log(resp);
+
+              this.gridApi.updateRowData({ remove: selectedData });
+            })
+            .then((response) => {
+              console.log(response);
+            });
+
+          break;
+        default:
       }
-    );
+    });
   }
   onGridReady = (params) => {
     this.gridApi = params.api;
