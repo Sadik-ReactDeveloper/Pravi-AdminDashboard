@@ -112,11 +112,11 @@ class ProductType extends React.Component {
         filter: "agSetColumnFilter",
         width: 150,
         cellRendererFramework: (params) => {
-          console.log(params?.data);
+          // console.log(params?.data);
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{params?.data?.created_by}</span>
+                <span>{params?.data?.created_by_name}</span>
               </div>
             </div>
           );
@@ -193,6 +193,21 @@ class ProductType extends React.Component {
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
                 <span>{params?.data?.company_type}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "GSTIN",
+        field: "company_type",
+        filter: "agSetColumnFilter",
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params?.data?.gstin_no}</span>
               </div>
             </div>
           );

@@ -140,7 +140,7 @@ export class CreateAccount extends Component {
     formdata.append("created_by", pageparmission?.Userinfo?.id);
     formdata.append("password", this.state.password);
     formdata.append("full_name", this.state.fullname);
-    formdata.append("gstin", this.state.GSTIN);
+    formdata.append("gstin_no", this.state.GSTIN);
     formdata.append("username", this.state.UserName);
     formdata.append("city", this.state.B_City);
     formdata.append("mobile", this.state.Mobile_no);
@@ -249,9 +249,7 @@ export class CreateAccount extends Component {
         <Card>
           <Row className="m-2">
             <Col>
-              <h1 col-sm-6 className="float-left">
-                Add here
-              </h1>
+              <h1 className="float-left">Add here</h1>
             </Col>
           </Row>
           <div className="container ">
@@ -315,7 +313,6 @@ export class CreateAccount extends Component {
                       type="select"
                       name="AssignRole"
                       value={this.state.AssignRole}
-                      defaultValue={"Admin"}
                       onChange={this.changeHandler}
                     >
                       <option value={"Admin"}>--Select Role--</option>

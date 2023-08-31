@@ -138,11 +138,9 @@ export class EditType extends Component {
     return (
       <div>
         <Card>
-          <h1 className="p-2 ">Edit Type here</h1>
+          <h1 className="p-2 ">Edit here</h1>
           <Row className="m-2">
-            <Col>
-              <h2>Exiting Information</h2>
-            </Col>
+            <Col>{/* <h2>Exiting Information</h2> */}</Col>
             <Col>
               <Route
                 render={({ history }) => (
@@ -292,7 +290,7 @@ export class EditType extends Component {
                     type="submit"
                     className="mx-3 mb-1"
                   >
-                    Add Type
+                    Submit
                   </Button.Ripple>
                 </Col>
               </Row>

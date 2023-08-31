@@ -42,17 +42,23 @@ export class EditBrand extends Component {
   };
 
   componentDidMount() {
+    console.log(window);
     let { id } = this.props.match.params;
-    console.log(id);
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    const data = new FormData();
+    data.append("user_id", pageparmission?.Userinfo?.id);
+    data.append("role", pageparmission?.Userinfo?.role);
+    data.append("brand_id", id);
     axiosConfig
-      .get(`/admin/viewone_brand/${id}`)
+      .post(`/getviewbrand`, data)
       .then((response) => {
-        console.log(response.data.data);
+        console.log(response.data?.data?.brands[0]);
+        let value = response.data?.data?.brands[0];
         this.setState({
-          data: response.data.data,
-          name: response.data.data.brand_name,
-          desc: response.data.data.desc,
-          status: response.data.data.status,
+          // data: response.data.data,
+          name: value?.brand_name,
+          desc: value.description,
+          status: value.status,
         });
       })
       .catch((error) => {
@@ -62,22 +68,28 @@ export class EditBrand extends Component {
 
   submitHandler = (e) => {
     e.preventDefault();
-    const data = new FormData();
-    data.append("brand_name", this.state.name);
-    data.append("desc", this.state.desc);
-    data.append("status", this.state.status);
-    if (this.state.selectedFile !== null) {
-      data.append("image", this.state.selectedFile, this.state.selectedName);
-    }
-    for (var value of data.values()) {
-      console.log(value);
-    }
     let { id } = this.props.match.params;
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    const data = new FormData();
+    data.append("user_id", pageparmission?.Userinfo?.id);
+    data.append("role", pageparmission?.Userinfo?.role);
+    data.append("brand_name", this.state.name);
+    data.append("description", this.state.desc);
+    data.append("status", this.state.status);
+    data.append("brand_id", id);
+    // if (this.state.selectedFile !== null) {
+    //   data.append("image", this.state.selectedFile, this.state.selectedName);
+    // }
+    // for (var value of data.values()) {
+    //   console.log(value);
+    // }
     axiosConfig
-      .post(`/admin/edit_brand/${id}`, data)
+      .post(`/editbrandsubmit`, data)
       .then((response) => {
-        console.log(response);
-        this.props.history.push("/app/freshlist/brand/brandList");
+        // console.log(response?.data.success);
+        if (response?.data.success) {
+          this.props.history.push("/app/freshlist/brand/brandList");
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -146,6 +158,7 @@ export class EditBrand extends Component {
                     onChange={this.handleChange}
                   >
                     <input
+                      checked={this.state.status === "Active" ? true : false}
                       style={{ marginRight: "3px" }}
                       type="radio"
                       name="status"
@@ -154,6 +167,7 @@ export class EditBrand extends Component {
                     <span style={{ marginRight: "20px" }}>Active</span>
 
                     <input
+                      checked={this.state.status === "Deactive" ? true : false}
                       style={{ marginRight: "3px" }}
                       type="radio"
                       name="status"

@@ -66,16 +66,22 @@ export class EditCategory extends Component {
 
   componentDidMount() {
     let { id } = this.props.match.params;
+    console.log(id);
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    const data = new FormData();
+    data.append("user_id", pageparmission?.Userinfo?.id);
+    data.append("role", pageparmission?.Userinfo?.role);
+    data.append("cat_id", id);
     axiosConfig
-      .get(`/admin/viewonecategory/${id}`)
+      .post(`/getcategoryview`, data)
       .then((response) => {
-        console.log(response.data.data);
+        console.log(response.data.data?.category);
         this.setState({
-          data: response.data.data,
-          category_name: response.data.data.category_name,
-          type: response.data.data.type,
-          feature: response.data.data.feature,
-          status: response.data.data.status,
+          data: response.data.data?.category,
+        });
+        this.setState({
+          category_name: response.data.data?.category?.category_name,
+          status: response.data.data?.category?.status,
         });
       })
       .catch((error) => {
@@ -85,48 +91,26 @@ export class EditCategory extends Component {
 
   submitHandler = (e) => {
     e.preventDefault();
-    const data = new FormData();
-    data.append("category_name", this.state.category_name);
-    data.append("type", this.state.type);
-    data.append("feature", this.state.feature);
-    data.append("status", this.state.status);
-    if (this.state.selectedFile1 !== null) {
-      data.append("image", this.state.selectedFile1, this.state.selectedName1);
-    }
-    if (this.state.selectedFile2 !== null) {
-      data.append(
-        "thumbnail_img",
-        this.state.selectedFile2,
-        this.state.selectedName2
-      );
-    }
-    if (this.state.selectedFile3 !== null) {
-      data.append(
-        "web_banner",
-        this.state.selectedFile3,
-        this.state.selectedName3
-      );
-    }
-    if (this.state.selectedFile4 !== null) {
-      data.append(
-        "app_banner",
-        this.state.selectedFile4,
-        this.state.selectedName4
-      );
-    }
-
-    for (var value of data.values()) {
-      console.log(value);
-    }
-
     let { id } = this.props.match.params;
-    console.log(id);
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+
+    const data = new FormData();
+    data.append("user_id", pageparmission?.Userinfo?.id);
+    data.append("role", pageparmission?.Userinfo?.role);
+    data.append("cat_id", id);
+    data.append("category_name", this.state.category_name);
+    data.append("status", this.state.status);
+
+    // for (var value of data.values()) {
+    //   console.log(value);
+    // }
+
     axiosConfig
-      .post(`/admin/edit_category/${id}`, data)
+      .post(`/categoryeditsubmit`, data)
       .then((response) => {
-        console.log(response);
-        if (response.data.msg === "success") {
-          swal("Success!", "You Data IS been Submitted", "success");
+        // console.log(response?.data.success);
+        if (response?.data.success) {
+          swal("Success!", "You Data iS been Submitted", "success");
           this.props.history.push("/app/freshlist/category/categoryList");
         }
       })
@@ -173,6 +157,31 @@ export class EditCategory extends Component {
                       onChange={this.changeHandler}
                     />
                   </FormGroup>
+                </Col>
+                <Col lg="6" md="6" sm="6" className="mb-2 mt-1">
+                  <Label className="mb-0 mx-1">Status</Label>
+                  <div
+                    className="form-label-group"
+                    onChange={this.changeHandler1}
+                  >
+                    <input
+                      checked={this.state.status === "Active" ? true : false}
+                      style={{ marginRight: "3px" }}
+                      type="radio"
+                      name="status"
+                      value="Active"
+                    />
+                    <span style={{ marginRight: "20px" }}>Active</span>
+
+                    <input
+                      checked={this.state.status == "Deactive" ? true : false}
+                      style={{ marginRight: "3px" }}
+                      type="radio"
+                      name="status"
+                      value="Deactive"
+                    />
+                    <span style={{ marginRight: "3px" }}>Deactive</span>
+                  </div>
                 </Col>
                 {/* <Col lg="6" md="6" className="mb-2">
                   <Label>Type</Label>

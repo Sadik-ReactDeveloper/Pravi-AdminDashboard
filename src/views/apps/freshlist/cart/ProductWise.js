@@ -387,7 +387,7 @@ class ProductWise extends React.Component {
       .post("/getReportProductList", formdata)
       .then((response) => {
         let rowData = response?.data?.data;
-        console.log(rowData);
+        // console.log(rowData);
         this.setState({ Productlist: rowData });
       })
       .catch((err) => {
@@ -461,7 +461,7 @@ class ProductWise extends React.Component {
                 <h1 className="float-left">Product Wise Report</h1>
               </Col>
               <Col lg="2" sm="2" md="2">
-                <label for="start">Start Date:</label>
+                <label>Start Date:</label>
 
                 <input
                   onChange={(e) => {
@@ -478,7 +478,7 @@ class ProductWise extends React.Component {
                 />
               </Col>
               <Col lg="2" sm="2" md="2">
-                <label for="start">End Date:</label>
+                <label>End Date:</label>
 
                 <input
                   onChange={(e) => {
@@ -499,7 +499,6 @@ class ProductWise extends React.Component {
                   onChange={(e) => {
                     this.setState({ SelectedProduct: e.target.value });
                   }}
-                  for="cars"
                 >
                   Choose a Product:
                 </label>

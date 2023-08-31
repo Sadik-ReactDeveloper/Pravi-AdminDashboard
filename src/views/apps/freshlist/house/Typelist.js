@@ -119,7 +119,7 @@ class Typelist extends React.Component {
               <Route
                 render={({ history }) => (
                   <>
-                    {this.state.Viewpermisson && (
+                    {/* {this.state.Viewpermisson && (
                       <Eye
                         className="mr-50"
                         size="25px"
@@ -128,7 +128,7 @@ class Typelist extends React.Component {
                           history.push(`/app/house/ViewType/${params.data.id}`)
                         }
                       />
-                    )}
+                    )} */}
 
                     {this.state.Editpermisson && (
                       <Edit

@@ -68,6 +68,7 @@ export class AddCategory extends Component {
     const data = new FormData();
     data.append("user_id", pageparmission?.Userinfo?.id);
     data.append("category_name", this.state.category_name);
+    data.append("status", "Active");
 
     axiosConfig
       .post(`/addcategory`, data)

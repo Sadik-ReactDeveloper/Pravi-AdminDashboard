@@ -27,6 +27,7 @@ export class EditProductType extends Component {
     this.state = {
       Address: "",
       fullname: "",
+      GSTIN: "",
       B_City: "",
       checkbox: "",
       SelectedState: "",
@@ -125,6 +126,7 @@ export class EditProductType extends Component {
           SelectedState: response.data.data.state_id,
           selectedValue: newdata,
           B_City: response.data.data.billing_city,
+          GSTIN: response.data.data.gstin_no,
           B_Country: response.data.data.billing_country,
           B_PinCode: response.data.data.billing_pincode,
           B_State: response.data.data.billing_state,
@@ -203,6 +205,7 @@ export class EditProductType extends Component {
     formdata.append("password", this.state.password);
     formdata.append("full_name", this.state.fullname);
     formdata.append("username", this.state.UserName);
+    formdata.append("gstin_no", this.state.GSTIN);
     formdata.append("city", this.state.B_City);
     formdata.append("mobile", this.state.Mobile_no);
     formdata.append("email", this.state.email);
@@ -407,6 +410,19 @@ export class EditProductType extends Component {
                         placeholder="Enter Companytype"
                         name="Companytype"
                         value={this.state.Companytype}
+                        onChange={this.changeHandler}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col lg="6" md="6">
+                    <FormGroup>
+                      <Label>GSTIN</Label>
+                      <Input
+                        required
+                        type="text"
+                        placeholder="Enter GSTIN No."
+                        name="GSTIN"
+                        value={this.state.GSTIN}
                         onChange={this.changeHandler}
                       />
                     </FormGroup>

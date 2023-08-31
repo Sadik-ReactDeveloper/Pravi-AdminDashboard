@@ -23,6 +23,7 @@ export class EditProduct extends Component {
     this.state = {
       category_name: "",
       ViewoneProduct: {},
+      Product: {},
       P_Title: "",
       Price: "",
       stock: "",
@@ -31,65 +32,100 @@ export class EditProduct extends Component {
       DiscountPrice: "",
       Addmore: false,
       rowData: [],
+      TypeList: [],
+      images: [],
       description: "",
       variety: "",
+      Brand: "",
+      Type: "",
       shipmentfee: "",
       Tags: "",
       taxrate: "",
       status: "",
-      // selectedFile1: null,
-      // selectedName1: "",
-      // selectedFile2: null,
-      // selectedName2: "",
       selectedFile3: [],
       selectedName3: "",
-      // selectedFile4: null,
-      // selectedName4: "",
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   async componentDidMount() {
     let { id } = this.props?.match.params;
-    console.log(id);
-    console.log(this.props?.location?.state);
-    console.log(JSON.parse(this.props?.location?.state?.veriety));
-    let variety = JSON.parse(this.props?.location?.state?.veriety);
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    const formdata = new FormData();
+    formdata.append("user_id", pageparmission?.Userinfo?.id);
+    formdata.append("product_id", id);
+
+    await axiosConfig
+      .post("/editproductview", formdata)
+      .then((response) => {
+        console.log(response.data.data[0]);
+        let getProduct = response.data.data[0];
+        this.setState({ Product: response.data.data });
+        // this.setState({ category_name: response.data.data?.category_name });
+        this.setState({ category_name: getProduct?.category_id });
+        this.setState({ P_Title: getProduct?.title });
+        this.setState({ Price: getProduct?.price });
+        this.setState({ stock: getProduct?.stock });
+        this.setState({ DiscountPrice: getProduct?.discountprice });
+        this.setState({ description: getProduct?.description });
+
+        // this.setState({ Type: getProduct?.product_type });
+        this.setState({ Type: getProduct?.product_type_id });
+        this.setState({ Brand: getProduct?.brand_id });
+        // this.setState({ Brand: getProduct?.brand_name });
+        // this.setState({
+        //   formValues: JSON.parse(getProduct?.veriety),
+        // });
+        this.setState({ shipmentfee: getProduct?.shipping_fee });
+        this.setState({ Tags: getProduct?.tags });
+        this.setState({ taxrate: getProduct?.tax_rate });
+        this.setState({ status: getProduct?.status });
+        this.setState({
+          images: getProduct?.product_images,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    let Product = JSON.parse(localStorage.getItem("EditProduct"));
+    // console.log(Product);
+    // this.setState({ Product: Product });
+    let variety = Product.veriety;
     if (variety.length > 0) {
       this.setState({ Addmore: true });
     }
-    // formdata.append("")
-    // axiosConfig
-    //   .post(``)
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
 
-    this.setState({
-      category_name: this.props?.location?.state?.category_name,
-    });
-    this.setState({ P_Title: this.props?.location?.state?.title });
+    const data = new FormData();
+    data.append("user_id", pageparmission?.Userinfo?.id);
+    data.append("role", pageparmission?.Userinfo?.role);
 
-    this.setState({ Price: this.props?.location?.state?.price });
-    this.setState({ stock: this.props?.location?.state?.stock });
-
-    this.setState({
-      DiscountPrice: this.props?.location?.state?.discountprice,
-    });
-    this.setState({ description: this.props?.location?.state?.description });
-    this.setState({
-      formValues: JSON.parse(this.props?.location?.state?.veriety),
-    });
-    this.setState({ shipmentfee: this.props?.location?.state?.shipping_fee });
-    this.setState({ Tags: this.props?.location?.state?.tags });
-    this.setState({ taxrate: this.props?.location?.state?.tax_rate });
-    this.setState({ status: this.props?.location?.state?.status });
-    await axiosConfig.get("/getcategory").then((response) => {
+    await axiosConfig.post("/getcategory", data).then((response) => {
       let rowData = response.data.data?.category;
       console.log(rowData);
-      this.setState({ rowData });
+      if (rowData) {
+        this.setState({ rowData });
+      }
+    });
+    const type = new FormData();
+    // let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    type.append("user_id", pageparmission?.Userinfo?.id);
+    type.append("role", pageparmission?.Userinfo?.role);
+    const brand = new FormData();
+    // let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    brand.append("user_id", pageparmission?.Userinfo?.id);
+    brand.append("role", pageparmission?.Userinfo?.role);
+    await axiosConfig.post("/getbrand", brand).then((response) => {
+      let Brandlist = response.data.data?.brands;
+      console.log(response);
+      if (Brandlist) {
+        this.setState({ Brandlist });
+      }
+    });
+    await axiosConfig.post("/producttypelistview", type).then((response) => {
+      let TypeList = response.data.data;
+      console.log(TypeList);
+      if (TypeList) {
+        this.setState({ TypeList });
+      }
     });
   }
 
@@ -131,12 +167,14 @@ export class EditProduct extends Component {
   submitHandler = (e) => {
     e.preventDefault();
     const data = new FormData();
-
-    data.append("id", this.props?.location?.state?.id);
+    let Product = JSON.parse(localStorage.getItem("EditProduct"));
+    data.append("id", Product?.id);
     data.append("title", this.state.P_Title);
     data.append("veriety", JSON.stringify(this.state.formValues));
     data.append("category_id", this.state.category_name);
-    data.append("stock", this.state.stock);
+    data.append("brand_id", this.state.Brand);
+    data.append("product_type_id", this.state.Type);
+    // data.append("stock", this.state.stock);
     data.append("price", this.state.Price);
     data.append("discountprice", this.state.DiscountPrice);
     data.append("description", this.state.description);
@@ -144,10 +182,7 @@ export class EditProduct extends Component {
     data.append("tax_rate", this.state.taxrate);
     data.append("tags", this.state.Tags);
     data.append("status", "Active");
-    // this.state.selectedFile3.forEach((image, index) => {
-    //   data.append(`image`, image);
-    // });
-    // debugger;
+
     for (let i = 0; i < this.state.selectedFile3?.length; i++) {
       data.append("images[]", this.state.selectedFile3[i]);
     }
@@ -203,6 +238,97 @@ export class EditProduct extends Component {
               <Row className="mb-2">
                 <Col lg="6" md="6">
                   <FormGroup>
+                    <Label> Choose Category *</Label>
+
+                    <select
+                      onChange={(e) =>
+                        this.setState({ category_name: e.target.value })
+                      }
+                      className="form-control"
+                      name="Select"
+                      id="Select"
+                    >
+                      <option value="volvo">--Select Category--</option>
+                      {this.state.rowData &&
+                        this.state.rowData?.map((val, i) => (
+                          <option
+                            selected={this.state.category_name}
+                            key={i}
+                            value={val?.id}
+                          >
+                            {val?.category_name}
+                          </option>
+                        ))}
+                    </select>
+                    {/* <Input
+                      type="text"
+                      placeholder="Title"
+                      name="category_name"
+                      bsSize="lg"
+                      value={this.state.category_name}
+                      onChange={this.changeHandler}
+                    /> */}
+                  </FormGroup>
+                </Col>
+                <Col lg="6" md="6">
+                  <FormGroup>
+                    <Label> Choose Type *</Label>
+
+                    <select
+                      onChange={(e) => this.setState({ Type: e.target.value })}
+                      className="form-control"
+                      name="Select"
+                      id="Select"
+                    >
+                      <option value="volvo">--Select Type--</option>
+                      {this.state.TypeList &&
+                        this.state.TypeList?.map((val, i) => (
+                          <option
+                            selected={this.state.Type}
+                            key={i}
+                            value={val?.id}
+                          >
+                            {val?.product_type}
+                          </option>
+                        ))}
+                    </select>
+                    {/* <Input
+                      type="text"
+                      placeholder="Title"
+                      name="category_name"
+                      bsSize="lg"
+                      value={this.state.category_name}
+                      onChange={this.changeHandler}
+                    /> */}
+                  </FormGroup>
+                </Col>
+                <Col lg="6" md="6">
+                  <FormGroup>
+                    <Label> Choose Brand *</Label>
+
+                    <select
+                      required
+                      onChange={(e) => this.setState({ Brand: e.target.value })}
+                      className="form-control"
+                      name="Select"
+                      id="Select"
+                    >
+                      <option value="volvo">--Select Brand--</option>
+                      {this.state.Brandlist &&
+                        this.state.Brandlist?.map((val, i) => (
+                          <option
+                            selected={this.state.Brand}
+                            key={i}
+                            value={val?.id}
+                          >
+                            {val?.brand_name}
+                          </option>
+                        ))}
+                    </select>
+                  </FormGroup>
+                </Col>
+                {/* <Col lg="6" md="6">
+                  <FormGroup>
                     <Label> Choose Category</Label>
 
                     <select
@@ -225,16 +351,9 @@ export class EditProduct extends Component {
                           </option>
                         ))}
                     </select>
-                    {/* <Input
-                      type="text"
-                      placeholder="Title"
-                      name="category_name"
-                      bsSize="lg"
-                      value={this.state.category_name}
-                      onChange={this.changeHandler}
-                    /> */}
+              
                   </FormGroup>
-                </Col>
+                </Col> */}
                 <Col lg="6" md="6">
                   <FormGroup>
                     <Label>Title</Label>
@@ -447,25 +566,24 @@ export class EditProduct extends Component {
                   </FormGroup>
                 </Col>
 
-                {this.props?.location?.state?.product_images && (
+                {this.state.images && (
                   <Col lg="8" sm="8">
                     <Label>Existing Images</Label>
                     <FormGroup>
-                      {this.props?.location?.state?.product_images?.map(
-                        (value) => {
-                          return (
-                            <span className="mx-1">
-                              <img
-                                style={{ borderRadius: "12px" }}
-                                src={value}
-                                width="150px"
-                                height="150px"
-                                alt="images"
-                              />
-                            </span>
-                          );
-                        }
-                      )}
+                      {this.state.images?.map((value) => {
+                        console.log(value);
+                        return (
+                          <span className="mx-1">
+                            <img
+                              style={{ borderRadius: "12px" }}
+                              src={value}
+                              width="150px"
+                              height="150px"
+                              alt="images"
+                            />
+                          </span>
+                        );
+                      })}
                     </FormGroup>
                   </Col>
                 )}

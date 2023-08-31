@@ -107,23 +107,23 @@ class CategoryList extends React.Component {
       //     );
       //   },
       // },
-      // {
-      //   headerName: "Status",
-      //   field: "status",
-      //   filter: true,
-      //   width: 100,
-      //   cellRendererFramework: (params) => {
-      //     return params.value === "Active" ? (
-      //       <div className="badge badge-pill badge-success">
-      //         {params.data.status}
-      //       </div>
-      //     ) : params.value === "Deactive" ? (
-      //       <div className="badge badge-pill badge-warning">
-      //         {params.data.status}
-      //       </div>
-      //     ) : null;
-      //   },
-      // },
+      {
+        headerName: "Status",
+        field: "status",
+        filter: true,
+        width: 100,
+        cellRendererFramework: (params) => {
+          return params.data.status === "Active" ? (
+            <div className="badge badge-pill badge-success">
+              {params.data.status}
+            </div>
+          ) : params.data.status === "Deactive" ? (
+            <div className="badge badge-pill badge-warning">
+              {params.data.status}
+            </div>
+          ) : null;
+        },
+      },
       {
         headerName: "Actions",
         field: "sortorder",
@@ -132,7 +132,7 @@ class CategoryList extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
-              {this.state.Viewpermisson && (
+              {/* {this.state.Viewpermisson && (
                 <Route
                   render={({ history }) => (
                     <>
@@ -153,7 +153,7 @@ class CategoryList extends React.Component {
                     </>
                   )}
                 />
-              )}
+              )} */}
               {this.state.Editpermisson && (
                 <Route
                   render={({ history }) => (

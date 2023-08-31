@@ -243,7 +243,13 @@ class ProductDashboard extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{ReactHtmlParser(params.data?.stock)}</span>
+                <span>
+                  {params.data?.stock ? (
+                    <> {ReactHtmlParser(params.data?.stock)}</>
+                  ) : (
+                    <>N/A</>
+                  )}
+                </span>
               </div>
             </div>
           );
@@ -305,12 +311,16 @@ class ProductDashboard extends React.Component {
                   className="mr-50"
                   size="25px"
                   color="blue"
-                  onClick={() =>
+                  onClick={() => {
+                    localStorage.setItem(
+                      "EditProduct",
+                      JSON.stringify(params.data)
+                    );
                     this.props.history.push({
                       pathname: `/app/freshlist/house/editmyproduct/${params.data?.id}`,
                       state: params.data,
-                    })
-                  }
+                    });
+                  }}
                 />
               )}
               {this.state.Deletepermisson && (
