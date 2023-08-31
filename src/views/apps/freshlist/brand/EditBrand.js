@@ -49,7 +49,7 @@ export class EditBrand extends Component {
     data.append("user_id", pageparmission?.Userinfo?.id);
     data.append("role", pageparmission?.Userinfo?.role);
     data.append("brand_id", id);
-    axiosConfig
+   await axiosConfig
       .post(`/getviewbrand`, data)
       .then((response) => {
         console.log(response.data?.data?.brands[0]);
