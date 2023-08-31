@@ -153,37 +153,37 @@ class Placeorder extends React.Component {
           );
         },
       },
-      {
-        headerName: "product_type",
-        field: "product_type",
-        filter: "agSetColumnFilter",
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{params.data?.product_type}</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "product_type",
+      //   field: "product_type",
+      //   filter: "agSetColumnFilter",
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{params.data?.product_type}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
 
-      {
-        headerName: "CATEGORY",
-        field: "category_name",
-        filter: "agSetColumnFilter",
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{params.data?.category_name}</span>
-              </div>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "CATEGORY",
+      //   field: "category_name",
+      //   filter: "agSetColumnFilter",
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{params.data?.category_name}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       // {
       //   headerName: "Description",
       //   field: "description",
