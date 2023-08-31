@@ -445,7 +445,7 @@ class Selectedorder extends React.Component {
       await axiosConfig
         .post("/getsupplierfororder", formdata)
         .then((response) => {
-          // console.log(response?.data?.suppliers);
+          console.log(response?.data);
           this.setState({ Supplier: response?.data?.suppliers });
         })
         .catch((error) => {
