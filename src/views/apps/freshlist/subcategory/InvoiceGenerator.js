@@ -680,25 +680,15 @@ class InvoiceGenerator extends React.Component {
   };
   MergeBillNow = (e) => {
     e.preventDefault();
-    // let ids = AddedBill.map((ele) => {
-    //   const formdata = new FormData();
-    //   formdata.append("order_id", ele?.order_id);
-    //   axiosConfig
-    //     .post(`/order_detail`, formdata)
-    //     .then((response) => {
-    //       console.log(response.data.data.flat());
-    //       AllProduct.push(response.data.data.flat());
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // });
 
     this.toggleModal();
   };
   handleSubmit = (e) => {
     e.preventDefault();
-
+    // debugger;
+    // console.log(this.state.sgst);
+    // console.log(this.state.cgst);
+    // console.log(this.state.deliveryCharges);
     if (this.state.sgst && this.state.cgst) {
       let pageparmission = JSON.parse(localStorage.getItem("userData"));
       let formdata = new FormData();
@@ -715,7 +705,7 @@ class InvoiceGenerator extends React.Component {
       axiosConfig
         .post(`/createmergebillapi`, formdata)
         .then((res) => {
-          console.log(res.data?.data?.applied_charges);
+          // console.log(res.data?.data?.applied_charges);
           this.setState({ Applied_Charges: res.data?.data?.applied_charges });
           // console.log(res.data.data?.items);
           this.setState({ AllbillMerged: res.data.data?.items });
@@ -740,7 +730,7 @@ class InvoiceGenerator extends React.Component {
     }
   };
   handleBillDownload = (data) => {
-    console.log(data);
+    // console.log(data);
     this.setState({ PrintData: data });
     const toWords = new ToWords();
     let words = toWords.convert(Number(data.sub_total), { currency: true });
@@ -753,7 +743,7 @@ class InvoiceGenerator extends React.Component {
     }));
   };
   toggleModalclose = () => {
-    debugger;
+    // debugger;
     this.setState({ modal: false });
     window.location.reload();
     // AddedBill = [];
@@ -764,11 +754,11 @@ class InvoiceGenerator extends React.Component {
   };
   async componentDidMount() {
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
-    console.log(pageparmission.role);
+    // console.log(pageparmission.role);
     let newparmisson = pageparmission?.role?.find(
       (value) => value?.pageName === "invoice Generator"
     );
-    console.log(newparmisson);
+    // console.log(newparmisson);
     this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
     this.setState({
       Createpermisson: newparmisson?.permission.includes("Create"),
@@ -790,7 +780,7 @@ class InvoiceGenerator extends React.Component {
     await axiosConfig
       .post(`/getallcompleteorders`, formdata)
       .then((res) => {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         let rowData = res.data.data;
         this.setState({ rowData });
       })
@@ -799,7 +789,7 @@ class InvoiceGenerator extends React.Component {
       });
   }
   async runthisfunction(id) {
-    console.log(id);
+    // console.log(id);
     await axiosConfig.delete(`/admin/del_subcategory/${id}`).then(
       (response) => {
         console.log(response);

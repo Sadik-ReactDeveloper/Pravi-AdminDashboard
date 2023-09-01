@@ -414,6 +414,9 @@ const EditInventory = lazy(() =>
 const AssignToClient = lazy(() =>
   import("./views/apps/freshlist/house/AssignToClient")
 );
+const AssignToClientlist = lazy(() =>
+  import("./views/apps/freshlist/house/AssignedCLientlist")
+);
 const AssignedPage = lazy(() =>
   import("./views/apps/freshlist/house/AssignedPage")
 );
@@ -1312,6 +1315,10 @@ class AppRouter extends React.Component {
           <AppRoute
             path="/app/freshlist/house/assigntoclient"
             component={AssignToClient}
+          />
+          <AppRoute
+            path="/app/freshlist/house/AssignToClientlist"
+            component={AssignToClientlist}
           />
           <AppRoute
             path="/app/freshlist/house/ProductDashboard"

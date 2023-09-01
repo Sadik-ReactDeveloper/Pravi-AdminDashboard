@@ -56,117 +56,72 @@ class AssignedList extends React.Component {
         filter: true,
       },
 
-      //   {
-      //     headerName: "PRODUCT Image",
-      //     field: "product",
-      //     filter: "agSetColumnFilter",
-      //     width: 150,
-      //     cellRendererFramework: (params) => {
-      //       return (
-      //         <div className="d-flex align-items-center cursor-pointer">
-      //           <div className="">
-      //             {/* <span>{params.data?.title}</span> */}
-      //             {params?.data?.product_images ? (
-      //               <img
-      //                 style={{ borderRadius: "12px" }}
-      //                 width="60px"
-      //                 height="40px"
-      //                 src={params?.data?.product_images[0]}
-      //                 alt="image"
-      //               />
-      //             ) : (
-      //               "No Image "
-      //             )}
-      //           </div>
-      //         </div>
-      //       );
-      //     },
-      //   },
       {
-        headerName: "Client Name",
-        field: "username",
+        headerName: "PRODUCT Image",
+        field: "product",
         filter: "agSetColumnFilter",
         width: 150,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{params.data?.username}</span>
+                {/* <span>{params.data?.title}</span> */}
+                {params?.data?.product_images ? (
+                  <img
+                    style={{ borderRadius: "12px" }}
+                    width="60px"
+                    height="40px"
+                    src={params?.data?.product_images[0]}
+                    alt="image"
+                  />
+                ) : (
+                  "No Image "
+                )}
               </div>
             </div>
           );
         },
       },
       {
-        headerName: "full_name",
-        field: "full_name",
+        headerName: "title",
+        field: "title",
         filter: "agSetColumnFilter",
         width: 150,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{params.data?.full_name}</span>
+                <span>{params.data?.title}</span>
               </div>
             </div>
           );
         },
       },
       {
-        headerName: "email",
-        field: "email",
+        headerName: "description",
+        field: "description",
         filter: "agSetColumnFilter",
         width: 150,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{params.data?.email}</span>
+                <span>{params.data?.description}</span>
               </div>
             </div>
           );
         },
       },
       {
-        headerName: "city",
-        field: "city",
+        headerName: "tags",
+        field: "tags",
         filter: "agSetColumnFilter",
         width: 150,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{params.data?.city}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "mobile",
-        field: "mobile",
-        filter: "agSetColumnFilter",
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{ReactHtmlParser(params.data?.mobile)}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "create_date",
-        field: "create_date",
-        filter: "agSetColumnFilter",
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <div className="">
-                <span>{params.data?.create_date}</span>
+                <span>{params.data?.tags}</span>
               </div>
             </div>
           );
@@ -176,7 +131,7 @@ class AssignedList extends React.Component {
         headerName: "status",
         field: "status",
         filter: "agSetColumnFilter",
-        width: 120,
+        width: 150,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
@@ -187,6 +142,51 @@ class AssignedList extends React.Component {
           );
         },
       },
+      // {
+      //   headerName: "mobile",
+      //   field: "mobile",
+      //   filter: "agSetColumnFilter",
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{ReactHtmlParser(params.data?.mobile)}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
+      {
+        headerName: "create_date",
+        field: "created_date",
+        filter: "agSetColumnFilter",
+        width: 190,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                <span>{params.data?.created_date}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      // {
+      //   headerName: "status",
+      //   field: "status",
+      //   filter: "agSetColumnFilter",
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <div className="">
+      //           <span>{params.data?.status}</span>
+      //         </div>
+      //       </div>
+      //     );
+      //   },
+      // },
       //   {
       //     headerName: "Shipping Fee",
       //     field: "shipping_fee",
@@ -280,55 +280,55 @@ class AssignedList extends React.Component {
       //     );
       //   },
       // },
-      {
-        headerName: "Actions",
-        field: "transactions",
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="actions cursor-pointer">
-              {/* {this.state.Viewpermisson && ( */}
-              <Eye
-                className="mr-50"
-                size="25px"
-                color="green"
-                onClick={() =>
-                  history.push(
-                    `/app/freshlist/house/viewoneassigned/${params.data.id}`
-                  )
-                }
-              />
-              {/* )} */}
-              {/* {this.state.Editpermisson && ( */}
-              <Edit
-                className="mr-50"
-                size="25px"
-                color="blue"
-                onClick={() =>
-                  this.props.history.push({
-                    pathname: `/app/freshlist/house/viewoneassigned/${params.data?.id}`,
-                    state: params.data,
-                  })
-                }
-              />
-              {/* )} */}
-              {/* {this.state.Deletepermisson && ( */}
-              <Trash2
-                className="mr-50"
-                size="25px"
-                color="Red"
-                onClick={() => {
-                  let selectedData = this.gridApi.getSelectedRows();
+      // {
+      //   headerName: "Actions",
+      //   field: "transactions",
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="actions cursor-pointer">
+      //         {/* {this.state.Viewpermisson && ( */}
+      //         <Eye
+      //           className="mr-50"
+      //           size="25px"
+      //           color="green"
+      //           onClick={() =>
+      //             history.push(
+      //               `/app/freshlist/house/viewoneassigned/${params.data.id}`
+      //             )
+      //           }
+      //         />
+      //         {/* )} */}
+      //         {/* {this.state.Editpermisson && ( */}
+      //         <Edit
+      //           className="mr-50"
+      //           size="25px"
+      //           color="blue"
+      //           onClick={() =>
+      //             this.props.history.push({
+      //               pathname: `/app/freshlist/house/viewoneassigned/${params.data?.id}`,
+      //               state: params.data,
+      //             })
+      //           }
+      //         />
+      //         {/* )} */}
+      //         {/* {this.state.Deletepermisson && ( */}
+      //         <Trash2
+      //           className="mr-50"
+      //           size="25px"
+      //           color="Red"
+      //           onClick={() => {
+      //             let selectedData = this.gridApi.getSelectedRows();
 
-                  this.runthisfunction(params.data?.id);
-                  this.gridApi.updateRowData({ remove: selectedData });
-                }}
-              />
-              {/* )} */}
-            </div>
-          );
-        },
-      },
+      //             this.runthisfunction(params.data?.id);
+      //             this.gridApi.updateRowData({ remove: selectedData });
+      //           }}
+      //         />
+      //         {/* )} */}
+      //       </div>
+      //     );
+      //   },
+      // },
     ],
   };
 
@@ -353,10 +353,11 @@ class AssignedList extends React.Component {
     formdata.append("user_id", pageparmission?.Userinfo?.id);
     formdata.append("role", pageparmission?.Userinfo?.role);
     await axiosConfig
-      .post("/getclientlist", formdata)
+      .post("/getUserAssignproductList", formdata)
       .then((response) => {
-        this.setState({ rowData: response.data.data });
-        console.log(response.data.data);
+        this.setState({ rowData: response.data.data[0].products });
+        // console.log(response.data.data);
+        // console.log(response.data.data[0].products);
       })
       .catch((error) => {
         console.log(error.response);
@@ -489,7 +490,7 @@ class AssignedList extends React.Component {
               <Row className="m-2">
                 <Col>
                   <h1 col-sm-6 className="float-left">
-                    Assigned Client List
+                    Assigned Product List
                   </h1>
                 </Col>
                 {/* <Col>

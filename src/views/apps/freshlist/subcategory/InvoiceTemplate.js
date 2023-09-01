@@ -772,7 +772,7 @@ const InvoiceTemplate = ({ tableList, invoiceData, CurrentWords }) => {
                           marginBottom: "6px",
                         }}
                       >
-                        CGST(12.00%)
+                        CGST(0.00%)
                       </Text>
                       {/* <Text
                         style={{
@@ -800,7 +800,7 @@ const InvoiceTemplate = ({ tableList, invoiceData, CurrentWords }) => {
                           marginBottom: "6px",
                         }}
                       >
-                        SGST(12.00%)
+                        SGST(0.00%)
                       </Text>
                       {/* <Text
                         style={{

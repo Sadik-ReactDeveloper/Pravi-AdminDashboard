@@ -68,7 +68,7 @@ class AnalyticsDashboard extends React.Component {
     axiosConfig
       .post("/dashboard", data)
       .then((response) => {
-        console.log(response?.data?.data?.Dashboard);
+        // console.log(response?.data?.data?.Dashboard);
 
         for (const [key, value] of Object.entries(
           response?.data?.data?.Dashboard
@@ -185,7 +185,7 @@ class AnalyticsDashboard extends React.Component {
 
                   return (
                     <>
-                      <Col key={ele} lg="4" md="12">
+                      <Col key={i} lg="4" md="12">
                         <Card
                           style={{ backgroundColor: `${bgcolor}` }}
                           // className={bgcolor}

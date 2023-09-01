@@ -7,13 +7,15 @@ import POInVoice from "./POInVoice";
 // import POInVoice from "./POInVoice";
 import axiosConfig from "../../../../axiosConfig";
 const InvoiceGenerator = (props) => {
+  console.log(props);
   const [Printview, setPrintview] = useState({});
   const [AllCharges, setAllCharges] = useState({});
   const [details, setDetails] = useState([]);
 
   useEffect(() => {
-    if (props?.AddedBill?.length > 1) {
-      console.log(props);
+    // debugger;
+    if (props?.AddedBill?.length > 0) {
+      // console.log("props", props);
       // console.log("Multibil here", props?.AllbillMerged);
       setDetails(props?.AllbillMerged);
       setAllCharges(props?.Applied_Charges);

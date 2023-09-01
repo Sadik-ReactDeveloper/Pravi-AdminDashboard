@@ -218,20 +218,20 @@ export class EditProduct extends Component {
             <Col>
               <h2>Existing Information</h2>
             </Col>
-            {/* <Col>
+            <Col>
               <Route
                 render={({ history }) => (
                   <Button
                     className=" btn btn-danger float-right"
                     onClick={() =>
-                      history.push("/app/freshlist/category/categoryList")
+                      history.push("/app/freshlist/house/ProductDashboard")
                     }
                   >
                     Back
                   </Button>
                 )}
               />
-            </Col> */}
+            </Col>
           </Row>
           <CardBody>
             <Form className="m-1" onSubmit={this.submitHandler}>
@@ -389,7 +389,12 @@ export class EditProduct extends Component {
                       type="number"
                       placeholder="Amount In Number"
                       name="Price"
+                      onKeyDown={(e) =>
+                        ["e", "E", "+", "-"].includes(e.key) &&
+                        e.preventDefault()
+                      }
                       bsSize="lg"
+                      min={0}
                       value={this.state.Price}
                       onChange={this.changeHandler}
                     />
@@ -451,6 +456,11 @@ export class EditProduct extends Component {
                               <input
                                 className="form-control"
                                 type="number"
+                                min={0}
+                                onKeyDown={(e) =>
+                                  ["e", "E", "+", "-"].includes(e.key) &&
+                                  e.preventDefault()
+                                }
                                 name="price"
                                 value={element.price || ""}
                                 onChange={(e) => this.handleChange(index, e)}
@@ -490,8 +500,13 @@ export class EditProduct extends Component {
                     <Label> Stock </Label>
                     <Input
                       type="number"
+                      min={0}
                       placeholder="Amount In Number"
                       name="stock"
+                      onKeyDown={(e) =>
+                        ["e", "E", "+", "-"].includes(e.key) &&
+                        e.preventDefault()
+                      }
                       bsSize="lg"
                       value={this.state.stock}
                       onChange={this.changeHandler}
@@ -503,8 +518,13 @@ export class EditProduct extends Component {
                     <Label>Discount Price</Label>
                     <Input
                       type="number"
+                      min={0}
                       placeholder="Discount Price"
                       name="DiscountPrice"
+                      onKeyDown={(e) =>
+                        ["e", "E", "+", "-"].includes(e.key) &&
+                        e.preventDefault()
+                      }
                       bsSize="lg"
                       value={this.state.DiscountPrice}
                       onChange={this.changeHandler}
@@ -516,8 +536,13 @@ export class EditProduct extends Component {
                     <Label>SHIPPING FEE(₹)</Label>
                     <Input
                       type="number"
+                      min={0}
                       placeholder="Number..."
                       name="shipmentfee"
+                      onKeyDown={(e) =>
+                        ["e", "E", "+", "-"].includes(e.key) &&
+                        e.preventDefault()
+                      }
                       bsSize="lg"
                       value={this.state.shipmentfee}
                       onChange={this.changeHandler}
@@ -531,6 +556,11 @@ export class EditProduct extends Component {
                       type="number"
                       placeholder="Tax in Percentage"
                       name="taxrate"
+                      min={0}
+                      onKeyDown={(e) =>
+                        ["e", "E", "+", "-"].includes(e.key) &&
+                        e.preventDefault()
+                      }
                       bsSize="lg"
                       value={this.state.taxrate}
                       onChange={this.changeHandler}

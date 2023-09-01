@@ -709,7 +709,7 @@ class All extends React.Component {
 
   async componentDidMount() {
     let { id } = this.props.match.params;
-    console.log(id);
+    // console.log(id);
 
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
 
@@ -719,7 +719,7 @@ class All extends React.Component {
     await axiosConfig
       .post(`/orderlist`, formdata)
       .then((res) => {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         let rowData = res?.data?.data;
         this.setState({ rowData });
       })

@@ -25,6 +25,7 @@ import { Route } from "react-router-dom";
 import AssignClientCompoent from "./AssignClientCompoent";
 import swal from "sweetalert";
 import Multiselect from "multiselect-react-dropdown";
+import AssignedCLientlist from "./AssignedCLientlist";
 
 // class AssignToClient extends React.Component {
 //   state = {
@@ -283,7 +284,7 @@ import Multiselect from "multiselect-react-dropdown";
 //                       size={20}
 //                       onClick={() =>
 //                         this.props.history.push({
-//                           pathname: `/app/freshlist/house/assignedPage/${params.data?.id}`,
+//                           pathname: `/app/freshlist/house/AssignToClientlist`,
 //                           state: params?.data,
 //                         })
 //                       }
@@ -798,19 +799,18 @@ const AssignToClient = () => {
           swal("No Product Found");
         }
       });
-    // const formdata = new FormData();
-    // formdata.append("user_id", pageparmission?.Userinfo?.id);
-    // formdata.append("role", pageparmission?.Userinfo?.role);
+    const data = new FormData();
+    data.append("user_id", pageparmission?.Userinfo?.id);
+    data.append("role", pageparmission?.Userinfo?.role);
 
-    // axiosConfig.post("/getbrand", formdata).then((response) => {
+    // axiosConfig.post("/getbrand", data).then((response) => {
     //   let Brandlist = response.data.data?.brands;
     //   setBrandlist(Brandlist);
     // });
-    axiosConfig.post("/getclientlist", formdata).then((response) => {
-      let Clientlist = response.data.data;
-      // console.log(Clientlist);
+    axiosConfig.post("/getuserlist", data).then((response) => {
+      let Clientlist = response.data.data?.users;
+      console.log(Clientlist);
       setClientlist(Clientlist);
-      // this.setState({ Clientlist });
     });
 
     // axiosConfig.post("/getcategory", formdata).then((response) => {
@@ -837,9 +837,9 @@ const AssignToClient = () => {
     // });
   }, []);
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-  };
+  // const submitHandler = (e) => {
+  //   e.preventDefault();
+  // };
   const submitHandlerAssign = (e) => {
     e.preventDefault();
 
@@ -858,8 +858,10 @@ const AssignToClient = () => {
       .post(`/assign_to_client`, formdata)
       .then((res) => {
         console.log(res.data);
-        if (res.data?.status) {
+        if (res.data?.success) {
           swal("Product Assigned Successfully");
+          setProduct("");
+          setClientname("");
         }
       })
       .catch((err) => {
@@ -886,89 +888,25 @@ const AssignToClient = () => {
             <Card>
               <Row className="m-2">
                 <Col>
-                  <h1 col-sm-6 className="float-left">
-                    Product Assign To Client(User)
-                  </h1>
+                  <h1 className="float-left">Product Assign To Client(User)</h1>
                 </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <Form className="m-1 container" onSubmit={submitHandler}>
-                    <Row className="mb-2">
-                      {/* <Col lg="3" md="3">
-                        <FormGroup>
-                          <Label> Choose Category *</Label>
-
-                          <select
-                            onChange={(e) => setcategory(e.target.value)}
-                            className="form-control"
-                            name="Select"
-                            id="Select"
-                          >
-                            <option value="volvo">--Select Category--</option>
-                            {GetCategory &&
-                              GetCategory?.map((val, i) => (
-                                <option key={i} value={val?.id}>
-                                  {val?.category_name}
-                                </option>
-                              ))}
-                          </select>
-                        </FormGroup>
-                      </Col>
-                      <Col lg="3" md="3">
-                        <FormGroup>
-                          <Label> Choose Type *</Label>
-
-                          <select
-                            onChange={(e) => setType(e.target.value)}
-                            className="form-control"
-                            name="Select"
-                            id="Select"
-                          >
-                            <option value="volvo">--Select Type--</option>
-                            {Typelist &&
-                              Typelist?.map((val, i) => (
-                                <option key={i} value={val?.id}>
-                                  {val?.product_type}
-                                </option>
-                              ))}
-                          </select>
-                        </FormGroup>
-                      </Col>
-                      <Col lg="3" md="3">
-                        <FormGroup>
-                          <Label> Choose Brand *</Label>
-
-                          <select
-                            required
-                            onChange={(e) => setBrand(e.target.value)}
-                            className="form-control"
-                            name="Select"
-                            id="Select"
-                          >
-                            <option value="volvo">--Select Brand--</option>
-                            {Brandlist &&
-                              Brandlist?.map((val, i) => (
-                                <option key={i} value={val?.id}>
-                                  {val?.brand_name}
-                                </option>
-                              ))}
-                          </select>
-                        </FormGroup>
-                      </Col> */}
-                      {/* <Col lg="3" md="3">
-                        <Button.Ripple
-                          color="primary"
-                          type="submit"
-                          className="mt-2"
-                        >
-                          Search
-                        </Button.Ripple>
-                      </Col> */}
-                    </Row>
-                  </Form>
-                  {/* <AssignClientCompoent /> */}
-                </Col>
+                {/* <Col>
+                  <Route
+                    render={({ history }) => (
+                      <Button
+                        className="float-right"
+                        color="primary"
+                        onClick={() =>
+                          history.push(
+                            "/app/freshlist/house/AssignToClientlist"
+                          )
+                        }
+                      >
+                        Assigned List
+                      </Button>
+                    )}
+                  />
+                </Col> */}
               </Row>
 
               <div className="container">
@@ -1048,6 +986,11 @@ const AssignToClient = () => {
                 </Form>
               </div>
             </Card>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <AssignedCLientlist />
           </Col>
         </Row>
       </>

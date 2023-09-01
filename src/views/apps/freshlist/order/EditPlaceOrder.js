@@ -78,35 +78,35 @@ class EditPlaceOrder extends React.Component {
         width: 80,
         filter: true,
       },
-      {
-        headerName: "Status",
-        field: "order_status",
-        filter: true,
-        width: 160,
-        cellRendererFramework: (params) => {
-          return params.data?.order_status === "Completed" ? (
-            <div className="badge badge-pill badge-success">Completed</div>
-          ) : params.data?.order_status === "Pending" ? (
-            <div className="badge badge-pill badge-warning">
-              {params.data?.order_status}
-            </div>
-          ) : params.data?.order_status === "Rejected" ? (
-            <div className="badge badge-pill bg-primary">Rejected</div>
-          ) : params.data?.order_status === "Cancelled" ? (
-            <div className="badge badge-pill bg-danger">
-              {params.data.order_status}
-            </div>
-          ) : params.data?.order_status === "orderreceived" ? (
-            <div className="badge badge-pill bg-success">Order Received</div>
-          ) : null;
-        },
-      },
+      // {
+      //   headerName: "Status",
+      //   field: "order_status",
+      //   filter: true,
+      //   width: 160,
+      //   cellRendererFramework: (params) => {
+      //     return params.data?.order_status === "Completed" ? (
+      //       <div className="badge badge-pill badge-success">Completed</div>
+      //     ) : params.data?.order_status === "Pending" ? (
+      //       <div className="badge badge-pill badge-warning">
+      //         {params.data?.order_status}
+      //       </div>
+      //     ) : params.data?.order_status === "Rejected" ? (
+      //       <div className="badge badge-pill bg-primary">Rejected</div>
+      //     ) : params.data?.order_status === "Cancelled" ? (
+      //       <div className="badge badge-pill bg-danger">
+      //         {params.data.order_status}
+      //       </div>
+      //     ) : params.data?.order_status === "orderreceived" ? (
+      //       <div className="badge badge-pill bg-success">Order Received</div>
+      //     ) : null;
+      //   },
+      // },
       {
         headerName: "product_id",
         field: "product_id",
         filter: true,
         resizable: true,
-        width: 150,
+        width: 180,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">

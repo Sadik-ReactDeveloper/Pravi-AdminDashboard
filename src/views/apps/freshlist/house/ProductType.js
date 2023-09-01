@@ -460,7 +460,7 @@ class ProductType extends React.Component {
     const { rowData, columnDefs, defaultColDef } = this.state;
     return (
       <>
-        <Row>
+        {/* <Row>
           <Col lg="4" md="12">
             <Card
               className="bg-secondary  py-3 "
@@ -533,7 +533,7 @@ class ProductType extends React.Component {
               </CardText>
             </Card>
           </Col>
-        </Row>
+        </Row> */}
         <Row className="app-user-list">
           <Col sm="12"></Col>
           <Col sm="12">
