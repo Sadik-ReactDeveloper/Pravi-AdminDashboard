@@ -497,7 +497,7 @@ class Placeorder extends React.Component {
           console.log(err);
         });
     } else {
-      swal("Add Quantity first");
+      // swal("Add Quantity first");
     }
   };
 

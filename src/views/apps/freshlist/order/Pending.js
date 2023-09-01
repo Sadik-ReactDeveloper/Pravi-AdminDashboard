@@ -146,12 +146,28 @@ class Pending extends React.Component {
         field: "order_id",
         filter: true,
         resizable: true,
-        width: 150,
+        width: 140,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
                 <span>{params.data?.order_id}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Username",
+        field: "username",
+        filter: true,
+        resizable: true,
+        width: 160,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.username}</span>
               </div>
             </div>
           );

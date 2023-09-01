@@ -17,6 +17,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Badge,
 } from "reactstrap";
 import "../../../../assets/css/main.css";
 import axiosConfig from "../../../../axiosConfig";
@@ -738,7 +739,7 @@ class ViewOneOrder extends React.Component {
     await axiosConfig
       .post(`/order_detail`, formdata)
       .then((res) => {
-        console.log(res.data.data);
+        console.log(res.data);
         let rowData = res?.data?.data;
         this.setState({ rowData });
       })
@@ -893,6 +894,107 @@ class ViewOneOrder extends React.Component {
                   {/* <InvoiceGenerator PrintData={this.state.PrintData} /> */}
                 </h1>
               </Col>
+              {/* <Col>
+                {(this.state.rowData &&
+                  this.state.rowData[0].order_status === "Completed") ||
+                this.state.rowData[0].order_status === "Rejected" ||
+                this.state.rowData[0].order_status === "Approved" ? (
+                  <Badge
+                    color={
+                      this.state.rowData[0]?.order_status === "Rejected"
+                        ? "danger"
+                        : "success"
+                    }
+                  >
+                    {this.state.rowData[0]?.order_status}
+                  </Badge>
+                ) : (
+                  <>
+                    <label>
+                      Update Order Status-
+                      {this.state.rowData[0]?.order_status &&
+                        this.state.rowData[0]?.order_status}
+                    </label>
+                    <select
+                      className="form-control"
+                      defaultValue={this.state.rowData[0]?.order_status}
+                      onChange={(e) => {
+                        let { id } = this.props.match.params;
+                        let data = new FormData();
+
+                        data.append("order_id", id);
+                        data.append(
+                          "budget_id",
+                          this.state.rowData[0]?.budget_id
+                        );
+                        data.append(
+                          "rejectedamount",
+                          this.state.rowData[0]?.sub_total
+                        );
+                        data.append("order_status", e.target.value);
+                        axiosConfig
+                          .post(`/change_order_status`, data)
+                          .then((res) => {
+                            console.log(res?.data.message);
+                            if (res?.data.message) {
+                              this.componentDidMount();
+                              swal("status Updated Succesfully");
+                            }
+                          })
+                          .catch((err) => {
+                            console.log(err);
+                          });
+                      }}
+                      name="changestatus"
+                      id="changeStatus"
+                    >
+                      <option value="Pending">--UpdateStatus--</option>
+                      <option value="Approved">Approved</option>
+                      <option value="Rejected">Rejected</option>
+                    </select>
+                  </>
+                )}
+              </Col> */}
+              {/* <label>
+                  Update Order Status-
+                  {this.state.rowData[0]?.order_status &&
+                    this.state.rowData[0]?.order_status}
+                </label>
+                <select
+                  className="form-control"
+                  // defaultValue={params.data?.order_status}
+                  onChange={(e) => {
+                    // console.log(e.target.value);
+                    let { id } = this.props.match.params;
+                    let data = new FormData();
+
+                    data.append("order_id", id);
+                    data.append("budget_id", this.state.rowData[0]?.budget_id);
+                    data.append(
+                      "rejectedamount",
+                      this.state.rowData[0]?.sub_total
+                    );
+                    data.append("order_status", e.target.value);
+                    axiosConfig
+                      .post(`/change_order_status`, data)
+                      .then((res) => {
+                        console.log(res?.data.message);
+                        if (res?.data.message) {
+                          this.componentDidMount();
+                          swal("status Updated Succesfully");
+                        }
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
+                  }}
+                  name="changestatus"
+                  id="changeStatus"
+                >
+                  <option value="Pending">--UpdateStatus--</option>
+                  <option value="Approved">Approved</option>
+                  <option value="Rejected">Rejected</option>
+                </select> */}
               <Col>
                 <Route
                   render={({ history }) => (

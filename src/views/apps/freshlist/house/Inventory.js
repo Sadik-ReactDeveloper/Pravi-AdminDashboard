@@ -119,22 +119,22 @@ class Invetory extends React.Component {
           );
         },
       },
-      // {
-      //   headerName: "Description",
-      //   field: "description",
-      //   filter: "agSetColumnFilter",
-      //   width: 150,
-      //   cellRendererFramework: (params) => {
-      //     return (
-      //       <div className="d-flex align-items-center cursor-pointer">
-      //         <div className="">
-      //           {/* <span>{ReactHtmlParser(params.data.volume)}</span> */}
-      //           <span>{params?.data?.description}</span>
-      //         </div>
-      //       </div>
-      //     );
-      //   },
-      // },
+      {
+        headerName: "Type",
+        field: "product_type",
+        filter: "agSetColumnFilter",
+        width: 150,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div className="">
+                {/* <span>{ReactHtmlParser(params.data.volume)}</span> */}
+                <span>{params?.data?.product_type}</span>
+              </div>
+            </div>
+          );
+        },
+      },
       {
         headerName: " Price",
         field: "price",
