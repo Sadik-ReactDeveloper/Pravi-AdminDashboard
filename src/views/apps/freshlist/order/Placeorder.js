@@ -64,7 +64,7 @@ class Placeorder extends React.Component {
         valueGetter: "node.rowIndex + 1",
         field: "node.rowIndex + 1",
         // checkboxSelection: true,
-        width: 150,
+        width: 80,
         filter: true,
         // cellRendererFramework: (params) => {
         //   return (
@@ -210,6 +210,8 @@ class Placeorder extends React.Component {
               <div className="d-flex">
                 {/* <Button color="primary">-</Button> */}
                 <input
+                  style={{ position: "relative" }}
+                  // value={this.state.ProductQuantity}
                   onChange={(e) => {
                     this.setState({ ProductQuantity: e.target.value });
                   }}

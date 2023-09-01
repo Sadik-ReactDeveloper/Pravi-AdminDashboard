@@ -294,7 +294,6 @@ class SuggestedProducts extends React.Component {
                   <Col>
                     <FormGroup>
                       <Label>Select A User</Label>
-
                       <select
                         required
                         onChange={(e) =>

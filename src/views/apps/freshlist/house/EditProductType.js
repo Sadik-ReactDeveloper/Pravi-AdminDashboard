@@ -348,6 +348,11 @@ export class EditProductType extends Component {
                       <Input
                         required
                         type="number"
+                        onKeyDown={(e) =>
+                          ["e", "E", "+", "-"].includes(e.key) &&
+                          e.preventDefault()
+                        }
+                        min={0}
                         maxLength={10}
                         size={10}
                         placeholder="0123456789"
@@ -363,6 +368,11 @@ export class EditProductType extends Component {
                       <Input
                         required
                         type="number"
+                        onKeyDown={(e) =>
+                          ["e", "E", "+", "-"].includes(e.key) &&
+                          e.preventDefault()
+                        }
+                        min={0}
                         maxLength={10}
                         size={10}
                         placeholder="0123456789"
@@ -581,7 +591,12 @@ export class EditProductType extends Component {
                         <Label>PinCode</Label>
                         <Input
                           required
-                          type="text"
+                          type="number"
+                          onKeyDown={(e) =>
+                            ["e", "E", "+", "-"].includes(e.key) &&
+                            e.preventDefault()
+                          }
+                          min={0}
                           placeholder="Enter PinCode"
                           name="B_PinCode"
                           value={this.state.B_PinCode}
@@ -708,7 +723,12 @@ export class EditProductType extends Component {
                         <Input
                           required
                           disabled={this.state.checkbox ? true : false}
-                          type="text"
+                          type="number"
+                          onKeyDown={(e) =>
+                            ["e", "E", "+", "-"].includes(e.key) &&
+                            e.preventDefault()
+                          }
+                          min={0}
                           placeholder="Enter PinCode"
                           name="S_PinCode"
                           value={this.state.S_PinCode}

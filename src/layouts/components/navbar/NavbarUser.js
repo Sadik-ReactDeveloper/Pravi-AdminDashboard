@@ -31,10 +31,10 @@ const UserDropdown = (props) => {
   // const { logout, isAuthenticated } = useAuth0()
   return (
     <DropdownMenu right>
-      <DropdownItem tag="a" href="#" onClick={(e) => handleNavigation(e)}>
+      {/* <DropdownItem tag="a" href="#" onClick={(e) => handleNavigation(e)}>
         <Icon.User size={14} className="mr-50" />
         <span className="align-middle">Edit Profile</span>
-      </DropdownItem>
+      </DropdownItem> */}
       {/* <DropdownItem
         tag="a"
         href="#"
@@ -64,6 +64,20 @@ const UserDropdown = (props) => {
         <span className="align-middle">WishList</span>
       </DropdownItem> */}
       <DropdownItem divider />
+      <Route
+        render={({ history }) => (
+          <DropdownItem
+            tag="a"
+            onClick={(e) => {
+              e.preventDefault();
+              history.push("/pages/profile/userProfile");
+            }}
+          >
+            <Icon.User size={14} className="mr-50" />
+            <span className="align-middle">Edit Profile</span>
+          </DropdownItem>
+        )}
+      />
       <Route
         render={({ history }) => (
           <DropdownItem

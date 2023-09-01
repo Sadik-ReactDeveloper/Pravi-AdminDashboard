@@ -359,8 +359,13 @@ export class CreateAccount extends Component {
                     <Input
                       required
                       type="number"
-                      maxLength={10}
+                      maxLength={12}
+                      onKeyDown={(e) =>
+                        ["e", "E", "+", "-"].includes(e.key) &&
+                        e.preventDefault()
+                      }
                       size={10}
+                      min={0}
                       placeholder="0123456789"
                       name="Mobile_no"
                       value={this.state.Mobile_no}
@@ -414,7 +419,12 @@ export class CreateAccount extends Component {
                     <Input
                       required
                       type="number"
-                      maxLength={10}
+                      onKeyDown={(e) =>
+                        ["e", "E", "+", "-"].includes(e.key) &&
+                        e.preventDefault()
+                      }
+                      min={0}
+                      maxLength={12}
                       size={10}
                       placeholder="0123456789"
                       name="Phone_no"
@@ -603,7 +613,12 @@ export class CreateAccount extends Component {
                       <Label>PinCode</Label>
                       <Input
                         required
-                        type="text"
+                        type="number"
+                        onKeyDown={(e) =>
+                          ["e", "E", "+", "-"].includes(e.key) &&
+                          e.preventDefault()
+                        }
+                        min={0}
                         placeholder="Enter PinCode"
                         name="B_PinCode"
                         value={this.state.B_PinCode}
@@ -752,8 +767,13 @@ export class CreateAccount extends Component {
                       <Input
                         required
                         disabled={this.state.checkbox ? true : false}
-                        type="text"
+                        type="number"
                         placeholder="Enter PinCode"
+                        onKeyDown={(e) =>
+                          ["e", "E", "+", "-"].includes(e.key) &&
+                          e.preventDefault()
+                        }
+                        min={0}
                         name="S_PinCode"
                         value={this.state.S_PinCode}
                         onChange={this.changeHandler}

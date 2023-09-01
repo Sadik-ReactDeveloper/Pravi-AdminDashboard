@@ -243,6 +243,7 @@ class BudgetAssignment extends React.Component {
         .then((res) => {
           console.log(res.data);
           swal("Success", "TopUp Request Created Successfully");
+          this.setState({ TopupAmount: "" });
         })
         .catch((err) => {
           console.log(err);
@@ -341,6 +342,7 @@ class BudgetAssignment extends React.Component {
                         <Input
                           className="form-control"
                           type="number"
+                          value={this.state.TopupAmount}
                           placeholder="Enter Top up"
                           onChange={(e) =>
                             this.setState({ TopupAmount: e.target.value })
