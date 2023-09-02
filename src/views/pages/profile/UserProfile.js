@@ -19,10 +19,11 @@ import axiosConfig from "../../../axiosConfig";
 // import { Route } from "react-router-dom";
 
 class UserProfile extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.state = {
       name: "",
+      LoginData: {},
       email: "",
       cnfmPassword: "",
       password: "",
@@ -42,23 +43,34 @@ class UserProfile extends React.Component {
 
   componentDidMount() {
     // let { id } = this.props.match.params;
-    axiosConfig
-      .get(`/admin/getoneadmin/63875207a1d65ee4d84b3ab2`)
-      .then((response) => {
-        //console.log(response.data);
-        console.log(response);
-        this.setState({
-          data: response.data.data,
-          name: response.data.data.name,
-          email: response.data.data.email,
-          // mobile: response.data.data.mobile,
-          password: response.data.data.password,
-          cnfmPassword: response.data.data.cnfmPassword,
-        });
-      })
-      .catch((error) => {
-        console.log(error.response);
-      });
+    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+    console.log(pageparmission?.Userinfo);
+    this.setState({ LoginData: pageparmission?.Userinfo });
+    this.setState({
+      // data: response.data.data,
+      name: pageparmission?.Userinfo?.full_name,
+      email: pageparmission?.Userinfo?.email,
+      mobile: pageparmission?.Userinfo?.mobile,
+      // password: pageparmission?.Userinfo?.password,
+      // cnfmPassword: pageparmission?.Userinfo?.password,
+    });
+    // axiosConfig
+    //   .get(`/admin/getoneadmin/63875207a1d65ee4d84b3ab2`)
+    //   .then((response) => {
+    //     //console.log(response.data);
+    //     console.log(response);
+    //     this.setState({
+    //       // data: response.data.data,
+    //       name: response.data.data.name,
+    //       email: response.data.data.email,
+    //       // mobile: response.data.data.mobile,
+    //       password: response.data.data.password,
+    //       cnfmPassword: response.data.data.cnfmPassword,
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.log(error.response);
+    //   });
   }
 
   changeHandler = (e) => {
@@ -87,9 +99,7 @@ class UserProfile extends React.Component {
     }
     //  let { id } = this.props.match.params;
     axiosConfig
-      .post(`/admin/adminprofile/63875207a1d65ee4d84b3ab2`, data, {
-
-      })
+      .post(`/admin/adminprofile/63875207a1d65ee4d84b3ab2`, data, {})
       .then((response) => {
         console.log(response.data.message);
         swal("Success!", "Submitted SuccessFull!", "success");
@@ -123,11 +133,15 @@ class UserProfile extends React.Component {
                   <ul className="lst-1">
                     <li className="lst-2">
                       Name:{" "}
-                      <span className="lst-3">{this.state.data.name}</span>
+                      <span className="lst-3">
+                        {this.state.LoginData?.username}
+                      </span>
                     </li>
                     <li className="lst-2">
                       Email:{" "}
-                      <span className="lst-3">{this.state.data.email}</span>
+                      <span className="lst-3">
+                        {this.state.LoginData?.email}
+                      </span>
                     </li>
                   </ul>
                 </div>

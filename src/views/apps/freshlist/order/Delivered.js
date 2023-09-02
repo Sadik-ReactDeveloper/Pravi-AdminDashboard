@@ -16,6 +16,7 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
+  Badge,
 } from "reactstrap";
 import "../../../../assets/css/main.css";
 import axiosConfig from "../../../../axiosConfig";
@@ -276,7 +277,7 @@ class Delivered extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
-                <span>{params.data?.total}</span>
+                <Badge color="success">{params.data?.total}</Badge>
               </div>
             </div>
           );

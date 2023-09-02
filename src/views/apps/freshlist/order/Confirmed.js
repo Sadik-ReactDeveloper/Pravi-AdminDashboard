@@ -140,6 +140,38 @@ class Confirmed extends React.Component {
           );
         },
       },
+      {
+        headerName: "PO Number",
+        field: "po_no",
+        filter: true,
+        resizable: true,
+        width: 160,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.po_no}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "total",
+        field: "total",
+        filter: true,
+        resizable: true,
+        width: 160,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <Badge color="success">{params.data?.total}</Badge>
+              </div>
+            </div>
+          );
+        },
+      },
 
       // {
       //   headerName: "Product Image",
@@ -249,38 +281,55 @@ class Confirmed extends React.Component {
           );
         },
       },
-      // {
-      //   headerName: "brandname ",
-      //   field: "brand_name",
-      //   filter: true,
-      //   resizable: true,
-      //   width: 180,
-      //   cellRendererFramework: (params) => {
-      //     return (
-      //       <div className="d-flex align-items-center cursor-pointer">
-      //         <div>
-      //           <span>{params.data?.brand_name}</span>
-      //         </div>
-      //       </div>
-      //     );
-      //   },
-      // },
-      // {
-      //   headerName: "city",
-      //   field: "city",
-      //   filter: true,
-      //   resizable: true,
-      //   width: 160,
-      //   cellRendererFramework: (params) => {
-      //     return (
-      //       <div className="d-flex align-items-center cursor-pointer">
-      //         <div>
-      //           <span>{params.data?.city}</span>
-      //         </div>
-      //       </div>
-      //     );
-      //   },
-      // },
+      {
+        headerName: "state",
+        field: "state_title",
+        filter: true,
+        resizable: true,
+        width: 180,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.state_title}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "City",
+        field: "city_name",
+        filter: true,
+        resizable: true,
+        width: 180,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.city_name}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Username",
+        field: "user_full_name",
+        filter: true,
+        resizable: true,
+        width: 180,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.user_full_name}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+
       {
         headerName: "order Creation date",
         field: "order_date",
@@ -474,22 +523,7 @@ class Confirmed extends React.Component {
       //     );
       //   },
       // },
-      // {
-      //   headerName: "subtotal",
-      //   field: "subtotal",
-      //   filter: true,
-      //   resizable: true,
-      //   width: 180,
-      //   cellRendererFramework: (params) => {
-      //     return (
-      //       <div className="d-flex align-items-center cursor-pointer">
-      //         <div>
-      //           <span>{params.data?.subtotal}</span>
-      //         </div>
-      //       </div>
-      //     );
-      //   },
-      // },
+
       // {
       //   headerName: "tags",
       //   field: "tags",

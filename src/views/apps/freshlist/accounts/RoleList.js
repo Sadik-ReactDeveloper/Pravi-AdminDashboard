@@ -109,7 +109,7 @@ class RoleList extends React.Component {
                   )}
                 />
               )}
-              {this.state.Deletepermisson && (
+              {/* {this.state.Deletepermisson && (
                 <BsTrash
                   className="mr-50"
                   size="25px"
@@ -118,7 +118,7 @@ class RoleList extends React.Component {
                     this.runthisfunction(params.data.id);
                   }}
                 />
-              )}
+              )} */}
             </div>
           );
         },

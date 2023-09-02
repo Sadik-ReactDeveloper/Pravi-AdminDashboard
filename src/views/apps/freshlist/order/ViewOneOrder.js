@@ -63,6 +63,7 @@ class ViewOneOrder extends React.Component {
 
   state = {
     rowData: [],
+    rowSinglevalue: {},
     Viewpermisson: null,
     Editpermisson: null,
     Createpermisson: null,
@@ -739,9 +740,10 @@ class ViewOneOrder extends React.Component {
     await axiosConfig
       .post(`/order_detail`, formdata)
       .then((res) => {
-        console.log(res.data);
-        let rowData = res?.data?.data;
-        this.setState({ rowData });
+        console.log(res.data?.data);
+        let Data = res.data?.data;
+        this.setState({ rowData: Data });
+        this.setState({ rowSinglevalue: res.data?.data[0] });
       })
       .catch((err) => {
         console.log(err?.response);
@@ -761,11 +763,20 @@ class ViewOneOrder extends React.Component {
     this.setState({
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
-
-    // await axiosConfig.get("/admin/allorder_list").then((response) => {
-
-    // console.log(newparmisson?.permission.includes("Create"));
-    // });
+    // const data = new FormData();
+    // data.append("user_id", pageparmission?.Userinfo?.id);
+    // await axiosConfig
+    //   .post(`/orderraiselist`, data)
+    //   .then((res) => {
+    //     // console.log(res.data.data);
+    //     let rowvalue = res.data.data;
+    //     let arr = rowvalue.filter((ele) => ele?.order_id === id);
+    //     console.log(arr);
+    //     // this.setState({ rowData: rowData });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   }
 
   async runthisfunction(id) {
@@ -817,7 +828,7 @@ class ViewOneOrder extends React.Component {
   };
 
   render() {
-    const { rowData, columnDefs, defaultColDef } = this.state;
+    const { rowSinglevalue, rowData, columnDefs, defaultColDef } = this.state;
     return (
       <Row className="app-user-list">
         {/* <Col sm="12">
@@ -889,47 +900,54 @@ class ViewOneOrder extends React.Component {
           <Card>
             <Row className="m-2">
               <Col>
-                <h1 col-sm-6 className="float-left">
-                  ViewOne Order
-                  {/* <InvoiceGenerator PrintData={this.state.PrintData} /> */}
-                </h1>
+                <h1 className="float-left">ViewOne Order</h1>
               </Col>
-              {/* <Col>
-                {(this.state.rowData &&
-                  this.state.rowData[0].order_status === "Completed") ||
-                this.state.rowData[0].order_status === "Rejected" ||
-                this.state.rowData[0].order_status === "Approved" ? (
-                  <Badge
-                    color={
-                      this.state.rowData[0]?.order_status === "Rejected"
-                        ? "danger"
-                        : "success"
-                    }
-                  >
-                    {this.state.rowData[0]?.order_status}
-                  </Badge>
+              <Col>
+                {(rowSinglevalue &&
+                  rowSinglevalue?.order_status === "Completed") ||
+                rowSinglevalue?.order_status === "Rejected" ||
+                rowSinglevalue?.order_status === "Approved" ? (
+                  <>
+                    <label>Order Status : &nbsp;</label>
+                    <Badge
+                      color={
+                        rowSinglevalue?.order_status === "Rejected"
+                          ? "danger"
+                          : "success"
+                      }
+                    >
+                      {rowSinglevalue?.order_status}
+                    </Badge>
+                  </>
                 ) : (
                   <>
                     <label>
                       Update Order Status-
-                      {this.state.rowData[0]?.order_status &&
-                        this.state.rowData[0]?.order_status}
+                      <Badge
+                        color={
+                          rowSinglevalue?.order_status === "Rejected"
+                            ? "danger"
+                            : "success"
+                        }
+                      >
+                        {" "}
+                        {rowSinglevalue?.order_status &&
+                          rowSinglevalue?.order_status}
+                      </Badge>
                     </label>
                     <select
                       className="form-control"
-                      defaultValue={this.state.rowData[0]?.order_status}
+                      defaultValue={rowSinglevalue?.order_status}
                       onChange={(e) => {
+                        debugger;
                         let { id } = this.props.match.params;
                         let data = new FormData();
 
                         data.append("order_id", id);
-                        data.append(
-                          "budget_id",
-                          this.state.rowData[0]?.budget_id
-                        );
+                        data.append("budget_id", rowSinglevalue?.budget_id);
                         data.append(
                           "rejectedamount",
-                          this.state.rowData[0]?.sub_total
+                          rowSinglevalue?.sub_total
                         );
                         data.append("order_status", e.target.value);
                         axiosConfig
@@ -954,11 +972,11 @@ class ViewOneOrder extends React.Component {
                     </select>
                   </>
                 )}
-              </Col> */}
+              </Col>
               {/* <label>
                   Update Order Status-
-                  {this.state.rowData[0]?.order_status &&
-                    this.state.rowData[0]?.order_status}
+                  {this.state.rowSinglevalue?.order_status &&
+                    this.state.rowSinglevalue?.order_status}
                 </label>
                 <select
                   className="form-control"

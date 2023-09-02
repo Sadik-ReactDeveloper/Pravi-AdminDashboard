@@ -205,15 +205,27 @@ class Typelist extends React.Component {
       switch (value) {
         case "delete":
           let data = new FormData();
-          data.append("id", id);
+          let pageparmission = JSON.parse(localStorage.getItem("userData"));
+          data.append("user_id", pageparmission?.Userinfo?.id);
+          data.append("role", pageparmission?.Userinfo?.role);
+          data.append("tablename", "product_type");
+          data.append("delete_id", id);
           axiosConfig
-            .post("/deleteproduct", data)
+            .post("/deleterecord", data)
             .then((resp) => {
-              console.log(resp);
-              this.gridApi.updateRowData({ remove: selectedData });
+              console.log(resp?.data.message);
+              if (resp?.data.success) {
+                swal("Success", "Type Deleted Successfully");
+                this.gridApi.updateRowData({ remove: selectedData });
+              }
+              if (!resp?.data?.success) {
+                console.log("object");
+                swal("Error", `${resp?.data.message}`);
+              }
             })
-            .then((response) => {
-              console.log(response);
+            .catch((err) => {
+              console.log(err);
+              // swal("Somethig Went Wrong");
             });
 
           break;

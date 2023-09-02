@@ -13,6 +13,7 @@ import {
   CardTitle,
   CardText,
   Label,
+  Badge,
 } from "reactstrap";
 import axios from "axios";
 import axiosConfig from "../../../../axiosConfig";
@@ -53,15 +54,15 @@ class ProductDashboard extends React.Component {
         valueGetter: "node.rowIndex + 1",
         field: "node.rowIndex + 1",
         // checkboxSelection: true,
-        width: 150,
+        width: 80,
         filter: true,
       },
 
       {
-        headerName: "PRODUCT Image",
+        headerName: "Image",
         field: "product_images",
         filter: "agSetColumnFilter",
-        width: 150,
+        width: 140,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
@@ -76,7 +77,7 @@ class ProductDashboard extends React.Component {
                     alt="image"
                   />
                 ) : (
-                  "No Image "
+                  "No Image"
                 )}
               </div>
             </div>
@@ -84,7 +85,7 @@ class ProductDashboard extends React.Component {
         },
       },
       {
-        headerName: "brand_name",
+        headerName: "Brand",
         field: "brand_name",
         filter: "agSetColumnFilter",
         width: 150,
@@ -99,7 +100,7 @@ class ProductDashboard extends React.Component {
         },
       },
       {
-        headerName: "product_type",
+        headerName: "Type",
         field: "product_type",
         filter: "agSetColumnFilter",
         width: 150,
@@ -114,7 +115,7 @@ class ProductDashboard extends React.Component {
         },
       },
       {
-        headerName: "PRODUCT",
+        headerName: "Product",
         field: "title",
         filter: "agSetColumnFilter",
         width: 150,
@@ -129,7 +130,7 @@ class ProductDashboard extends React.Component {
         },
       },
       {
-        headerName: "CATEGORY",
+        headerName: "category",
         field: "category_name",
         filter: "agSetColumnFilter",
         width: 150,
@@ -147,7 +148,7 @@ class ProductDashboard extends React.Component {
         headerName: "Description",
         field: "description",
         filter: "agSetColumnFilter",
-        width: 120,
+        width: 150,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
@@ -167,7 +168,7 @@ class ProductDashboard extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{params.data?.price}</span>
+                <Badge color="success">{params.data?.price}</Badge>
               </div>
             </div>
           );
@@ -177,7 +178,7 @@ class ProductDashboard extends React.Component {
         headerName: "DiscountPrice",
         field: "discountprice",
         filter: "agSetColumnFilter",
-        width: 120,
+        width: 140,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
@@ -192,7 +193,7 @@ class ProductDashboard extends React.Component {
         headerName: "Shipping Fee",
         field: "shipping_fee",
         filter: "agSetColumnFilter",
-        width: 120,
+        width: 140,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
@@ -290,7 +291,7 @@ class ProductDashboard extends React.Component {
       {
         headerName: "Actions",
         field: "transactions",
-        width: 150,
+        width: 180,
         cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
@@ -384,24 +385,35 @@ class ProductDashboard extends React.Component {
     let selectedData = this.gridApi.getSelectedRows();
     swal("Warning", "Sure You Want to Delete it", {
       buttons: {
-        cancel: "cancel",
+        cancel: "Cancel",
         catch: { text: "Delete ", value: "delete" },
       },
     }).then((value) => {
       switch (value) {
         case "delete":
           let data = new FormData();
-          data.append("id", id);
+          let pageparmission = JSON.parse(localStorage.getItem("userData"));
+          data.append("user_id", pageparmission?.Userinfo?.id);
+          data.append("role", pageparmission?.Userinfo?.role);
+          data.append("tablename", "trupee_product");
+          data.append("delete_id", id);
           axiosConfig
-            .post("/deleteproduct", data)
+            .post("/deleterecord", data)
             .then((resp) => {
-              console.log(resp);
-              this.gridApi.updateRowData({ remove: selectedData });
+              console.log(resp?.data.message);
+              if (resp?.data.success) {
+                swal("Success", "Product Deleted Successfully");
+                this.gridApi.updateRowData({ remove: selectedData });
+              }
+              if (!resp?.data?.success) {
+                console.log("object");
+                swal("Error", `${resp?.data.message}`);
+              }
             })
-            .then((response) => {
-              console.log(response);
+            .catch((err) => {
+              console.log(err);
+              // swal("Somethig Went Wrong");
             });
-
           break;
         default:
       }

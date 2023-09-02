@@ -16,6 +16,7 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
+  Badge,
 } from "reactstrap";
 import { AiOutlineDownload } from "react-icons/ai";
 import axiosConfig from "../../../../axiosConfig";
@@ -348,7 +349,7 @@ class inVoiceRegenerator extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
-                <span>{params.data?.subtotal}</span>
+                <Badge color="success">{params.data?.subtotal}</Badge>
               </div>
             </div>
           );
@@ -364,7 +365,7 @@ class inVoiceRegenerator extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
-                <span>{params.data?.grandtotal}</span>
+                <Badge color="success">{params.data?.grandtotal}</Badge>
               </div>
             </div>
           );

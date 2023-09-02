@@ -84,7 +84,7 @@ class Pending extends React.Component {
         resizable: true,
         width: 230,
         cellRendererFramework: (params) => {
-          // console.log(params.data);
+          console.log(params.data);
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
@@ -260,7 +260,7 @@ class Pending extends React.Component {
                 />
               )} */}
 
-              {/* {this.state.Deletepermisson && this.state.Deletepermisson && (
+              {this.state.Deletepermisson && this.state.Deletepermisson && (
                 <Route
                   render={() => (
                     <Trash
@@ -268,14 +268,14 @@ class Pending extends React.Component {
                       size="25px"
                       color="red"
                       onClick={() => {
-                        let selectedData = this.gridApi.getSelectedRows();
-                        this.runthisfunction(params.data.id);
-                        this.gridApi.updateRowData({ remove: selectedData });
+                        console.log(params.data);
+                        this.runthisfunction(params.data?.order_id);
+                        // this.gridApi.updateRowData({ remove: selectedData });
                       }}
                     />
                   )}
                 />
-              )} */}
+              )}
             </div>
           );
         },
@@ -291,7 +291,7 @@ class Pending extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
-                <span>{params.data?.total}</span>
+                <Badge color="success">{params.data?.total}</Badge>
               </div>
             </div>
           );
@@ -514,8 +514,44 @@ class Pending extends React.Component {
 
   async runthisfunction(id) {
     console.log(id);
-    await axiosConfig.delete(`/admin/del_order/${id}`).then((response) => {
-      console.log(response);
+
+    let selectedData = this.gridApi.getSelectedRows();
+
+    swal("Warning", "Sure You Want to Delete it", {
+      buttons: {
+        cancel: "Cancel",
+        catch: { text: "Delete ", value: "delete" },
+      },
+    }).then((value) => {
+      switch (value) {
+        case "delete":
+          let data = new FormData();
+          let pageparmission = JSON.parse(localStorage.getItem("userData"));
+          data.append("user_id", pageparmission?.Userinfo?.id);
+          data.append("role", pageparmission?.Userinfo?.role);
+          data.append("tablename", "order_master");
+          data.append("delete_id", id);
+          axiosConfig
+            .post("/deleteorder", data)
+            .then((resp) => {
+              console.log(resp?.data.message);
+              if (resp?.data.success) {
+                swal("Success", "Order Deleted Successfully");
+                this.gridApi.updateRowData({ remove: selectedData });
+              }
+              if (!resp?.data?.success) {
+                // console.log("object");
+                swal("Error", `${resp?.data.message}`);
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+              // swal("Somethig Went Wrong");
+            });
+
+          break;
+        default:
+      }
     });
   }
   onGridReady = (params) => {

@@ -81,10 +81,10 @@ class ViewOneReceivedorder extends React.Component {
         filter: true,
       },
       {
-        headerName: "inventoryStatus",
+        headerName: "InventoryStatus",
         field: "inventory_status",
         filter: true,
-        width: 160,
+        width: 190,
         cellRendererFramework: (params) => {
           return params.data?.inventory_status === "verified" ? (
             <div className="badge badge-pill badge-success">verified</div>
@@ -104,8 +104,8 @@ class ViewOneReceivedorder extends React.Component {
         },
       },
       {
-        headerName: "product_id",
-        field: "product_id",
+        headerName: "Productid",
+        field: "productid",
         filter: true,
         resizable: true,
         width: 150,
@@ -114,6 +114,38 @@ class ViewOneReceivedorder extends React.Component {
             <div className="d-flex align-items-center cursor-pointer">
               <div>
                 <span>{params.data?.product_id}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "PO Number",
+        field: "po_no",
+        filter: true,
+        resizable: true,
+        width: 180,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.po_no}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Client Code",
+        field: "username",
+        filter: true,
+        resizable: true,
+        width: 170,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <div>
+                <span>{params.data?.username}</span>
               </div>
             </div>
           );
@@ -136,7 +168,7 @@ class ViewOneReceivedorder extends React.Component {
         },
       },
       {
-        headerName: "current Stock ",
+        headerName: "Current Stock",
         field: "current_stock",
         filter: true,
         resizable: true,
@@ -1083,7 +1115,7 @@ class ViewOneReceivedorder extends React.Component {
               </Col>
 
               {this.state.IsVerified && (
-                <Col className="" lg="3" md="3" ms="3">
+                <Col className="" lg="2" md="2" ms="2">
                   <div className="dispatched">
                     <Button
                       onClick={() => {

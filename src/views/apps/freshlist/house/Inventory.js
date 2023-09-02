@@ -18,6 +18,7 @@ import {
   ModalBody,
   ModalFooter,
   FormGroup,
+  Badge,
 } from "reactstrap";
 import axiosConfig from "../../../../axiosConfig";
 import ReactHtmlParser from "react-html-parser";
@@ -62,7 +63,7 @@ class Invetory extends React.Component {
       },
 
       {
-        headerName: "Category NAME",
+        headerName: "Category name",
         field: "itemname",
         filter: "agSetColumnFilter",
         width: 150,
@@ -92,7 +93,7 @@ class Invetory extends React.Component {
         },
       },
       {
-        headerName: "PRODUCT Image",
+        headerName: "Image",
         field: "product",
         filter: "agSetColumnFilter",
         width: 150,
@@ -126,7 +127,7 @@ class Invetory extends React.Component {
         width: 150,
         cellRendererFramework: (params) => {
           return (
-            <div className="d-flex align-items-center cursor-pointer">
+            <div className="d-flex align-items-center flex-wrap cursor-pointer">
               <div className="">
                 {/* <span>{ReactHtmlParser(params.data.volume)}</span> */}
                 <span>{params?.data?.product_type}</span>
@@ -139,12 +140,14 @@ class Invetory extends React.Component {
         headerName: " Price",
         field: "price",
         filter: "agSetColumnFilter",
-        width: 160,
+        width: 120,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{ReactHtmlParser(params.data?.price)}</span>
+                <Badge color="success">
+                  {ReactHtmlParser(params.data?.price)}
+                </Badge>
               </div>
             </div>
           );
@@ -190,7 +193,9 @@ class Invetory extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{ReactHtmlParser(params.data?.quantity)}</span>
+                <Badge color="success">
+                  {ReactHtmlParser(params.data?.quantity)}
+                </Badge>
               </div>
             </div>
           );

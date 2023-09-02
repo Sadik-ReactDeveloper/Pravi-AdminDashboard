@@ -16,6 +16,7 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
+  Badge,
 } from "reactstrap";
 import { AiOutlineDownload } from "react-icons/ai";
 import axiosConfig from "../../../../axiosConfig";
@@ -92,7 +93,7 @@ class InvoiceGenerator extends React.Component {
       },
       {
         headerName: "Add Bills",
-        width: 180,
+        width: 160,
         filter: true,
         cellRendererFramework: (params) => {
           return (
@@ -359,7 +360,7 @@ class InvoiceGenerator extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
-                <span>{params.data?.total}</span>
+                <Badge color="success">{params.data?.total}</Badge>
               </div>
             </div>
           );

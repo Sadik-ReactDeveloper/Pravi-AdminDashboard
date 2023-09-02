@@ -30,6 +30,7 @@ class ProductWise extends React.Component {
     rowData: [],
     paginationPageSize: 20,
     CurrentDate: "",
+    Show: false,
     StartDate: "",
     EndDate: "",
     currenPageSize: "",
@@ -214,7 +215,7 @@ class ProductWise extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data?.total}</span>
+              <Badge color="success">{params.data.total}</Badge>
             </div>
           );
         },
@@ -318,57 +319,54 @@ class ProductWise extends React.Component {
       },
     ],
   };
-  handleProductFilterChange = (event) => {
-    const filterText = event.target.value.toLowerCase();
-    let pageparmission = JSON.parse(localStorage.getItem("userData"));
+  // handleProductFilterChange = (event) => {
+  //   const filterText = event.target.value.toLowerCase();
+  //   let pageparmission = JSON.parse(localStorage.getItem("userData"));
 
-    // const formdata = new FormData();
-    // formdata.append("user_id", pageparmission?.Userinfo?.id);
-    // formdata.append("role", pageparmission?.Userinfo?.role);
-    // axiosConfig
-    //   .post("/reportApi", formdata)
-    //   .then((response) => {
-    //     let rowData = response?.data?.data;
-    //     this.setState({ rowData });
-    //   })
-    //   .catch((err) => {
-    //     // console.log(err);
-    //   });
+  //   // const formdata = new FormData();
+  //   // formdata.append("user_id", pageparmission?.Userinfo?.id);
+  //   // formdata.append("role", pageparmission?.Userinfo?.role);
+  //   // axiosConfig
+  //   //   .post("/reportApi", formdata)
+  //   //   .then((response) => {
+  //   //     let rowData = response?.data?.data;
+  //   //     this.setState({ rowData });
+  //   //   })
+  //   //   .catch((err) => {
+  //   //     // console.log(err);
+  //   //   });
 
-    const { originalRowData, rowData } = this.state;
+  //   const { originalRowData, rowData } = this.state;
 
-    const filteredRowData = rowData.map((row) => {
-      const filteredProducts = row.products.filter((product) =>
-        product.title.toLowerCase().includes(filterText)
-      );
-      return {
-        ...row,
-        products: filteredProducts,
-      };
-    });
+  //   const filteredRowData = rowData.map((row) => {
+  //     const filteredProducts = row.products.filter((product) =>
+  //       product.title.toLowerCase().includes(filterText)
+  //     );
+  //     return {
+  //       ...row,
+  //       products: filteredProducts,
+  //     };
+  //   });
 
-    let newarrr = filteredRowData.filter((ele, i) => ele?.products.length > 0);
-    console.log(newarrr);
-    this.searchiTem(newarrr);
-  };
-  searchiTem = (data) => {
-    this.setState({ rowData: data });
-  };
+  //   let newarrr = filteredRowData.filter((ele, i) => ele?.products.length > 0);
+  //   console.log(newarrr);
+  //   this.searchiTem(newarrr);
+  // // };
+  // searchiTem = (data) => {
+  //   this.setState({ rowData: data });
+  // };
 
   // componentDidUpdate() {
   //   this.setState({ rowData: newarr });
   // }
 
-  componentDidMount() {
+  async componentDidMount() {
     const date = new Date().toISOString();
-    // console.log(date.split("T")[0]);
     this.setState({ CurrentDate: date.split("T")[0] });
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
-    // console.log(pageparmission.role);
     let newparmisson = pageparmission?.role?.find(
       (value) => value?.pageName === "Product Wise"
     );
-    // console.log(newparmisson);
     this.setState({ Viewpermisson: newparmisson?.permission.includes("View") });
     this.setState({
       Createpermisson: newparmisson?.permission.includes("Create"),
@@ -383,11 +381,10 @@ class ProductWise extends React.Component {
     const formdata = new FormData();
     formdata.append("user_id", pageparmission?.Userinfo?.id);
     formdata.append("role", pageparmission?.Userinfo?.role);
-    axiosConfig
+    await axiosConfig
       .post("/getReportProductList", formdata)
       .then((response) => {
         let rowData = response?.data?.data;
-        // console.log(rowData);
         this.setState({ Productlist: rowData });
       })
       .catch((err) => {
@@ -435,6 +432,7 @@ class ProductWise extends React.Component {
             swal(`${response.data?.message}`);
             this.setState({ rowData: "" });
           } else {
+            this.setState({ Show: true });
             this.setState({ rowData: alllist });
           }
         })
@@ -447,8 +445,14 @@ class ProductWise extends React.Component {
     }
   };
   render() {
-    const { filteredRowData, Productlist, rowData, columnDefs, defaultColDef } =
-      this.state;
+    const {
+      Show,
+      filteredRowData,
+      Productlist,
+      rowData,
+      columnDefs,
+      defaultColDef,
+    } = this.state;
     return (
       // console.log(filteredRowData),
       // console.log(productFilterText),
@@ -529,98 +533,104 @@ class ProductWise extends React.Component {
                 </Button>
               </Col>
             </Row>
-            <CardBody>
-              {this.state.rowData === null ? null : (
-                <div className="ag-theme-material w-100 my-2 ag-grid-table">
-                  <div className="d-flex flex-wrap justify-content-between align-items-center">
-                    <div className="mb-1">
-                      <UncontrolledDropdown className="p-1 ag-dropdown">
-                        <DropdownToggle tag="div">
-                          {this.gridApi
-                            ? this.state.currenPageSize
-                            : "" * this.state.getPageSize -
-                              (this.state.getPageSize - 1)}{" "}
-                          -{" "}
-                          {this.state.rowData.length -
-                            this.state.currenPageSize * this.state.getPageSize >
-                          0
-                            ? this.state.currenPageSize * this.state.getPageSize
-                            : this.state.rowData.length}{" "}
-                          of {this.state.rowData.length}
-                          <ChevronDown className="ml-50" size={15} />
-                        </DropdownToggle>
-                        <DropdownMenu right>
-                          <DropdownItem
-                            tag="div"
-                            onClick={() => this.filterSize(20)}
-                          >
-                            20
-                          </DropdownItem>
-                          <DropdownItem
-                            tag="div"
-                            onClick={() => this.filterSize(50)}
-                          >
-                            50
-                          </DropdownItem>
-                          <DropdownItem
-                            tag="div"
-                            onClick={() => this.filterSize(100)}
-                          >
-                            100
-                          </DropdownItem>
-                          <DropdownItem
-                            tag="div"
-                            onClick={() => this.filterSize(134)}
-                          >
-                            134
-                          </DropdownItem>
-                        </DropdownMenu>
-                      </UncontrolledDropdown>
-                    </div>
-                    <div className="d-flex flex-wrap justify-content-between mb-1">
-                      <div className="table-input mr-1">
-                        <Input
-                          placeholder="search..."
-                          onChange={(e) => {
-                            this.updateSearchQuery(e.target.value);
-                            // this.handleProductFilterChange(e);
-                          }}
-                          value={this.state.value}
-                        />
+            {Show ? (
+              <>
+                <CardBody>
+                  {this.state.rowData === null ? null : (
+                    <div className="ag-theme-material w-100 my-2 ag-grid-table">
+                      <div className="d-flex flex-wrap justify-content-between align-items-center">
+                        <div className="mb-1">
+                          <UncontrolledDropdown className="p-1 ag-dropdown">
+                            <DropdownToggle tag="div">
+                              {this.gridApi
+                                ? this.state.currenPageSize
+                                : "" * this.state.getPageSize -
+                                  (this.state.getPageSize - 1)}{" "}
+                              -{" "}
+                              {this.state.rowData.length -
+                                this.state.currenPageSize *
+                                  this.state.getPageSize >
+                              0
+                                ? this.state.currenPageSize *
+                                  this.state.getPageSize
+                                : this.state.rowData.length}{" "}
+                              of {this.state.rowData.length}
+                              <ChevronDown className="ml-50" size={15} />
+                            </DropdownToggle>
+                            <DropdownMenu right>
+                              <DropdownItem
+                                tag="div"
+                                onClick={() => this.filterSize(20)}
+                              >
+                                20
+                              </DropdownItem>
+                              <DropdownItem
+                                tag="div"
+                                onClick={() => this.filterSize(50)}
+                              >
+                                50
+                              </DropdownItem>
+                              <DropdownItem
+                                tag="div"
+                                onClick={() => this.filterSize(100)}
+                              >
+                                100
+                              </DropdownItem>
+                              <DropdownItem
+                                tag="div"
+                                onClick={() => this.filterSize(134)}
+                              >
+                                134
+                              </DropdownItem>
+                            </DropdownMenu>
+                          </UncontrolledDropdown>
+                        </div>
+                        <div className="d-flex flex-wrap justify-content-between mb-1">
+                          <div className="table-input mr-1">
+                            <Input
+                              placeholder="search..."
+                              onChange={(e) => {
+                                this.updateSearchQuery(e.target.value);
+                                // this.handleProductFilterChange(e);
+                              }}
+                              value={this.state.value}
+                            />
+                          </div>
+                          <div className="export-btn">
+                            <Button.Ripple
+                              color="primary"
+                              onClick={() => this.gridApi.exportDataAsCsv()}
+                            >
+                              Export as CSV
+                            </Button.Ripple>
+                          </div>
+                        </div>
                       </div>
-                      <div className="export-btn">
-                        <Button.Ripple
-                          color="primary"
-                          onClick={() => this.gridApi.exportDataAsCsv()}
-                        >
-                          Export as CSV
-                        </Button.Ripple>
-                      </div>
+                      <ContextLayout.Consumer>
+                        {(context) => (
+                          <AgGridReact
+                            rowHeight={rowHeight}
+                            gridOptions={{}}
+                            rowSelection="multiple"
+                            defaultColDef={defaultColDef}
+                            columnDefs={columnDefs}
+                            rowData={rowData}
+                            onGridReady={this.onGridReady}
+                            colResizeDefault={"shift"}
+                            animateRows={true}
+                            floatingFilter={false}
+                            pagination={true}
+                            paginationPageSize={this.state.paginationPageSize}
+                            pivotPanelShow="always"
+                            enableRtl={context.state.direction === "rtl"}
+                          />
+                        )}
+                      </ContextLayout.Consumer>
                     </div>
-                  </div>
-                  <ContextLayout.Consumer>
-                    {(context) => (
-                      <AgGridReact
-                        rowHeight={rowHeight}
-                        gridOptions={{}}
-                        rowSelection="multiple"
-                        defaultColDef={defaultColDef}
-                        columnDefs={columnDefs}
-                        rowData={rowData}
-                        onGridReady={this.onGridReady}
-                        colResizeDefault={"shift"}
-                        animateRows={true}
-                        floatingFilter={false}
-                        pagination={true}
-                        paginationPageSize={this.state.paginationPageSize}
-                        pivotPanelShow="always"
-                        enableRtl={context.state.direction === "rtl"}
-                      />
-                    )}
-                  </ContextLayout.Consumer>
-                </div>
-              )}
-            </CardBody>
+                  )}
+                </CardBody>
+              </>
+            ) : null}
           </Card>
         </Col>
       </Row>

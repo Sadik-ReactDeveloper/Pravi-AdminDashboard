@@ -10,6 +10,7 @@ import {
   DropdownMenu,
   DropdownItem,
   DropdownToggle,
+  Badge,
 } from "reactstrap";
 import axiosConfig from "../../../../axiosConfig";
 import axios from "axios";
@@ -209,7 +210,7 @@ class PaymentStatus extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
-                <span>{params.data?.grandtotal}</span>
+                <Badge color="success">{params.data?.grandtotal}</Badge>
               </div>
             </div>
           );
@@ -225,7 +226,7 @@ class PaymentStatus extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
-                <span>{params.data?.remaining_amt}</span>
+                <Badge color="danger">{params.data?.remaining_amt}</Badge>
               </div>
             </div>
           );

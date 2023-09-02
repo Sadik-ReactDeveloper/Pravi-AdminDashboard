@@ -146,7 +146,9 @@ class ViewOneReport extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data.qty * params.data.price}</span>
+              <Badge color="success">
+                {params.data.qty * params.data.price}
+              </Badge>
             </div>
           );
         },

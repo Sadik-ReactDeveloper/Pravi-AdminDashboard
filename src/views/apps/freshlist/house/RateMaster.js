@@ -13,6 +13,7 @@ import {
   CardTitle,
   CardText,
   Label,
+  Badge,
 } from "reactstrap";
 import axiosConfig from "../../../../axiosConfig";
 import ReactHtmlParser from "react-html-parser";
@@ -112,7 +113,9 @@ class RateMaster extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div className="">
-                <span>{ReactHtmlParser(params.data.price)}</span>
+                <Badge color="success">
+                  {ReactHtmlParser(params.data.price)}
+                </Badge>
               </div>
             </div>
           );

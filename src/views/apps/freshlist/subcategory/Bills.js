@@ -16,6 +16,7 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
+  Badge,
 } from "reactstrap";
 import { AiOutlineDownload } from "react-icons/ai";
 import axiosConfig from "../../../../axiosConfig";
@@ -464,7 +465,7 @@ class Bills extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
-                <span>{params.data?.total}</span>
+                <Badge color="success">{params.data?.total}</Badge>
               </div>
             </div>
           );

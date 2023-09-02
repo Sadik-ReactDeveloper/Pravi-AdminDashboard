@@ -349,7 +349,7 @@ export default function AddRoleNew() {
                       <Col>
                         <Label>Existing Role *</Label>
                         <Input
-                          required
+                          disabled
                           value={Role}
                           onChange={(e) => setRole(e.target.value)}
                           type="text"
@@ -360,7 +360,7 @@ export default function AddRoleNew() {
                       <Col>
                         <Label>Existing Role Description * </Label>
                         <Input
-                          required
+                          // disabled
                           value={Desc}
                           onChange={(e) => setDesc(e.target.value)}
                           type="text"

@@ -32,12 +32,18 @@ const pendingPayment = lazy(() =>
   import("./views/apps/pendingPayment/PendingPayment")
 );
 
-const simpleProductList = lazy(() => import("./views/apps/productManagement/simpleProduct/SimpleProductList"));
-const addSimpleProduct = lazy(() => import("./views/apps/productManagement/simpleProduct/AddSimpleProduct"));
-const editSimpleProduct = lazy(() => import("./views/apps/productManagement/simpleProduct/EditSimpleProduct"));
-const viewSimpleProduct = lazy(() => import("./views/apps/productManagement/simpleProduct/ViewSimpleProduct"));
-
-
+const simpleProductList = lazy(() =>
+  import("./views/apps/productManagement/simpleProduct/SimpleProductList")
+);
+const addSimpleProduct = lazy(() =>
+  import("./views/apps/productManagement/simpleProduct/AddSimpleProduct")
+);
+const editSimpleProduct = lazy(() =>
+  import("./views/apps/productManagement/simpleProduct/EditSimpleProduct")
+);
+const viewSimpleProduct = lazy(() =>
+  import("./views/apps/productManagement/simpleProduct/ViewSimpleProduct")
+);
 
 // const coupon = lazy(() => import("./views/apps/products/coupon/Coupon"));
 const allOrder = lazy(() => import("./views/apps/order/AllOrder"));
@@ -452,23 +458,26 @@ class AppRouter extends React.Component {
             path="/app/users/user/viewUsers/:id"
             component={viewUsers}
           />
-     
-      
-       
-          
           <AppRoute
             path="/app/pendingPayment/pendingPayment"
             component={pendingPayment}
           />
-        
-         
-          
-          <AppRoute path="/app/productManagement/simpleProduct/simpleProductList" component={simpleProductList} />
-          <AppRoute path="/app/productManagement/simpleProduct/addSimpleProduct" component={addSimpleProduct} />
-          <AppRoute path="/app/productManagement/simpleProduct/editSimpleProduct" component={editSimpleProduct} />
-          <AppRoute path="/app/productManagement/simpleProduct/viewSimpleProduct/:id" component={viewSimpleProduct} />
-         
-
+          <AppRoute
+            path="/app/productManagement/simpleProduct/simpleProductList"
+            component={simpleProductList}
+          />
+          <AppRoute
+            path="/app/productManagement/simpleProduct/addSimpleProduct"
+            component={addSimpleProduct}
+          />
+          <AppRoute
+            path="/app/productManagement/simpleProduct/editSimpleProduct"
+            component={editSimpleProduct}
+          />
+          <AppRoute
+            path="/app/productManagement/simpleProduct/viewSimpleProduct/:id"
+            component={viewSimpleProduct}
+          />
           {/* <AppRoute path="/app/products/coupon" component={coupon} /> */}
           <AppRoute path="/app/order/allorder" component={allOrder} />
           <AppRoute path="/app/order/status" component={status} />
@@ -680,11 +689,12 @@ class AppRouter extends React.Component {
             path="/pages/reset-password"
             component={resetPassword}
             fullLayout
-          /> <AppRoute
-          path="/pages/newPassword"
-          component={newPassword}
-          fullLayout
-        />
+          />{" "}
+          <AppRoute
+            path="/pages/newPassword"
+            component={newPassword}
+            fullLayout
+          />
           <AppRoute path="/pages/profile/userProfile" component={userProfile} />
           <AppRoute
             path="/pages/profile/editUserProfile/:id"

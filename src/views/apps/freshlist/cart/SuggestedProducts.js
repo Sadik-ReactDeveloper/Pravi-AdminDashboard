@@ -70,8 +70,8 @@ class SuggestedProducts extends React.Component {
         width: 220,
         cellRendererFramework: (params) => {
           return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.budget}</span>
+            <div className="d-flex mt-1 align-items-center cursor-pointer">
+              <Badge color="success">{params.data.budget}</Badge>
             </div>
           );
         },
@@ -83,8 +83,8 @@ class SuggestedProducts extends React.Component {
         width: 220,
         cellRendererFramework: (params) => {
           return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.remaining_budget}</span>
+            <div className="d-flex mt-1 align-items-center cursor-pointer">
+              <Badge color="warning">{params.data.remaining_budget}</Badge>
             </div>
           );
         },
