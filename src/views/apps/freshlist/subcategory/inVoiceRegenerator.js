@@ -253,7 +253,11 @@ class inVoiceRegenerator extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <div>
-                <span>{params.data?.orders[0]?.supplier_name}</span>
+                {params.data?.orders != null ? (
+                  <>
+                    <span>{params.data?.orders[0]?.supplier_name}</span>
+                  </>
+                ) : null}
               </div>
             </div>
           );
