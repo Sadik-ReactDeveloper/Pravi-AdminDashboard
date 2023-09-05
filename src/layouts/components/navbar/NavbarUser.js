@@ -88,7 +88,7 @@ const UserDropdown = (props) => {
             onClick={(e) => {
               // e.preventDefault();
               const data = new FormData();
-
+              debugger;
               let pageparmission = JSON.parse(localStorage.getItem("userData"));
               data.append("user_id", pageparmission?.Userinfo?.id);
               data.append("role", pageparmission?.Userinfo?.role);

@@ -149,13 +149,13 @@ class RoleList extends React.Component {
     await axiosConfig
       .post("/getrolelist", formdata)
       .then((response) => {
-        console.log(response.data?.data);
+        // console.log(response.data?.data);
         const propertyNames = Object.values(response.data?.data);
-        console.log(propertyNames);
+        // console.log(propertyNames);
         this.setState({ rowData: propertyNames });
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
   }
 

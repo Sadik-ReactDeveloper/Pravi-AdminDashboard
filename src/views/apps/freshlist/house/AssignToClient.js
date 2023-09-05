@@ -807,7 +807,7 @@ const AssignToClient = () => {
     //   let Brandlist = response.data.data?.brands;
     //   setBrandlist(Brandlist);
     // });
-    axiosConfig.post("/getuserlist", data).then((response) => {
+    axiosConfig.post("/getuserlistforassign", data).then((response) => {
       let Clientlist = response.data.data?.users;
       console.log(Clientlist);
       setClientlist(Clientlist);

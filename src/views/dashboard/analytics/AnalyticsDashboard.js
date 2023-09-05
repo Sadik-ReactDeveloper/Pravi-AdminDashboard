@@ -166,7 +166,7 @@ class AnalyticsDashboard extends React.Component {
     //   });
   }
   render() {
-    console.log(this.state.product);
+    // console.log(this.state.product);
     return (
       <React.Fragment>
         {this.state.Viewpermisson ? (
