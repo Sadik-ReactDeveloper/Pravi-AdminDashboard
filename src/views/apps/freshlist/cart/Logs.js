@@ -19,6 +19,8 @@ import { Edit, Trash2, ChevronDown, Eye } from "react-feather";
 import { history } from "../../../../history";
 import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../../assets/scss/pages/users.scss";
+import axiosConfig from "../../../../axiosConfig";
+
 import { Route, Link } from "react-router-dom";
 // import { components } from "react-select";
 
@@ -27,10 +29,11 @@ class Logs extends React.Component {
     rowData: [],
     paginationPageSize: 20,
     currenPageSize: "",
+    Log: [],
     getPageSize: "",
     defaultColDef: {
       sortable: true,
-      editable: true,
+      // editable: true,
       resizable: true,
       suppressMenu: true,
     },
@@ -44,114 +47,116 @@ class Logs extends React.Component {
       },
       {
         headerName: "Name",
-        field: "subscriptions",
+        field: "full_name",
         filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data.subscriptions}</span>
+              <span>{params.data?.full_name}</span>
             </div>
           );
         },
       },
       {
-        headerName: "Product Name",
+        headerName: "Activity",
         field: "product",
         filter: true,
-        width: 190,
+        width: 700,
         cellRendererFramework: (params) => {
+          // console.log(params?.data?.log_event);
+          let log = JSON.parse(params?.data?.log_event);
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.product}</span>
+              <span>{log?.data}</span>
             </div>
           );
         },
       },
-      {
-        headerName: "How Many Day",
-        field: "validity",
-        filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.validity}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "How Many Orders Placed",
-        field: "orders",
-        filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.orders}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "How Many Remaining",
-        field: "remaining",
-        filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.remaining}</span>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "How Many Day",
+      //   field: "validity",
+      //   filter: true,
+      //   width: 200,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.validity}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "How Many Orders Placed",
+      //   field: "orders",
+      //   filter: true,
+      //   width: 200,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.orders}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "How Many Remaining",
+      //   field: "remaining",
+      //   filter: true,
+      //   width: 200,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.remaining}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
 
-      {
-        headerName: "Status",
-        field: "status",
-        filter: true,
-        width: 150,
-        cellRendererFramework: (params) => {
-          return params.value === "Block" ? (
-            <div className="badge badge-pill badge-success">
-              {params.data.status}
-            </div>
-          ) : params.value === "Unblock" ? (
-            <div className="badge badge-pill badge-warning">
-              {params.data.status}
-            </div>
-          ) : null;
-        },
-      },
-      {
-        headerName: "Actions",
-        field: "sortorder",
-        field: "transactions",
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="actions cursor-pointer">
-              <Eye
-                className="mr-50"
-                size="25px"
-                color="green"
-                onClick={() =>
-                  history.push(
-                    `/app/freshlist/subscriber/viewSubscriber/${params.data._id}`
-                  )
-                }
-              />
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "Status",
+      //   field: "status",
+      //   filter: true,
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return params.value === "Block" ? (
+      //       <div className="badge badge-pill badge-success">
+      //         {params.data.status}
+      //       </div>
+      //     ) : params.value === "Unblock" ? (
+      //       <div className="badge badge-pill badge-warning">
+      //         {params.data.status}
+      //       </div>
+      //     ) : null;
+      //   },
+      // },
+      // {
+      //   headerName: "Actions",
+      //   field: "sortorder",
+      //   field: "transactions",
+      //   width: 150,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="actions cursor-pointer">
+      //         <Eye
+      //           className="mr-50"
+      //           size="25px"
+      //           color="green"
+      //           onClick={() =>
+      //             history.push(
+      //               `/app/freshlist/subscriber/viewSubscriber/${params.data._id}`
+      //             )
+      //           }
+      //         />
+      //       </div>
+      //     );
+      //   },
+      // },
     ],
   };
   componentDidMount() {
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
-    console.log(pageparmission.role);
+    // console.log(pageparmission.role);
     let newparmisson = pageparmission?.role?.find(
       (value) => value?.pageName === "Logs"
     );
@@ -166,14 +171,20 @@ class Logs extends React.Component {
     this.setState({
       Deletepermisson: newparmisson?.permission.includes("Delete"),
     });
-    console.log(newparmisson?.permission.includes("View"));
-    console.log(newparmisson?.permission.includes("Create"));
-    console.log(newparmisson?.permission.includes("Edit"));
-    console.log(newparmisson?.permission.includes("Delete"));
 
-    const formdata = new FormData();
-    formdata.append("user_id", pageparmission?.Userinfo?.id);
-    formdata.append("role", pageparmission?.Userinfo?.role);
+    const data = new FormData();
+    data.append("user_id", pageparmission?.Userinfo?.id);
+    data.append("role", pageparmission?.Userinfo?.role);
+    axiosConfig
+      .post("/getAllLogs", data)
+      .then((response) => {
+        console.log(response?.data?.data);
+
+        this.setState({ rowData: response?.data?.data });
+      })
+      .catch((err) => {
+        // console.log(err);
+      });
   }
   onGridReady = (params) => {
     this.gridApi = params.api;

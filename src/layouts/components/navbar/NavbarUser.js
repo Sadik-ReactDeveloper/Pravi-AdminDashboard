@@ -11,6 +11,8 @@ import {
   Badge,
 } from "reactstrap";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import axiosConfig from "../../../axiosConfig";
+
 import axios from "axios";
 import * as Icon from "react-feather";
 import classnames from "classnames";
@@ -84,7 +86,23 @@ const UserDropdown = (props) => {
             tag="a"
             href="#"
             onClick={(e) => {
-              e.preventDefault();
+              // e.preventDefault();
+              const data = new FormData();
+
+              let pageparmission = JSON.parse(localStorage.getItem("userData"));
+              data.append("user_id", pageparmission?.Userinfo?.id);
+              data.append("role", pageparmission?.Userinfo?.role);
+              axiosConfig
+                .post("/apiLogout", data)
+                .then((resp) => {
+                  console.log(resp);
+                  localStorage.clear();
+                  history.push("/#/pages/login");
+                })
+                .catch((err) => {
+                  console.log(err);
+                  // swal("Somethig Went Wrong");
+                });
               // if (isAuthenticated) {
               //    // return logout({
               //    //   returnTo: window.location.origin + process.env.REACT_APP_PUBLIC_PATH
@@ -99,9 +117,9 @@ const UserDropdown = (props) => {
                   return props.logoutWithFirebase();
                 }
               } else {
-                localStorage.removeItem("auth-admintoken");
-                localStorage.clear();
-                history.push("/#/pages/login");
+                // localStorage.removeItem("auth-admintoken");
+                // localStorage.clear();
+                // history.push("/#/pages/login");
               }
             }}
           >

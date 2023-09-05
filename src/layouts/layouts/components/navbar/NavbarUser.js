@@ -92,7 +92,7 @@ const UserDropdown = (props) => {
         }}
       >
         <Icon.Power size={14} className="mr-50" />
-        <span className="align-middle">Log Out</span>
+        <span className="align-middle">Log Outs</span>
       </DropdownItem>
     </DropdownMenu>
   );
