@@ -461,8 +461,9 @@ export class CreateAccount extends Component {
                 </Col>
                 <Col lg="6" md="6">
                   <FormGroup>
-                    <Label for="cars"> State </Label>
+                    <Label for="cars"> State *</Label>
                     <select
+                      required
                       name="SelectedState"
                       value={this.state.SelectedState}
                       onChange={(e) => {
@@ -492,8 +493,9 @@ export class CreateAccount extends Component {
                   </FormGroup>
                 </Col>
                 <Col lg="6" md="6">
-                  <Label for="cars">City </Label>
+                  <Label for="cars">City * </Label>
                   <Multiselect
+                    required
                     options={this.state.CityList} // Options to display in the dropdown
                     selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
                     onSelect={this.onSelect} // Function will trigger on select event
