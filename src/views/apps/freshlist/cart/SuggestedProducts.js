@@ -14,6 +14,8 @@ import {
   Label,
   FormGroup,
 } from "reactstrap";
+import Multiselect from "multiselect-react-dropdown";
+
 import axios from "axios";
 import { ContextLayout } from "../../../../utility/context/Layout";
 import { AgGridReact } from "ag-grid-react";
@@ -25,7 +27,7 @@ import { Route, Link } from "react-router-dom";
 // import { components } from "react-select";
 import axiosConfig from "../../../../axiosConfig";
 import swal from "sweetalert";
-
+const selectItem1 = [];
 class SuggestedProducts extends React.Component {
   state = {
     rowData: [],
@@ -242,17 +244,22 @@ class SuggestedProducts extends React.Component {
     e.preventDefault();
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
     const data = new FormData();
+    let uniqueChars = [...new Set(selectItem1)];
+    // debugger;
+    // console.log(uniqueChars);
+
     data.append("user_id", pageparmission?.Userinfo?.id);
     data.append("budget", this.state.BudgetValue);
-    data.append("assign_user_id", this.state.userid);
-    if (this.state.BudgetValue > 0 && this.state.userid) {
+    data.append("assign_user_id", JSON.stringify(uniqueChars));
+    if (this.state.BudgetValue > 0) {
       axiosConfig
         .post(`/addbudget`, data)
         .then((res) => {
+          swal("Budget Assigned Successfully");
           console.log(res.data);
           this.setState({ BudgetValue: "" });
           this.setState({ userid: "" });
-          swal("Budget Assigned Successfully");
+          window.location.reload();
           this.componentDidMount();
         })
         .catch((err) => {
@@ -261,6 +268,39 @@ class SuggestedProducts extends React.Component {
     } else {
       swal("Something is Missing. Enter details before Submit");
     }
+  };
+  onSelect(selectedList, selectedItem) {
+    console.log(selectedList);
+
+    if (selectedList.length) {
+      for (var i = 0; i < selectedList.length; i++) {
+        selectItem1.push(selectedList[i].id);
+      }
+    }
+    // console.log(selectItem1);
+  }
+
+  onRemove = (selectedList, removedItem) => {
+    // selectItem1 = [];
+    // console.log(selectedList);
+    // if (selectedList.length) {
+    //   for (var i = 0; i < selectedList.length; i++) {
+    //     selectItem1.push({ userid: selectedList[i].id });
+    //   }
+    // }
+    console.log(removedItem);
+
+    // let arr1 = selectItem1.includes(removedItem?.id);
+    // let newarr = selectItem1.filter((val) => {
+    //   console.log(((val = removedItem?.id), i));
+    //   debugger;
+    //   if (val === removedItem?.id) {
+    //     return null;
+    //   } else {
+    //     return val;
+    //   }
+    // });
+    // console.log(arr1);
   };
   render() {
     const { rowData, columnDefs, defaultColDef } = this.state;
@@ -294,7 +334,15 @@ class SuggestedProducts extends React.Component {
                   <Col>
                     <FormGroup>
                       <Label>Select A User</Label>
-                      <select
+                      <Multiselect
+                        required
+                        options={this.state.userDataList} // Options to display in the dropdown
+                        selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
+                        onSelect={this.onSelect} // Function will trigger on select event
+                        onRemove={this.onRemove} // Function will trigger on remove event
+                        displayValue="username" // Property name to display in the dropdown options
+                      />
+                      {/* <select
                         required
                         onChange={(e) =>
                           this.setState({ userid: e.target.value })
@@ -310,7 +358,7 @@ class SuggestedProducts extends React.Component {
                               {val?.username}
                             </option>
                           ))}
-                      </select>
+                      </select> */}
                     </FormGroup>
                   </Col>
                   <Col>

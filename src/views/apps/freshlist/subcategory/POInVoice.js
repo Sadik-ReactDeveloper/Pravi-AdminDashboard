@@ -1103,6 +1103,37 @@ const POInVoice = ({
                         style={{
                           fontSize: "10px",
                           fontWeight: "bold",
+                          // width: "70%",
+                          marginBottom: "6px",
+                        }}
+                      >
+                        Discount :
+                      </Text>{" "}
+                      <Text
+                        style={{
+                          // flexDirection: "row",
+                          // justifyContent: "flex-end",
+                          fontSize: "10px",
+                          fontWeight: "bold",
+                          // marginRight: "1px",
+                          marginBottom: "6px",
+                        }}
+                      >
+                        {AllCharges?.discount_value}.00
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        gap: "10px",
+                        paddingBottom: "3px",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: "10px",
+                          fontWeight: "bold",
                           marginBottom: "6px",
                         }}
                       >
@@ -1244,37 +1275,7 @@ const POInVoice = ({
                         {AllCharges?.other_charges}.00
                       </Text>
                     </View>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        gap: "10px",
-                        paddingBottom: "3px",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: "10px",
-                          fontWeight: "bold",
-                          // width: "70%",
-                          marginBottom: "6px",
-                        }}
-                      >
-                        Discount :
-                      </Text>{" "}
-                      <Text
-                        style={{
-                          // flexDirection: "row",
-                          // justifyContent: "flex-end",
-                          fontSize: "10px",
-                          fontWeight: "bold",
-                          // marginRight: "1px",
-                          marginBottom: "6px",
-                        }}
-                      >
-                        {AllCharges?.discount_value}.00
-                      </Text>
-                    </View>
+
                     <View
                       style={{
                         flexDirection: "row",

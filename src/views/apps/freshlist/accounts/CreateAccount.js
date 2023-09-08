@@ -214,9 +214,6 @@ export class CreateAccount extends Component {
       }
     }
   }
-  // componentDidUpdate() {
-  //   console.log(selectItem1);
-  // }
 
   onRemove = (selectedList, removedItem) => {
     // selectItem1 = [];

@@ -72,9 +72,9 @@ export class EditProduct extends Component {
         this.setState({ Type: getProduct?.product_type_id });
         this.setState({ Brand: getProduct?.brand_id });
         // this.setState({ Brand: getProduct?.brand_name });
-        // this.setState({
-        //   formValues: JSON.parse(getProduct?.veriety),
-        // });
+        this.setState({
+          formValues: JSON.parse(getProduct?.veriety),
+        });
         this.setState({ shipmentfee: getProduct?.shipping_fee });
         this.setState({ Tags: getProduct?.tags });
         this.setState({ taxrate: getProduct?.tax_rate });

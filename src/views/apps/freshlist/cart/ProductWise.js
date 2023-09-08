@@ -70,30 +70,18 @@ class ProductWise extends React.Component {
       },
       {
         headerName: "Product Name",
-        field: "products",
+        field: "product_name",
         filter: true,
-        // filter: "agTextColumnFilter",
-        // innerHeight: 100,
         width: 200,
-        // filterParams: {
-        //   textCustomComparator: function (filter, value, filterText) {
-        //     // Convert product titles to a single string for filtering
-        //     const allTitles = value.map((product) => product.title).join(", ");
-        //     return allTitles.toLowerCase().includes(filterText.toLowerCase());
-        //   },
-        // },
 
         cellRendererFramework: (params) => {
-          // let newdata = params?.data?.products?.filter(
-          //   (ele) => ele?.product_id === this.state.SelectedProduct
-          // );
-          // console.log(newdata[0]);
           return (
             <div className="d-flex flex-wrap">
-              {params?.data?.products &&
+              {/* {params?.data?.products &&
                 params?.data?.products?.map((ele, i) => (
                   <span key={i}>{ele?.title} ,</span>
-                ))}
+                ))} */}
+              <span>{params.data?.product_name}</span>
             </div>
           );
         },
@@ -292,8 +280,8 @@ class ProductWise extends React.Component {
       // },
       {
         headerName: "Actions",
-        field: "sortorder",
-        field: "transactions",
+        // field: "sortorder",
+        // field: "transactions",
         width: 150,
         cellRendererFramework: (params) => {
           return (

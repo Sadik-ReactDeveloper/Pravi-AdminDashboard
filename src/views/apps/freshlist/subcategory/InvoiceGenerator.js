@@ -62,6 +62,7 @@ class InvoiceGenerator extends React.Component {
     Applied_Charges: {},
     paginationPageSize: 20,
     currenPageSize: "",
+    ButtonText: "Submit",
     Mergebilllength: "",
     modal: false,
     sgst: "",
@@ -686,6 +687,7 @@ class InvoiceGenerator extends React.Component {
   };
   handleSubmit = (e) => {
     e.preventDefault();
+    this.setState({ ButtonText: "InProcess" });
     // debugger;
     // console.log(this.state.sgst);
     // console.log(this.state.cgst);
@@ -725,8 +727,11 @@ class InvoiceGenerator extends React.Component {
         })
         .catch((err) => {
           console.log(err);
+          this.setState({ ButtonText: "Submit" });
         });
     } else {
+      this.setState({ ButtonText: "Submit" });
+
       swal("Enter Values in field");
     }
   };
@@ -1057,8 +1062,16 @@ class InvoiceGenerator extends React.Component {
                     <Row>
                       <Col lg="12" className="mt-2 mb-2">
                         <div className="d-flex justify-content-center">
-                          <Button color="primary" type="submit">
-                            Submit
+                          <Button
+                            disabled={
+                              this.state.ButtonText === "InProcess"
+                                ? true
+                                : false
+                            }
+                            color="primary"
+                            type="submit"
+                          >
+                            {this.state.ButtonText}
                           </Button>
                         </div>
                       </Col>
