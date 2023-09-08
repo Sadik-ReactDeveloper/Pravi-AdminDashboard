@@ -70,7 +70,7 @@ class AnalyticsDashboard extends React.Component {
       .then((response) => {
         // debugger;
         // console.log(response?.data?.data?.Dashboard);
-        // this.setState({ product: [] });
+        this.setState({ product: [] });
         for (const [key, value] of Object.entries(
           response?.data?.data?.Dashboard
         )) {
