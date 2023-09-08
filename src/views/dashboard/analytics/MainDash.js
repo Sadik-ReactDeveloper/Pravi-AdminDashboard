@@ -37,20 +37,21 @@ class MainDash extends React.Component {
     };
   }
 
-  componentDidMount() {
-    axiosConfig
-      .get("/admin/product_list")
-      .then((response) => {
-        this.setState({ product: response.data.data.length });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+  // componentDidMount() {
+  // axiosConfig
+  //   .get("/admin/product_list")
+  //   .then((response) => {
+  //     // console.log(response);
+  //     this.setState({ product: response.data.data.length });
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
+  // }
   render() {
     return (
       <React.Fragment>
-        <Row></Row>
+        {/* <Row></Row> */}
         <AnalyticsDashboard />
       </React.Fragment>
     );

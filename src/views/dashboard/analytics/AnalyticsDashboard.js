@@ -59,7 +59,7 @@ class AnalyticsDashboard extends React.Component {
     // });
     // console.log(newparmisson?.permission.includes("View"));
     // console.log(newparmisson?.permission.includes("Create"));
-    // console.log(newparmisson?.permission.includes("Edit"));
+    // console.log(newparmisson?.pproductdebermission.includes("Edit"));
     // console.log(newparmisson?.permission.includes("Delete"));
     const data = new FormData();
 
@@ -68,16 +68,18 @@ class AnalyticsDashboard extends React.Component {
     axiosConfig
       .post("/dashboard", data)
       .then((response) => {
+        // debugger;
         // console.log(response?.data?.data?.Dashboard);
-
+        // this.setState({ product: [] });
         for (const [key, value] of Object.entries(
           response?.data?.data?.Dashboard
         )) {
           Product.push(`${key}: ${value}`);
           // console.log(`${key}: ${value}`);
         }
+        let uniq = [...new Set(Product)];
 
-        this.setState({ product: Product });
+        this.setState({ product: uniq });
       })
       .catch((error) => {
         console.log(error);
