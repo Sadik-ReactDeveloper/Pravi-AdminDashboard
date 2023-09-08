@@ -19,7 +19,7 @@ import { BsBoxSeam } from "react-icons/bs";
 import { TbTruckDelivery } from "react-icons/tb";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import MainDash from "./MainDash";
-const Product = [];
+
 class AnalyticsDashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -68,18 +68,20 @@ class AnalyticsDashboard extends React.Component {
     axiosConfig
       .post("/dashboard", data)
       .then((response) => {
-        // debugger;
         // console.log(response?.data?.data?.Dashboard);
-        this.setState({ product: [] });
+        // this.setState({ product: [] });
+        const Product = [];
         for (const [key, value] of Object.entries(
           response?.data?.data?.Dashboard
         )) {
           Product.push(`${key}: ${value}`);
           // console.log(`${key}: ${value}`);
         }
-        let uniq = [...new Set(Product)];
+        let uniqueChars = [...new Set(Product)];
 
-        this.setState({ product: uniq });
+        console.log(uniqueChars);
+
+        this.setState({ product: uniqueChars });
       })
       .catch((error) => {
         console.log(error);
