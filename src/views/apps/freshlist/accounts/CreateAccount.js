@@ -1010,7 +1010,6 @@ const CreateAccount = () => {
     let pageparmission = JSON.parse(localStorage.getItem("userData"));
     let uniqueChars = [...new Set(selectItem1)];
     let selectedOption = [...new Set(selectedOptions)];
-    // console.log(selectedOption);
 
     const formdata = new FormData();
 
@@ -1039,7 +1038,7 @@ const CreateAccount = () => {
     formdata.append("shipping_pincode", S_PinCode);
     formdata.append("phone_no", Phone_no);
     if (selectedOption.length > 0) {
-      formdata.append("state_id", selectedOption.toString());
+      formdata.append("state_id", multiSelect.toString());
     } else {
       formdata.append("state_id", SelectedState);
     }
@@ -1100,12 +1099,15 @@ const CreateAccount = () => {
     if (selectedList.length) {
       for (var i = 0; i < selectedList.length; i++) {
         selectedOptions.push(selectedList[i].id);
-        // selectstate2.push(selectedList[i].id);
       }
     }
+
+    let arr = selectedList.map((ele) => ele.id);
+    setmultiSelect(arr);
+    // console.log(multiSelect);
+
     let uniqueChars = [...new Set(selectedOptions)];
-    // console.log(uniqueChars);
-    console.log(uniqueChars.toString());
+
     if (uniqueChars.length === 1) {
       let value = uniqueChars[0];
       const formdata = new FormData();
@@ -1126,6 +1128,12 @@ const CreateAccount = () => {
     // debugger;
     // setselectedOptions("");
     // console.log(selectedList);
+    // setmultiSelect(selectedList);
+
+    let arr = selectedList.map((ele) => ele.id);
+    // console.log(arr);
+    setmultiSelect(arr);
+    // console.log(multiSelect);
     // if (selectedList.length) {
     //   for (var i = 0; i < selectedList.length; i++) {
     //     selectedOptions.push(selectedList[i].id);
