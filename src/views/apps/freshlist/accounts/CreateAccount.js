@@ -1221,7 +1221,7 @@ const CreateAccount = () => {
                       // onChange={changeHandler}
                       onChange={(e) => setAssignRole(e.target.value)}
                     >
-                      <option value={"Admin"}>--Select Role--</option>
+                      <option value="">--Select Role--</option>
 
                       {productName &&
                         productName?.map((value, index) => (

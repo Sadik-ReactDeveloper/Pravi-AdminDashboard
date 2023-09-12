@@ -16,6 +16,7 @@ import {
 // import Checkbox from "../../../components/@vuexy/checkbox/CheckboxesVuexy";
 // import { Check } from "react-feather";
 import glogo from "../../../assets/img/pages/glogo.png";
+import logo from "../../../assets/img/logo/logo.ico";
 import { history } from "../../../history";
 import axios from "axios";
 import swal from "sweetalert";
@@ -39,7 +40,6 @@ class NewPassword extends React.Component {
       .post("http://35.154.86.59/api/admin/adminfogetpassword", this.state, {
         headers: {
           "auth-admintoken": localStorage.getItem("auth-admintoken"),
-          
         },
       })
       .then((response) => {
@@ -66,7 +66,7 @@ class NewPassword extends React.Component {
             <Col lg="8" md="12" className="p-1">
               <Card className="rounded-0 mb-0 px-2 pb-3 login-tabs-container">
                 <CardHeader className="pb-1">
-                  <img src={glogo} class="img-fluid" alt="..." />
+                  <img src={logo} class="img-fluid" alt="..." />
                   {/* <img src={glogo} alt="glogo" /> */}
                   <br />
                 </CardHeader>
@@ -119,4 +119,3 @@ class NewPassword extends React.Component {
   }
 }
 export default NewPassword;
-

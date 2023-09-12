@@ -561,7 +561,10 @@ const forgotPassword = lazy(() =>
 const resetPassword = lazy(() =>
   import("./views/pages/authentication/ResetPassword")
 );
-const newPassword = lazy(() =>
+const myResetpass = lazy(() =>
+  import("./views/pages/authentication/myResetpass")
+);
+const NewPassword = lazy(() =>
   import("./views/pages/authentication/NewPassword")
 );
 
@@ -1501,6 +1504,12 @@ class AppRouter extends React.Component {
             path="/app/freshlist/sales/totalSales"
             component={TotalSales}
           />
+          <AppRoute
+            path="/pages/newPassword/:id"
+            exact
+            component={NewPassword}
+            fullLayout
+          />
           <AppRoute path="/app/freshlist/sales/hubSales" component={HubSales} />
           {/* hub List */}
           <AppRoute path="/app/freshlist/hubs/AddHub" component={AddHub} />
@@ -1525,10 +1534,10 @@ class AppRouter extends React.Component {
             path="/pages/reset-password"
             component={resetPassword}
             fullLayout
-          />{" "}
+          />
           <AppRoute
-            path="/pages/newPassword"
-            component={newPassword}
+            path="/pages/resetpassword"
+            component={myResetpass}
             fullLayout
           />
           {/* Theme Components Starts from here all the demo components*/}

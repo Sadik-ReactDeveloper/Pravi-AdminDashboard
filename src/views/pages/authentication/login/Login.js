@@ -37,6 +37,7 @@ class Login extends React.Component {
     this.state = {
       email: "",
       password: "",
+      resetpassword: false,
       // rowData: {},
     };
   }
@@ -92,6 +93,25 @@ class Login extends React.Component {
         // swal("Error!", "Invalid! Email or Password ", "error");
       });
   };
+  changepassword = (e) => {
+    e.preventDefault();
+    debugger;
+    let formdata = new FormData();
+    formdata.append("email", this.state.email);
+    formdata.append("base_url", "this.state.password");
+    // console.log(this.state.email);
+    // console.log(this.state.password);
+    axiosConfig
+      .post("/forgetPasswordEmailVerify", formdata)
+      .then((res) => {
+        console.log(res);
+        this.setState({ resetpassword: false });
+        swal("Email has been sent to Your Mail id", "Please Check and verify");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   render() {
     return (
@@ -116,64 +136,104 @@ class Login extends React.Component {
                         height="150px"
                       />
                     </div>
-                    <CardHeader className="pb-1">
-                      <CardTitle>
-                        <h4 className="mb-0">
-                          <strong>Login</strong>
-                        </h4>
-                      </CardTitle>
-                    </CardHeader>
-                    <p className="px-2 auth-title mb-2">
-                      Welcome back, Please login to your account.
-                    </p>
-                    <Form onSubmit={this.loginHandler}>
-                      <Label>UserName</Label>
-                      <FormGroup className="form-label-group position-relative has-icon-left">
-                        <Input
-                          type="text"
-                          name="email"
-                          placeholder="Username"
-                          value={this.state.email}
-                          onChange={this.handlechange}
-                          // required
-                        />
-                      </FormGroup>
 
-                      <Label>Password</Label>
-                      <FormGroup className="form-label-group position-relative has-icon-left">
-                        <Input
-                          type="password"
-                          name="password"
-                          placeholder="Password"
-                          value={this.state.password}
-                          onChange={this.handlechange}
-                          // required
-                        />
-                      </FormGroup>
+                    {this.state.resetpassword ? (
+                      <>
+                        <CardHeader className="pb-1">
+                          <CardTitle>
+                            <h4 className="mb-0">
+                              <strong>Email Verification</strong>
+                            </h4>
+                          </CardTitle>
+                        </CardHeader>
+                        <p className="px-2 auth-title mb-2">
+                          Welcome , Please Enter details.
+                        </p>
+                        <Form onSubmit={this.changepassword}>
+                          <Label>Email</Label>
+                          <FormGroup className="form-label-group position-relative has-icon-left">
+                            <Input
+                              type="email"
+                              name="email"
+                              placeholder="Username"
+                              value={this.state.email}
+                              onChange={this.handlechange}
+                              // required
+                            />
+                          </FormGroup>
+                          <div className="d-flex justify-content-center">
+                            <Button.Ripple color="primary" type="submit">
+                              Submit
+                            </Button.Ripple>
+                          </div>
+                        </Form>
+                      </>
+                    ) : (
+                      <>
+                        <CardHeader className="pb-1">
+                          <CardTitle>
+                            <h4 className="mb-0">
+                              <strong>Login</strong>
+                            </h4>
+                          </CardTitle>
+                        </CardHeader>
+                        <p className="px-2 auth-title mb-2">
+                          Welcome back, Please login to your account.
+                        </p>
+                        <Form onSubmit={this.loginHandler}>
+                          <Label>UserName</Label>
+                          <FormGroup className="form-label-group position-relative has-icon-left">
+                            <Input
+                              type="text"
+                              name="email"
+                              placeholder="Username"
+                              value={this.state.email}
+                              onChange={this.handlechange}
+                              // required
+                            />
+                          </FormGroup>
 
-                      <div className="d-flex justify-content-between">
-                        <Button.Ripple
-                          color="primary"
-                          outline
-                          onClick={() => {
-                            history.push("/pages/forgotpassword");
-                          }}
-                        >
-                          Forget Password
-                        </Button.Ripple>
-                        <Button.Ripple color="primary" type="submit">
-                          Login
-                        </Button.Ripple>
-                        <TabContent activeTab={this.state.activeTab}>
-                          <TabPane tabId="1">
-                            <LoginJWT />
-                          </TabPane>
-                          <TabPane tabId="2">
-                            <LoginFirebase />
-                          </TabPane>
-                        </TabContent>
-                      </div>
-                    </Form>
+                          <Label>Password</Label>
+                          <FormGroup className="form-label-group position-relative has-icon-left">
+                            <Input
+                              type="password"
+                              name="password"
+                              placeholder="Password"
+                              value={this.state.password}
+                              onChange={this.handlechange}
+                              // required
+                            />
+                          </FormGroup>
+
+                          <div className="d-flex justify-content-between">
+                            <Button.Ripple
+                              color="primary"
+                              outline
+                              onClick={(e) => {
+                                e.preventDefault();
+                                this.setState({ resetpassword: true });
+                              }}
+                              // onClick={() => {
+                              //   history.push("/pages/reset-password");
+                              // }}
+                            >
+                              Forget Password
+                            </Button.Ripple>
+                            <Button.Ripple color="primary" type="submit">
+                              Login
+                            </Button.Ripple>
+                            <TabContent activeTab={this.state.activeTab}>
+                              <TabPane tabId="1">
+                                <LoginJWT />
+                              </TabPane>
+                              <TabPane tabId="2">
+                                <LoginFirebase />
+                              </TabPane>
+                            </TabContent>
+                          </div>
+                        </Form>
+                      </>
+                    )}
                   </Card>
                 </Col>
               </Row>

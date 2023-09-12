@@ -1,60 +1,60 @@
-import React from "react"
-import { Form, FormGroup, Input, Label, Button } from "reactstrap"
-import Checkbox from "../../../../components/@vuexy/checkbox/CheckboxesVuexy"
-import { Check } from "react-feather"
-import { connect } from "react-redux"
-import axios from "axios"
-import { signupWithJWT } from "../../../../redux/actions/auth/registerActions"
-import { history } from "../../../../history"
-import swal from 'sweetalert';
+import React from "react";
+import { Form, FormGroup, Input, Label, Button } from "reactstrap";
+import Checkbox from "../../../../components/@vuexy/checkbox/CheckboxesVuexy";
+import { Check } from "react-feather";
+import { connect } from "react-redux";
+import axios from "axios";
+import { signupWithJWT } from "../../../../redux/actions/auth/registerActions";
+import { history } from "../../../../history";
+import swal from "sweetalert";
 class RegisterJWT extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
- 
+  constructor(props) {
+    super(props);
+    this.state = {
       seller_name: "",
       seller_email: "",
       password: "",
       confirm_password: "",
       selectedFile: null,
-      status: ""
+      status: "",
     };
-}
-    
-      handleRegister = e => {
-        e.preventDefault()
-        this.props.signupWithFirebase(
-          this.state.seller_name,
-          this.state.seller_email,
-          this.state.password
-        )
-      }
-      onChangeHandler = (event) => {
-        this.setState({ selectedFile: event.target.files[0] });
-        this.setState({ selectedName: event.target.files[0].name });
-        console.log(event.target.files[0]);
-      };
-      changeHandler1 = (e) => {
-        this.setState({ status: e.target.value });
-      };
-      changeHandler = (e) => {
-        this.setState({ [e.target.name]: e.target.value });
-      };
-      submitHandler = (e) => {
-        e.preventDefault();
-      
-        axios.post("/35.154.86.59/api/admin/seller_signup", this.state)
-          .then((response) => {
-            console.log(response);  
-             alert("Seller Added Successful")
-            swal("Successful!", "You clicked the button!", "success");
-            this.props.history.push("/pages/login");
-          })
-          .catch((error) => {
-            //  swal("Error!", "You clicked the button!", "error");
-            console.log(error);
-          });
-      };
+  }
+
+  handleRegister = (e) => {
+    e.preventDefault();
+    this.props.signupWithFirebase(
+      this.state.seller_name,
+      this.state.seller_email,
+      this.state.password
+    );
+  };
+  onChangeHandler = (event) => {
+    this.setState({ selectedFile: event.target.files[0] });
+    this.setState({ selectedName: event.target.files[0].name });
+    console.log(event.target.files[0]);
+  };
+  changeHandler1 = (e) => {
+    this.setState({ status: e.target.value });
+  };
+  changeHandler = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+  submitHandler = (e) => {
+    e.preventDefault();
+
+    axios
+      .post("/35.154.86.59/api/admin/seller_signup", this.state)
+      .then((response) => {
+        console.log(response);
+        alert("Seller Added Successful");
+        swal("Successful!", "You clicked the button!", "success");
+        this.props.history.push("/pages/login");
+      })
+      .catch((error) => {
+        //  swal("Error!", "You clicked the button!", "error");
+        console.log(error);
+      });
+  };
 
   render() {
     return (
@@ -66,7 +66,7 @@ class RegisterJWT extends React.Component {
             name="seller_name"
             required
             value={this.state.seller_name}
-            onChange={e => this.setState({ seller_name: e.target.value })}
+            onChange={(e) => this.setState({ seller_name: e.target.value })}
           />
           <Label>Name</Label>
         </FormGroup>
@@ -77,7 +77,7 @@ class RegisterJWT extends React.Component {
             required
             name="seller_email"
             value={this.state.seller_email}
-            onChange={e => this.setState({ seller_email: e.target.value })}
+            onChange={(e) => this.setState({ seller_email: e.target.value })}
           />
           <Label>Email</Label>
         </FormGroup>
@@ -88,7 +88,7 @@ class RegisterJWT extends React.Component {
             required
             name="password"
             value={this.state.password}
-            onChange={e => this.setState({ password: e.target.value })}
+            onChange={(e) => this.setState({ password: e.target.value })}
           />
           <Label>Password</Label>
         </FormGroup>
@@ -98,7 +98,9 @@ class RegisterJWT extends React.Component {
             placeholder="Confirm Password"
             required
             value={this.state.confirm_password}
-            onChange={e => this.setState({ confirm_password: e.target.value })}
+            onChange={(e) =>
+              this.setState({ confirm_password: e.target.value })
+            }
           />
           <Label>Confirm Password</Label>
         </FormGroup>
@@ -113,9 +115,9 @@ class RegisterJWT extends React.Component {
         <div className="d-flex justify-content-between">
           <Button.Ripple
             color="primary"
-            outline   
+            outline
             onClick={() => {
-              history.push("/pages/login")
+              history.push("/pages/login");
             }}
           >
             Login
@@ -125,12 +127,12 @@ class RegisterJWT extends React.Component {
           </Button.Ripple>
         </div>
       </Form>
-    )
+    );
   }
 }
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    values: state.auth.register
-  }
-}
-export default connect(mapStateToProps, { signupWithJWT })(RegisterJWT)
+    values: state.auth.register,
+  };
+};
+export default connect(mapStateToProps, { signupWithJWT })(RegisterJWT);
