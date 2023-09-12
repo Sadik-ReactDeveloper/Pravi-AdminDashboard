@@ -298,13 +298,14 @@ export default function AddRoleNew() {
       .then((res) => {
         console.log(res);
         swal("Success", "Role Updated");
-        setSelected("");
-        setDesc("");
-        setRole("");
+        // setSelected("");
+        // setDesc("");
+        // setRole("");
+        // window.location.reload();
         var checkboxes = document.getElementsByName("check");
-        for (var checkbox of checkboxes) {
-          checkbox.checked = false;
-        }
+        // for (var checkbox of checkboxes) {
+        //   checkbox.checked = false;
+        // }
       })
       .catch((er) => {
         console.log(er);
