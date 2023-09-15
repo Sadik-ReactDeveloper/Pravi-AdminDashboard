@@ -23,7 +23,7 @@ const Footer = (props) => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Paravi,
+            Pravri,
           </a>
           All rights reserved
         </span>

@@ -15,7 +15,8 @@ import {
   TabPane,
 } from "reactstrap";
 // import classnames from "classnames";
-import logo from "../../../../assets/img/logo/logo.ico";
+// import logo from "../../../../assets/img/logo/logo.ico";
+import logo from "../../../../assets/img/logo/paravilogo.jpeg";
 //import loginImg from "../../../../assets/img/pages/login.png";
 import "../../../../assets/scss/pages/authentication.scss";
 import { history } from "../../../../history";
@@ -128,11 +129,11 @@ class Login extends React.Component {
               <Row className="m-0">
                 <Col lg="12" md="12" className="p-1">
                   <Card className="rounded-0 mb-0 px-2 login-tabs-container">
-                    <div className="logo-box text-center p-1">
+                    <div className="logo-box text-center p-2">
                       <img
                         src={logo}
                         alt="loginImg"
-                        width="150px"
+                        width="210px"
                         height="150px"
                       />
                     </div>
